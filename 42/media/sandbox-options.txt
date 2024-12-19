@@ -27,6 +27,34 @@ option BathroomFunctions.EnableDiarrhea
 	translation = BathroomFunctions_EnableDiarrhea,
 }
 
+/*
+Realistic Range: The amount of fecal matter the rectum can hold before needing to defecate varies. On average:
+The rectum can hold 0.2-0.5 liters (200-500 mL) of stool before needing to empty.
+In extreme cases, it can stretch to about 1 liter (1,000 mL).
+Default Maximum: Max bowel capacity to 0.5 liters (500 mL).
+*/
+option BathroomFunctions.BowelsMaxValue
+{
+	type = double,
+	min = 200.0,
+	max = 1000.0,
+	default = 500.0,
+
+	page = Urination,
+	translation = BathroomFunctions_BowelsMaxValue,
+}
+
+option BathroomFunctions.BowelsIncreaseMultiplier
+{
+	type = double,
+	min = 0,
+	max = 100.0,
+	default = 1.0,
+
+	page = Defecation,
+	translation = BathroomFunctions_DefecateIncreaseMultiplier,
+}
+
 option BathroomFunctions.DefecateSpeedMultiplier
 {
 	type = double,
@@ -36,17 +64,6 @@ option BathroomFunctions.DefecateSpeedMultiplier
 
 	page = Defecation,
 	translation = BathroomFunctions_DefecateSpeedMultiplier,
-}
-
-option BathroomFunctions.DefecateIncreaseMultiplier
-{
-	type = double,
-	min = 0,
-	max = 100.0,
-	default = 1.0,
-
-	page = Defecation,
-	translation = BathroomFunctions_DefecateIncreaseMultiplier,
 }
 
 option BathroomFunctions.CanPoopSelf
@@ -94,6 +111,32 @@ option BathroomFunctions.FliesOnPoop
 	translation = BathroomFunctions_FliesOnPoop
 }
 
+/*
+Realistic Range: Human bladder typically holds 400-600 mL (0.4-0.6 liters) of urine before a strong urge occurs. However, it can stretch to a maximum of about 800-1,000 mL (0.8-1.0 liters) in extreme cases.
+Default Maximum: Max bladder capacity to 0.8 liters (800 mL).
+*/
+option BathroomFunctions.BladderMaxValue
+{
+	type = double,
+	min = 400.0,
+	max = 1000.0,
+	default = 800.0,
+
+	page = Urination,
+	translation = BathroomFunctions_BladderMaxValue,
+}
+
+option BathroomFunctions.BladderIncreaseMultiplier
+{
+	type = double,
+	min = 0,
+	max = 100.0,
+	default = 1.0,
+
+	page = Urination,
+	translation = BathroomFunctions_BladderIncreaseMultiplier,
+}
+
 option BathroomFunctions.UrinateSpeedMultiplier
 {
 	type = double,
@@ -103,17 +146,6 @@ option BathroomFunctions.UrinateSpeedMultiplier
 
 	page = Urination,
 	translation = BathroomFunctions_UrinateSpeedMultiplier,
-}
-
-option BathroomFunctions.UrinateIncreaseMultiplier
-{
-	type = double,
-	min = 0,
-	max = 100.0,
-	default = 1.0,
-
-	page = Urination,
-	translation = BathroomFunctions_UrinateIncreaseMultiplier,
 }
 
 option BathroomFunctions.CanPeeSelf

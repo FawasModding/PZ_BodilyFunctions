@@ -10,7 +10,6 @@ FlySquares = {}
 
 --[[
 Function to retrieve the player's current urination value
-This value determines how much the player needs to urinate.
 If the value isn't set or isn't a valid number, it defaults to 0.0.
 ]]--
 function BathroomFunctions.GetUrinateValue()
@@ -26,7 +25,6 @@ end
 
 --[[
 Function to retrieve the player's current defecation value
-This value determines how much the player needs to defecate.
 If the value isn't set or isn't a valid number, it defaults to 0.0.
 ]]--
 function BathroomFunctions.GetDefecateValue()
@@ -38,6 +36,36 @@ function BathroomFunctions.GetDefecateValue()
     end
 
     return defecateValue -- Return the defecation value
+end
+
+--[[
+Function to set the player's current urination value
+Ensures the value is a valid number and updates the player's modData.
+]]
+function BathroomFunctions.SetUrinateValue(newUrinateValue)
+    local player = getPlayer() -- Fetch the current player object
+
+    -- Ensure the new value is a valid number
+    if type(newUrinateValue) == "number" then
+        player:getModData().urinateValue = tonumber(newUrinateValue) -- Update the urination value in player's modData
+    else
+        print("Error: Invalid value for urinateValue. Must be a number.") -- Handle invalid input
+    end
+end
+
+--[[
+Function to set the player's current defecation value
+Ensures the value is a valid number and updates the player's modData.
+]]
+function BathroomFunctions.SetDefecateValue(newDefecateValue)
+    local player = getPlayer() -- Fetch the current player object
+
+    -- Ensure the new value is a valid number
+    if type(newDefecateValue) == "number" then
+        player:getModData().defecateValue = tonumber(newDefecateValue) -- Update the defecation value in player's modData
+    else
+        print("Error: Invalid value for defecateValue. Must be a number.") -- Handle invalid input
+    end
 end
 
 -- =====================================================
@@ -67,38 +95,50 @@ function BathroomFunctions.NewBathroomValues()
 
     -- Update the urination value
     local urinateValue = BathroomFunctions.GetUrinateValue() -- Get the current urination value
-    local urinateIncrease = SandboxVars.BathroomFunctions.UrinateIncreaseMultiplier -- Get the urination increase rate from SandboxVars
+    local bladderMaxValue = SandboxVars.BathroomFunctions.BladderMaxValue or 100 -- Get the max bladder value, default to 100 if not set
+    local urinateIncrease = 0.005 * bladderMaxValue * SandboxVars.BathroomFunctions.BladderIncreaseMultiplier -- 0.5% of the max bladder value * multiplier
 
-    urinateValue = urinateValue + urinateIncrease -- Increase the urination value by the multiplier
+    urinateValue = urinateValue + urinateIncrease -- Increase the urination value by the calculated percentage
     player:getModData().urinateValue = tonumber(urinateValue) -- Save the updated value back to the player's modData
-    print(urinateValue) -- Debug print statement to display the updated urination value
+    print("Updated Urinate Value: " .. urinateValue) -- Debug print statement to display the updated urination value
 
     -- === DEFECATION ===
 
     -- Update the defecation value
     local defecateValue = BathroomFunctions.GetDefecateValue() -- Get the current defecation value
-    local defecateIncrease = 0.5 * SandboxVars.BathroomFunctions.DefecateIncreaseMultiplier -- Calculate the defecation increase rate
+    local bowelsMaxValue = SandboxVars.BathroomFunctions.BowelsMaxValue or 100 -- Get the max bowel value, default to 100 if not set
+    local defecateIncrease = 0.005 * bowelsMaxValue * SandboxVars.BathroomFunctions.BowelsIncreaseMultiplier -- 0.5% of the max bowel value * multiplier
 
-    defecateValue = defecateValue + defecateIncrease -- Increase the defecation value by the calculated rate
+    defecateValue = defecateValue + defecateIncrease -- Increase the defecation value by the calculated percentage
     player:getModData().defecateValue = tonumber(defecateValue) -- Save the updated value back to the player's modData
-    print(defecateValue) -- Debug print statement to display the updated defecation value
+    print("Updated Defecate Value: " .. defecateValue) -- Debug print statement to display the updated defecation value
+
 end
 
 function BathroomFunctions.CheckForAccident()
-    local urinateValue = BathroomFunctions.GetUrinateValue()
-    local defecateValue = BathroomFunctions.GetDefecateValue()
+    local urinateValue = BathroomFunctions.GetUrinateValue() -- Current bladder level
+    local defecateValue = BathroomFunctions.GetDefecateValue() -- Current bowel level
     local player = getPlayer()
 
-    -- CALCULATE
+    -- Retrieve maximum values from SandboxVars
+    local bladderMaxValue = SandboxVars.BathroomFunctions.BladderMaxValue or 100 -- Default to 100 if not set
+    local bowelsMaxValue = SandboxVars.BathroomFunctions.BowelsMaxValue or 100 -- Default to 100 if not set
 
-    if urinateValue >= 90 then --Can pee self
+    -- Calculate thresholds
+    local bladderThreshold = 0.9 * bladderMaxValue -- 90% of max bladder value
+    local bowelsThreshold = 0.95 * bowelsMaxValue -- 95% of max bowel value
+
+    -- Check if the player should urinate involuntarily
+    if urinateValue >= bladderThreshold then
         BathroomFunctions.UrinateSelf()
     end
 
-    if defecateValue >= 95 then --Can poop self
+    -- Check if the player should defecate involuntarily
+    if defecateValue >= bowelsThreshold then
         BathroomFunctions.DefecateSelf()
     end
 end
+
 
 -- =====================================================
 --
@@ -107,13 +147,19 @@ end
 -- =====================================================
 
 function BathroomFunctions.UrinateSelf()
+    local urinateValue = BathroomFunctions.GetUrinateValue() -- Current bladder level
     local player = getPlayer()
+
+    BathroomFunctions.SetUrinateValue(0)
 
     player:Say("I pissed myself")
 end
 
 function BathroomFunctions.DefecateSelf()
+    local defecateValue = BathroomFunctions.GetDefecateValue() -- Current bowel level
     local player = getPlayer()
+
+    BathroomFunctions.SetDefecateValue(0)
 
     player:Say("I shit myself")
 end
