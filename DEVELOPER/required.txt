@@ -1,0 +1,13 @@
+- Urination Meter
+- Defecation Meter
+
+- "Urinate" context menu option
+- "Defecate" context menu option
+
+- Laxatives
+- Anti-Diarrhea Pills
+- Pee Pills
+
+- Pee in bottles
+- Filter out pee bottle
+- Sit on toilet (required for pooping or peeing [females only])

@@ -1,0 +1,28 @@
+module BathroomFunctions
+{
+    fluid Urine
+    {
+        ColorReference  = Gold,
+        DisplayName     = Fluid_Name_Urine,
+
+        Categories
+        {
+            Hazardous,
+        }
+
+        BlendWhiteList
+        {
+            whitelist = true,
+            categories
+            {
+            }
+        }
+
+        Poison
+        {
+            maxEffect         = Medium,
+            minAmount         = 0.2,
+            diluteRatio       = 0.1,
+        }
+    }
+}
