@@ -3,7 +3,7 @@ module BathroomFunctions
     fluid Urine
     {
         ColorReference  = Gold,
-        DisplayName     = Urine,
+        DisplayName     = Fluid_Name_Urine,
 
         Categories
         {

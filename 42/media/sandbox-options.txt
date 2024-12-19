@@ -52,7 +52,7 @@ option BathroomFunctions.BowelsIncreaseMultiplier
 	default = 1.0,
 
 	page = Defecation,
-	translation = BathroomFunctions_DefecateIncreaseMultiplier,
+	translation = BathroomFunctions_BowelsIncreaseMultiplier,
 }
 
 option BathroomFunctions.DefecateSpeedMultiplier
@@ -108,7 +108,7 @@ option BathroomFunctions.FliesOnPoop
 	default = true,
 
 	page = Defecation,
-	translation = BathroomFunctions_FliesOnPoop
+	translation = BathroomFunctions_FliesOnPoop,
 }
 
 /*
