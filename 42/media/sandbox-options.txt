@@ -40,7 +40,7 @@ option BathroomFunctions.BowelsMaxValue
 	max = 1000.0,
 	default = 500.0,
 
-	page = Urination,
+	page = Defecation,
 	translation = BathroomFunctions_BowelsMaxValue,
 }
 

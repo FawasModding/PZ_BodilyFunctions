@@ -1,3 +1,5 @@
 12/18/24
 -Added original assets
 -Created "Urine" liquid type
+-Reimplemented main BathroomFunctions.lua script, pee and poop meter
+-Reimplemented Sandbox variables
