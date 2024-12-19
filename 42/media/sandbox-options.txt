@@ -1,0 +1,162 @@
+VERSION = 1,
+
+option BathroomFunctions.EnableUrination
+{
+	type = boolean,
+	default = true,
+
+	page = Bathroom,
+	translation = BathroomFunctions_EnableUrination,
+}
+
+option BathroomFunctions.EnableDefecation
+{
+	type = boolean,
+	default = true,
+
+	page = Bathroom,
+	translation = BathroomFunctions_EnableDefecation,
+}
+
+option BathroomFunctions.EnableDiarrhea
+{
+	type = boolean,
+	default = true,
+
+	page = Defecation,
+	translation = BathroomFunctions_EnableDiarrhea,
+}
+
+option BathroomFunctions.DefecateSpeedMultiplier
+{
+	type = double,
+	min = 0,
+	max = 100.0,
+	default = 1.0,
+
+	page = Defecation,
+	translation = BathroomFunctions_DefecateSpeedMultiplier,
+}
+
+option BathroomFunctions.DefecateIncreaseMultiplier
+{
+	type = double,
+	min = 0,
+	max = 100.0,
+	default = 1.0,
+
+	page = Defecation,
+	translation = BathroomFunctions_DefecateIncreaseMultiplier,
+}
+
+option BathroomFunctions.CanPoopSelf
+{
+	type = boolean,
+	default = true,
+
+	page = Defecation,
+	translation = BathroomFunctions_CanPoopSelf,
+}
+
+option BathroomFunctions.NightPoopAccidents
+{
+	type = boolean,
+	default = true,
+
+	page = Defecation,
+	translation = BathroomFunctions_NightPoopAccidents,
+}
+
+option BathroomFunctions.CreatePoopObject
+{
+	type = boolean,
+	default = true,
+
+	page = Defecation,
+	translation = BathroomFunctions_CreatePoopObject,
+}
+
+option BathroomFunctions.VisiblePoopStain
+{
+	type = boolean,
+	default = true,
+
+	page = Defecation,
+	translation = BathroomFunctions_VisiblePoopStain,
+}
+
+option BathroomFunctions.FliesOnPoop
+{
+	type = boolean,
+	default = true,
+
+	page = Defecation,
+	translation = BathroomFunctions_FliesOnPoop
+}
+
+option BathroomFunctions.UrinateSpeedMultiplier
+{
+	type = double,
+	min = 0,
+	max = 100.0,
+	default = 1.0,
+
+	page = Urination,
+	translation = BathroomFunctions_UrinateSpeedMultiplier,
+}
+
+option BathroomFunctions.UrinateIncreaseMultiplier
+{
+	type = double,
+	min = 0,
+	max = 100.0,
+	default = 1.0,
+
+	page = Urination,
+	translation = BathroomFunctions_UrinateIncreaseMultiplier,
+}
+
+option BathroomFunctions.CanPeeSelf
+{
+	type = boolean,
+	default = true,
+
+	page = Urination,
+	translation = BathroomFunctions_CanPeeSelf,
+}
+
+option BathroomFunctions.NightPeeAccidents
+{
+	type = boolean,
+	default = true,
+
+	page = Urination,
+	translation = BathroomFunctions_NightPeeAccidents,
+}
+
+option BathroomFunctions.CreatePeeObject
+{
+	type = boolean,
+	default = true,
+
+	page = Urination,
+	translation = BathroomFunctions_CreatePeeObject,
+}
+
+option BathroomFunctions.VisiblePeeStain
+{
+	type = boolean,
+	default = false,
+
+	page = Urination,
+	translation = BathroomFunctions_VisiblePeeStain,
+}
+
+option BathroomFunctions.CanPeeBottle
+{
+	type = boolean,
+	default = true,
+
+	page = Urination,
+	translation = BathroomFunctions_CanPeeBottle,
+}
