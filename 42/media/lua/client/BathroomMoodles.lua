@@ -4,12 +4,6 @@ MF.createMoodle("Urination");
 MF.createMoodle("PoopedSelf");
 MF.createMoodle("PeedSelf");
 
--- =====================================================
---
--- BATHROOM VALUES FUNCTIONS
---
--- =====================================================
-
 local function CheckBathroomMeters(player)
 	local playerNum = player:getPlayerNum()
 	local moodle = MF.getMoodle("Defecation",playerNum)
