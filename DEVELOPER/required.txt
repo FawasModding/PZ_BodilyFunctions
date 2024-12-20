@@ -12,5 +12,5 @@
 - Filter out pee bottle
 - Sit on toilet (required for pooping or peeing [females only])
 
-- Urination Moodle
-- Defecation Moodle
+- Pee Self action is timed
+- Poop Self action is timed

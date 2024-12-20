@@ -16,4 +16,22 @@ Moodles_EN {
 	Moodles_Urination_Bad_desc_lvl3 = "The need is impossible to ignore.",
 	Moodles_Urination_Bad_lvl4 = "On the Verge",
 	Moodles_Urination_Bad_desc_lvl4 = "About to burst!",
+
+    Moodles_PoopedSelf_Bad_lvl1 = "Small Accident",
+    Moodles_PoopedSelf_Bad_desc_lvl1 = "It's not horrible, but it's definitely noticeable.",
+    Moodles_PoopedSelf_Bad_lvl2 = "Unpleasant Situation",
+    Moodles_PoopedSelf_Bad_desc_lvl2 = "You've officially soiled yourself.",
+    Moodles_PoopedSelf_Bad_lvl3 = "Serious Mess",
+    Moodles_PoopedSelf_Bad_desc_lvl3 = "Your pants will not forgive you.",
+    Moodles_PoopedSelf_Bad_lvl4 = "Disastrous Accident",
+    Moodles_PoopedSelf_Bad_desc_lvl4 = "Never let this happen again.",
+
+    Moodles_PeedSelf_Bad_lvl1 = "Small Leak",
+    Moodles_PeedSelf_Bad_desc_lvl1 = "It’s uncomfortable, but you can still manage.",
+    Moodles_PeedSelf_Bad_lvl2 = "Accident Occurred",
+    Moodles_PeedSelf_Bad_desc_lvl2 = "You've officially wet yourself.",
+    Moodles_PeedSelf_Bad_lvl3 = "Fully Soaked",
+    Moodles_PeedSelf_Bad_desc_lvl3 = "Can't blame it on spilled water.",
+    Moodles_PeedSelf_Bad_lvl4 = "Catastrophic Leak",
+    Moodles_PeedSelf_Bad_desc_lvl4 = "Time to do laundry.",
 }

@@ -17,6 +17,9 @@ Sandbox_EN =
 	Sandbox_BathroomFunctions_RequirePantsUnzipped = "Require Pants Unzipped",
 	Sandbox_BathroomFunctions_RequirePantsUnzipped_tooltip = "Enable for consequences when using the bathroom without unzipping your pants.",
 
+    Sandbox_BathroomFunctions_DoMoodles = "Do Moodles",
+    Sandbox_BathroomFunctions_DoMoodles_tooltip = "Enable or disable moodles for pee/poop meters.",
+
 	Sandbox_Defecation = "Defecation",
 	
 	Sandbox_BathroomFunctions_EnableDefecation = "Enable Defecation",

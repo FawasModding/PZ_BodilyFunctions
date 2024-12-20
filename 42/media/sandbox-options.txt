@@ -18,6 +18,15 @@ option BathroomFunctions.EnableDefecation
 	translation = BathroomFunctions_EnableDefecation,
 }
 
+option BathroomFunctions.DoMoodles
+{
+    type = boolean,
+    default = true,
+
+    page = Bathroom,
+    translation = BathroomFunctions_DoMoodles,
+}
+
 option BathroomFunctions.EnableDiarrhea
 {
 	type = boolean,

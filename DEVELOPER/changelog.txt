@@ -1,6 +1,7 @@
 12/19/24
 -Moved Translate to lua/shared to fix
--
+-Added "Defecation" and "Urination" moodles
+-Added "PoopedSelf" and "PeedSelf" moodles
 
 12/18/24
 -Added original assets

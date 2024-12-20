@@ -68,6 +68,58 @@ function BathroomFunctions.SetDefecateValue(newDefecateValue)
     end
 end
 
+--[[
+Function to retrieve the player's current peed self value
+If the value isn't set or isn't a valid number, it defaults to 0.0.
+]]--
+function BathroomFunctions.GetPeedSelfValue()
+    local player = getPlayer() -- Fetch the current player object
+    local peedSelfValue = player:getModData().peedSelfValue -- Retrieve the peed self value from the player's modData
+
+    if type(peedSelfValue) ~= "number" then -- Ensure the retrieved value is a valid number
+        peedSelfValue = 0.0 -- Default to 0.0 if the value is invalid or undefined
+    end
+
+    return peedSelfValue -- Return the peed self value
+end
+
+--[[
+Function to retrieve the player's current pooped self value
+If the value isn't set or isn't a valid number, it defaults to 0.0.
+]]--
+function BathroomFunctions.GetPoopedSelfValue()
+    local player = getPlayer() -- Fetch the current player object
+    local poopedSelfValue = player:getModData().poopedSelfValue -- Retrieve the pooped self value from the player's modData
+
+    if type(poopedSelfValue) ~= "number" then -- Ensure the retrieved value is a valid number
+        poopedSelfValue = 0.0 -- Default to 0.0 if the value is invalid or undefined
+    end
+
+    return poopedSelfValue -- Return the pooped self value
+end
+
+function BathroomFunctions.SetPeedSelfValue(newPeedSelfValue)
+    local player = getPlayer() -- Fetch the current player object
+
+    -- Ensure the new value is a valid number
+    if type(newPeedSelfValue) == "number" then
+        player:getModData().peedSelfValue = tonumber(newPeedSelfValue)
+    else
+        print("Error: Invalid value for urinateValue. Must be a number.") -- Handle invalid input
+    end
+end
+
+function BathroomFunctions.SetPoopedSelfValue(newPoopedSelfValue)
+    local player = getPlayer() -- Fetch the current player object
+
+    -- Ensure the new value is a valid number
+    if type(newPoopedSelfValue) == "number" then
+        player:getModData().poopedSelfValue = tonumber(newPoopedSelfValue)
+    else
+        print("Error: Invalid value for defecateValue. Must be a number.") -- Handle invalid input
+    end
+end
+
 -- =====================================================
 --
 -- BATHROOM FUNCTIONALITY AND TIMERS
@@ -146,23 +198,45 @@ end
 --
 -- =====================================================
 
-function BathroomFunctions.UrinateSelf()
-    local urinateValue = BathroomFunctions.GetUrinateValue() -- Current bladder level
-    local player = getPlayer()
-
-    BathroomFunctions.SetUrinateValue(0)
-
-    player:Say("I pissed myself")
-end
-
 function BathroomFunctions.DefecateSelf()
+    local player = getPlayer() -- Fetch the current player object
     local defecateValue = BathroomFunctions.GetDefecateValue() -- Current bowel level
-    local player = getPlayer()
+    local bowelsMaxValue = SandboxVars.BathroomFunctions.BowelsMaxValue or 100 -- Get the max bladder value, default to 100 if not set
 
+    -- Increment the poopedSelfValue to represent the accident
+    local poopedSelfValue = BathroomFunctions.GetPoopedSelfValue()
+    poopedSelfValue = poopedSelfValue + defecateValue -- Add the current defecation value to the poopedSelfValue
+    BathroomFunctions.SetPoopedSelfValue(poopedSelfValue)
+
+    -- The player says that they pooped themselves
+    player:Say("I shit myself")
+
+    -- Set the defecate value to 0 as the player has defecated
     BathroomFunctions.SetDefecateValue(0)
 
-    player:Say("I shit myself")
+    print("Updated Pooped Self Value: " .. BathroomFunctions.GetPoopedSelfValue()) -- Debug print statement to display the updated defecation value
 end
+
+
+function BathroomFunctions.UrinateSelf()
+    local player = getPlayer() -- Fetch the current player object
+    local urinateValue = BathroomFunctions.GetUrinateValue() -- Current bladder level
+    local bladderMaxValue = SandboxVars.BathroomFunctions.BladderMaxValue or 100 -- Get the max bladder value, default to 100 if not set
+
+    -- Increment the peedSelfValue to represent the accident
+    local peedSelfValue = BathroomFunctions.GetPeedSelfValue()
+    peedSelfValue = peedSelfValue + urinateValue -- Add the current urination value to the peedSelfValue
+    BathroomFunctions.SetPeedSelfValue(peedSelfValue)
+
+    -- The player says that they peed themselves
+    player:Say("I pissed myself")
+
+    -- Set the urinate value to 0 as the player has urinated
+    BathroomFunctions.SetUrinateValue(0)
+
+    print("Updated Peed Self Value: " .. BathroomFunctions.GetPeedSelfValue()) -- Debug print statement to display the updated defecation value
+end
+
 
 -- =====================================================
 --
