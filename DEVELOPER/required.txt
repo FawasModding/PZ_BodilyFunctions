@@ -1,16 +1,17 @@
-- Urination Meter
-- Defecation Meter
+IMMEDIATE:
 
 - "Urinate" context menu option
 - "Defecate" context menu option
+- Sit on toilet (required for pooping or peeing [females only])
+- Poop object if not wearing bottoms
+- Pee puddle on accidental urination
+
+EVENTUAL:
 
 - Laxatives
 - Anti-Diarrhea Pills
 - Pee Pills
-
 - Pee in bottles
 - Filter out pee bottle
-- Sit on toilet (required for pooping or peeing [females only])
-
 - Pee Self action is timed
 - Poop Self action is timed

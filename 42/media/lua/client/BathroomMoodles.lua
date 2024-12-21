@@ -66,6 +66,8 @@ local function CheckBathroomMeters(player)
 
 	if moodle3 then
 		local poopedSelfValue = BathroomFunctions.GetPoopedSelfValue()
+		local poopedSelfPercent = poopedSelfValue / 100 -- Assuming a max value of 100 for severity
+
 		local poopedSelfThreshold = {
 			[0.25] = 0.4,
 			[0.5] = 0.3,
@@ -73,16 +75,14 @@ local function CheckBathroomMeters(player)
 			[1.0] = 0.1
 		}
 
-		-- Calculate percentage of the max value
-		local poopedSelfPercent = poopedSelfValue / bowelsMaxValue
-
-		if poopedSelfPercent > 1.0 then
+		-- Adjusted conditional logic to ensure correct thresholds
+		if poopedSelfPercent >= 1.0 then
 			moodle3:setValue(poopedSelfThreshold[1.0])
-		elseif poopedSelfPercent > 0.75 then
+		elseif poopedSelfPercent >= 0.75 then
 			moodle3:setValue(poopedSelfThreshold[0.75])
-		elseif poopedSelfPercent > 0.5 then
+		elseif poopedSelfPercent >= 0.5 then
 			moodle3:setValue(poopedSelfThreshold[0.5])
-		elseif poopedSelfPercent > 0.25 then
+		elseif poopedSelfPercent >= 0.25 then
 			moodle3:setValue(poopedSelfThreshold[0.25])
 		else
 			moodle3:setValue(0.5)
@@ -91,6 +91,8 @@ local function CheckBathroomMeters(player)
 
 	if moodle4 then
 		local peedSelfValue = BathroomFunctions.GetPeedSelfValue()
+		local peedSelfPercent = peedSelfValue / 100 -- Assuming a max value of 100 for severity
+
 		local peedSelfThreshold = {
 			[0.25] = 0.4,
 			[0.5] = 0.3,
@@ -98,16 +100,14 @@ local function CheckBathroomMeters(player)
 			[1.0] = 0.1
 		}
 
-		-- Calculate percentage of the max value
-		local peedSelfPercent = peedSelfValue / bladderMaxValue
-
-		if peedSelfPercent > 1.0 then
+		-- Adjusted conditional logic to ensure correct thresholds
+		if peedSelfPercent >= 1.0 then
 			moodle4:setValue(peedSelfThreshold[1.0])
-		elseif peedSelfPercent > 0.75 then
+		elseif peedSelfPercent >= 0.75 then
 			moodle4:setValue(peedSelfThreshold[0.75])
-		elseif peedSelfPercent > 0.5 then
+		elseif peedSelfPercent >= 0.5 then
 			moodle4:setValue(peedSelfThreshold[0.5])
-		elseif peedSelfPercent > 0.25 then
+		elseif peedSelfPercent >= 0.25 then
 			moodle4:setValue(peedSelfThreshold[0.25])
 		else
 			moodle4:setValue(0.5)

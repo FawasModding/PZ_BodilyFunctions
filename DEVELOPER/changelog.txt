@@ -1,3 +1,6 @@
+12/20/24
+-Made PeedSelf and PoopedSelf moodles depend on the PeedSeverity and PoopedSeverity values on each clothing item. Which means, moodle disappears after 10 minutes of taking the soiled clothes off.
+
 12/19/24
 -Moved Translate to lua/shared to fix
 -Added "Defecation" and "Urination" moodles

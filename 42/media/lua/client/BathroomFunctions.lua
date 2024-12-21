@@ -25,6 +25,7 @@ function BathroomFunctions.BathroomFunctionTimers()
     if BathroomFunctions.didFirstTimer then
         BathroomFunctions.NewBathroomValues() -- If the initial setup is done, update the player's bathroom values
         BathroomFunctions.CheckForAccident() -- Check whether or not the player has urinated or defecated themselves.
+        BathroomFunctions.DirtyBottomsEffects()
     else
         BathroomFunctions.didFirstTimer = true -- If this is the first call, set the flag to true and skip updating values
     end
@@ -105,11 +106,6 @@ function BathroomFunctions.DefecateSelf()
     local defecateValue = BathroomFunctions.GetDefecateValue() -- Current bowel level
     local bowelsMaxValue = SandboxVars.BathroomFunctions.BowelsMaxValue or 100 -- Get the max bowel value, default to 100 if not set
 
-    -- Increment the poopedSelfValue to represent the accident
-    local poopedSelfValue = BathroomFunctions.GetPoopedSelfValue()
-    poopedSelfValue = poopedSelfValue + defecateValue -- Add the current defecation value to the poopedSelfValue
-    BathroomFunctions.SetPoopedSelfValue(poopedSelfValue)
-
     -- Check if player has relevant clothing on and apply the "pooped bottoms" effects
     if BathroomFunctions.HasClothingOn(player, "UnderwearBottom", "Pants", "BathRobe", "FullSuit") then
         BathroomFunctions.DefecateBottoms()
@@ -126,11 +122,6 @@ function BathroomFunctions.UrinateSelf()
     local player = getPlayer() -- Fetch the current player object
     local urinateValue = BathroomFunctions.GetUrinateValue() -- Current bladder level
     local bladderMaxValue = SandboxVars.BathroomFunctions.BladderMaxValue or 100 -- Get the max bladder value, default to 100 if not set
-
-    -- Increment the peedSelfValue to represent the accident
-    local peedSelfValue = BathroomFunctions.GetPeedSelfValue()
-    peedSelfValue = peedSelfValue + urinateValue -- Add the current urination value to the peedSelfValue
-    BathroomFunctions.SetPeedSelfValue(peedSelfValue)
 
     -- Check if player has relevant clothing on and apply the "peed bottoms" effects
     if BathroomFunctions.HasClothingOn(player, "UnderwearBottom", "Pants", "BathRobe", "FullSuit") then
@@ -154,8 +145,24 @@ function BathroomFunctions.UrinateBottoms()
     for i = 1, #bodyLocations do
         clothing = player:getWornItem(bodyLocations[i])
         if clothing then
-            clothing:getModData().peed = true -- Mark the clothing as soiled by urine
-            BathroomFunctions.SetClothing(clothing) -- Update the clothing item
+            local modData = clothing:getModData()
+
+            -- Ensure 'peedSeverity' is initialized if it doesn't exist
+            if modData.peedSeverity == nil then
+                modData.peedSeverity = 0
+            end
+
+            -- Mark the clothing as soiled by urine
+            modData.peed = true
+            modData.peedSeverity = modData.peedSeverity + 25
+
+            -- Cap the 'peedSeverity' at 100
+            if modData.peedSeverity >= 100 then
+                modData.peedSeverity = 100
+            end
+
+            -- Update the clothing's condition after the accident
+            BathroomFunctions.PeedPoopedSelfUpdate(clothing)
         end
     end
 
@@ -166,6 +173,7 @@ function BathroomFunctions.UrinateBottoms()
     -- The player says they have urinated themselves
     player:Say("I've pissed myself")
 end
+
 
 -- Function to apply effects when the player has defecated in their clothing
 function BathroomFunctions.DefecateBottoms()
@@ -178,8 +186,27 @@ function BathroomFunctions.DefecateBottoms()
     for i = 1, #bodyLocations do
         clothing = player:getWornItem(bodyLocations[i])
         if clothing then
-            clothing:getModData().pooped = true -- Mark the clothing as soiled by feces
-            BathroomFunctions.SetClothing(clothing) -- Update the clothing item
+            local modData = clothing:getModData()
+
+            -- Ensure 'poopedSeverity' is initialized if it doesn't exist
+            if modData.poopedSeverity == nil then
+                modData.poopedSeverity = 0
+            end
+
+            -- Mark the clothing as soiled by feces
+            modData.pooped = true
+            modData.poopedSeverity = modData.poopedSeverity + 25
+
+            -- Cap the 'poopedSeverity' at 100
+            if modData.poopedSeverity >= 100 then
+                modData.poopedSeverity = 100
+            end
+
+            -- Update the clothing item and condition
+            BathroomFunctions.SetClothing(clothing)
+
+            -- Update the player's condition after the accident
+            BathroomFunctions.PeedPoopedSelfUpdate(clothing)
         end
     end
 
@@ -200,6 +227,7 @@ function BathroomFunctions.DefecateBottoms()
     -- The player says they have defecated themselves
     player:Say("I've shit myself")
 end
+
 
 -- Helper function to check if the player is wearing any of the specified clothing
 function BathroomFunctions.HasClothingOn(player, ...)
@@ -234,35 +262,104 @@ function BathroomFunctions.SetClothing(clothing)
     -- If the clothing is marked as "peed" (wet), modify the clothing's properties
     if clothing:getModData().peed == true then
         -- Update the name to include the "(Peed)" status
-        clothing:setName(cleanName .. " (Peed)")
+        clothing:setName(cleanName .. " (Peed " .. clothing:getModData().peedSeverity .. "%)")
         -- Set the wetness to maximum (500) to indicate the clothing is soaked
         clothing:setWetness(500)
         -- Set the dirtyness to maximum (100) to reflect the soiled condition
         clothing:setDirtyness(100)
-
-        -- Ensure the "peed" status is set to true
-        clothing:getModData().peed = true
     end
 
     -- If the clothing is marked as "pooped" (dirty), modify the clothing's properties
     if clothing:getModData().pooped == true then
         -- Update the name to include the "(Pooped)" status
-        clothing:setName(cleanName .. " (Pooped)")
+        clothing:setName(cleanName .. " (Pooped " .. clothing:getModData().poopedSeverity .. "%)")
         -- Set the dirtyness to maximum (100) to reflect the soiled condition
         clothing:setDirtyness(100)
         -- Reduce the player's run speed to simulate the hindrance caused by having poop in the clothing
         clothing:setRunSpeedModifier(clothing:getRunSpeedModifier() - 0.2) -- Expected effect: slower movement, but may not be very noticeable
-
-        -- Ensure the "pooped" status is set to true
-        clothing:getModData().pooped = true
     end
 
     -- If both "peed" and "pooped" statuses are true, update the clothing name to reflect both conditions
     if clothing:getModData().peed and clothing:getModData().pooped then
-        clothing:setName(cleanName .. " (Peed & Pooped)")
+        clothing:setName(cleanName .. " (Peed " .. clothing:getModData().peedSeverity .. "%" .. " & " .. "Pooped " .. clothing:getModData().poopedSeverity .. "%)")
     end
 end
 
+--[[
+Use this to call function to show the wearing urinated and defecated garments moodles. As well as affect the mood over time.
+]]--
+function BathroomFunctions.DirtyBottomsEffects()
+    local player = getPlayer()
+    local totalPoopedSeverity = 0
+    local totalPeedSeverity = 0
+
+    -- Iterate over all worn items
+    for i = 0, player:getWornItems():size() - 1 do
+        local item = player:getWornItems():getItemByIndex(i)
+
+        -- Ensure the item is not nil before calling PeedPoopedSelfUpdate
+        if item ~= nil then
+            -- Update values for pooped and peed states based on item mod data
+            local itemUpdatedPooped, itemUpdatedPeed = BathroomFunctions.PeedPoopedSelfUpdate(item)
+
+            -- Accumulate the total pooped and peed severity
+            if itemUpdatedPooped then
+                totalPoopedSeverity = totalPoopedSeverity + item:getModData().poopedSeverity
+            end
+            if itemUpdatedPeed then
+                totalPeedSeverity = totalPeedSeverity + item:getModData().peedSeverity
+            end
+        else
+            print("Error: Worn item is nil at index " .. i)
+        end
+    end
+
+    -- Update global values for pooped and peed after all items are processed
+    if totalPoopedSeverity > 0 then
+        BathroomFunctions.SetPoopedSelfValue(totalPoopedSeverity)
+    else
+        BathroomFunctions.SetPoopedSelfValue(0)
+    end
+    if totalPeedSeverity > 0 then
+        BathroomFunctions.SetPeedSelfValue(totalPeedSeverity)
+    else
+        BathroomFunctions.SetPeedSelfValue(0)
+    end
+end
+
+function BathroomFunctions.PeedPoopedSelfUpdate(clothing)
+    local updatedPooped = false
+    local updatedPeed = false
+
+    -- Ensure 'clothing' and its 'modData' are valid before proceeding
+    if clothing ~= nil and clothing:getModData() ~= nil then
+        local modData = clothing:getModData()
+
+        if modData.pooped ~= nil then -- Check if the worn item is defecated
+            BathroomFunctions.SetPoopedSelfValue(modData.poopedSeverity)
+            updatedPooped = true
+        else
+            -- If no pooped state, set to 0 (can be skipped here if handled at the end of the loop)
+            BathroomFunctions.SetPoopedSelfValue(0)
+        end
+
+        if modData.peed ~= nil then -- Check if the worn item is urinated
+            BathroomFunctions.SetPeedSelfValue(modData.peedSeverity)
+            updatedPeed = true
+        else
+            -- If no peed state, set to 0 (can be skipped here if handled at the end of the loop)
+            BathroomFunctions.SetPeedSelfValue(0)
+        end
+    else
+        print("Error: Clothing or mod data is nil in PeedPoopedSelfUpdate.")
+    end
+
+    -- Debugging output
+    print("Updated PeedSelfValue: " .. BathroomFunctions.GetPeedSelfValue())
+    print("Updated PoopedSelfValue: " .. BathroomFunctions.GetPoopedSelfValue())
+
+    return updatedPooped, updatedPeed
+end
 
 
 
