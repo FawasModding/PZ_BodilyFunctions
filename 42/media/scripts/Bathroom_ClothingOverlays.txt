@@ -1,0 +1,86 @@
+module BathroomFunctions {
+    imports {
+        Base
+    }
+	
+    item Bathroom_PeedPants {
+        Type = Clothing,
+        DisplayName = PeedPants,
+        ClothingItem = Bathroom_PeedPants,
+        BodyLocation = PeedOverlay,
+        IconsForTexture = PeedPants,
+        Tags = BathroomOverlay,
+        WorldStaticModel = Trousers_Ground,
+    }
+
+	
+    item SuitTrousersMesh_Peed {
+        Type = Clothing,
+        DisplayName = SuitTrousersMesh_Peed,
+        ClothingItem = SuitTrousersMesh_Peed,
+        BodyLocation = PeedOverlay,
+        IconsForTexture = PeedPants,
+        Tags = BathroomOverlay,
+        WorldStaticModel = Trousers_Ground,
+    }
+
+    item Female_Underpants_Peed {
+        Type = Clothing,
+        DisplayName = Female_Underpants_Peed,
+        ClothingItem = Female_Underpants_Peed,
+        BodyLocation = PeedOverlay,
+        IconsForTexture = PeedPants,
+        Tags = BathroomOverlay,
+        WorldStaticModel = Trousers_Ground,
+    }
+
+    item Male_Boxers_Peed {
+        Type = Clothing,
+        DisplayName = Male_Boxers_Peed,
+        ClothingItem = Male_Boxers_Peed,
+        BodyLocation = PeedOverlay,
+        IconsForTexture = PeedPants,
+        Tags = BathroomOverlay,
+        WorldStaticModel = Trousers_Ground,
+    }
+
+    item BoxingShorts_Peed {
+        Type = Clothing,
+        DisplayName = BoxingShorts_Peed,
+        ClothingItem = BoxingShorts_Peed,
+        BodyLocation = PeedOverlay,
+        IconsForTexture = PeedPants,
+        Tags = BathroomOverlay,
+        WorldStaticModel = Trousers_Ground,
+    }
+
+    item LongShorts_Peed {
+        Type = Clothing,
+        DisplayName = LongShorts_Peed,
+        ClothingItem = LongShorts_Peed,
+        BodyLocation = PeedOverlay,
+        IconsForTexture = PeedPants,
+        Tags = BathroomOverlay,
+        WorldStaticModel = Trousers_Ground,
+    }
+
+    item Male_SmallTrunks_Peed {
+        Type = Clothing,
+        DisplayName = Male_SmallTrunks_Peed,
+        ClothingItem = Male_SmallTrunks_Peed,
+        BodyLocation = PeedOverlay,
+        IconsForTexture = PeedPants,
+        Tags = BathroomOverlay,
+        WorldStaticModel = Trousers_Ground,
+    }
+
+    item Trousers_Short_Peed {
+        Type = Clothing,
+        DisplayName = Trousers_Short_Peed,
+        ClothingItem = Trousers_Short_Peed,
+        BodyLocation = PeedOverlay,
+        IconsForTexture = PeedPants,
+        Tags = BathroomOverlay,
+        WorldStaticModel = Trousers_Ground,
+    }
+}

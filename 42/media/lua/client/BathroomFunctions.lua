@@ -2,15 +2,6 @@ BathroomFunctions = {}
 BathroomFunctions.didFirstTimer = false
 FlySquares = {}
 
-
-
-
-
-
-
-
-
-
 -- =====================================================
 --
 -- BATHROOM FUNCTIONALITY AND TIMERS
@@ -355,8 +346,8 @@ function BathroomFunctions.PeedPoopedSelfUpdate(clothing)
     end
 
     -- Debugging output
-    print("Updated PeedSelfValue: " .. BathroomFunctions.GetPeedSelfValue())
-    print("Updated PoopedSelfValue: " .. BathroomFunctions.GetPoopedSelfValue())
+    --print("Updated PeedSelfValue: " .. BathroomFunctions.GetPeedSelfValue())
+    --print("Updated PoopedSelfValue: " .. BathroomFunctions.GetPoopedSelfValue())
 
     return updatedPooped, updatedPeed
 end
@@ -369,8 +360,26 @@ end
 --
 -- =====================================================
 
+function BathroomFunctions.onGameBoot()
+    local humanGroup = BodyLocations.getGroup("Human"); -- Get the BodyLocations group for humans
+    local peedLocation = humanGroup:getOrCreateLocation("PeedOverlay"); -- Create or fetch the PeedOverlay location
+
+    -- Remove PeedOverlay if it already exists to avoid duplication
+    local list = getClassFieldVal(humanGroup, getClassField(humanGroup, 1));
+    list:remove(peedLocation);
+
+    -- Find the index of Pants to ensure PeedOverlay renders above it
+    local pantsIndex = humanGroup:indexOf("Pants");
+
+    -- Add PeedOverlay just after Pants
+    list:add(pantsIndex + 1, peedLocation);
+end
+
+
 --[[
 Register the BathroomFunctionTimers function to run every 10 in-game minutes
 This ensures bathroom values are periodically updated.
 ]]--
 Events.EveryTenMinutes.Add(BathroomFunctions.BathroomFunctionTimers)
+
+Events.OnGameBoot.Add(BathroomFunctions.onGameBoot)
