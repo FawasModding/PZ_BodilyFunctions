@@ -46,11 +46,11 @@ Sandbox_EN =
 	Sandbox_BathroomFunctions_CreatePoopObject = "Create Poop Objects",
 	Sandbox_BathroomFunctions_CreatePoopObject_tooltip = "Enables poop objects when pooping on the ground or yourself.",
 
-	Sandbox_BathroomFunctions_VisiblePoopStain = "Show Poop Stain",
-	Sandbox_BathroomFunctions_VisiblePoopStain_tooltip = "Whether or not to change the clothing's texture to show a brown spot. (Creates new auto-equiped item)",
-
 	Sandbox_BathroomFunctions_FliesOnPoop = "Flies Around Poop",
 	Sandbox_BathroomFunctions_FliesOnPoop_tooltip = "Fly particles will fly around feces piles.",
+
+	Sandbox_BathroomFunctions_VisiblePoopStain = "(Testing) Show Poop Stain",
+	Sandbox_BathroomFunctions_VisiblePoopStain_tooltip = "Whether or not to show a fecal stain on soiled bottoms. (Warning: May be unoptimized.)",
 
 	Sandbox_BathroomFunctions_LegacyPoopStain = "Legacy Poop Stain",
 	Sandbox_BathroomFunctions_LegacyPoopStain_tooltip = "Creates the dirt effect on your clothes rather than retextured clothing.",
@@ -79,7 +79,7 @@ Sandbox_EN =
 	Sandbox_BathroomFunctions_CreatePeeObject_tooltip = "Enables urine objects when peeing on the ground or yourself.",
 
 	Sandbox_BathroomFunctions_VisiblePeeStain = "(Testing) Show Wet Spot",
-	Sandbox_BathroomFunctions_VisiblePeeStain_tooltip = "Whether or not to change the clothing's texture to show a wet spot. (Creates new auto-equiped item)",
+	Sandbox_BathroomFunctions_VisiblePeeStain_tooltip = "Whether or not to show a urine stain on wet bottoms. (Warning: May be unoptimized.)",
 
 	Sandbox_BathroomFunctions_CanPeeBottle = "Can Pee In Bottle",
 	Sandbox_BathroomFunctions_CanPeeBottle_tooltip = "Enables peeing in bottles.",

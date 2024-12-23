@@ -1,5 +1,6 @@
 12/22/24
 -Created several peed bottoms overlays, created a script that allows these to be applied when necessary.
+-Added functionality to "Show Pee Stain" in Sandbox settings
 
 12/20/24
 -Made PeedSelf and PoopedSelf moodles depend on the PeedSeverity and PoopedSeverity values on each clothing item. Which means, moodle disappears after 10 minutes of taking the soiled clothes off.

@@ -187,7 +187,7 @@ option BathroomFunctions.CreatePeeObject
 option BathroomFunctions.VisiblePeeStain
 {
 	type = boolean,
-	default = false,
+	default = true,
 
 	page = Urination,
 	translation = BathroomFunctions_VisiblePeeStain,

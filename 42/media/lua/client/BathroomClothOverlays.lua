@@ -138,50 +138,56 @@ end
 
 -- Function to handle the clothing check
 function BathroomClothOverlays.OnClothingChanged(player)
-    local player = getPlayer() -- needed because of EveryOneMinute
 
-    -- Always remove the overlay first to ensure no (or, less than there would be lmao) duplicates
-    -- Kind of inefficient but this has already taken too much time :|   If you're reading this, fix it and propose a change to the github
-    BathroomClothOverlays.removePeedOverlays(player)
+    -- THIS IS THE OVERARCHING BOOL THAT DECIDES IF THIS FEATURE WORKS IN-GAME
+    if SandboxVars.BathroomFunctions.VisiblePeeStain == true then
 
-    -- store all "peed" items from the inventory
-    local peedItems = {}
+        local player = getPlayer() -- needed because of EveryOneMinute
 
-    -- Check the player's inventory for "peed" items
-    local inventory = player:getInventory()
-    for i = 0, inventory:getItems():size() - 1 do
-        local item = inventory:getItems():get(i)
-        if item and item:getModData().peed == true then
-            --print("Found peed item in inventory: " .. tostring(item:getDisplayName()))
-            table.insert(peedItems, item) -- Add to the peed items array
-        end
-    end
+        -- Always remove the overlay first to ensure no (or, less than there would be lmao) duplicates
+        -- Kind of inefficient but this has already taken too much time :|   If you're reading this, fix it and propose a change to the github
+        BathroomClothOverlays.removePeedOverlays(player)
 
-    -- If no "peed" items are found in the inventory, return, since the rest is unnecessary
-    if #peedItems == 0 then
-        --print("No peed items found in inventory. Overlay removed.")
-        return
-    end
+        -- store all "peed" items from the inventory
+        local peedItems = {}
 
-    -- Perform the actual check of worn items
-    local currentWornItems = BathroomClothOverlays.getCurrentWornItems(player)
-
-    local equipped = false
-
-    for wornItem, _ in pairs(currentWornItems) do
-        for _, peedItem in ipairs(peedItems) do
-            -- Compare worn item and inventory item by their unique types
-            if wornItem:getModData() and wornItem:getModData().peed == true then
-                --print("Player is wearing a peed item: " .. tostring(wornItem:getDisplayName()))
-                BathroomClothOverlays.equipPeedOverlays(player)
-                equipped = true
+        -- Check the player's inventory for "peed" items
+        local inventory = player:getInventory()
+        for i = 0, inventory:getItems():size() - 1 do
+            local item = inventory:getItems():get(i)
+            if item and item:getModData().peed == true then
+                --print("Found peed item in inventory: " .. tostring(item:getDisplayName()))
+                table.insert(peedItems, item) -- Add to the peed items array
             end
         end
-    end
 
-    -- If no worn items match the "peed" items array, overlay stays removed
-    if not equipped then
-        --print("No peed items worn. Overlay removed.")
+        -- If no "peed" items are found in the inventory, return, since the rest is unnecessary
+        if #peedItems == 0 then
+            --print("No peed items found in inventory. Overlay removed.")
+            return
+        end
+
+        -- Perform the actual check of worn items
+        local currentWornItems = BathroomClothOverlays.getCurrentWornItems(player)
+
+        local equipped = false
+
+        for wornItem, _ in pairs(currentWornItems) do
+            for _, peedItem in ipairs(peedItems) do
+                -- Compare worn item and inventory item by their unique types
+                if wornItem:getModData() and wornItem:getModData().peed == true then
+                    --print("Player is wearing a peed item: " .. tostring(wornItem:getDisplayName()))
+                    BathroomClothOverlays.equipPeedOverlays(player)
+                    equipped = true
+                end
+            end
+        end
+
+        -- If no worn items match the "peed" items array, overlay stays removed
+        if not equipped then
+            --print("No peed items worn. Overlay removed.")
+        end
+
     end
 end
 
