@@ -5,6 +5,7 @@ IMMEDIATE:
 - Pee puddle on accidental urination
 - Pee & Poop beans for debug
 - Fix bug where only pooped item name text is added
+- Every sandbox option with "*" is unimplemented. implement these
 
 EVENTUAL:
 
@@ -17,3 +18,7 @@ EVENTUAL:
 - Pee Self action is timed
 - Poop Self action is timed
 - All underwear defined in BathroomClothOverlays
+- Realistic stomach volume w/ liquid and food contents that convert into bladder and bowels meters
+- Pee when pooping on the toilet
+- Require wiping with paper, tissues, tp, etc. otherwise putting pants / underwear back on causes 5% pooped
+- Require girls wiping with paper, tissues, tp, etc. otherwise putting pants / underwear back on causes 2% peed

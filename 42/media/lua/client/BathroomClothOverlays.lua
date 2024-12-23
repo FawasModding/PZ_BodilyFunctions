@@ -12,8 +12,36 @@ BathroomClothOverlays.femaleUnderpantsPeedItems = {}
 function BathroomClothOverlays.populateTestItems()
     -- Define a list of items for each type (strings only)
     local suitTrousersMeshItems = {"Trousers_Suit", "Trousers_SuitTEXTURE", "Trousers_Scrubs"}
-    local maleBoxersPantsItems = {"Boxers_White", "Male_Boxers_Pants_2", "Male_Boxers_Pants_3"}
-    local femaleUnderpantsPeedItems = {"Underpants_White", "Boxers_RedStripes", "Boxers_Silk_Black", "Bikini_TINT"}
+    local maleBoxersPantsItems = 
+    {
+        "Boxers_White",
+        "Male_Boxers_Pants_2",
+        "Male_Boxers_Pants_3",
+        "Boxers_Hearts",
+        "Boxers_Silk_Black",
+        "Boxers_Silk_Red",
+        "Boxers_RedStripes"
+    }
+    local femaleUnderpantsPeedItems =
+    {
+        "Underpants_White",
+        "Bikini_TINT",
+        "Underpants_Black",
+        "Underpants_RedSpots",
+        "Underpants_AnimalPrint",
+        "Underpants_Hide",
+        "FrillyUnderpants_Black",
+        "FrillyUnderpants_Pink",
+        "FrillyUnderpants_Red",
+        "Briefs_White",
+        "Briefs_AnimalPrints",
+        "Briefs_SmallTrunks_Black",
+        "Briefs_SmallTrunks_Blue",
+        "Briefs_SmallTrunks_Red",
+        "Briefs_SmallTrunks_WhiteTINT"
+    }
+
+
 
     -- Insert the items into their respective arrays
     for _, itemType in ipairs(suitTrousersMeshItems) do

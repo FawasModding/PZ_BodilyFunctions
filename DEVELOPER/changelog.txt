@@ -5,6 +5,7 @@
 -Added "Liquid Laxative" and "Liquid Diuretic" liquids
 -Made Pee, Laxative, and Diuretic liquids mixable.
 -Added "Filtered Urine" liquid
+-Revamped sandbox options page
 
 12/22/24
 -Created several peed bottoms overlays, created a script that allows these to be applied when necessary.

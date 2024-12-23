@@ -60,8 +60,8 @@ function BathroomFunctions.CheckForAccident()
     local bowelsMaxValue = SandboxVars.BathroomFunctions.BowelsMaxValue or 100 -- Default to 100 if not set
 
     -- Calculate thresholds
-    local bladderThreshold = 0.9 * bladderMaxValue -- 90% of max bladder value
-    local bowelsThreshold = 0.95 * bowelsMaxValue -- 95% of max bowel value
+    local bladderThreshold = 0.95 * bladderMaxValue -- 95% of max bladder value
+    local bowelsThreshold = 0.98 * bowelsMaxValue -- 98% of max bowel value
 
     -- Check if the player should urinate involuntarily
     if urinateValue >= bladderThreshold then

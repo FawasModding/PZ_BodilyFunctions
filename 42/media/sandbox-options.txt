@@ -27,15 +27,6 @@ option BathroomFunctions.DoMoodles
     translation = BathroomFunctions_DoMoodles,
 }
 
-option BathroomFunctions.EnableDiarrhea
-{
-	type = boolean,
-	default = true,
-
-	page = Defecation,
-	translation = BathroomFunctions_EnableDiarrhea,
-}
-
 /*
 Realistic Range: The amount of fecal matter the rectum can hold before needing to defecate varies. On average:
 The rectum can hold 0.2-0.5 liters (200-500 mL) of stool before needing to empty.
@@ -75,31 +66,73 @@ option BathroomFunctions.DefecateSpeedMultiplier
 	translation = BathroomFunctions_DefecateSpeedMultiplier,
 }
 
-option BathroomFunctions.CanPoopSelf
+option BathroomFunctions.POOPREQUIREMENTSHeader
 {
 	type = boolean,
-	default = true,
+	default = false,
 
 	page = Defecation,
-	translation = BathroomFunctions_CanPoopSelf,
+	translation = BathroomFunctions_POOPREQUIREMENTSHeader,
 }
 
-option BathroomFunctions.NightPoopAccidents
+/*
+Most people feel the urge to pee by this point and can comfortably use a toilet.
+*/
+option BathroomFunctions.PoopInToiletRequirement
 {
-	type = boolean,
-	default = true,
+	type = double,
+	min = 0,
+	max = 100.0,
+	default = 70.0,
 
 	page = Defecation,
-	translation = BathroomFunctions_NightPoopAccidents,
+	translation = BathroomFunctions_PoopInToiletRequirement,
 }
 
-option BathroomFunctions.CreatePoopObject
+/*
+Peeing on the ground would require more desperation, as it’s socially awkward. People tend to avoid this unless their bladder is pressing.
+*/
+option BathroomFunctions.PoopOnGroundRequirement
+{
+	type = double,
+	min = 0,
+	max = 100.0,
+	default = 80.0,
+
+	page = Defecation,
+	translation = BathroomFunctions_PoopOnGroundRequirement,
+}
+
+/*
+It's difficult for most people to consciously pee themselves due to social conditioning, even when the bladder is nearly full.
+*/
+option BathroomFunctions.PoopOnSelfRequirement
+{
+	type = double,
+	min = 0,
+	max = 100.0,
+	default = 75.0,
+
+	page = Defecation,
+	translation = BathroomFunctions_PoopOnSelfRequirement,
+}
+
+option BathroomFunctions.POOPSELFHeader
+{
+	type = boolean,
+	default = false,
+
+	page = Defecation,
+	translation = BathroomFunctions_POOPSELFHeader,
+}
+
+option BathroomFunctions.CanHavePoopAccident
 {
 	type = boolean,
 	default = true,
 
 	page = Defecation,
-	translation = BathroomFunctions_CreatePoopObject,
+	translation = BathroomFunctions_CanHavePoopAccident,
 }
 
 option BathroomFunctions.VisiblePoopStain
@@ -111,6 +144,33 @@ option BathroomFunctions.VisiblePoopStain
 	translation = BathroomFunctions_VisiblePoopStain,
 }
 
+option BathroomFunctions.NightPoopAccidents
+{
+	type = boolean,
+	default = true,
+
+	page = Defecation,
+	translation = BathroomFunctions_NightPoopAccidents,
+}
+
+option BathroomFunctions.POOPEXTRAHeader
+{
+	type = boolean,
+	default = false,
+
+	page = Defecation,
+	translation = BathroomFunctions_POOPEXTRAHeader,
+}
+
+option BathroomFunctions.CreatePoopObject
+{
+	type = boolean,
+	default = true,
+
+	page = Defecation,
+	translation = BathroomFunctions_CreatePoopObject,
+}
+
 option BathroomFunctions.FliesOnPoop
 {
 	type = boolean,
@@ -118,6 +178,15 @@ option BathroomFunctions.FliesOnPoop
 
 	page = Defecation,
 	translation = BathroomFunctions_FliesOnPoop,
+}
+
+option BathroomFunctions.EnableDiarrhea
+{
+	type = boolean,
+	default = true,
+
+	page = Defecation,
+	translation = BathroomFunctions_EnableDiarrhea,
 }
 
 /*
@@ -157,13 +226,82 @@ option BathroomFunctions.UrinateSpeedMultiplier
 	translation = BathroomFunctions_UrinateSpeedMultiplier,
 }
 
-option BathroomFunctions.CanPeeSelf
+option BathroomFunctions.PEEREQUIREMENTSHeader
+{
+	type = boolean,
+	default = false,
+
+	page = Urination,
+	translation = BathroomFunctions_PEEREQUIREMENTSHeader,
+}
+
+/*
+Most people feel the urge to pee by this point and can comfortably use a toilet.
+*/
+option BathroomFunctions.PeeInToiletRequirement
+{
+	type = double,
+	min = 0,
+	max = 100.0,
+	default = 60.0,
+
+	page = Urination,
+	translation = BathroomFunctions_PeeInToiletRequirement,
+}
+
+/*
+Peeing on the ground would require more desperation, as it’s socially awkward. People tend to avoid this unless their bladder is pressing.
+*/
+option BathroomFunctions.PeeOnGroundRequirement
+{
+	type = double,
+	min = 0,
+	max = 100.0,
+	default = 70.0,
+
+	page = Urination,
+	translation = BathroomFunctions_PeeOnGroundRequirement,
+}
+
+/*
+It's difficult for most people to consciously pee themselves due to social conditioning, even when the bladder is nearly full.
+*/
+option BathroomFunctions.PeeOnSelfRequirement
+{
+	type = double,
+	min = 0,
+	max = 100.0,
+	default = 85.0,
+
+	page = Urination,
+	translation = BathroomFunctions_PeeOnSelfRequirement,
+}
+
+option BathroomFunctions.PEESELFHeader
+{
+	type = boolean,
+	default = false,
+
+	page = Urination,
+	translation = BathroomFunctions_PEESELFHeader,
+}
+
+option BathroomFunctions.CanHavePeeAccident
 {
 	type = boolean,
 	default = true,
 
 	page = Urination,
-	translation = BathroomFunctions_CanPeeSelf,
+	translation = BathroomFunctions_CanHavePeeAccident,
+}
+
+option BathroomFunctions.VisiblePeeStain
+{
+	type = boolean,
+	default = true,
+
+	page = Urination,
+	translation = BathroomFunctions_VisiblePeeStain,
 }
 
 option BathroomFunctions.NightPeeAccidents
@@ -175,6 +313,15 @@ option BathroomFunctions.NightPeeAccidents
 	translation = BathroomFunctions_NightPeeAccidents,
 }
 
+option BathroomFunctions.PEEEXTRAHeader
+{
+	type = boolean,
+	default = false,
+
+	page = Urination,
+	translation = BathroomFunctions_PEEEXTRAHeader,
+}
+
 option BathroomFunctions.CreatePeeObject
 {
 	type = boolean,
@@ -182,15 +329,6 @@ option BathroomFunctions.CreatePeeObject
 
 	page = Urination,
 	translation = BathroomFunctions_CreatePeeObject,
-}
-
-option BathroomFunctions.VisiblePeeStain
-{
-	type = boolean,
-	default = true,
-
-	page = Urination,
-	translation = BathroomFunctions_VisiblePeeStain,
 }
 
 option BathroomFunctions.CanPeeBottle
