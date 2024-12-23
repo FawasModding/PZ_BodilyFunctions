@@ -1,3 +1,7 @@
+12/23/24
+-Added context menu options for using the bathroom with a urinal, toilet, ground, and on self
+-
+
 12/22/24
 -Created several peed bottoms overlays, created a script that allows these to be applied when necessary.
 -Removed display name from clothing items so it no longer shows up in inventory

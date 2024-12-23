@@ -77,14 +77,6 @@ end
 
 
 
-
-
-
-
-
-
-
-
 -- =====================================================
 --
 -- ACCIDENT FUNCTIONS
@@ -98,7 +90,7 @@ function BathroomFunctions.DefecateSelf()
     local bowelsMaxValue = SandboxVars.BathroomFunctions.BowelsMaxValue or 100 -- Get the max bowel value, default to 100 if not set
 
     -- Check if player has relevant clothing on and apply the "pooped bottoms" effects
-    if BathroomFunctions.HasClothingOn(player, "UnderwearBottom", "Pants", "BathRobe", "FullSuit") then
+    if BathroomFunctions.HasClothingOn(player, "UnderwearBottom", "Pants", "BathRobe", "FullSuit", "Underwear") then
         BathroomFunctions.DefecateBottoms()
     end
 
@@ -115,7 +107,7 @@ function BathroomFunctions.UrinateSelf()
     local bladderMaxValue = SandboxVars.BathroomFunctions.BladderMaxValue or 100 -- Get the max bladder value, default to 100 if not set
 
     -- Check if player has relevant clothing on and apply the "peed bottoms" effects
-    if BathroomFunctions.HasClothingOn(player, "UnderwearBottom", "Pants", "BathRobe", "FullSuit") then
+    if BathroomFunctions.HasClothingOn(player, "UnderwearBottom", "Pants", "BathRobe", "FullSuit", "Underwear") then
         BathroomFunctions.UrinateBottoms()
     end
 
@@ -130,7 +122,7 @@ function BathroomFunctions.UrinateBottoms()
     local player = getPlayer()
 
     local clothing = nil
-    local bodyLocations = {"UnderwearBottom", "Torso1Legs1", "Legs1", "Pants", "BathRobe", "FullSuit", "FullSuitHead", "FullTop", "BodyCostume"}
+    local bodyLocations = {"UnderwearBottom", "Torso1Legs1", "Legs1", "Pants", "BathRobe", "FullSuit", "FullSuitHead", "FullTop", "BodyCostume", "Underwear"}
 
     -- Check if the player is wearing any of the specified clothing
     for i = 1, #bodyLocations do
@@ -154,6 +146,8 @@ function BathroomFunctions.UrinateBottoms()
 
             -- Update the clothing's condition after the accident
             BathroomFunctions.PeedPoopedSelfUpdate(clothing)
+
+            BathroomClothOverlays.OnClothingChanged(player)
         end
     end
 
@@ -354,6 +348,118 @@ end
 
 
 
+
+
+-- =====================================================
+--
+-- RIGHT CLICK / INTERACTION FUNCTIONS
+--
+-- =====================================================
+
+function BathroomFunctions.BathroomRightClick(player, context, worldObjects)
+    local firstObject
+    for _, o in ipairs(worldObjects) do
+        if not firstObject then firstObject = o end
+    end
+
+    local player = getPlayer()
+    local square = firstObject:getSquare()
+    local worldObjects = square:getObjects()
+    local toiletOptionAdded = false
+
+    local urinalTiles = {"fixtures_bathroom_01_8", "fixtures_bathroom_01_9", "fixtures_bathroom_01_10", "fixtures_bathroom_01_11"}
+    local outhouseTiles = {"fixtures_bathroom_02_24", "fixtures_bathroom_02_25", "fixtures_bathroom_02_26", "fixtures_bathroom_02_27", "fixtures_bathroom_02_4", "fixtures_bathroom_02_5", "fixtures_bathroom_02_14", "fixtures_bathroom_02_15"}
+
+    local urinateValue = BathroomFunctions.GetUrinateValue()
+    local defecateValue = BathroomFunctions.GetDefecateValue()
+
+    -- Main menu option: "Bodily Functions"
+    local bathroomOption = context:addOption("Bodily Functions", worldObjects, nil)
+
+    -- Submenu for "Bodily Functions"
+    local bathroomSubMenu = ISContextMenu:getNew(context)
+    context:addSubMenu(bathroomOption, bathroomSubMenu)
+
+    -- Submenu for "Urination"
+    local peeOption = bathroomSubMenu:addOption("Urination", worldObjects, nil)
+    local peeSubMenu = ISContextMenu:getNew(bathroomSubMenu)
+    bathroomSubMenu:addSubMenu(peeOption, peeSubMenu)
+
+    -- Submenu for "Defecation"
+    local poopOption = bathroomSubMenu:addOption("Defecation", worldObjects, nil)
+    local poopSubMenu = ISContextMenu:getNew(bathroomSubMenu)
+    bathroomSubMenu:addSubMenu(poopOption, poopSubMenu)
+
+    -- Tooltips for "Urination"
+    local function addTooltip(option, description)
+        if option then
+            local tooltip = ISToolTip:new()
+            tooltip:initialise()
+            tooltip:setVisible(false)
+            tooltip.description = description
+            option.toolTip = tooltip
+        end
+    end
+
+    -- Default options for urination and defecation
+    local groundPeeOption = peeSubMenu:addOption("On Ground", worldObjects, BathroomFunctions.ClickedPeeOption, player)
+    local selfPeeOption = peeSubMenu:addOption("On Self", worldObjects, BathroomFunctions.UrinateSelf, player)
+    addTooltip(groundPeeOption, "Urinate on the ground. Prepare for a mess.")
+    addTooltip(selfPeeOption, "Urinate on yourself. But why.")
+
+    local groundPoopOption = poopSubMenu:addOption("On Ground", worldObjects, BathroomFunctions.ClickedPoopOption, player)
+    local selfPoopOption = poopSubMenu:addOption("On Self", worldObjects, BathroomFunctions.DefecateSelf, player)
+    addTooltip(groundPoopOption, "Defecate on the ground. Prepare for a mess.")
+    addTooltip(selfPoopOption, "Defecate on yourself. But why.")
+
+    -- Loop through world objects and check for toilets, urinals, and outhouses
+    for i = 0, worldObjects:size() - 1 do
+        local object = worldObjects:get(i)
+
+        -- Using toilet
+        if object:getTextureName() and luautils.stringStarts(object:getTextureName(), "fixtures_bathroom_01") and object:hasWater() and object:getSquare():DistToProper(player:getSquare()) < 1 then
+            local toiletPeeOption = peeSubMenu:addOption("In Toilet", worldObjects, BathroomFunctions.PeeInToilet, player)
+            local toiletPoopOption = poopSubMenu:addOption("In Toilet", worldObjects, BathroomFunctions.PoopInToilet, player)
+
+            if object:getWaterAmount() < 10.0 then
+                toiletPoopOption.notAvailable = true
+            end
+
+            addTooltip(toiletPeeOption, "Urinate in the toilet.")
+            addTooltip(toiletPoopOption, "Defecate in the toilet. Requires sufficient water.")
+            toiletOptionAdded = true
+        end
+
+        -- Using urinal
+        if not player:isFemale() then
+            for _, tile in ipairs(urinalTiles) do
+                if object:getTextureName() == tile then
+                    local urinalOption = peeSubMenu:addOption("In Urinal", worldObjects, BathroomFunctions.PeeInToilet, player)
+                    addTooltip(urinalOption, "Urinate in the urinal.")
+                    toiletOptionAdded = true
+                    break
+                end
+            end
+        end
+
+        -- Using outhouses
+        for _, tile in ipairs(outhouseTiles) do
+            if object:getTextureName() == tile then
+                local outhousePeeOption = peeSubMenu:addOption("In Outhouse", worldObjects, BathroomFunctions.PeeInToilet, player)
+                local outhousePoopOption = poopSubMenu:addOption("In Outhouse", worldObjects, BathroomFunctions.PoopInToilet, player)
+
+                addTooltip(outhousePeeOption, "Urinate in the outhouse.")
+                addTooltip(outhousePoopOption, "Defecate in the outhouse.")
+                toiletOptionAdded = true
+                break
+            end
+        end
+    end
+end
+
+
+
+
 -- =====================================================
 --
 -- EVENT REGISTRATION
@@ -391,3 +497,5 @@ This ensures bathroom values are periodically updated.
 Events.EveryTenMinutes.Add(BathroomFunctions.BathroomFunctionTimers)
 
 Events.OnGameBoot.Add(BathroomFunctions.onGameBoot)
+
+Events.OnFillWorldObjectContextMenu.Add(BathroomFunctions.BathroomRightClick)
