@@ -1,9 +1,9 @@
-UrinateAction = ISBaseTimedAction:derive("UrinateAction")
-function UrinateAction:isValid()
+SelfUrinate = ISBaseTimedAction:derive("SelfUrinate")
+function SelfUrinate:isValid()
 	return true
 end
 
-function UrinateAction:update()
+function SelfUrinate:update()
 	if self.usingToilet then
 		local props = self.toiletObject:getProperties()
 
@@ -19,7 +19,7 @@ function UrinateAction:update()
 	end
 end
 
-function UrinateAction:start()
+function SelfUrinate:start()
 	--Checks if character peed on ground or in toilet, has animation for male/female
 	if self.usingToilet then
 		if self.character:isFemale() then --If female, sit
@@ -36,11 +36,11 @@ function UrinateAction:start()
 	end
 end
 
-function UrinateAction:stop()
+function SelfUrinate:stop()
 	ISBaseTimedAction.stop(self)
 end
 
-function UrinateAction:perform()
+function SelfUrinate:perform()
 	local urinateValue = BathroomFunctions.GetUrinateValue()
 
 
@@ -48,7 +48,7 @@ function UrinateAction:perform()
 	ISBaseTimedAction.perform(self)
 end
 
-function UrinateAction:new(character, time, stopWalk, stopRun, peedSelf, usingToilet, toiletObject)
+function SelfUrinate:new(character, time, stopWalk, stopRun, peedSelf, usingToilet, toiletObject)
 	local o = {}
 	setmetatable(o, self)
 	self.__index = self

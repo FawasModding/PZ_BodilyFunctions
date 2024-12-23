@@ -83,41 +83,6 @@ end
 --
 -- =====================================================
 
--- Function to handle the defecation action when the player has an accident
-function BathroomFunctions.DefecateSelf()
-    local player = getPlayer() -- Fetch the current player object
-    local defecateValue = BathroomFunctions.GetDefecateValue() -- Current bowel level
-    local bowelsMaxValue = SandboxVars.BathroomFunctions.BowelsMaxValue or 100 -- Get the max bowel value, default to 100 if not set
-
-    -- Check if player has relevant clothing on and apply the "pooped bottoms" effects
-    if BathroomFunctions.HasClothingOn(player, unpack(BathroomFunctions.GetSoilableClothing())) then
-        BathroomFunctions.DefecateBottoms()
-    end
-
-    -- Set the defecate value to 0 as the player has defecated
-    BathroomFunctions.SetDefecateValue(0)
-
-    print("Updated Pooped Self Value: " .. BathroomFunctions.GetPoopedSelfValue()) -- Debug print statement to display the updated defecation value
-end
-
--- Function to handle the urination action when the player has an accident
-function BathroomFunctions.UrinateSelf()
-    local player = getPlayer() -- Fetch the current player object
-    local urinateValue = BathroomFunctions.GetUrinateValue() -- Current bladder level
-    local bladderMaxValue = SandboxVars.BathroomFunctions.BladderMaxValue or 100 -- Get the max bladder value, default to 100 if not set
-
-    -- Check if player has relevant clothing on and apply the "peed bottoms" effects
-    if BathroomFunctions.HasClothingOn(player, unpack(BathroomFunctions.GetSoilableClothing())) then
-        BathroomFunctions.UrinateBottoms()
-    end
-
-    -- Set the urinate value to 0 as the player has urinated
-    BathroomFunctions.SetUrinateValue(0)
-
-    print("Updated Peed Self Value: " .. BathroomFunctions.GetPeedSelfValue()) -- Debug print statement to display the updated urination value
-end
-
-
 -- Function to apply effects when the player has urinated in their clothing
 function BathroomFunctions.UrinateBottoms()
     local player = getPlayer()
@@ -472,14 +437,14 @@ function BathroomFunctions.PeeInToilet(worldObjects, object, player)
 	local urinateValue = BathroomFunctions.GetUrinateValue()
 	local peeTime = urinateValue
 
-	ISTimedActionQueue.add(UrinateAction:new(player, peeTime, true, true, false, true, object))
+	ISTimedActionQueue.add(ToiletUrinate:new(player, peeTime, true, true, object))
 end
 function BathroomFunctions.PoopInToilet(worldObjects, object, player)
 	local player = getPlayer()
 	local defecateValue = BathroomFunctions.GetDefecateValue()
 	local poopTime = defecateValue * 2
 
-	ISTimedActionQueue.add(DefecateAction:new(player, poopTime, true, true, false, true, object))
+	ISTimedActionQueue.add(ToiletDefecate:new(player, poopTime, true, true, object))
 end
 function BathroomFunctions.PeeOnGround()
 	--check if pants are down or unzipped, if so, go on ground, otherwise, go on self
@@ -487,7 +452,7 @@ function BathroomFunctions.PeeOnGround()
 	local urinateValue = BathroomFunctions.GetUrinateValue()
 	local peeTime = urinateValue
 
-	ISTimedActionQueue.add(UrinateAction:new(player, peeTime, true, true, false, false, nil))
+	ISTimedActionQueue.add(GroundUrinate:new(player, peeTime, true, true))
 end
 function BathroomFunctions.PoopOnGround()
 	--check if pants are down or unzipped, if so, go on ground, otherwise, go on self
@@ -495,9 +460,38 @@ function BathroomFunctions.PoopOnGround()
 	local defecateValue = BathroomFunctions.GetDefecateValue()
 	local poopTime = defecateValue * 2
 
-	ISTimedActionQueue.add(DefecateAction:new(player, poopTime, true, true, false, false, nil))
+	ISTimedActionQueue.add(GroundDefecate:new(player, poopTime, true, true))
 end
+function BathroomFunctions.DefecateSelf()
+    local player = getPlayer() -- Fetch the current player object
+    local defecateValue = BathroomFunctions.GetDefecateValue() -- Current bowel level
+    local bowelsMaxValue = SandboxVars.BathroomFunctions.BowelsMaxValue or 100 -- Get the max bowel value, default to 100 if not set
 
+    -- Check if player has relevant clothing on and apply the "pooped bottoms" effects
+    if BathroomFunctions.HasClothingOn(player, unpack(BathroomFunctions.GetSoilableClothing())) then
+        BathroomFunctions.DefecateBottoms()
+    end
+
+    -- Set the defecate value to 0 as the player has defecated
+    BathroomFunctions.SetDefecateValue(0)
+
+    print("Updated Pooped Self Value: " .. BathroomFunctions.GetPoopedSelfValue()) -- Debug print statement to display the updated defecation value
+end
+function BathroomFunctions.UrinateSelf()
+    local player = getPlayer() -- Fetch the current player object
+    local urinateValue = BathroomFunctions.GetUrinateValue() -- Current bladder level
+    local bladderMaxValue = SandboxVars.BathroomFunctions.BladderMaxValue or 100 -- Get the max bladder value, default to 100 if not set
+
+    -- Check if player has relevant clothing on and apply the "peed bottoms" effects
+    if BathroomFunctions.HasClothingOn(player, unpack(BathroomFunctions.GetSoilableClothing())) then
+        BathroomFunctions.UrinateBottoms()
+    end
+
+    -- Set the urinate value to 0 as the player has urinated
+    BathroomFunctions.SetUrinateValue(0)
+
+    print("Updated Peed Self Value: " .. BathroomFunctions.GetPeedSelfValue()) -- Debug print statement to display the updated urination value
+end
 
 
 

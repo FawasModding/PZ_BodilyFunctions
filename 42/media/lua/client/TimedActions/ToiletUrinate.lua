@@ -1,9 +1,9 @@
-DefecateAction = ISBaseTimedAction:derive("DefecateAction")
-function DefecateAction:isValid()
+ToiletUrinate = ISBaseTimedAction:derive("ToiletUrinate")
+function ToiletUrinate:isValid()
 	return true
 end
 
-function DefecateAction:update()
+function ToiletUrinate:update()
 	if self.usingToilet then
 		local props = self.toiletObject:getProperties()
 
@@ -19,29 +19,30 @@ function DefecateAction:update()
 	end
 end
 
-function DefecateAction:start()
-	-- Remove clothing items before starting the defecation
-    self.removedClothing = {}
+function ToiletUrinate:start()
 
-	if self.usingToilet then
+	--Character pees in toilet, has animation for male/female
+	if self.character:isFemale() then --If female, sit
 		self:setActionAnim("bathroomSitToilet")
-	else
-		self:setActionAnim("bathroomSquat")
+	else --If male, stand
+		self:setActionAnim("bathroomStandToilet")
 	end
+
 end
 
-function DefecateAction:stop()
+function ToiletUrinate:stop()
 	ISBaseTimedAction.stop(self)
 end
 
-function DefecateAction:perform()
-	local defecateValue = BathroomFunctions.GetDefecateValue()
+function ToiletUrinate:perform()
+	local urinateValue = BathroomFunctions.GetUrinateValue()
 
-	self.character:getModData().defecateValue = 0.0 --RESET DEFECATE VALUE
+
+	self.character:getModData().urinateValue = 0.0 --RESET URINE VALUE
 	ISBaseTimedAction.perform(self)
 end
 
-function DefecateAction:new(character, time, stopWalk, stopRun, poopedSelf, usingToilet, toiletObject)
+function ToiletUrinate:new(character, time, stopWalk, stopRun, toiletObject)
 	local o = {}
 	setmetatable(o, self)
 	self.__index = self
@@ -49,8 +50,6 @@ function DefecateAction:new(character, time, stopWalk, stopRun, poopedSelf, usin
 	o.stopOnWalk = stopWalk
 	o.stopOnRun = stopRun
 	o.maxTime = time
-	o.poopedSelf = poopedSelf
-	o.usingToilet = usingToilet
 	o.toiletObject = toiletObject
 	return o
 end
