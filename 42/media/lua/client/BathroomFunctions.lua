@@ -402,12 +402,12 @@ function BathroomFunctions.BathroomRightClick(player, context, worldObjects)
     end
 
     -- Default options for urination and defecation
-    local groundPeeOption = peeSubMenu:addOption("On Ground", worldObjects, BathroomFunctions.ClickedPeeOption, player)
+    local groundPeeOption = peeSubMenu:addOption("On Ground", worldObjects, BathroomFunctions.PeeOnGround, player)
     local selfPeeOption = peeSubMenu:addOption("On Self", worldObjects, BathroomFunctions.UrinateSelf, player)
     addTooltip(groundPeeOption, "Urinate on the ground. Prepare for a mess.")
     addTooltip(selfPeeOption, "Urinate on yourself. But why.")
 
-    local groundPoopOption = poopSubMenu:addOption("On Ground", worldObjects, BathroomFunctions.ClickedPoopOption, player)
+    local groundPoopOption = poopSubMenu:addOption("On Ground", worldObjects, BathroomFunctions.PoopOnGround, player)
     local selfPoopOption = poopSubMenu:addOption("On Self", worldObjects, BathroomFunctions.DefecateSelf, player)
     addTooltip(groundPoopOption, "Defecate on the ground. Prepare for a mess.")
     addTooltip(selfPoopOption, "Defecate on yourself. But why.")
@@ -456,6 +456,49 @@ function BathroomFunctions.BathroomRightClick(player, context, worldObjects)
         end
     end
 end
+
+
+
+
+
+-- =====================================================
+--
+-- EVENT REGISTRATION
+--
+-- =====================================================
+
+function BathroomFunctions.PeeInToilet(worldObjects, object, player)
+	local player = getPlayer()
+	local urinateValue = BathroomFunctions.GetUrinateValue()
+	local peeTime = urinateValue
+
+	ISTimedActionQueue.add(UrinateAction:new(player, peeTime, true, true, false, true, object))
+end
+function BathroomFunctions.PoopInToilet(worldObjects, object, player)
+	local player = getPlayer()
+	local defecateValue = BathroomFunctions.GetDefecateValue()
+	local poopTime = defecateValue * 2
+
+	ISTimedActionQueue.add(DefecateAction:new(player, poopTime, true, true, false, true, object))
+end
+function BathroomFunctions.PeeOnGround()
+	--check if pants are down or unzipped, if so, go on ground, otherwise, go on self
+	local player = getPlayer()
+	local urinateValue = BathroomFunctions.GetUrinateValue()
+	local peeTime = urinateValue
+
+	ISTimedActionQueue.add(UrinateAction:new(player, peeTime, true, true, false, false, nil))
+end
+function BathroomFunctions.PoopOnGround()
+	--check if pants are down or unzipped, if so, go on ground, otherwise, go on self
+	local player = getPlayer()
+	local defecateValue = BathroomFunctions.GetDefecateValue()
+	local poopTime = defecateValue * 2
+
+	ISTimedActionQueue.add(DefecateAction:new(player, poopTime, true, true, false, false, nil))
+end
+
+
 
 
 

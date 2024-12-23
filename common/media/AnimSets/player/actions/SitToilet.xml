@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <animNode>
-	<m_Name>bathroomSquat</m_Name>
+	<m_Name>bathroomSitToilet</m_Name>
 	<m_SpeedScale>0.80</m_SpeedScale>
-	<m_AnimName>Bob_IdleBlowtorch_Floor</m_AnimName>
+	<m_AnimName>Bob_SatChair</m_AnimName>
 	<m_Looped>true</m_Looped>
 	<m_deferredBoneAxis>Y</m_deferredBoneAxis>
 	<m_SyncTrackingEnabled>false</m_SyncTrackingEnabled>
@@ -10,7 +10,7 @@
 	<m_Conditions>
 		<m_Name>PerformingAction</m_Name>
 		<m_Type>STRING</m_Type>
-		<m_StringValue>bathroomSquat</m_StringValue>
+		<m_StringValue>bathroomSitToilet</m_StringValue>
 	</m_Conditions>
 	<m_SubStateBoneWeights>
 		<boneName>Dummy01</boneName>

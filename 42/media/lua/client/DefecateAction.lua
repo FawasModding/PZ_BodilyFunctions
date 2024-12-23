@@ -22,7 +22,7 @@ end
 function DefecateAction:start()
 	if self.usingToilet then
 		self:setActionAnim("bathroomSitToilet")
-	elseif not self.peedSelf then
+	else
 		self:setActionAnim("bathroomSquat")
 	end
 end
@@ -34,27 +34,7 @@ end
 function DefecateAction:perform()
 	local defecateValue = BathroomFunctions.GetUrinateValue()
 
-	if self.poopedSelf then --Pooping on self
-		BathroomFunctions.DefecateBottoms()
-	end
-
-	if self.usingToilet then --Pooping in toilet
-		getSoundManager():PlayWorldSound("ToiletFlush", self.character:getCurrentSquare(), 0, 10, 0, false)
-	end
-	
-	if not self.poopedSelf and not self.usingToilet then --Pooping on ground
-		self.character:getStats():setFatigue(self.character:getStats():getFatigue() + 0.025)
-
-		--Manage poop puddles, poops should be different dependant on defecate value, diarrhea, and corn
-		if SandboxVars.BathroomFunctions.CreatePoopObject == true then
-			local fecesItem = InventoryItemFactory.CreateItem("BathroomFunctions.HumanFeces")
-			self.character:getCurrentSquare():AddWorldInventoryItem(fecesItem, 0, 0, 0)
-		end
-	end
-
-	--self.character:getModData().needsWipe = true
 	self.character:getModData().defecateValue = 0.0 --RESET DEFECATE VALUE
-
 	ISBaseTimedAction.perform(self)
 end
 

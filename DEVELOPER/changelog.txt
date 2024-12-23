@@ -1,6 +1,6 @@
 12/23/24
 -Added context menu options for using the bathroom with a urinal, toilet, ground, and on self
--
+-Added UrinateAction and DefecateAction actions
 
 12/22/24
 -Created several peed bottoms overlays, created a script that allows these to be applied when necessary.
