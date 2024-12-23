@@ -24,6 +24,16 @@ end
 function GroundUrinate:perform()
 	local urinateValue = BathroomFunctions.GetUrinateValue()
 
+	if self.character:isFemale() then --Minor detail, but squatting should give more fatigue than standing
+		self.character:getStats():setFatigue(self.character:getStats():getFatigue() + 0.025)
+	end
+
+	getSoundManager():PlayWorldSound("PeeSelf", self.character:getCurrentSquare(), 0, 10, 0, false)
+
+	if SandboxVars.BathroomFunctions.CreatePeeObject == true then
+		local urineItem = instanceItem("BathroomFunctions.HumanUrine_Large")
+		self.character:getCurrentSquare():AddWorldInventoryItem(urineItem, 0, 0, 0)
+	end
 
 	self.character:getModData().urinateValue = 0.0 --RESET URINE VALUE
 	ISBaseTimedAction.perform(self)

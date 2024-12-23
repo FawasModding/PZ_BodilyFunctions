@@ -1,0 +1,60 @@
+module BathroomFunctions
+{
+	item HumanUrine_Large
+	{
+		Weight = 1,
+		Type = Food,
+		Icon = HumanUrine,
+		DaysFresh = 0,
+		DisplayCategory = Junk,
+		WorldStaticModel = BathroomFunctions.Urine_Model_Large,
+		Tags = isCompostable,
+		IsDung = true,
+	}
+
+    model Urine_Model_Large
+    {
+		mesh = UrinePuddle,
+		texture = WorldItems/UrineTexture,
+		scale = 0.002,
+    }
+
+	item HumanUrine_Small
+	{
+		Weight = 1,
+		Type = Food,
+		Icon = HumanUrine,
+		DaysFresh = 0,
+		DisplayCategory = Junk,
+		WorldStaticModel = BathroomFunctions.Urine_Model_Small,
+		Tags = isCompostable,
+		IsDung = true,
+	}
+
+    model Urine_Model_Small
+    {
+		mesh = UrinePuddle,
+		texture = WorldItems/UrineTexture,
+		scale = 0.0015,
+    }
+
+	item HumanFeces
+	{
+		Weight = 1,
+		Type = Food,
+		DisplayName = Human Feces,
+		Icon = HumanFeces,
+		DaysFresh = 0,
+		DisplayCategory = Junk,
+		WorldStaticModel = BathroomFunctions.Feces_Model,
+		Tags = isCompostable,
+		IsDung = true,
+	}
+
+	model Feces_Model
+    {
+		mesh = PoopPile,
+		texture = WorldItems/FecesTexture,
+		scale = 0.075,
+    }
+}

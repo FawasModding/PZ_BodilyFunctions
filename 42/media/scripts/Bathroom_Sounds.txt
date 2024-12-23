@@ -1,0 +1,82 @@
+module Base
+{
+	sound WasteFlies
+	{
+		category = Bathroom,
+		clip
+		{
+			file = media/sound/WasteFlies.ogg,
+			volume = 1,
+		}
+	}
+
+	sound ToiletFlush
+	{
+		category = Bathroom,
+		clip
+		{
+			file = media/sound/ToiletFlush.ogg,
+			volume = 1,
+		}
+	}
+
+	sound StomachGrowl
+	{
+		category = Bathroom,
+		clip
+		{
+			file = media/sound/StomachGrowl.ogg,
+			volume = 1,
+		}
+	}
+
+	sound PeeToilet
+	{
+		category = Bathroom,
+		clip
+		{
+			file = media/sound/PeeToilet.ogg,
+			volume = 1,
+		}
+	}
+
+	sound PeeSelf
+	{
+		category = Bathroom,
+		clip
+		{
+			file = media/sound/PeeSelf.ogg,
+			volume = 1,
+		}
+	}
+
+	sound PoopSelf1
+	{
+		category = Bathroom,
+		clip
+		{
+			file = media/sound/PoopSelf1.ogg,
+			volume = 1,
+		}
+	}
+
+	sound PoopSelf2
+	{
+		category = Bathroom,
+		clip
+		{
+			file = media/sound/PoopSelf2.ogg,
+			volume = 1,
+		}
+	}
+
+	sound PoopSelf3
+	{
+		category = Bathroom,
+		clip
+		{
+			file = media/sound/PoopSelf3.ogg,
+			volume = 1,
+		}
+	}
+}

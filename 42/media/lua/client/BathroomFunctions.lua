@@ -117,6 +117,13 @@ function BathroomFunctions.UrinateBottoms()
         end
     end
 
+    if SandboxVars.BathroomFunctions.CreatePeeObject == true then
+		local urineItem = instanceItem("BathroomFunctions.HumanUrine_Small")
+		player:getCurrentSquare():AddWorldInventoryItem(urineItem, 0, 0, 0)
+	end
+
+    getSoundManager():PlayWorldSound("PeeSelf", player:getCurrentSquare(), 0, 10, 0, false)
+
     -- Update player stats for the accident
     player:getStats():setStress(player:getStats():getStress() + 0.6)
     player:getBodyDamage():setUnhappynessLevel(player:getBodyDamage():getUnhappynessLevel() + 20)
@@ -159,6 +166,8 @@ function BathroomFunctions.DefecateBottoms()
             BathroomFunctions.PeedPoopedSelfUpdate(clothing)
         end
     end
+
+    getSoundManager():PlayWorldSound("PoopSelf1", player:getCurrentSquare(), 0, 10, 0, false)
 
     -- Update player stats for the accident
     player:getStats():setStress(player:getStats():getStress() + 0.8)
@@ -470,6 +479,8 @@ function BathroomFunctions.DefecateSelf()
     -- Check if player has relevant clothing on and apply the "pooped bottoms" effects
     if BathroomFunctions.HasClothingOn(player, unpack(BathroomFunctions.GetSoilableClothing())) then
         BathroomFunctions.DefecateBottoms()
+    else -- if the player doesn't wear clothing while peeing
+
     end
 
     -- Set the defecate value to 0 as the player has defecated
@@ -485,6 +496,11 @@ function BathroomFunctions.UrinateSelf()
     -- Check if player has relevant clothing on and apply the "peed bottoms" effects
     if BathroomFunctions.HasClothingOn(player, unpack(BathroomFunctions.GetSoilableClothing())) then
         BathroomFunctions.UrinateBottoms()
+    else -- if the player doesn't wear clothing while pooping
+        if SandboxVars.BathroomFunctions.CreatePeeObject == true then
+		    local urineItem = instanceItem("BathroomFunctions.HumanUrine_Large")
+		    player:getCurrentSquare():AddWorldInventoryItem(urineItem, 0, 0, 0)
+	    end
     end
 
     -- Set the urinate value to 0 as the player has urinated

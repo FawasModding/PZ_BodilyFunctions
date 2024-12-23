@@ -8,6 +8,10 @@
 -Revamped sandbox options page
 -Added more underwear to the clothing overlay list
 -Separated out "UrinateAction" and "DefecateAction" timed actions into three types
+-Added HumanUrine_Small, HumanUrine_Large, HumanFeces items.
+-Made HumanUrine_Small spawn when the player pees themselves wearing clothes
+-Made HumanUrine_Large spawn when the player pees without clothes, either by squatting or having an accident without clothes
+-Made HumanFeces spawn when the player poops on the ground
 
 12/22/24
 -Created several peed bottoms overlays, created a script that allows these to be applied when necessary.

@@ -6,6 +6,8 @@ IMMEDIATE:
 - Pee & Poop beans for debug
 - Fix bug where only pooped item name text is added
 - Every sandbox option with "*" is unimplemented. implement these
+- Nausea and discomfort for as long as the player wears pooped clothing
+- Discomfort for as long as the player wears peed clothing
 
 EVENTUAL:
 
