@@ -1,7 +1,36 @@
 BathroomClothOverlays = {}
 
 -- Table to track previously worn items
-BathroomClothOverlays.previousWornItems = {}
+--BathroomClothOverlays.previousWornItems = {}
+
+-- Arrays to store the items by type
+BathroomClothOverlays.suitTrousersMeshPeedItems = {}
+BathroomClothOverlays.maleBoxersPantsItems = {}
+BathroomClothOverlays.femaleUnderpantsPeedItems = {}
+
+-- Function to populate the arrays with test items
+function BathroomClothOverlays.populateTestItems()
+    -- Define a list of items for each type (strings only)
+    local suitTrousersMeshItems = {"Trousers_Suit", "Trousers_SuitTEXTURE", "Trousers_Scrubs"}
+    local maleBoxersPantsItems = {"Boxers_White", "Male_Boxers_Pants_2", "Male_Boxers_Pants_3"}
+    local femaleUnderpantsPeedItems = {"Underpants_White", "Boxers_RedStripes", "Boxers_Silk_Black", "Bikini_TINT"}
+
+    -- Insert the items into their respective arrays
+    for _, itemType in ipairs(suitTrousersMeshItems) do
+        table.insert(BathroomClothOverlays.suitTrousersMeshPeedItems, itemType)
+    end
+    for _, itemType in ipairs(maleBoxersPantsItems) do
+        table.insert(BathroomClothOverlays.maleBoxersPantsItems, itemType)
+    end
+    for _, itemType in ipairs(femaleUnderpantsPeedItems) do
+        table.insert(BathroomClothOverlays.femaleUnderpantsPeedItems, itemType)
+    end
+end
+
+-- Call this function to populate the test items when the script starts
+Events.OnLoad.Add(function()
+    BathroomClothOverlays.populateTestItems()  -- Populate test items
+end)
 
 -- Helper function to build a table of currently worn items
 function BathroomClothOverlays.getCurrentWornItems(player)
@@ -15,35 +44,83 @@ function BathroomClothOverlays.getCurrentWornItems(player)
     return currentWornItems
 end
 
--- Helper function to check if the Female_Underpants_Peed is already in the inventory
-function BathroomClothOverlays.isFemaleUnderpantsPeedInInventory(player)
-    local inventory = player:getInventory()
-    -- Iterate through all the items in the inventory and check if the item exists
-    for i = 0, inventory:getItems():size() - 1 do
-        local item = inventory:getItems():get(i)
-        if item and item:getType() == "BathroomFunctions.Female_Underpants_Peed" then
-            return true -- Found the item, return true
+-- Function to add the correct peed item to the player, based on worn items and only if it's not already in the inventory
+function BathroomClothOverlays.equipPeedOverlays(player)
+    -- Get the player's worn items
+    local currentWornItems = BathroomClothOverlays.getCurrentWornItems(player)
+
+    -- Default peed item
+    local appliedPeedItem = "Female_Underpants_Peed"
+    local hasSuitTrousersMesh = false
+    local hasMaleBoxersPants = false
+    local hasFemaleUnderpants = false
+    local isDefault = true  -- New default flag
+
+    -- Check which item the player is wearing and select the corresponding "peed" item
+    for wornItem, _ in pairs(currentWornItems) do
+        if wornItem:getModData().peed == true then
+            -- Detect if the player is wearing a "peed" item
+            if table.contains(BathroomClothOverlays.suitTrousersMeshPeedItems, wornItem:getType()) then
+                hasSuitTrousersMesh = true
+                isDefault = false  -- Not default if we find a match
+            elseif table.contains(BathroomClothOverlays.maleBoxersPantsItems, wornItem:getType()) then
+                hasMaleBoxersPants = true
+                isDefault = false  -- Not default if we find a match
+            elseif table.contains(BathroomClothOverlays.femaleUnderpantsPeedItems, wornItem:getType()) then
+                hasFemaleUnderpants = true
+                isDefault = false  -- Not default if we find a match
+            end
         end
     end
-    return false -- Item not found
+
+    -- If this specific item is not defined in the tables, fall back to the default trouser pee ovelray
+    if isDefault then
+        if not currentWornItems["BathroomFunctions.SuitTrousersMesh_Peed"] then
+            local itemToWear = player:getInventory():AddItem("BathroomFunctions.SuitTrousersMesh_Peed")
+            player:setWornItem("PeedOverlay", itemToWear)
+            --print("Equipped Female_Underpants_Peed (default)")
+        end
+        return
+    end
+
+    -- Check if the selected "peed" items are already in the player's inventory
+    -- Add the correct "peed" items based on what the player is wearing
+    if hasSuitTrousersMesh and not currentWornItems["BathroomFunctions.SuitTrousersMesh_Peed"] then
+        local itemToWear = player:getInventory():AddItem("BathroomFunctions.SuitTrousersMesh_Peed")
+        player:setWornItem("PeedOverlay2", itemToWear)
+        --print("Equipped SuitTrousersMesh_Peed")
+    end
+    if hasMaleBoxersPants and not currentWornItems["BathroomFunctions.Male_Boxers_Peed"] then
+        local itemToWear = player:getInventory():AddItem("BathroomFunctions.Male_Boxers_Peed")
+        player:setWornItem("PeedOverlay", itemToWear)
+        --print("Equipped Male_Boxers_Peed")
+    end
+    if hasFemaleUnderpants and not currentWornItems["BathroomFunctions.Female_Underpants_Peed"] then
+        local itemToWear = player:getInventory():AddItem("BathroomFunctions.Female_Underpants_Peed")
+        player:setWornItem("PeedOverlay", itemToWear)
+        --print("Equipped Female_Underpants_Peed")
+    end
 end
 
--- Function to add Female_Underpants_Peed to the player, but only if it's not already in the inventory
-function BathroomClothOverlays.equipFemaleUnderpantsPeed(player)
-    local femaleUnderpantsPeed = player:getInventory():AddItem("BathroomFunctions.Female_Underpants_Peed") -- Replace with the correct item type if needed
-    player:setWornItem("PeedOverlay", femaleUnderpantsPeed) -- Equip the item
-    print("Equipped Female_Underpants_Peed")
+-- Helper function to check if an item type is in a list
+function table.contains(table, value)
+    for _, v in ipairs(table) do
+        if v == value then
+            return true
+        end
+    end
+    return false
 end
 
--- Function to remove all instances of Female_Underpants_Peed from the player's inventory
-function BathroomClothOverlays.removeFemaleUnderpantsPeed(player)
+-- Function to remove all instances of peed overlays from the player's inventory
+function BathroomClothOverlays.removePeedOverlays(player)
     -- Get the player's inventory
     local inventory = player:getInventory()
     
     -- Create a list of items to remove to avoid modifying the inventory during iteration
     local itemsToRemove = {}
 
-    -- Collect items tagged as "BathroomOverlay"
+    -- Collect items tagged as "BathroomOverlay", the tag used by peed overlays (and maybe pooped overlays if I decide I want to watch the world burn)
     for i = 0, inventory:getItems():size() - 1 do
         local item = inventory:getItems():get(i)
         if item and item:hasTag("BathroomOverlay") then
@@ -55,22 +132,19 @@ function BathroomClothOverlays.removeFemaleUnderpantsPeed(player)
     for _, item in ipairs(itemsToRemove) do
         inventory:Remove(item)
         player:removeWornItem(item)
-        print("Removed BathroomOverlay item: " .. tostring(item:getDisplayName()))
+        --print("Removed BathroomOverlay item: " .. tostring(item:getDisplayName()))
     end
 end
 
--- Store a global variable for the timer
-local delayTimer = nil
-
--- Function to handle the delayed clothing check
+-- Function to handle the clothing check
 function BathroomClothOverlays.OnClothingChanged(player)
+    local player = getPlayer() -- needed because of EveryOneMinute
 
-    local player = getPlayer()
+    -- Always remove the overlay first to ensure no (or, less than there would be lmao) duplicates
+    -- Kind of inefficient but this has already taken too much time :|   If you're reading this, fix it and propose a change to the github
+    BathroomClothOverlays.removePeedOverlays(player)
 
-    -- Always remove the overlay first to ensure it's in sync with current state
-    BathroomClothOverlays.removeFemaleUnderpantsPeed(player)
-
-    -- Array to store all "peed" items from the inventory
+    -- store all "peed" items from the inventory
     local peedItems = {}
 
     -- Check the player's inventory for "peed" items
@@ -78,41 +152,39 @@ function BathroomClothOverlays.OnClothingChanged(player)
     for i = 0, inventory:getItems():size() - 1 do
         local item = inventory:getItems():get(i)
         if item and item:getModData().peed == true then
-            print("Found peed item in inventory: " .. tostring(item:getDisplayName()))
+            --print("Found peed item in inventory: " .. tostring(item:getDisplayName()))
             table.insert(peedItems, item) -- Add to the peed items array
         end
     end
 
-    -- If no "peed" items are found in the inventory, no need to proceed further
+    -- If no "peed" items are found in the inventory, return, since the rest is unnecessary
     if #peedItems == 0 then
-        print("No peed items found in inventory. Overlay removed.")
+        --print("No peed items found in inventory. Overlay removed.")
         return
     end
 
-    -- Function to check after the delay has passed
-    local function delayedCheck()
-        -- Perform the actual check of worn items
-        local currentWornItems = BathroomClothOverlays.getCurrentWornItems(player)
+    -- Perform the actual check of worn items
+    local currentWornItems = BathroomClothOverlays.getCurrentWornItems(player)
 
-        for wornItem, _ in pairs(currentWornItems) do
-            for _, peedItem in ipairs(peedItems) do
-                -- Compare worn item and inventory item by their unique types
-                if wornItem:getModData() and wornItem:getModData().peed == true then
-                    print("Player is wearing a peed item: " .. tostring(wornItem:getDisplayName()))
-                    BathroomClothOverlays.equipFemaleUnderpantsPeed(player)
-                    return -- Exit early since we only need to equip once
-                end
+    local equipped = false
+
+    for wornItem, _ in pairs(currentWornItems) do
+        for _, peedItem in ipairs(peedItems) do
+            -- Compare worn item and inventory item by their unique types
+            if wornItem:getModData() and wornItem:getModData().peed == true then
+                --print("Player is wearing a peed item: " .. tostring(wornItem:getDisplayName()))
+                BathroomClothOverlays.equipPeedOverlays(player)
+                equipped = true
             end
         end
-
-        -- If no worn items match the "peed" items array, overlay stays removed
-        print("No peed items worn. Overlay removed.")
     end
 
-    delayedCheck()
+    -- If no worn items match the "peed" items array, overlay stays removed
+    if not equipped then
+        --print("No peed items worn. Overlay removed.")
+    end
 end
 
--- Add the event listener for clothing changes
 Events.OnClothingUpdated.Add(BathroomClothOverlays.OnClothingChanged)
 --Events.EveryTenMinutes.Add(BathroomClothOverlays.OnClothingChanged)
 

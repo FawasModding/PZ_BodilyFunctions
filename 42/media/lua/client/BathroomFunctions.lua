@@ -171,7 +171,7 @@ function BathroomFunctions.DefecateBottoms()
     local player = getPlayer()
 
     local clothing = nil
-    local bodyLocations = {"UnderwearBottom", "Torso1Legs1", "Legs1", "Pants", "BathRobe", "FullSuit", "FullSuitHead", "FullTop", "BodyCostume"}
+    local bodyLocations = {"UnderwearBottom", "Torso1Legs1", "Legs1", "Pants", "BathRobe", "FullSuit", "FullSuitHead", "FullTop", "BodyCostume", "Underwear"}
 
     -- Check if the player is wearing any of the specified clothing
     for i = 1, #bodyLocations do
@@ -362,17 +362,25 @@ end
 
 function BathroomFunctions.onGameBoot()
     local humanGroup = BodyLocations.getGroup("Human"); -- Get the BodyLocations group for humans
-    local peedLocation = humanGroup:getOrCreateLocation("PeedOverlay"); -- Create or fetch the PeedOverlay location
+    local peedUndiesLocation = humanGroup:getOrCreateLocation("PeedOverlay"); -- Create or fetch the PeedOverlay location
+    local peedPantsLocation = humanGroup:getOrCreateLocation("PeedOverlay2"); -- Create or fetch the PeedOverlay location
 
     -- Remove PeedOverlay if it already exists to avoid duplication
     local list = getClassFieldVal(humanGroup, getClassField(humanGroup, 1));
-    list:remove(peedLocation);
+    list:remove(peedUndiesLocation);
+
+    -- Remove PeedOverlay2 if it already exists to avoid duplication
+    local list = getClassFieldVal(humanGroup, getClassField(humanGroup, 1));
+    list:remove(peedPantsLocation);
 
     -- Find the index of Pants to ensure PeedOverlay renders above it
     local pantsIndex = humanGroup:indexOf("Pants");
 
     -- Add PeedOverlay just after Pants
-    list:add(pantsIndex + 1, peedLocation);
+    list:add(pantsIndex + 1, peedUndiesLocation);
+
+    -- Add PeedOverlay2 just after PeedOverlay
+    list:add(pantsIndex + 2, peedPantsLocation);
 end
 
 

@@ -5,6 +5,8 @@ IMMEDIATE:
 - Sit on toilet (required for pooping or peeing [females only])
 - Poop object if not wearing bottoms
 - Pee puddle on accidental urination
+- Pee & Poop beans for debug
+- Fix bug where only pooped item name text is added
 
 EVENTUAL:
 
@@ -15,3 +17,4 @@ EVENTUAL:
 - Filter out pee bottle
 - Pee Self action is timed
 - Poop Self action is timed
+- All underwear defined in BathroomClothOverlays
