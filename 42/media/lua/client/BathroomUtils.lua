@@ -115,3 +115,11 @@ function BathroomFunctions.SetPoopedSelfValue(newPoopedSelfValue)
         print("Error: Invalid value for defecateValue. Must be a number.") -- Handle invalid input
     end
 end
+
+--[[
+Function defining all of the soilable clothing.
+]]--
+function BathroomFunctions.GetSoilableClothing()
+    local bodyLocations = {"UnderwearBottom", "Torso1Legs1", "Legs1", "Pants", "BathRobe", "FullSuit", "FullSuitHead", "FullTop", "BodyCostume", "Underwear"}
+    return bodyLocations
+end

@@ -1,7 +1,5 @@
 IMMEDIATE:
 
-- "Urinate" context menu option
-- "Defecate" context menu option
 - Sit on toilet (required for pooping or peeing [females only])
 - Poop object if not wearing bottoms
 - Pee puddle on accidental urination
@@ -10,11 +8,12 @@ IMMEDIATE:
 
 EVENTUAL:
 
-- Laxatives
-- Anti-Diarrhea Pills
-- Pee Pills
+- Anti-Diarrhea, Laxatives, Diuretic pills
+- Liquid laxative and diuretic should actually impact poop and pee production
+- Containers for liquid laxative and diuretic
 - Pee in bottles
 - Filter out pee bottle
+- Make filtered urine liquid give nausea but safe to drink
 - Pee Self action is timed
 - Poop Self action is timed
 - All underwear defined in BathroomClothOverlays

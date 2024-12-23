@@ -90,7 +90,7 @@ function BathroomFunctions.DefecateSelf()
     local bowelsMaxValue = SandboxVars.BathroomFunctions.BowelsMaxValue or 100 -- Get the max bowel value, default to 100 if not set
 
     -- Check if player has relevant clothing on and apply the "pooped bottoms" effects
-    if BathroomFunctions.HasClothingOn(player, "UnderwearBottom", "Pants", "BathRobe", "FullSuit", "Underwear") then
+    if BathroomFunctions.HasClothingOn(player, unpack(BathroomFunctions.GetSoilableClothing())) then
         BathroomFunctions.DefecateBottoms()
     end
 
@@ -107,7 +107,7 @@ function BathroomFunctions.UrinateSelf()
     local bladderMaxValue = SandboxVars.BathroomFunctions.BladderMaxValue or 100 -- Get the max bladder value, default to 100 if not set
 
     -- Check if player has relevant clothing on and apply the "peed bottoms" effects
-    if BathroomFunctions.HasClothingOn(player, "UnderwearBottom", "Pants", "BathRobe", "FullSuit", "Underwear") then
+    if BathroomFunctions.HasClothingOn(player, unpack(BathroomFunctions.GetSoilableClothing())) then
         BathroomFunctions.UrinateBottoms()
     end
 
@@ -117,12 +117,13 @@ function BathroomFunctions.UrinateSelf()
     print("Updated Peed Self Value: " .. BathroomFunctions.GetPeedSelfValue()) -- Debug print statement to display the updated urination value
 end
 
+
 -- Function to apply effects when the player has urinated in their clothing
 function BathroomFunctions.UrinateBottoms()
     local player = getPlayer()
 
     local clothing = nil
-    local bodyLocations = {"UnderwearBottom", "Torso1Legs1", "Legs1", "Pants", "BathRobe", "FullSuit", "FullSuitHead", "FullTop", "BodyCostume", "Underwear"}
+    local bodyLocations = BathroomFunctions.GetSoilableClothing()
 
     -- Check if the player is wearing any of the specified clothing
     for i = 1, #bodyLocations do
@@ -159,13 +160,12 @@ function BathroomFunctions.UrinateBottoms()
     player:Say("I've pissed myself")
 end
 
-
 -- Function to apply effects when the player has defecated in their clothing
 function BathroomFunctions.DefecateBottoms()
     local player = getPlayer()
 
     local clothing = nil
-    local bodyLocations = {"UnderwearBottom", "Torso1Legs1", "Legs1", "Pants", "BathRobe", "FullSuit", "FullSuitHead", "FullTop", "BodyCostume", "Underwear"}
+    local bodyLocations = BathroomFunctions.GetSoilableClothing()
 
     -- Check if the player is wearing any of the specified clothing
     for i = 1, #bodyLocations do

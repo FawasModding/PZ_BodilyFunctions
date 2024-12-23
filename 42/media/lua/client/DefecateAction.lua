@@ -20,6 +20,9 @@ function DefecateAction:update()
 end
 
 function DefecateAction:start()
+	-- Remove clothing items before starting the defecation
+    self.removedClothing = {}
+
 	if self.usingToilet then
 		self:setActionAnim("bathroomSitToilet")
 	else
@@ -32,7 +35,7 @@ function DefecateAction:stop()
 end
 
 function DefecateAction:perform()
-	local defecateValue = BathroomFunctions.GetUrinateValue()
+	local defecateValue = BathroomFunctions.GetDefecateValue()
 
 	self.character:getModData().defecateValue = 0.0 --RESET DEFECATE VALUE
 	ISBaseTimedAction.perform(self)
