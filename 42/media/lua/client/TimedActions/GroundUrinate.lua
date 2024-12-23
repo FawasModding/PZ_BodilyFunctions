@@ -4,10 +4,16 @@ function GroundUrinate:isValid()
 end
 
 function GroundUrinate:update()
-
+	-- Reduce urination value proportionally to the elapsed time
+    local delta = self:getJobDelta() -- Get the progress of the action (0.0 to 1.0)
+    local initialValue = self.character:getModData().urinateValue
+    local newValue = self.initialUrinateValue - (delta * self.initialUrinateValue)
+    self.character:getModData().urinateValue = math.max(newValue, 0) -- Ensure it doesn't go below 0
 end
 
 function GroundUrinate:start()
+	-- Save the initial urination value at the start of the action
+    self.initialUrinateValue = self.character:getModData().urinateValue or 0
 
 	if self.character:isFemale() then --If female, squat
 		self:setActionAnim("bathroomSquat")
@@ -29,6 +35,7 @@ function GroundUrinate:perform()
 	end
 
 	getSoundManager():PlayWorldSound("PeeSelf", self.character:getCurrentSquare(), 0, 10, 0, false)
+	--self.character:playSound("PeeSelf")
 
 	if SandboxVars.BathroomFunctions.CreatePeeObject == true then
 		local urineItem = instanceItem("BathroomFunctions.HumanUrine_Large")

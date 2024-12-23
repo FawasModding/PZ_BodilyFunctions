@@ -1,9 +1,18 @@
 ContextMenu_EN = {
-	ContextMenu_Urinate = "Urinate",
-	ContextMenu_Urinated = " (Urinated)",
-	ContextMenu_UrinateSterilize = "Sterilize Urinated",
-	ContextMenu_ToiletUse = "In toilet",
-	ContextMenu_Defecate = "Defecate",
-	ContextMenu_Defecated = "(Defecated)",
-	ContextMenu_DefecateSterilize = "Sterilize Defecated",
+	ContextMenu_BodilyFunctions = "Bodily Functions",
+	ContextMenu_Urinate = "Urinate"
+	ContextMenu_Defecate = "Defecate"
+
+	ContextMenu_FlushToilet = "Flush Toilet"
+	ContextMenu_WipeSelf = "Wipe Self"
+	ContextMenu_WashSoiled = "Wash Soiled Clothing"
+	ContextMenu_UseGround = "On Ground"
+	ContextMenu_UseSelf = "On Self"
+	ContextMenu_UseToilet = "In Toilet"
+	ContextMenu_UseOuthouse = "In Outhouse"
+	ContextMenu_UseUrinal = "In Urinal"
+	ContextMenu_UseBottle = "In Bottle"
+
+	ContextMenu_Peed = "Peed"
+	ContextMenu_Pooped = "Pooped"
 }

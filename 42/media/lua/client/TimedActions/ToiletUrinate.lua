@@ -4,6 +4,12 @@ function ToiletUrinate:isValid()
 end
 
 function ToiletUrinate:update()
+	-- Reduce urination value proportionally to the elapsed time
+    local delta = self:getJobDelta() -- Get the progress of the action (0.0 to 1.0)
+    local initialValue = self.character:getModData().urinateValue
+    local newValue = self.initialUrinateValue - (delta * self.initialUrinateValue)
+    self.character:getModData().urinateValue = math.max(newValue, 0) -- Ensure it doesn't go below 0
+
 	if self.usingToilet then
 		local props = self.toiletObject:getProperties()
 
@@ -20,6 +26,8 @@ function ToiletUrinate:update()
 end
 
 function ToiletUrinate:start()
+	-- Save the initial urination value at the start of the action
+    self.initialUrinateValue = self.character:getModData().urinateValue or 0
 
 	--Character pees in toilet, has animation for male/female
 	if self.character:isFemale() then --If female, sit

@@ -12,6 +12,18 @@
 -Made HumanUrine_Small spawn when the player pees themselves wearing clothes
 -Made HumanUrine_Large spawn when the player pees without clothes, either by squatting or having an accident without clothes
 -Made HumanFeces spawn when the player poops on the ground
+-Shortened PeeToilet and PeeSelf sounds
+-Added functionality for:
+	Sandbox_BathroomFunctions_PoopOnSelfRequirement
+	Sandbox_BathroomFunctions_PoopOnGroundRequirement
+	Sandbox_BathroomFunctions_PoopInToiletRequirement
+	Sandbox_BathroomFunctions_PeeOnSelfRequirement
+	Sandbox_BathroomFunctions_PeeOnGroundRequirement
+	Sandbox_BathroomFunctions_PeeInToiletRequirement
+-Updated context menu tooltips to show requirements sourced from sandbox settings
+-Made peeing / pooping yourself use timed actions, a quarter of the currently pee / poop value
+-Pee / poop values slowly go down as pee / poop timed actions go
+-
 
 12/22/24
 -Created several peed bottoms overlays, created a script that allows these to be applied when necessary.

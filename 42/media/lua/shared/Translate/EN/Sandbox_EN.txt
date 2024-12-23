@@ -34,13 +34,13 @@ Sandbox_EN =
 	Sandbox_BathroomFunctions_DefecateSpeedMultiplier = "Defecate Speed Multiplier*",
 	Sandbox_BathroomFunctions_DefecateSpeedMultiplier_tooltip = "How long it takes you to defecate.",
 
-	Sandbox_BathroomFunctions_PoopOnSelfRequirement = "Poop On Self Requirement*",
+	Sandbox_BathroomFunctions_PoopOnSelfRequirement = "Poop On Self Requirement",
 	Sandbox_BathroomFunctions_PoopOnSelfRequirement_tooltip = "The percentage fullness of your bowels required to intentionally poop yourself.",
 
-	Sandbox_BathroomFunctions_PoopOnGroundRequirement = "Poop On Ground Requirement*",
+	Sandbox_BathroomFunctions_PoopOnGroundRequirement = "Poop On Ground Requirement",
 	Sandbox_BathroomFunctions_PoopOnGroundRequirement_tooltip = "The percentage fullness of your bowels required to poop on the ground.",
 
-	Sandbox_BathroomFunctions_PoopInToiletRequirement = "Poop In Toilet Requirement*",
+	Sandbox_BathroomFunctions_PoopInToiletRequirement = "Poop In Toilet Requirement",
 	Sandbox_BathroomFunctions_PoopInToiletRequirement_tooltip = "The percentage fullness of your bowels required to poop in a toilet.",
 
 	Sandbox_BathroomFunctions_CanHavePoopAccident = "Can Accidentally Poop Self*",
@@ -84,13 +84,13 @@ Sandbox_EN =
 	Sandbox_BathroomFunctions_UrinateSpeedMultiplier = "Urinate Speed Multiplier*",
 	Sandbox_BathroomFunctions_UrinateSpeedMultiplier_tooltip = "How long it takes you to urinate.",
 
-	Sandbox_BathroomFunctions_PeeOnSelfRequirement = "Pee On Self Requirement*",
+	Sandbox_BathroomFunctions_PeeOnSelfRequirement = "Pee On Self Requirement",
 	Sandbox_BathroomFunctions_PeeOnSelfRequirement_tooltip = "The percentage fullness of your bladder required to intentionally pee yourself.",
 
-	Sandbox_BathroomFunctions_PeeOnGroundRequirement = "Pee On Ground Requirement*",
+	Sandbox_BathroomFunctions_PeeOnGroundRequirement = "Pee On Ground Requirement",
 	Sandbox_BathroomFunctions_PeeOnGroundRequirement_tooltip = "The percentage fullness of your bladder required to pee on the ground.",
 
-	Sandbox_BathroomFunctions_PeeInToiletRequirement = "Pee In Toilet Requirement*",
+	Sandbox_BathroomFunctions_PeeInToiletRequirement = "Pee In Toilet Requirement",
 	Sandbox_BathroomFunctions_PeeInToiletRequirement_tooltip = "The percentage fullness of your bladder required to pee in a toilet.",
 
 	Sandbox_BathroomFunctions_CanHavePeeAccident = "Can Accidentally Pee Self*",

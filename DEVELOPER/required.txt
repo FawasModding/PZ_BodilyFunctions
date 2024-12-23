@@ -8,6 +8,7 @@ IMMEDIATE:
 - Every sandbox option with "*" is unimplemented. implement these
 - Nausea and discomfort for as long as the player wears pooped clothing
 - Discomfort for as long as the player wears peed clothing
+- Use PlayLoopedSoundTillComplete for SelfUrinate and SelfDefecate
 
 EVENTUAL:
 

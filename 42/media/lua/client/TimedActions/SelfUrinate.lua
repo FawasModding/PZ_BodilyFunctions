@@ -4,36 +4,16 @@ function SelfUrinate:isValid()
 end
 
 function SelfUrinate:update()
-	if self.usingToilet then
-		local props = self.toiletObject:getProperties()
-
-		if (props:Val("Facing") == "N") then
-			self.character:setDir(IsoDirections.N)
-		elseif (props:Val("Facing") == "E") then
-			self.character:setDir(IsoDirections.E)
-		elseif (props:Val("Facing") == "S") then
-			self.character:setDir(IsoDirections.S)
-		elseif (props:Val("Facing") == "W") then
-			self.character:setDir(IsoDirections.W)
-		end
-	end
+	-- Reduce urination value proportionally to the elapsed time
+    local delta = self:getJobDelta() -- Get the progress of the action (0.0 to 1.0)
+    local initialValue = self.character:getModData().urinateValue
+    local newValue = self.initialUrinateValue - (delta * self.initialUrinateValue)
+    self.character:getModData().urinateValue = math.max(newValue, 0) -- Ensure it doesn't go below 0
 end
 
 function SelfUrinate:start()
-	--Checks if character peed on ground or in toilet, has animation for male/female
-	if self.usingToilet then
-		if self.character:isFemale() then --If female, sit
-			self:setActionAnim("bathroomSitToilet")
-		else --If male, stand
-			self:setActionAnim("bathroomStandToilet")
-		end
-	else
-		if self.character:isFemale() then --If female, squat
-			self:setActionAnim("bathroomSquat")
-		else --If male, stand
-			self:setActionAnim("bathroomStandPee")
-		end
-	end
+	-- Save the initial urination value at the start of the action
+    self.initialUrinateValue = self.character:getModData().urinateValue or 0
 end
 
 function SelfUrinate:stop()
@@ -43,8 +23,8 @@ end
 function SelfUrinate:perform()
 	local urinateValue = BathroomFunctions.GetUrinateValue()
 
-
-	self.character:getModData().urinateValue = 0.0 --RESET URINE VALUE
+	-- Ensure urinateValue is fully reset at the end of the action
+	self.character:getModData().urinateValue = 0.0
 	ISBaseTimedAction.perform(self)
 end
 
