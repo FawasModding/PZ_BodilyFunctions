@@ -20,14 +20,14 @@ local function CheckBathroomMeters(player)
 			[0.25] = 0.4,
 			[0.5] = 0.3,
 			[0.75] = 0.2,
-			[1.0] = 0.1
+			[0.9] = 0.1  -- Change the 1.0 threshold to 0.9
 		}
 
 		-- Calculate percentage of the max value
 		local defecationPercent = defecationValue / bowelsMaxValue
 
-		if defecationPercent > 1.0 then
-			moodle:setValue(defecationThreshold[1.0])
+		if defecationPercent > 0.9 then
+			moodle:setValue(defecationThreshold[0.9])  -- Set value at 90%
 		elseif defecationPercent > 0.75 then
 			moodle:setValue(defecationThreshold[0.75])
 		elseif defecationPercent > 0.5 then
@@ -45,14 +45,14 @@ local function CheckBathroomMeters(player)
 			[0.25] = 0.4,
 			[0.5] = 0.3,
 			[0.75] = 0.2,
-			[1.0] = 0.1
+			[0.9] = 0.1  -- Change the 1.0 threshold to 0.9
 		}
 
 		-- Calculate percentage of the max value
 		local urinationPercent = urinationValue / bladderMaxValue
 
-		if urinationPercent > 1.0 then
-			moodle2:setValue(urinationThreshold[1.0])
+		if urinationPercent > 0.9 then
+			moodle2:setValue(urinationThreshold[0.9])  -- Set value at 90%
 		elseif urinationPercent > 0.75 then
 			moodle2:setValue(urinationThreshold[0.75])
 		elseif urinationPercent > 0.5 then

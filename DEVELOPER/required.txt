@@ -1,16 +1,13 @@
 IMMEDIATE:
 
-- Sit on toilet (required for pooping or peeing [females only])
-- Poop object if not wearing bottoms
-- Pee puddle on accidental urination
+- Advanced it on toilet (required for pooping or peeing [females only])
 - Pee & Poop beans for debug
-- Fix bug where only pooped item name text is added
 - Every sandbox option with "*" is unimplemented. implement these
 - Nausea and discomfort for as long as the player wears pooped clothing
 - Discomfort for as long as the player wears peed clothing
 - Use PlayLoopedSoundTillComplete for SelfUrinate and SelfDefecate
 
-- FIX BUG IN SELFURINATE
+- Fix the moodles causing instant urination / defecation when reaching 50%
 
 EVENTUAL:
 

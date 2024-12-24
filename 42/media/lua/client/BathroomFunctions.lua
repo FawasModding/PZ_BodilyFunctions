@@ -89,15 +89,18 @@ function BathroomFunctions.CheckForAccident()
         coldModifier = player:getMoodles():getMoodleLevel(MoodleType.HasACold) * 2 -- Cold increases chance
     end
 
-    -- Check if the player should urinate involuntarily, either by reaching the threshold or moodle modifiers
-    if urinateValue >= bladderThreshold or panicModifier > 0 or stressedModifier > 0 or drunkModifier > 0 or heavyLoadModifier > 0 or wetModifier > 0 or painModifier > 0 or coldModifier > 0 then
+    -- Check if the player should urinate involuntarily
+    if urinateValue >= bladderThreshold or 
+       (urinateValue > 0.5 * bladderMaxValue and (panicModifier > 0 or stressedModifier > 0 or drunkModifier > 0 or heavyLoadModifier > 0 or wetModifier > 0 or painModifier > 0 or coldModifier > 0)) then
         BathroomFunctions.UrinateSelf()
     end
 
-    -- Check if the player should defecate involuntarily, either by reaching the threshold or moodle modifiers
-    if defecateValue >= bowelsThreshold or panicModifier > 0 or stressedModifier > 0 or heavyLoadModifier > 0 or wetModifier > 0 or painModifier > 0 or coldModifier > 0 then
+    -- Check if the player should defecate involuntarily
+    if defecateValue >= bowelsThreshold or 
+       (defecateValue > 0.5 * bowelsMaxValue and (panicModifier > 0 or stressedModifier > 0 or heavyLoadModifier > 0 or wetModifier > 0 or painModifier > 0 or coldModifier > 0)) then
         BathroomFunctions.DefecateSelf()
     end
+
 end
 
 
@@ -116,6 +119,8 @@ function BathroomFunctions.UrinateBottoms()
     local clothing = nil
     local bodyLocations = BathroomFunctions.GetSoilableClothing()
 
+    local bladderMaxValue = SandboxVars.BathroomFunctions.BladderMaxValue or 100 -- Get the max bladder value, default to 100 if not set
+
     -- Check if the player is wearing any of the specified clothing
     for i = 1, #bodyLocations do
         clothing = player:getWornItem(bodyLocations[i])
@@ -127,9 +132,12 @@ function BathroomFunctions.UrinateBottoms()
                 modData.peedSeverity = 0
             end
 
+            -- Convert to a percentage of the bladderMaxValue
+            local urinatePercentage = (BathroomFunctions.GetUrinateValue() / bladderMaxValue) * 100
+
             -- Mark the clothing as soiled by urine
             modData.peed = true
-            modData.peedSeverity = modData.peedSeverity + 25
+            modData.peedSeverity = modData.peedSeverity + urinatePercentage
 
             -- Cap the 'peedSeverity' at 100
             if modData.peedSeverity >= 100 then
@@ -155,7 +163,7 @@ function BathroomFunctions.UrinateBottoms()
     getSoundManager():PlayWorldSound("PeeSelf", player:getCurrentSquare(), 0, 10, .2, false)
 
     -- Update player stats for the accident
-    player:getStats():setStress(player:getStats():getStress() + 0.6)
+    --player:getStats():setStress(player:getStats():getStress() + 0.6)
     player:getBodyDamage():setUnhappynessLevel(player:getBodyDamage():getUnhappynessLevel() + 5)
 
     -- The player says they have urinated themselves
@@ -169,6 +177,8 @@ function BathroomFunctions.DefecateBottoms()
     local clothing = nil
     local bodyLocations = BathroomFunctions.GetSoilableClothing()
 
+    local bowelsMaxValue = SandboxVars.BathroomFunctions.BowelsMaxValue or 100 -- Get the max bowels value, default to 100 if not set
+
     -- Check if the player is wearing any of the specified clothing
     for i = 1, #bodyLocations do
         clothing = player:getWornItem(bodyLocations[i])
@@ -180,9 +190,12 @@ function BathroomFunctions.DefecateBottoms()
                 modData.poopedSeverity = 0
             end
 
-            -- Mark the clothing as soiled by feces
+            -- Convert to a percentage of the bladderMaxValue
+            local defecatePercentage = (BathroomFunctions.GetDefecateValue() / bowelsMaxValue) * 100
+
+            -- Mark the clothing as soiled by urine
             modData.pooped = true
-            modData.poopedSeverity = modData.poopedSeverity + 25
+            modData.poopedSeverity = modData.poopedSeverity + defecatePercentage
 
             -- Cap the 'poopedSeverity' at 100
             if modData.poopedSeverity >= 100 then
@@ -201,7 +214,7 @@ function BathroomFunctions.DefecateBottoms()
     getSoundManager():PlayWorldSound("PoopSelf1", player:getCurrentSquare(), 0, 10, .05, false)
 
     -- Update player stats for the accident
-    player:getStats():setStress(player:getStats():getStress() + 0.8)
+    --player:getStats():setStress(player:getStats():getStress() + 0.8)
     player:getBodyDamage():setUnhappynessLevel(player:getBodyDamage():getUnhappynessLevel() + 10)
     player:getStats():setFatigue(player:getStats():getFatigue() + 0.025)
 

@@ -25,6 +25,8 @@
 -Pee / poop values slowly go down as pee / poop timed actions go
 -Added player voice lines for pooping / peeing self
 -Added translation support for bodily functions
+-Changed moodles to only cause urination / defecation when 50% or higher. Still VERY flawed though.
+-Changed pee and poop moodles to hit 4/4 when 90% or higher
 
 12/22/24
 -Created several peed bottoms overlays, created a script that allows these to be applied when necessary.
