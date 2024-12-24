@@ -23,7 +23,8 @@
 -Updated context menu tooltips to show requirements sourced from sandbox settings
 -Made peeing / pooping yourself use timed actions, a quarter of the currently pee / poop value
 -Pee / poop values slowly go down as pee / poop timed actions go
--
+-Added player voice lines for pooping / peeing self
+-Added translation support for bodily functions
 
 12/22/24
 -Created several peed bottoms overlays, created a script that allows these to be applied when necessary.

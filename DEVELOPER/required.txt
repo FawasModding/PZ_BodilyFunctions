@@ -10,6 +10,8 @@ IMMEDIATE:
 - Discomfort for as long as the player wears peed clothing
 - Use PlayLoopedSoundTillComplete for SelfUrinate and SelfDefecate
 
+- FIX BUG IN SELFURINATE
+
 EVENTUAL:
 
 - Anti-Diarrhea, Laxatives, Diuretic pills
@@ -25,3 +27,4 @@ EVENTUAL:
 - Pee when pooping on the toilet
 - Require wiping with paper, tissues, tp, etc. otherwise putting pants / underwear back on causes 5% pooped
 - Require girls wiping with paper, tissues, tp, etc. otherwise putting pants / underwear back on causes 2% peed
+- Replace bathroom moodles to use urge rather than bladder / bowels capacity. So it can be dynamically changed to show how close you are to going.
