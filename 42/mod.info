@@ -3,3 +3,4 @@ poster=poster.png
 id=bathroomfunctions
 description=Realism in its harshest form.
 require=\MoodleFramework
+icon=icon.png

@@ -1,3 +1,9 @@
+12/26/24
+-Added "icon.png"
+-Added icons for context menu options
+-Remade trait icons (Unused)
+-Added weak and strong bladder traits (unused for now)
+
 12/23/24
 -Added context menu options for using the bathroom with a urinal, toilet, ground, and on self
 -Added UrinateAction and DefecateAction actions

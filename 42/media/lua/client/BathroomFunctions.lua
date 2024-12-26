@@ -397,6 +397,7 @@ function BathroomFunctions.BathroomRightClick(player, context, worldObjects)
 
     -- Main menu option: "Bodily Functions"
     local bathroomOption = context:addOption(getText("ContextMenu_BodilyFunctions"), worldObjects, nil)
+    bathroomOption.iconTexture = getTexture("media/textures/ContextMenuToilet.png");
 
     -- Submenu for "Bodily Functions"
     local bathroomSubMenu = ISContextMenu:getNew(context)
@@ -406,11 +407,13 @@ function BathroomFunctions.BathroomRightClick(player, context, worldObjects)
     local peeOption = bathroomSubMenu:addOption(getText("ContextMenu_Urinate"), worldObjects, nil)
     local peeSubMenu = ISContextMenu:getNew(bathroomSubMenu)
     bathroomSubMenu:addSubMenu(peeOption, peeSubMenu)
+    peeOption.iconTexture = getTexture("media/ui/Urination.png");
 
     -- Submenu for "Defecation"
     local poopOption = bathroomSubMenu:addOption(getText("ContextMenu_Defecate"), worldObjects, nil)
     local poopSubMenu = ISContextMenu:getNew(bathroomSubMenu)
     bathroomSubMenu:addSubMenu(poopOption, poopSubMenu)
+    poopOption.iconTexture = getTexture("media/ui/Defecation.png");
 
     -- Tooltips for "Urination"
     local function addTooltip(option, description)
@@ -428,11 +431,15 @@ function BathroomFunctions.BathroomRightClick(player, context, worldObjects)
     local selfPeeOption = peeSubMenu:addOption((getText("ContextMenu_Pee") .. " " .. getText("ContextMenu_UseSelf")), worldObjects, BathroomFunctions.UrinateSelf, player)
     addTooltip(groundPeeOption, "Urinate on the ground. (Requires " .. SandboxVars.BathroomFunctions.PeeOnGroundRequirement / 100 .. "%)")
     addTooltip(selfPeeOption, "Urinate on yourself. Very few situations where this would be useful. (Requires " .. SandboxVars.BathroomFunctions.PeeOnSelfRequirement / 100 .. "%)")
+    groundPeeOption.iconTexture = getTexture("media/textures/ContextMenuGround.png");
+    selfPeeOption.iconTexture = getTexture("media/ui/PeedSelf.png");
 
     local groundPoopOption = poopSubMenu:addOption((getText("ContextMenu_Poop") .. " " .. getText("ContextMenu_UseGround")), worldObjects, BathroomFunctions.PoopOnGround, player)
     local selfPoopOption = poopSubMenu:addOption((getText("ContextMenu_Poop") .. " " .. getText("ContextMenu_UseSelf")), worldObjects, BathroomFunctions.DefecateSelf, player)
     addTooltip(groundPoopOption, "Defecate on the ground. (Requires " .. SandboxVars.BathroomFunctions.PoopOnGroundRequirement / 100 .. "%)")
     addTooltip(selfPoopOption, "Defecate on yourself. Very few situations where this would be useful. (Requires " .. SandboxVars.BathroomFunctions.PoopOnSelfRequirement / 100 .. "%)")
+    groundPoopOption.iconTexture = getTexture("media/textures/ContextMenuGround.png");
+    selfPoopOption.iconTexture = getTexture("media/ui/PoopedSelf.png");
 
     -- Disable "On Self" pee options if urinateValue too low
     if urinateValue < (SandboxVars.BathroomFunctions.PeeOnGroundRequirement / 100) * bladderMaxValue then
@@ -465,6 +472,9 @@ function BathroomFunctions.BathroomRightClick(player, context, worldObjects)
             addTooltip(toiletPoopOption, "Defecate in the toilet. (Requires " .. SandboxVars.BathroomFunctions.PoopInToiletRequirement / 100 .. "% and sufficient water)")
             toiletOptionAdded = true
 
+            toiletPeeOption.iconTexture = getTexture("media/textures/ContextMenuToilet.png");
+            toiletPoopOption.iconTexture = getTexture("media/textures/ContextMenuToilet.png");
+
             if urinateValue < (SandboxVars.BathroomFunctions.PeeInToiletRequirement / 100) * bladderMaxValue then
                 toiletPeeOption.notAvailable = true
             end
@@ -478,18 +488,21 @@ function BathroomFunctions.BathroomRightClick(player, context, worldObjects)
             for _, tile in ipairs(urinalTiles) do
                 if object:getTextureName() == tile then
                     -- Pee option
-                    local urinalOption = peeSubMenu:addOption((getText("ContextMenu_Pee") .. " " .. getText("ContextMenu_UseUrinal")), worldObjects, BathroomFunctions.PeeInToilet, player)
-                    addTooltip(urinalOption, "Urinate in the urinal. (Requires " .. SandboxVars.BathroomFunctions.PeeInToiletRequirement / 100 .. "%)")
+                    local urinalPeeOption = peeSubMenu:addOption((getText("ContextMenu_Pee") .. " " .. getText("ContextMenu_UseUrinal")), worldObjects, BathroomFunctions.PeeInToilet, player)
+                    addTooltip(urinalPeeOption, "Urinate in the urinal. (Requires " .. SandboxVars.BathroomFunctions.PeeInToiletRequirement / 100 .. "%)")
                     toiletOptionAdded = true
 
                     if urinateValue < (SandboxVars.BathroomFunctions.PeeInToiletRequirement / 100) * bladderMaxValue then
-                        urinalOption.notAvailable = true
+                        urinalPeeOption.notAvailable = true
                     end
 
                     -- Poop option (always unavailable)
-                    local poopOption = peeSubMenu:addOption((getText("ContextMenu_Poop") .. " " .. getText("ContextMenu_UseUrinal")), worldObjects, nil, player)
-                    addTooltip(poopOption, "Don't you fucking dare'.")
-                    poopOption.notAvailable = true
+                    local urinalPoopOption = poopSubMenu:addOption((getText("ContextMenu_Poop") .. " " .. getText("ContextMenu_UseUrinal")), worldObjects, nil, player)
+                    addTooltip(urinalPoopOption, "Don't you fucking dare'.")
+                    urinalPoopOption.notAvailable = true
+
+                    urinalPeeOption.iconTexture = getTexture("media/textures/ContextMenuToilet.png");
+                    urinalPoopOption.iconTexture = getTexture("media/textures/ContextMenuToilet.png");
 
                     break
                 end
@@ -501,6 +514,9 @@ function BathroomFunctions.BathroomRightClick(player, context, worldObjects)
             if object:getTextureName() == tile then
                 local outhousePeeOption = peeSubMenu:addOption((getText("ContextMenu_Pee") .. " " .. getText("ContextMenu_UseOuthouse")), worldObjects, BathroomFunctions.PeeInToilet, player)
                 local outhousePoopOption = poopSubMenu:addOption((getText("ContextMenu_Poop") .. " " .. getText("ContextMenu_UseOuthouse")), worldObjects, BathroomFunctions.PoopInToilet, player)
+                
+                outhousePeeOption.iconTexture = getTexture("media/textures/ContextMenuToilet.png");
+                outhousePoopOption.iconTexture = getTexture("media/textures/ContextMenuToilet.png");
 
                 addTooltip(outhousePeeOption, "Urinate in the outhouse. (Requires " .. SandboxVars.BathroomFunctions.PeeInToiletRequirement / 100 .. "%)")
                 addTooltip(outhousePoopOption, "Defecate in the outhouse. (Requires " .. SandboxVars.BathroomFunctions.PoopInToiletRequirement / 100 .. "%)")
