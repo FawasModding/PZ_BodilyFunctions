@@ -2,6 +2,7 @@
 -Added 3 new sandbox options
 -Added support for disabling purposeful self urination / defecation
 -Simplified sandbox-options.txt
+-Player needs soap and water to clean soiled clothes + entire clean soiled clothes system added
 
 12/26/24
 -Added "icon.png"

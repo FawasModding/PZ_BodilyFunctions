@@ -4,6 +4,7 @@ module BathroomFunctions
 	{
 		Weight = 1,
 		Type = Food,
+		DisplayName = Pee Puddle (Large),
 		Icon = HumanUrine,
 		DaysFresh = 0,
 		DisplayCategory = Junk,
@@ -23,6 +24,7 @@ module BathroomFunctions
 	{
 		Weight = 1,
 		Type = Food,
+		DisplayName = Pee Puddle (Small),
 		Icon = HumanUrine,
 		DaysFresh = 0,
 		DisplayCategory = Junk,

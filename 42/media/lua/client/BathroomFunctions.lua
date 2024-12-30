@@ -31,7 +31,7 @@ function BathroomFunctions.NewBathroomValues()
     -- Update the urination value
     local urinateValue = BathroomFunctions.GetUrinateValue() -- Get the current urination value
     local bladderMaxValue = SandboxVars.BathroomFunctions.BladderMaxValue or 100 -- Get the max bladder value, default to 100 if not set
-    local urinateIncrease = 0.005 * bladderMaxValue * SandboxVars.BathroomFunctions.BladderIncreaseMultiplier -- 0.5% of the max bladder value * multiplier
+    local urinateIncrease = 0.01 * bladderMaxValue * SandboxVars.BathroomFunctions.BladderIncreaseMultiplier -- 1% of the max bladder value * multiplier
 
     urinateValue = urinateValue + urinateIncrease -- Increase the urination value by the calculated percentage
     player:getModData().urinateValue = tonumber(urinateValue) -- Save the updated value back to the player's modData
@@ -252,10 +252,10 @@ end
 function BathroomFunctions.SetClothing(clothing)
     local cleanName = nil
 
-    -- Check if the clothing name contains a parenthesis, which might indicate a status modifier (like "(Peed)" or "(Pooped)")
+    -- Check if the clothing name contains a parenthesis, for status modifier (like "(Peed)" or "(Pooped)")
     if (string.find(clothing:getName(), "%(")) then
         local startIndex = string.find(clothing:getName(), "%(")
-        -- Extract the base name of the clothing (without the status modifier in parentheses)
+        -- Get base name of the clothing (without the status modifier in parentheses)
         cleanName = string.sub(clothing:getName(), 0, startIndex - 2)
     else
         cleanName = clothing:getName()
@@ -280,8 +280,8 @@ function BathroomFunctions.SetClothing(clothing)
         clothing:setName(cleanName .. " (Pooped " .. clothing:getModData().poopedSeverity .. "%)")
         -- Set the dirtyness to maximum (100) to reflect the soiled condition
         clothing:setDirtyness(100)
-        -- Reduce the player's run speed to simulate the hindrance caused by having poop in the clothing
-        clothing:setRunSpeedModifier(clothing:getRunSpeedModifier() - 0.2) -- Expected effect: slower movement, but may not be very noticeable
+        -- Reduce the player's run speed to simulate having poop in the clothing
+        clothing:setRunSpeedModifier(clothing:getRunSpeedModifier() - 0.2) -- slower movement, but may not be very noticeable
     end
 
     -- If both "peed" and "pooped" statuses are true, update the clothing name to reflect both conditions
@@ -444,9 +444,6 @@ function BathroomFunctions.BathroomRightClick(player, context, worldObjects)
         selfPeeOption.iconTexture = getTexture("media/ui/PeedSelf.png");
 
         -- Disable "On Self" pee options if urinateValue too low
-        if urinateValue < (SandboxVars.BathroomFunctions.PeeOnGroundRequirement / 100) * bladderMaxValue then
-            groundPeeOption.notAvailable = true
-        end
         if urinateValue < (SandboxVars.BathroomFunctions.PeeOnSelfRequirement / 100) * bladderMaxValue then
             selfPeeOption.notAvailable = true
         end
@@ -459,13 +456,17 @@ function BathroomFunctions.BathroomRightClick(player, context, worldObjects)
         addTooltip(selfPoopOption, "Defecate on yourself. Very few situations where this would be useful. (Requires " .. SandboxVars.BathroomFunctions.PoopOnSelfRequirement / 100 .. "%)")
         selfPoopOption.iconTexture = getTexture("media/ui/PoopedSelf.png");
 
-        if defecateValue < (SandboxVars.BathroomFunctions.PeeOnGroundRequirement / 100) * bowelsMaxValue then
-            groundPoopOption.notAvailable = true
-        end
         if defecateValue < (SandboxVars.BathroomFunctions.PoopOnSelfRequirement / 100) * bowelsMaxValue then
             selfPoopOption.notAvailable = true
         end
     
+    end
+
+    if urinateValue < (SandboxVars.BathroomFunctions.PeeOnGroundRequirement / 100) * bladderMaxValue then
+        groundPeeOption.notAvailable = true
+    end
+    if defecateValue < (SandboxVars.BathroomFunctions.PeeOnGroundRequirement / 100) * bowelsMaxValue then
+        groundPoopOption.notAvailable = true
     end
 
     -- Loop through world objects and check for toilets, urinals, and outhouses
@@ -548,7 +549,82 @@ function BathroomFunctions.BathroomRightClick(player, context, worldObjects)
     end
 end
 
+function BathroomFunctions.WashingRightClick(player, context, worldObjects)
+	local player = getPlayer()
 
+	local hasSoiledItem = false
+	local soiledItemEquipped = false
+	local soiledItem = nil
+	local soapItem = nil
+
+	for i = 0, player:getInventory():getItems():size() - 1 do
+		local item = player:getInventory():getItems():get(i)
+		
+		if item:getType() == "Soap2" then
+			soapItem = item
+		end
+
+		if item:getModData().peed == true or item:getModData().pooped == true then --If peed/pooped item
+			hasSoiledItem = true
+			if (item:isEquipped()) then
+				soiledItemEquipped = true
+			end
+			soiledItem = item
+		end
+	end
+
+	if hasSoiledItem then
+		local storeWater = nil
+		local firstObject = nil
+		for _, o in ipairs(worldObjects) do
+			if not firstObject then firstObject = o end
+		end
+
+		local square = firstObject:getSquare()
+		local worldObjects = square:getObjects()
+		for i = 0, worldObjects:size() - 1 do
+			local object = worldObjects:get(i)
+			if (object:getTextureName() and object:hasWater()) then --Anything that can usually be used to wash
+				storeWater = object
+			end
+		end
+
+		if storeWater == nil then
+			return
+		end
+		
+		if storeWater:getSquare():DistToProper(player:getSquare()) > 10 then
+			return
+		end
+
+		local washOption = context:addOptionOnTop("Wash Soiled Clothing", nil, nil)
+		local subMenu = ISContextMenu:getNew(context)
+		context:addSubMenu(washOption, subMenu)
+		local option = subMenu:addOption(soiledItem:getName(), player, BathroomFunctions.WashSoiled, square, soiledItem, soapItem, storeWater, soiledItemEquipped)
+
+
+		local waterRemaining = storeWater:getWaterAmount()
+		
+		if (waterRemaining < 15) then
+			option.notAvailable = true --Not enough water
+		end
+
+        if soiledItem:getModData().pooped then -- Only require soap if soiled clothing is pooped
+            if soapItem == nil or soapItem:getCurrentUses() <= 0 then
+                option.notAvailable = true -- Not enough soap / no soap
+            else
+                local soapText = "0"
+            end
+        end
+
+		--local tooltip = ISWorldObjectContextMenu.addToolTip()
+		--tooltip.description = getText("ContextMenu_WaterSource") .. ": " .. source
+		--tooltip.description = tooltip.description .. " <LINE> Water: " .. tostring(math.min(waterRemaining, 15)) .. " / " .. tostring(15)
+		--tooltip.description = tooltip.description .. " <LINE> Bleach: " .. bleachText .. " / 0.3"
+		--tooltip.description = tooltip.description .. " <LINE> Dirty: " .. math.ceil(defecatedItem:getDirtyness()) .. " / 100"
+		--option.toolTip = tooltip
+	end
+end
 
 
 
@@ -632,7 +708,17 @@ function BathroomFunctions.UrinateSelf()
     print("Updated Peed Self Value: " .. BathroomFunctions.GetPeedSelfValue()) -- Debug print statement to display the updated urination value
 end
 
+function BathroomFunctions.WashSoiled(playerObj, square, soiledItem, bleachItem, storeWater, soiledItemEquipped)
+	if not square or not luautils.walkAdj(playerObj, square, true) then
+		return
+	end
 
+	if soiledItemEquipped then --Unequip soiled clothing before washing
+		ISTimedActionQueue.add(ISUnequipAction:new(playerObj, soiledItem, 50))
+	end
+	
+	ISTimedActionQueue.add(WashSoiled:new(playerObj, 400, square, soiledItem, bleachItem, storeWater))
+end
 
 
 
@@ -675,3 +761,4 @@ Events.EveryTenMinutes.Add(BathroomFunctions.BathroomFunctionTimers)
 Events.OnGameBoot.Add(BathroomFunctions.onGameBoot)
 
 Events.OnFillWorldObjectContextMenu.Add(BathroomFunctions.BathroomRightClick)
+Events.OnFillWorldObjectContextMenu.Add(BathroomFunctions.WashingRightClick)

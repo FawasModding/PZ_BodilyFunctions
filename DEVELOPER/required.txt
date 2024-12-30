@@ -1,7 +1,6 @@
 IMMEDIATE:
 
-- Fix the moodles causing instant urination / defecation when reaching 50%
-- Player needs soap and water to clean urinated clothes
+
 
 EVENTUAL:
 

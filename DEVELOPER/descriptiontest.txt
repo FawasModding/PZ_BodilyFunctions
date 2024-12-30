@@ -15,6 +15,7 @@ Current Features:
 - Human feces (ground pooping)
 
 Planned Features:
+- Moodles impact pee / poop self chance. (Currently bugged, will be brought back ASAP)
 - Player taking off clothes automatically before being able to urinate / defecate
 - Pee in bottles (useful when in a vehicle or trying not to make noise)
 - Filtering pee from bottles.
@@ -46,7 +47,7 @@ Over time the player will need to pee and poop. Right click, and use the Bodily 
 
 Cleaning Clothes
 Wearing peed or pooped clothes upsets your player, so to clean them, you'll need:
-- Peed: Soap and water
+- Peed: Water
 - Pooped: Soap and water
 
 ----------------------------------------------------------------------------------
