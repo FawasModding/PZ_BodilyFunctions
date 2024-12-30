@@ -1,0 +1,58 @@
+Welcome to a level of realism a surprising amount of people desire. The whole zombie thing is a bitch, y'know? Why not make it worse.
+
+THIS WILL NOT BE BACKPORTED TO BUILD 41. IF YOU WANT TO USE BUILD 41, USE NATER'S DEFECATION MOD AND/OR MY URINATION MOD.
+
+ANY SANDBOX OPTION WITH A "*" IS NOT CURRENTLY IMPLEMENTED.
+
+----------------------------------------------------------------------------------
+
+Current Features:
+- Bladder & Bowel Moodles (represents bladder/bowel size. may change to represent urge)
+- Ground, Toilet, Urinal, and Outhouse support (report any exceptions)
+- Peed & Pooped Clothes Moodles (after 10 in-game minutes of taking them off, moodles disappear and mood effects disable)
+- Peed clothes visual effect (kind of unoptimized. w.i.p but functional)
+- Urine puddle (peeing self + ground peeing)
+- Human feces (ground pooping)
+
+Planned Features:
+- Player taking off clothes automatically before being able to urinate / defecate
+- Pee in bottles (useful when in a vehicle or trying not to make noise)
+- Filtering pee from bottles.
+- Stomach and Bladder traits impact bladder and bowel size
+- "Liquid Laxative" and "Liquid Diuretic" (your friends will hate you)
+- Laxative, Diuretic, and Anti-Diarrheal pills
+
+Potential Features:
+- Pooped clothes visual effect
+- Urgency idle animations
+- Females have smaller bladder (would be a sandbox option)
+- Permanent poop stain despite cleaning (probably just a tooltip, but no debuff)
+
+Known Issues:
+- Toilet registration is a bit finnicky. You'll need to get really close to the toilet and right click it, don't stand 10 feet away and expect it to work. This will be fixed at some point.
+- Sitting on the toilet should use the built-in Build 42 functionality.
+
+----------------------------------------------------------------------------------
+
+HOW TO USE:
+
+Moodles
+There are four new moodles:
+Bladder & Bladder: These represent your bladder / bowels capacity. They are meant to warn you how badly you need to go.
+Peed Self & Pooped Self: This appears if you wear peed/pooped clothing. It means your character will progressively get a mood debuff. Take off peed/pooped clothes to remove it.
+
+Bodily Functions
+Over time the player will need to pee and poop. Right click, and use the Bodily Functions context menu option to pee or poop in available areas.
+
+Cleaning Clothes
+Wearing peed or pooped clothes upsets your player, so to clean them, you'll need:
+- Peed: Soap and water
+- Pooped: Soap and water
+
+----------------------------------------------------------------------------------
+
+Translation Credits:
+
+Thanks Stuff v2:
+Nater (Defecation Mod, the one who inspired this in the first place. Check out his mod)
+https://steamcommunity.com/sharedfiles/filedetails/?id=1436878551&searchtext=defecation

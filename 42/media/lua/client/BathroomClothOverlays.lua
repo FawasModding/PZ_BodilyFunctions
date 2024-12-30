@@ -10,7 +10,7 @@ BathroomClothOverlays.femaleUnderpantsPeedItems = {}
 
 -- Function to populate the arrays with test items
 function BathroomClothOverlays.populateTestItems()
-    -- Define a list of items for each type (strings only)
+    -- Define lists for each item type
     local suitTrousersMeshItems = {"Trousers_Suit", "Trousers_SuitTEXTURE", "Trousers_Scrubs"}
     local maleBoxersPantsItems = 
     {
@@ -82,7 +82,7 @@ function BathroomClothOverlays.equipPeedOverlays(player)
     local hasSuitTrousersMesh = false
     local hasMaleBoxersPants = false
     local hasFemaleUnderpants = false
-    local isDefault = true  -- New default flag
+    local isDefault = true
 
     -- Check which item the player is wearing and select the corresponding "peed" item
     for wornItem, _ in pairs(currentWornItems) do
@@ -173,7 +173,7 @@ function BathroomClothOverlays.OnClothingChanged(player)
         local player = getPlayer() -- needed because of EveryOneMinute
 
         -- Always remove the overlay first to ensure no (or, less than there would be lmao) duplicates
-        -- Kind of inefficient but this has already taken too much time :|   If you're reading this, fix it and propose a change to the github
+        -- Kind of inefficient but this has already taken too much time :|   If you're reading this, fix it and propose a change
         BathroomClothOverlays.removePeedOverlays(player)
 
         -- store all "peed" items from the inventory

@@ -1,15 +1,16 @@
 IMMEDIATE:
 
-- Advanced it on toilet (required for pooping or peeing [females only])
+- Fix the moodles causing instant urination / defecation when reaching 50%
+- Player needs soap and water to clean urinated clothes
+
+EVENTUAL:
+
+- Advanced sit on toilet (required for pooping or peeing [females only])
 - Pee & Poop beans for debug
 - Every sandbox option with "*" is unimplemented. implement these
 - Nausea and discomfort for as long as the player wears pooped clothing
 - Discomfort for as long as the player wears peed clothing
 - Use PlayLoopedSoundTillComplete for SelfUrinate and SelfDefecate
-
-- Fix the moodles causing instant urination / defecation when reaching 50%
-
-EVENTUAL:
 
 - Anti-Diarrhea, Laxatives, Diuretic pills
 - Liquid laxative and diuretic should actually impact poop and pee production
@@ -17,11 +18,9 @@ EVENTUAL:
 - Pee in bottles
 - Filter out pee bottle
 - Make filtered urine liquid give nausea but safe to drink
-- Pee Self action is timed
-- Poop Self action is timed
 - All underwear defined in BathroomClothOverlays
 - Realistic stomach volume w/ liquid and food contents that convert into bladder and bowels meters
 - Pee when pooping on the toilet
 - Require wiping with paper, tissues, tp, etc. otherwise putting pants / underwear back on causes 5% pooped
-- Require girls wiping with paper, tissues, tp, etc. otherwise putting pants / underwear back on causes 2% peed
+- Require females wiping with paper, tissues, tp, etc. otherwise putting pants / underwear back on causes 2% peed
 - Replace bathroom moodles to use urge rather than bladder / bowels capacity. So it can be dynamically changed to show how close you are to going.

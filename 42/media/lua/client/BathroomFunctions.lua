@@ -150,7 +150,9 @@ function BathroomFunctions.UrinateBottoms()
             -- Update the clothing's condition after the accident
             BathroomFunctions.PeedPoopedSelfUpdate(clothing)
 
-            BathroomClothOverlays.OnClothingChanged(player)
+            if SandboxVars.BathroomFunctions.ShowPeeStain == true then
+                BathroomClothOverlays.OnClothingChanged(player)
+            end
         end
     end
 
@@ -289,7 +291,7 @@ function BathroomFunctions.SetClothing(clothing)
 end
 
 --[[
-Use this to call function to show the wearing urinated and defecated garments moodles. As well as affect the mood over time.
+Use this to call function to to show the wearing urinated and defecated garments moodles. As well as affect the mood over time.
 ]]--
 function BathroomFunctions.DirtyBottomsEffects()
     local player = getPlayer()
@@ -428,31 +430,42 @@ function BathroomFunctions.BathroomRightClick(player, context, worldObjects)
 
     -- Default options for urination and defecation
     local groundPeeOption = peeSubMenu:addOption((getText("ContextMenu_Pee") .. " " .. getText("ContextMenu_UseGround")), worldObjects, BathroomFunctions.PeeOnGround, player)
-    local selfPeeOption = peeSubMenu:addOption((getText("ContextMenu_Pee") .. " " .. getText("ContextMenu_UseSelf")), worldObjects, BathroomFunctions.UrinateSelf, player)
     addTooltip(groundPeeOption, "Urinate on the ground. (Requires " .. SandboxVars.BathroomFunctions.PeeOnGroundRequirement / 100 .. "%)")
-    addTooltip(selfPeeOption, "Urinate on yourself. Very few situations where this would be useful. (Requires " .. SandboxVars.BathroomFunctions.PeeOnSelfRequirement / 100 .. "%)")
     groundPeeOption.iconTexture = getTexture("media/textures/ContextMenuGround.png");
-    selfPeeOption.iconTexture = getTexture("media/ui/PeedSelf.png");
 
     local groundPoopOption = poopSubMenu:addOption((getText("ContextMenu_Poop") .. " " .. getText("ContextMenu_UseGround")), worldObjects, BathroomFunctions.PoopOnGround, player)
-    local selfPoopOption = poopSubMenu:addOption((getText("ContextMenu_Poop") .. " " .. getText("ContextMenu_UseSelf")), worldObjects, BathroomFunctions.DefecateSelf, player)
     addTooltip(groundPoopOption, "Defecate on the ground. (Requires " .. SandboxVars.BathroomFunctions.PoopOnGroundRequirement / 100 .. "%)")
-    addTooltip(selfPoopOption, "Defecate on yourself. Very few situations where this would be useful. (Requires " .. SandboxVars.BathroomFunctions.PoopOnSelfRequirement / 100 .. "%)")
     groundPoopOption.iconTexture = getTexture("media/textures/ContextMenuGround.png");
-    selfPoopOption.iconTexture = getTexture("media/ui/PoopedSelf.png");
 
-    -- Disable "On Self" pee options if urinateValue too low
-    if urinateValue < (SandboxVars.BathroomFunctions.PeeOnGroundRequirement / 100) * bladderMaxValue then
-        groundPeeOption.notAvailable = true
+    if(SandboxVars.BathroomFunctions.CanHavePeePurpose == true) then
+
+        local selfPeeOption = peeSubMenu:addOption((getText("ContextMenu_Pee") .. " " .. getText("ContextMenu_UseSelf")), worldObjects, BathroomFunctions.UrinateSelf, player)
+        addTooltip(selfPeeOption, "Urinate on yourself. Very few situations where this would be useful. (Requires " .. SandboxVars.BathroomFunctions.PeeOnSelfRequirement / 100 .. "%)")
+        selfPeeOption.iconTexture = getTexture("media/ui/PeedSelf.png");
+
+        -- Disable "On Self" pee options if urinateValue too low
+        if urinateValue < (SandboxVars.BathroomFunctions.PeeOnGroundRequirement / 100) * bladderMaxValue then
+            groundPeeOption.notAvailable = true
+        end
+        if urinateValue < (SandboxVars.BathroomFunctions.PeeOnSelfRequirement / 100) * bladderMaxValue then
+            selfPeeOption.notAvailable = true
+        end
+
     end
-    if urinateValue < (SandboxVars.BathroomFunctions.PeeOnSelfRequirement / 100) * bladderMaxValue then
-        selfPeeOption.notAvailable = true
-    end
-    if defecateValue < (SandboxVars.BathroomFunctions.PeeOnGroundRequirement / 100) * bowelsMaxValue then
-        groundPoopOption.notAvailable = true
-    end
-    if defecateValue < (SandboxVars.BathroomFunctions.PoopOnSelfRequirement / 100) * bowelsMaxValue then
-        selfPoopOption.notAvailable = true
+
+    if(SandboxVars.BathroomFunctions.CanHavePoopPurpose == true) then
+  
+        local selfPoopOption = poopSubMenu:addOption((getText("ContextMenu_Poop") .. " " .. getText("ContextMenu_UseSelf")), worldObjects, BathroomFunctions.DefecateSelf, player)
+        addTooltip(selfPoopOption, "Defecate on yourself. Very few situations where this would be useful. (Requires " .. SandboxVars.BathroomFunctions.PoopOnSelfRequirement / 100 .. "%)")
+        selfPoopOption.iconTexture = getTexture("media/ui/PoopedSelf.png");
+
+        if defecateValue < (SandboxVars.BathroomFunctions.PeeOnGroundRequirement / 100) * bowelsMaxValue then
+            groundPoopOption.notAvailable = true
+        end
+        if defecateValue < (SandboxVars.BathroomFunctions.PoopOnSelfRequirement / 100) * bowelsMaxValue then
+            selfPoopOption.notAvailable = true
+        end
+    
     end
 
     -- Loop through world objects and check for toilets, urinals, and outhouses
@@ -496,7 +509,7 @@ function BathroomFunctions.BathroomRightClick(player, context, worldObjects)
                         urinalPeeOption.notAvailable = true
                     end
 
-                    -- Poop option (always unavailable)
+                    -- Poop option is always unavailable
                     local urinalPoopOption = poopSubMenu:addOption((getText("ContextMenu_Poop") .. " " .. getText("ContextMenu_UseUrinal")), worldObjects, nil, player)
                     addTooltip(urinalPoopOption, "Don't you fucking dare'.")
                     urinalPoopOption.notAvailable = true

@@ -1,3 +1,8 @@
+12/30/24
+-Added 3 new sandbox options
+-Added support for disabling purposeful self urination / defecation
+-Simplified sandbox-options.txt
+
 12/26/24
 -Added "icon.png"
 -Added icons for context menu options

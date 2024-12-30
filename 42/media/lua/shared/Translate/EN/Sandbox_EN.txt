@@ -1,5 +1,6 @@
 Sandbox_EN =
 {
+
 	Sandbox_Bathroom = "Bathroom",
 	
 	Sandbox_BathroomFunctions_RequireWipe = "Require Wiping*",
@@ -34,17 +35,23 @@ Sandbox_EN =
 	Sandbox_BathroomFunctions_DefecateSpeedMultiplier = "Defecate Speed Multiplier*",
 	Sandbox_BathroomFunctions_DefecateSpeedMultiplier_tooltip = "How long it takes you to defecate.",
 
-	Sandbox_BathroomFunctions_PoopOnSelfRequirement = "Poop On Self Requirement",
+	Sandbox_BathroomFunctions_PoopAccidentRequirement = "Poop Accident Requirement*",
+	Sandbox_BathroomFunctions_PoopAccidentRequirement_tooltip = "The percentage fullness of your bowels required to accidentally poop yourself.",
+
+	Sandbox_BathroomFunctions_PoopOnSelfRequirement = "'Poop On Self' Requirement",
 	Sandbox_BathroomFunctions_PoopOnSelfRequirement_tooltip = "The percentage fullness of your bowels required to intentionally poop yourself.",
 
-	Sandbox_BathroomFunctions_PoopOnGroundRequirement = "Poop On Ground Requirement",
+	Sandbox_BathroomFunctions_PoopOnGroundRequirement = "'Poop On Ground' Requirement",
 	Sandbox_BathroomFunctions_PoopOnGroundRequirement_tooltip = "The percentage fullness of your bowels required to poop on the ground.",
 
-	Sandbox_BathroomFunctions_PoopInToiletRequirement = "Poop In Toilet Requirement",
+	Sandbox_BathroomFunctions_PoopInToiletRequirement = "'Poop In Toilet' Requirement",
 	Sandbox_BathroomFunctions_PoopInToiletRequirement_tooltip = "The percentage fullness of your bowels required to poop in a toilet.",
 
 	Sandbox_BathroomFunctions_CanHavePoopAccident = "Can Accidentally Poop Self*",
 	Sandbox_BathroomFunctions_CanHavePoopAccident_tooltip = "Whether or not you can poop yourself.",
+
+	Sandbox_BathroomFunctions_CanHavePoopPurpose = "Can Intentionally Poop Self",
+	Sandbox_BathroomFunctions_CanHavePoopPurpose_tooltip = "Whether or not the 'Poop Self' option shows in the context menu.",
 
 	Sandbox_BathroomFunctions_NightPoopAccidents = "Can Poop The Bed*",
 	Sandbox_BathroomFunctions_NightPoopAccidents_tooltip = "Whether or not you can poop yourself while asleep.",
@@ -84,17 +91,23 @@ Sandbox_EN =
 	Sandbox_BathroomFunctions_UrinateSpeedMultiplier = "Urinate Speed Multiplier*",
 	Sandbox_BathroomFunctions_UrinateSpeedMultiplier_tooltip = "How long it takes you to urinate.",
 
-	Sandbox_BathroomFunctions_PeeOnSelfRequirement = "Pee On Self Requirement",
+	Sandbox_BathroomFunctions_PeeAccidentRequirement = "Pee Accident Requirement*",
+	Sandbox_BathroomFunctions_PeeAccidentRequirement_tooltip = "The percentage fullness of your bladder required to accidentally pee yourself.",
+
+	Sandbox_BathroomFunctions_PeeOnSelfRequirement = "'Pee On Self' Requirement",
 	Sandbox_BathroomFunctions_PeeOnSelfRequirement_tooltip = "The percentage fullness of your bladder required to intentionally pee yourself.",
 
-	Sandbox_BathroomFunctions_PeeOnGroundRequirement = "Pee On Ground Requirement",
+	Sandbox_BathroomFunctions_PeeOnGroundRequirement = "'Pee On Ground' Requirement",
 	Sandbox_BathroomFunctions_PeeOnGroundRequirement_tooltip = "The percentage fullness of your bladder required to pee on the ground.",
 
-	Sandbox_BathroomFunctions_PeeInToiletRequirement = "Pee In Toilet Requirement",
+	Sandbox_BathroomFunctions_PeeInToiletRequirement = "'Pee In Toilet' Requirement",
 	Sandbox_BathroomFunctions_PeeInToiletRequirement_tooltip = "The percentage fullness of your bladder required to pee in a toilet.",
 
 	Sandbox_BathroomFunctions_CanHavePeeAccident = "Can Accidentally Pee Self*",
 	Sandbox_BathroomFunctions_CanHavePeeAccident_tooltip = "Whether or not you can pee yourself.",
+
+	Sandbox_BathroomFunctions_CanHavePeePurpose = "Can Intentionally Pee Self",
+	Sandbox_BathroomFunctions_CanHavePeePurpose_tooltip = "Whether or not the 'Pee Self' option shows in the context menu.",
 
 	Sandbox_BathroomFunctions_NightPeeAccidents = "Can Wet The Bed*",
 	Sandbox_BathroomFunctions_NightPeeAccidents_tooltip = "Whether or not you can pee yourself while asleep.",
