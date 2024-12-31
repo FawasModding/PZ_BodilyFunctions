@@ -1,12 +1,16 @@
 {
   "ExpandedNodes": [
     "",
-    "\\42",
     "\\42\\media",
     "\\42\\media\\lua",
     "\\42\\media\\lua\\client",
-    "\\DEVELOPER"
+    "\\42\\media\\lua\\client\\TimedActions",
+    "\\42\\media\\lua\\shared",
+    "\\42\\media\\lua\\shared\\Translate",
+    "\\42\\media\\lua\\shared\\Translate\\EN",
+    "\\42\\media\\scripts",
+    "\\common"
   ],
-  "SelectedNode": "\\DEVELOPER\\changelog.txt",
+  "SelectedNode": "\\common\\mod.info",
   "PreviewInSolutionExplorer": false
 }

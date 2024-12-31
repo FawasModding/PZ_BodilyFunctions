@@ -1,5 +1,5 @@
-name=Bathroom Functions
+name=Bathroom Functions DEV
 poster=poster.png
-id=bathroomfunctions
+id=bathroomfunctionsdev
 description=Realism in its harshest form.
 require=\MoodleFramework
