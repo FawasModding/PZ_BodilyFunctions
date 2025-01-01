@@ -1,3 +1,6 @@
+12/31/24
+-Made ToiletDefecate.lua also reduce urinate value, not just defecate
+
 12/30/24
 -Added 3 new sandbox options
 -Added support for disabling purposeful self urination / defecation

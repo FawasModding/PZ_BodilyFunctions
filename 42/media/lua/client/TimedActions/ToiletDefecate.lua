@@ -10,6 +10,12 @@ function ToiletDefecate:update()
     local newValue = self.initialDefecateValue - (delta * self.initialDefecateValue)
     self.character:getModData().defecateValue = math.max(newValue, 0) -- Ensure it doesn't go below 0
 
+	-- Reduce urination value proportionally to the elapsed time
+    local delta = self:getJobDelta() -- Get the progress of the action (0.0 to 1.0)
+    local initialValue = self.character:getModData().urinateValue
+    local newValue = self.initialUrinateValue - (delta * self.initialUrinateValue)
+    self.character:getModData().urinateValue = math.max(newValue, 0) -- Ensure it doesn't go below 0
+
 	if self.usingToilet then
 		local props = self.toiletObject:getProperties()
 
@@ -29,6 +35,9 @@ function ToiletDefecate:start()
 	-- Save the initial defecation value at the start of the action
     self.initialDefecateValue = self.character:getModData().defecateValue or 0
 
+	-- Save the initial urination value at the start of the action
+    self.initialUrinateValue = self.character:getModData().urinateValue or 0
+
 	-- Remove clothing items before starting the defecation
     self.removedClothing = {}
 
@@ -45,6 +54,7 @@ function ToiletDefecate:perform()
 	local defecateValue = BathroomFunctions.GetDefecateValue()
 
 	self.character:getModData().defecateValue = 0.0 --RESET DEFECATE VALUE
+	self.character:getModData().urinateValue = 0.0 --RESET URINE VALUE
 	ISBaseTimedAction.perform(self)
 end
 

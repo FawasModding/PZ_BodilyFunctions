@@ -78,28 +78,36 @@ function BathroomFunctions.CheckForAccident()
     local painModifier = 0
     local coldModifier = 0
 
-    -- Check moodles for modifiers (if moodles are enabled)
-    if player:getMoodles() then
-        panicModifier = player:getMoodles():getMoodleLevel(MoodleType.Panic) * 5 -- Panic increases accident likelihood
-        stressedModifier = player:getMoodles():getMoodleLevel(MoodleType.Stress) * 3 -- Stress increases chance
-        drunkModifier = player:getMoodles():getMoodleLevel(MoodleType.Drunk) * 10 -- Drunk increases chance for urination
-        heavyLoadModifier = player:getMoodles():getMoodleLevel(MoodleType.HeavyLoad) * 3 -- Heavy load increases chance
-        wetModifier = player:getMoodles():getMoodleLevel(MoodleType.Wet) * 5 -- Wet triggers a stronger urge
-        painModifier = player:getMoodles():getMoodleLevel(MoodleType.Pain) * 3 -- Pain increases likelihood
-        coldModifier = player:getMoodles():getMoodleLevel(MoodleType.HasACold) * 2 -- Cold increases chance
-    end
-
-    -- Check if the player should urinate involuntarily
-    if urinateValue >= bladderThreshold or 
-       (urinateValue > 0.5 * bladderMaxValue and (panicModifier > 0 or stressedModifier > 0 or drunkModifier > 0 or heavyLoadModifier > 0 or wetModifier > 0 or painModifier > 0 or coldModifier > 0)) then
+    -- Only use this for now
+    if urinateValue >= bladderThreshold then
         BathroomFunctions.UrinateSelf()
     end
-
-    -- Check if the player should defecate involuntarily
-    if defecateValue >= bowelsThreshold or 
-       (defecateValue > 0.5 * bowelsMaxValue and (panicModifier > 0 or stressedModifier > 0 or heavyLoadModifier > 0 or wetModifier > 0 or painModifier > 0 or coldModifier > 0)) then
+    if defecateValue >= bowelsThreshold then
         BathroomFunctions.DefecateSelf()
     end
+
+    -- Check moodles for modifiers (if moodles are enabled)
+    --if player:getMoodles() then
+    --    panicModifier = player:getMoodles():getMoodleLevel(MoodleType.Panic) * 5 -- Panic increases accident likelihood
+    --    stressedModifier = player:getMoodles():getMoodleLevel(MoodleType.Stress) * 3 -- Stress increases chance
+    --    drunkModifier = player:getMoodles():getMoodleLevel(MoodleType.Drunk) * 10 -- Drunk increases chance for urination
+    --    heavyLoadModifier = player:getMoodles():getMoodleLevel(MoodleType.HeavyLoad) * 3 -- Heavy load increases chance
+    --    wetModifier = player:getMoodles():getMoodleLevel(MoodleType.Wet) * 5 -- Wet triggers a stronger urge
+    --    painModifier = player:getMoodles():getMoodleLevel(MoodleType.Pain) * 3 -- Pain increases likelihood
+    --    coldModifier = player:getMoodles():getMoodleLevel(MoodleType.HasACold) * 2 -- Cold increases chance
+    --end
+
+    -- Check if the player should urinate involuntarily
+    --if urinateValue >= bladderThreshold or 
+    --   (urinateValue > 0.5 * bladderMaxValue and (panicModifier > 0 or stressedModifier > 0 or drunkModifier > 0 or heavyLoadModifier > 0 or wetModifier > 0 or painModifier > 0 or coldModifier > 0)) then
+    --    BathroomFunctions.UrinateSelf()
+    --end
+
+    -- Check if the player should defecate involuntarily
+    --if defecateValue >= bowelsThreshold or 
+    --   (defecateValue > 0.5 * bowelsMaxValue and (panicModifier > 0 or stressedModifier > 0 or heavyLoadModifier > 0 or wetModifier > 0 or painModifier > 0 or coldModifier > 0)) then
+    --    BathroomFunctions.DefecateSelf()
+    --end
 
 end
 

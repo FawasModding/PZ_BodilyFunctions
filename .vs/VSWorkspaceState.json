@@ -1,16 +1,16 @@
 {
   "ExpandedNodes": [
     "",
+    "\\42",
     "\\42\\media",
     "\\42\\media\\lua",
-    "\\42\\media\\lua\\client",
-    "\\42\\media\\lua\\client\\TimedActions",
     "\\42\\media\\lua\\shared",
     "\\42\\media\\lua\\shared\\Translate",
     "\\42\\media\\lua\\shared\\Translate\\EN",
     "\\42\\media\\scripts",
-    "\\common"
+    "\\common",
+    "\\DEVELOPER"
   ],
-  "SelectedNode": "\\common\\mod.info",
+  "SelectedNode": "\\42\\media\\lua\\client\\BathroomCharacterInfo_AddTab.lua",
   "PreviewInSolutionExplorer": false
 }
