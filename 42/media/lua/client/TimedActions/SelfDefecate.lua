@@ -16,14 +16,19 @@ function SelfDefecate:start()
     self.initialDefecateValue = self.character:getModData().defecateValue or 0
 end
 
+-- If action ends early
 function SelfDefecate:stop()
+	-- You stop the action, you automatically poop yourself
+	self.character:getModData().defecateValue = 0.0
+
 	ISBaseTimedAction.stop(self)
 end
 
 function SelfDefecate:perform()
 	local defecateValue = BathroomFunctions.GetDefecateValue()
 
-	self.character:getModData().defecateValue = 0.0 --RESET DEFECATE VALUE
+	-- Ensure defecateValue is fully reset at the end of the action
+	self.character:getModData().defecateValue = 0.0
 	ISBaseTimedAction.perform(self)
 end
 

@@ -16,7 +16,11 @@ function SelfUrinate:start()
     self.initialUrinateValue = self.character:getModData().urinateValue or 0
 end
 
+-- If action ends early
 function SelfUrinate:stop()
+	-- You stop the action, you automatically pee yourself
+	self.character:getModData().urinateValue = 0.0
+
 	ISBaseTimedAction.stop(self)
 end
 

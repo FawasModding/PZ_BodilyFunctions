@@ -49,7 +49,7 @@ function BathroomCharacterInfo_GUIHandler:render()
     end
 
     -- Display the urination text
-    local urinationText = "Bladder Contents: " .. BathroomFunctions.GetUrinateValue() / bladderMaxValue .. "%"
+    local urinationText = "Bladder Contents: " .. (BathroomFunctions.GetUrinateValue() / bladderMaxValue) * 100 .. "%"
     self:drawText(urinationText, textX, textY, 1, 1, 1, 1, smallFont)
 
     -- Update maxTextWidth with the width of the urination text
@@ -74,7 +74,7 @@ function BathroomCharacterInfo_GUIHandler:render()
     end
 
     -- Display the defecation text
-    local defecationText = "Bowel Contents: " .. BathroomFunctions.GetDefecateValue() / bowelsMaxValue .. "%"
+    local defecationText = "Bowel Contents: " .. (BathroomFunctions.GetDefecateValue() / bowelsMaxValue) * 100 .. "%"
     self:drawText(defecationText, textX, textY, 1, 1, 1, 1, smallFont)
 
     -- Update maxTextWidth with the width of the defecation text

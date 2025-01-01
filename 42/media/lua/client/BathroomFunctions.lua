@@ -14,7 +14,7 @@ This function is called periodically (e.g., every 10 in-game minutes).
 ]]--
 function BathroomFunctions.BathroomFunctionTimers()
     if BathroomFunctions.didFirstTimer then
-        BathroomFunctions.NewBathroomValues() -- If the initial setup is done, update the player's bathroom values
+        BathroomFunctions.UpdateBathroomValues() -- If the initial setup is done, update the player's bathroom values
         BathroomFunctions.CheckForAccident() -- Check whether or not the player has urinated or defecated themselves.
         BathroomFunctions.DirtyBottomsEffects()
     else
@@ -23,7 +23,7 @@ function BathroomFunctions.BathroomFunctionTimers()
 end
 
 -- Function to update the player's bathroom-related values (urination and defecation)
-function BathroomFunctions.NewBathroomValues()
+function BathroomFunctions.UpdateBathroomValues()
     local player = getPlayer() -- Fetch the current player object
 
     -- === URINATION ===
@@ -78,12 +78,24 @@ function BathroomFunctions.CheckForAccident()
     local painModifier = 0
     local coldModifier = 0
 
-    -- Only use this for now
-    if urinateValue >= bladderThreshold then
-        BathroomFunctions.UrinateSelf()
-    end
-    if defecateValue >= bowelsThreshold then
-        BathroomFunctions.DefecateSelf()
+    -- If you're asleep when you pee / poop yourself, it happens automatically and wakes you up.
+    -- If you're awake, it begins the pee / poop self action
+    if player:isAsleep() then
+        if urinateValue >= bladderThreshold then
+            player:forceAwake()
+            BathroomFunctions.UrinateBottoms()
+            BathroomFunctions.SetUrinateValue(0)
+        elseif defecateValue >= bowelsThreshold then
+            player:forceAwake()
+            BathroomFunctions.DefecateBottoms()
+            BathroomFunctions.SetDefecateValue(0)
+        end
+    else
+        if urinateValue >= bladderThreshold then
+            BathroomFunctions.TriggerSelfUrinate()
+        elseif defecateValue >= bowelsThreshold then
+            BathroomFunctions.TriggerSelfDefecate()
+        end
     end
 
     -- Check moodles for modifiers (if moodles are enabled)
@@ -100,17 +112,16 @@ function BathroomFunctions.CheckForAccident()
     -- Check if the player should urinate involuntarily
     --if urinateValue >= bladderThreshold or 
     --   (urinateValue > 0.5 * bladderMaxValue and (panicModifier > 0 or stressedModifier > 0 or drunkModifier > 0 or heavyLoadModifier > 0 or wetModifier > 0 or painModifier > 0 or coldModifier > 0)) then
-    --    BathroomFunctions.UrinateSelf()
+    --    BathroomFunctions.TriggerSelfUrinate()
     --end
 
     -- Check if the player should defecate involuntarily
     --if defecateValue >= bowelsThreshold or 
     --   (defecateValue > 0.5 * bowelsMaxValue and (panicModifier > 0 or stressedModifier > 0 or heavyLoadModifier > 0 or wetModifier > 0 or painModifier > 0 or coldModifier > 0)) then
-    --    BathroomFunctions.DefecateSelf()
+    --    BathroomFunctions.TriggerSelfDefecate()
     --end
 
 end
-
 
 
 
@@ -156,7 +167,7 @@ function BathroomFunctions.UrinateBottoms()
             BathroomFunctions.SetClothing(clothing)
 
             -- Update the clothing's condition after the accident
-            BathroomFunctions.PeedPoopedSelfUpdate(clothing)
+            BathroomFunctions.UpdateSoiledSeverity(clothing)
 
             if SandboxVars.BathroomFunctions.ShowPeeStain == true then
                 BathroomClothOverlays.OnClothingChanged(player)
@@ -216,7 +227,7 @@ function BathroomFunctions.DefecateBottoms()
             BathroomFunctions.SetClothing(clothing)
 
             -- Update the player's condition after the accident
-            BathroomFunctions.PeedPoopedSelfUpdate(clothing)
+            BathroomFunctions.UpdateSoiledSeverity(clothing)
         end
     end
 
@@ -310,10 +321,10 @@ function BathroomFunctions.DirtyBottomsEffects()
     for i = 0, player:getWornItems():size() - 1 do
         local item = player:getWornItems():getItemByIndex(i)
 
-        -- Ensure the item is not nil before calling PeedPoopedSelfUpdate
+        -- Ensure the item is not nil before calling UpdateSoiledSeverity
         if item ~= nil then
             -- Update values for pooped and peed states based on item mod data
-            local itemUpdatedPooped, itemUpdatedPeed = BathroomFunctions.PeedPoopedSelfUpdate(item)
+            local itemUpdatedPooped, itemUpdatedPeed = BathroomFunctions.UpdateSoiledSeverity(item)
 
             -- Accumulate the total pooped and peed severity
             if itemUpdatedPooped and item:getModData().poopedSeverity then
@@ -340,7 +351,7 @@ function BathroomFunctions.DirtyBottomsEffects()
     end
 end
 
-function BathroomFunctions.PeedPoopedSelfUpdate(clothing)
+function BathroomFunctions.UpdateSoiledSeverity(clothing)
     local updatedPooped = false
     local updatedPeed = false
 
@@ -364,7 +375,7 @@ function BathroomFunctions.PeedPoopedSelfUpdate(clothing)
             BathroomFunctions.SetPeedSelfValue(0)
         end
     else
-        print("Error: Clothing or mod data is nil in PeedPoopedSelfUpdate.")
+        print("Error: Clothing or mod data is nil in UpdateSoiledSeverity.")
     end
 
     -- Debugging output
@@ -373,8 +384,6 @@ function BathroomFunctions.PeedPoopedSelfUpdate(clothing)
 
     return updatedPooped, updatedPeed
 end
-
-
 
 
 
@@ -437,18 +446,18 @@ function BathroomFunctions.BathroomRightClick(player, context, worldObjects)
     end
 
     -- Default options for urination and defecation
-    local groundPeeOption = peeSubMenu:addOption((getText("ContextMenu_Pee") .. " " .. getText("ContextMenu_UseGround")), worldObjects, BathroomFunctions.PeeOnGround, player)
-    addTooltip(groundPeeOption, "Urinate on the ground. (Requires " .. SandboxVars.BathroomFunctions.PeeOnGroundRequirement / 100 .. "%)")
+    local groundPeeOption = peeSubMenu:addOption((getText("ContextMenu_Pee") .. " " .. getText("ContextMenu_UseGround")), worldObjects, BathroomFunctions.TriggerGroundUrinate, player)
+    addTooltip(groundPeeOption, "Urinate on the ground. (Requires " .. SandboxVars.BathroomFunctions.TriggerGroundUrinateRequirement .. "%)")
     groundPeeOption.iconTexture = getTexture("media/textures/ContextMenuGround.png");
 
-    local groundPoopOption = poopSubMenu:addOption((getText("ContextMenu_Poop") .. " " .. getText("ContextMenu_UseGround")), worldObjects, BathroomFunctions.PoopOnGround, player)
-    addTooltip(groundPoopOption, "Defecate on the ground. (Requires " .. SandboxVars.BathroomFunctions.PoopOnGroundRequirement / 100 .. "%)")
+    local groundPoopOption = poopSubMenu:addOption((getText("ContextMenu_Poop") .. " " .. getText("ContextMenu_UseGround")), worldObjects, BathroomFunctions.TriggerGroundDefecate, player)
+    addTooltip(groundPoopOption, "Defecate on the ground. (Requires " .. SandboxVars.BathroomFunctions.TriggerGroundDefecateRequirement .. "%)")
     groundPoopOption.iconTexture = getTexture("media/textures/ContextMenuGround.png");
 
     if(SandboxVars.BathroomFunctions.CanHavePeePurpose == true) then
 
-        local selfPeeOption = peeSubMenu:addOption((getText("ContextMenu_Pee") .. " " .. getText("ContextMenu_UseSelf")), worldObjects, BathroomFunctions.UrinateSelf, player)
-        addTooltip(selfPeeOption, "Urinate on yourself. Very few situations where this would be useful. (Requires " .. SandboxVars.BathroomFunctions.PeeOnSelfRequirement / 100 .. "%)")
+        local selfPeeOption = peeSubMenu:addOption((getText("ContextMenu_Pee") .. " " .. getText("ContextMenu_UseSelf")), worldObjects, BathroomFunctions.TriggerSelfUrinate, player)
+        addTooltip(selfPeeOption, "Urinate on yourself. Very few situations where this would be useful. (Requires " .. SandboxVars.BathroomFunctions.PeeOnSelfRequirement .. "%)")
         selfPeeOption.iconTexture = getTexture("media/ui/PeedSelf.png");
 
         -- Disable "On Self" pee options if urinateValue too low
@@ -460,8 +469,8 @@ function BathroomFunctions.BathroomRightClick(player, context, worldObjects)
 
     if(SandboxVars.BathroomFunctions.CanHavePoopPurpose == true) then
   
-        local selfPoopOption = poopSubMenu:addOption((getText("ContextMenu_Poop") .. " " .. getText("ContextMenu_UseSelf")), worldObjects, BathroomFunctions.DefecateSelf, player)
-        addTooltip(selfPoopOption, "Defecate on yourself. Very few situations where this would be useful. (Requires " .. SandboxVars.BathroomFunctions.PoopOnSelfRequirement / 100 .. "%)")
+        local selfPoopOption = poopSubMenu:addOption((getText("ContextMenu_Poop") .. " " .. getText("ContextMenu_UseSelf")), worldObjects, BathroomFunctions.TriggerSelfDefecate, player)
+        addTooltip(selfPoopOption, "Defecate on yourself. Very few situations where this would be useful. (Requires " .. SandboxVars.BathroomFunctions.PoopOnSelfRequirement .. "%)")
         selfPoopOption.iconTexture = getTexture("media/ui/PoopedSelf.png");
 
         if defecateValue < (SandboxVars.BathroomFunctions.PoopOnSelfRequirement / 100) * bowelsMaxValue then
@@ -470,10 +479,10 @@ function BathroomFunctions.BathroomRightClick(player, context, worldObjects)
     
     end
 
-    if urinateValue < (SandboxVars.BathroomFunctions.PeeOnGroundRequirement / 100) * bladderMaxValue then
+    if urinateValue < (SandboxVars.BathroomFunctions.TriggerGroundUrinateRequirement / 100) * bladderMaxValue then
         groundPeeOption.notAvailable = true
     end
-    if defecateValue < (SandboxVars.BathroomFunctions.PeeOnGroundRequirement / 100) * bowelsMaxValue then
+    if defecateValue < (SandboxVars.BathroomFunctions.TriggerGroundUrinateRequirement / 100) * bowelsMaxValue then
         groundPoopOption.notAvailable = true
     end
 
@@ -483,15 +492,15 @@ function BathroomFunctions.BathroomRightClick(player, context, worldObjects)
 
         -- Using toilet
         if object:getTextureName() and luautils.stringStarts(object:getTextureName(), "fixtures_bathroom_01") and object:hasWater() and object:getSquare():DistToProper(player:getSquare()) < 1 then
-            local toiletPeeOption = peeSubMenu:addOption((getText("ContextMenu_Pee") .. " " .. getText("ContextMenu_UseToilet")), worldObjects, BathroomFunctions.PeeInToilet, player)
-            local toiletPoopOption = poopSubMenu:addOption((getText("ContextMenu_Poop") .. " " .. getText("ContextMenu_UseToilet")), worldObjects, BathroomFunctions.PoopInToilet, player)
+            local toiletPeeOption = peeSubMenu:addOption((getText("ContextMenu_Pee") .. " " .. getText("ContextMenu_UseToilet")), worldObjects, BathroomFunctions.TriggerToiletUrinate, player)
+            local toiletPoopOption = poopSubMenu:addOption((getText("ContextMenu_Poop") .. " " .. getText("ContextMenu_UseToilet")), worldObjects, BathroomFunctions.TriggerToiletDefecate, player)
 
             if object:getWaterAmount() < 10.0 then
                 toiletPoopOption.notAvailable = true
             end
 
-            addTooltip(toiletPeeOption, "Urinate in the toilet. (Requires " .. SandboxVars.BathroomFunctions.PeeInToiletRequirement / 100 .. "% and sufficient water)")
-            addTooltip(toiletPoopOption, "Defecate in the toilet. (Requires " .. SandboxVars.BathroomFunctions.PoopInToiletRequirement / 100 .. "% and sufficient water)")
+            addTooltip(toiletPeeOption, "Urinate in the toilet. (Requires " .. SandboxVars.BathroomFunctions.PeeInToiletRequirement .. "% and sufficient water)")
+            addTooltip(toiletPoopOption, "Defecate in the toilet. (Requires " .. SandboxVars.BathroomFunctions.TriggerToiletDefecateRequirement .. "% and sufficient water)")
             toiletOptionAdded = true
 
             toiletPeeOption.iconTexture = getTexture("media/textures/ContextMenuToilet.png");
@@ -510,8 +519,8 @@ function BathroomFunctions.BathroomRightClick(player, context, worldObjects)
             for _, tile in ipairs(urinalTiles) do
                 if object:getTextureName() == tile then
                     -- Pee option
-                    local urinalPeeOption = peeSubMenu:addOption((getText("ContextMenu_Pee") .. " " .. getText("ContextMenu_UseUrinal")), worldObjects, BathroomFunctions.PeeInToilet, player)
-                    addTooltip(urinalPeeOption, "Urinate in the urinal. (Requires " .. SandboxVars.BathroomFunctions.PeeInToiletRequirement / 100 .. "%)")
+                    local urinalPeeOption = peeSubMenu:addOption((getText("ContextMenu_Pee") .. " " .. getText("ContextMenu_UseUrinal")), worldObjects, BathroomFunctions.TriggerToiletUrinate, player)
+                    addTooltip(urinalPeeOption, "Urinate in the urinal. (Requires " .. SandboxVars.BathroomFunctions.PeeInToiletRequirement .. "%)")
                     toiletOptionAdded = true
 
                     if urinateValue < (SandboxVars.BathroomFunctions.PeeInToiletRequirement / 100) * bladderMaxValue then
@@ -534,14 +543,14 @@ function BathroomFunctions.BathroomRightClick(player, context, worldObjects)
         -- Using outhouses
         for _, tile in ipairs(outhouseTiles) do
             if object:getTextureName() == tile then
-                local outhousePeeOption = peeSubMenu:addOption((getText("ContextMenu_Pee") .. " " .. getText("ContextMenu_UseOuthouse")), worldObjects, BathroomFunctions.PeeInToilet, player)
-                local outhousePoopOption = poopSubMenu:addOption((getText("ContextMenu_Poop") .. " " .. getText("ContextMenu_UseOuthouse")), worldObjects, BathroomFunctions.PoopInToilet, player)
+                local outhousePeeOption = peeSubMenu:addOption((getText("ContextMenu_Pee") .. " " .. getText("ContextMenu_UseOuthouse")), worldObjects, BathroomFunctions.TriggerToiletUrinate, player)
+                local outhousePoopOption = poopSubMenu:addOption((getText("ContextMenu_Poop") .. " " .. getText("ContextMenu_UseOuthouse")), worldObjects, BathroomFunctions.TriggerToiletDefecate, player)
                 
                 outhousePeeOption.iconTexture = getTexture("media/textures/ContextMenuToilet.png");
                 outhousePoopOption.iconTexture = getTexture("media/textures/ContextMenuToilet.png");
 
-                addTooltip(outhousePeeOption, "Urinate in the outhouse. (Requires " .. SandboxVars.BathroomFunctions.PeeInToiletRequirement / 100 .. "%)")
-                addTooltip(outhousePoopOption, "Defecate in the outhouse. (Requires " .. SandboxVars.BathroomFunctions.PoopInToiletRequirement / 100 .. "%)")
+                addTooltip(outhousePeeOption, "Urinate in the outhouse. (Requires " .. SandboxVars.BathroomFunctions.PeeInToiletRequirement .. "%)")
+                addTooltip(outhousePoopOption, "Defecate in the outhouse. (Requires " .. SandboxVars.BathroomFunctions.TriggerToiletDefecateRequirement .. "%)")
                 toiletOptionAdded = true
 
                 if urinateValue < (SandboxVars.BathroomFunctions.PeeInToiletRequirement / 100) * bladderMaxValue then
@@ -642,21 +651,21 @@ end
 --
 -- =====================================================
 
-function BathroomFunctions.PeeInToilet(worldObjects, object, player)
+function BathroomFunctions.TriggerToiletUrinate(worldObjects, object, player)
 	local player = getPlayer()
 	local urinateValue = BathroomFunctions.GetUrinateValue()
 	local peeTime = urinateValue
 
 	ISTimedActionQueue.add(ToiletUrinate:new(player, peeTime, true, true, object))
 end
-function BathroomFunctions.PoopInToilet(worldObjects, object, player)
+function BathroomFunctions.TriggerToiletDefecate(worldObjects, object, player)
 	local player = getPlayer()
 	local defecateValue = BathroomFunctions.GetDefecateValue()
 	local poopTime = defecateValue * 2
 
 	ISTimedActionQueue.add(ToiletDefecate:new(player, poopTime, true, true, object))
 end
-function BathroomFunctions.PeeOnGround()
+function BathroomFunctions.TriggerGroundUrinate()
 	--check if pants are down or unzipped, if so, go on ground, otherwise, go on self
 	local player = getPlayer()
 	local urinateValue = BathroomFunctions.GetUrinateValue()
@@ -664,7 +673,7 @@ function BathroomFunctions.PeeOnGround()
 
 	ISTimedActionQueue.add(GroundUrinate:new(player, peeTime, true, true))
 end
-function BathroomFunctions.PoopOnGround()
+function BathroomFunctions.TriggerGroundDefecate()
 	--check if pants are down or unzipped, if so, go on ground, otherwise, go on self
 	local player = getPlayer()
 	local defecateValue = BathroomFunctions.GetDefecateValue()
@@ -672,7 +681,7 @@ function BathroomFunctions.PoopOnGround()
 
 	ISTimedActionQueue.add(GroundDefecate:new(player, poopTime, true, true))
 end
-function BathroomFunctions.DefecateSelf()
+function BathroomFunctions.TriggerSelfDefecate()
     local player = getPlayer() -- Fetch the current player object
     local defecateValue = BathroomFunctions.GetDefecateValue() -- Current bowel level
     local poopTime = defecateValue / 4 -- Make this a quarter of the defecate value so the player isn't locked for long
@@ -692,7 +701,7 @@ function BathroomFunctions.DefecateSelf()
 
     print("Updated Pooped Self Value: " .. BathroomFunctions.GetPoopedSelfValue()) -- Debug print statement to display the updated defecation value
 end
-function BathroomFunctions.UrinateSelf()
+function BathroomFunctions.TriggerSelfUrinate()
     local player = getPlayer() -- Fetch the current player object
     local urinateValue = BathroomFunctions.GetUrinateValue() -- Current bladder level
 	local peeTime = urinateValue / 4 -- Make this a quarter of the urinate value so the player isn't locked for long
