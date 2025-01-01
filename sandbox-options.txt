@@ -51,7 +51,7 @@ option BathroomFunctions.POOPREQUIREMENTSHeader
 /*
 Most people feel the urge to pee by this point and can comfortably use a toilet.
 */
-option BathroomFunctions.TriggerToiletDefecateRequirement
+option BathroomFunctions.PoopInToiletRequirement
 {
 	type = double, min = 0, max = 100.0, default = 70.0,
 	page = Defecation, translation = BathroomFunctions_PoopInToiletRequirement,
@@ -60,7 +60,7 @@ option BathroomFunctions.TriggerToiletDefecateRequirement
 /*
 Peeing on the ground would require more desperation. People tend to avoid this unless their bladder is pressing.
 */
-option BathroomFunctions.TriggerGroundDefecateRequirement
+option BathroomFunctions.PoopOnGroundRequirement
 {
 	type = double, min = 0, max = 100.0, default = 80.0,
 	page = Defecation, translation = BathroomFunctions_PoopOnGroundRequirement,
@@ -178,7 +178,7 @@ option BathroomFunctions.PeeInToiletRequirement
 /*
 Peeing on the ground would require more desperation. People tend to avoid this unless their bladder is pressing.
 */
-option BathroomFunctions.TriggerGroundUrinateRequirement
+option BathroomFunctions.PeeOnGroundRequirement
 {
 	type = double, min = 0, max = 100.0, default = 70.0,
 	page = Urination, translation = BathroomFunctions_PeeOnGroundRequirement,

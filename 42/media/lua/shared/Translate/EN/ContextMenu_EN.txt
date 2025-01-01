@@ -11,7 +11,7 @@ ContextMenu_EN = {
 	ContextMenu_UseToilet = "In Toilet"
 	ContextMenu_UseOuthouse = "In Outhouse"
 	ContextMenu_UseUrinal = "In Urinal"
-	ContextMenu_UseBottle = "In Bottle"
+	ContextMenu_UseContainer = "In Container"
 
 	ContextMenu_Pee = "Pee"
 	ContextMenu_Poop = "Poop"
