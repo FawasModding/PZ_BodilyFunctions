@@ -70,13 +70,13 @@ function BathroomFunctions.CheckForAccident()
     local bowelsThreshold = 0.98 * bowelsMaxValue -- 98% of max bowel value
 
     -- Moodle modifiers (activated only if moodles are enabled)
-    local panicModifier = 0
-    local stressedModifier = 0
-    local drunkModifier = 0
-    local heavyLoadModifier = 0
-    local wetModifier = 0
-    local painModifier = 0
-    local coldModifier = 0
+    --local panicModifier = 0
+    --local stressedModifier = 0
+    --local drunkModifier = 0
+    --local heavyLoadModifier = 0
+    --local wetModifier = 0
+    --local painModifier = 0
+    --local coldModifier = 0
 
     -- If you're asleep when you pee / poop yourself, it happens automatically and wakes you up.
     -- If you're awake, it begins the pee / poop self action
@@ -511,16 +511,19 @@ function BathroomFunctions.BathroomRightClick(player, context, worldObjects)
         local object = worldObjects:get(i)
 
         -- Using toilet
-        if object:getTextureName() and luautils.stringStarts(object:getTextureName(), "fixtures_bathroom_01") and object:hasWater() and object:getSquare():DistToProper(player:getSquare()) < 1 then
-            local toiletPeeOption = peeSubMenu:addOption((getText("ContextMenu_Pee") .. " " .. getText("ContextMenu_UseToilet")), worldObjects, BathroomFunctions.TriggerToiletUrinate, player)
-            local toiletPoopOption = poopSubMenu:addOption((getText("ContextMenu_Poop") .. " " .. getText("ContextMenu_UseToilet")), worldObjects, BathroomFunctions.TriggerToiletDefecate, player)
+        --if object:getTextureName() and luautils.stringStarts(object:getTextureName(), "fixtures_bathroom_01") and object:hasWater() and object:getSquare():DistToProper(player:getSquare()) < 1 then
+        if object:getTextureName() and luautils.stringStarts(object:getTextureName(), "fixtures_bathroom_01") and object:getSquare():DistToProper(player:getSquare()) < 5 then
+            local toiletPeeOption = peeSubMenu:addOption((getText("ContextMenu_Pee") .. " " .. getText("ContextMenu_UseToilet")), object, BathroomFunctions.TriggerToiletUrinate, player)
+            local toiletPoopOption = poopSubMenu:addOption((getText("ContextMenu_Poop") .. " " .. getText("ContextMenu_UseToilet")), object, BathroomFunctions.TriggerToiletDefecate, player)
 
-            if object:getWaterAmount() < 10.0 then
-                toiletPoopOption.notAvailable = true
-            end
+            --if object:getWaterAmount() < 10.0 then
+            --    toiletPoopOption.notAvailable = true
+            --end
 
-            addTooltip(toiletPeeOption, "Urinate in the toilet. (Requires " .. peeInToiletRequirement .. "% and sufficient water)")
-            addTooltip(toiletPoopOption, "Defecate in the toilet. (Requires " .. poopInToiletRequirement .. "% and sufficient water)")
+            --addTooltip(toiletPeeOption, "Urinate in the toilet. (Requires " .. peeInToiletRequirement .. "% and sufficient water)")
+            --addTooltip(toiletPoopOption, "Defecate in the toilet. (Requires " .. poopInToiletRequirement .. "% and sufficient water)")
+            addTooltip(toiletPeeOption, "Urinate in the toilet. (Requires " .. peeInToiletRequirement .. "%")
+            addTooltip(toiletPoopOption, "Defecate in the toilet. (Requires " .. poopInToiletRequirement .. "%")
             toiletOptionAdded = true
 
             toiletPeeOption.iconTexture = getTexture("media/textures/ContextMenuToilet.png");
@@ -537,9 +540,9 @@ function BathroomFunctions.BathroomRightClick(player, context, worldObjects)
         -- Using urinal
         if not player:isFemale() then
             for _, tile in ipairs(urinalTiles) do
-                if object:getTextureName() == tile then
+                if object:getTextureName() == tile and object:getSquare():DistToProper(player:getSquare()) < 5 then
                     -- Pee option
-                    local urinalPeeOption = peeSubMenu:addOption((getText("ContextMenu_Pee") .. " " .. getText("ContextMenu_UseUrinal")), worldObjects, BathroomFunctions.TriggerToiletUrinate, player)
+                    local urinalPeeOption = peeSubMenu:addOption((getText("ContextMenu_Pee") .. " " .. getText("ContextMenu_UseUrinal")), object, BathroomFunctions.TriggerToiletUrinate, player)
                     addTooltip(urinalPeeOption, "Urinate in the urinal. (Requires " .. peeInToiletRequirement .. "%)")
                     toiletOptionAdded = true
 
@@ -548,7 +551,7 @@ function BathroomFunctions.BathroomRightClick(player, context, worldObjects)
                     end
 
                     -- Poop option is always unavailable
-                    local urinalPoopOption = poopSubMenu:addOption((getText("ContextMenu_Poop") .. " " .. getText("ContextMenu_UseUrinal")), worldObjects, nil, player)
+                    local urinalPoopOption = poopSubMenu:addOption((getText("ContextMenu_Poop") .. " " .. getText("ContextMenu_UseUrinal")), object, nil, player)
                     addTooltip(urinalPoopOption, "Don't you fucking dare'.")
                     urinalPoopOption.notAvailable = true
 
@@ -562,9 +565,9 @@ function BathroomFunctions.BathroomRightClick(player, context, worldObjects)
 
         -- Using outhouses
         for _, tile in ipairs(outhouseTiles) do
-            if object:getTextureName() == tile then
-                local outhousePeeOption = peeSubMenu:addOption((getText("ContextMenu_Pee") .. " " .. getText("ContextMenu_UseOuthouse")), worldObjects, BathroomFunctions.TriggerToiletUrinate, player)
-                local outhousePoopOption = poopSubMenu:addOption((getText("ContextMenu_Poop") .. " " .. getText("ContextMenu_UseOuthouse")), worldObjects, BathroomFunctions.TriggerToiletDefecate, player)
+            if object:getTextureName() == tile and object:getSquare():DistToProper(player:getSquare()) < 5 then
+                local outhousePeeOption = peeSubMenu:addOption((getText("ContextMenu_Pee") .. " " .. getText("ContextMenu_UseOuthouse")), object, BathroomFunctions.TriggerToiletUrinate, player)
+                local outhousePoopOption = poopSubMenu:addOption((getText("ContextMenu_Poop") .. " " .. getText("ContextMenu_UseOuthouse")), object, BathroomFunctions.TriggerToiletDefecate, player)
                 
                 outhousePeeOption.iconTexture = getTexture("media/textures/ContextMenuToilet.png");
                 outhousePoopOption.iconTexture = getTexture("media/textures/ContextMenuToilet.png");
@@ -699,19 +702,28 @@ end
 --
 -- =====================================================
 
-function BathroomFunctions.TriggerToiletUrinate(worldObjects, object, player)
-	local player = getPlayer()
-	local urinateValue = BathroomFunctions.GetUrinateValue()
-	local peeTime = urinateValue
+function BathroomFunctions.TriggerToiletUrinate(object, player)
+    local player = getPlayer()
+    local urinateValue = BathroomFunctions.GetUrinateValue()
+    local peeTime = urinateValue
 
-	ISTimedActionQueue.add(ToiletUrinate:new(player, peeTime, true, true, object))
+    -- Walk to toilet first
+    ISTimedActionQueue.add(ISWalkToTimedAction:new(player, object))
+
+    -- Urinate at the toilet
+    ISTimedActionQueue.add(ToiletUrinate:new(player, peeTime, true, true, object))
 end
-function BathroomFunctions.TriggerToiletDefecate(worldObjects, object, player)
-	local player = getPlayer()
-	local defecateValue = BathroomFunctions.GetDefecateValue()
-	local poopTime = defecateValue * 2
 
-	ISTimedActionQueue.add(ToiletDefecate:new(player, poopTime, true, true, object))
+function BathroomFunctions.TriggerToiletDefecate(object, player)
+    local player = getPlayer()
+    local defecateValue = BathroomFunctions.GetDefecateValue()
+    local poopTime = defecateValue * 2
+
+    -- Walk to toilet first
+    ISTimedActionQueue.add(ISWalkToTimedAction:new(player, object))
+
+    -- Defecate at the toilet
+    ISTimedActionQueue.add(ToiletDefecate:new(player, poopTime, true, true, object))
 end
 function BathroomFunctions.TriggerGroundUrinate()
 	--check if pants are down or unzipped, if so, go on ground, otherwise, go on self

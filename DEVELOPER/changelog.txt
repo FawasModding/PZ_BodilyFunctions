@@ -6,6 +6,11 @@ gotta make SelfUrinate SelfDefecate happen if using ground or toilet action ends
 -Renamed many functions for clarity
 -Added pee in container context menu option. Takes amount in mL out of bladder and puts it into the selected bottle.
 -Added fallback default values in case the mod updates and the player can't set sandbox values
+-Temporarily disabled necessity for water in toilet when using.
+-Added mod options, not yet integrated all the way.
+-Changed mod page to need Moodles Framework B42.
+-Increased radius for using toilets.
+-Added "WalkTo" function for using toilets. (not thoroughly tested for outhouses and urinals)
 
 12/31/24
 -Made ToiletDefecate.lua also reduce urinate value, not just defecate
