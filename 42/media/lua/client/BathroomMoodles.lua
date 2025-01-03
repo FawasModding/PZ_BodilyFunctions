@@ -14,103 +14,121 @@ local function CheckBathroomMeters(player)
 	local bowelsMaxValue = SandboxVars.BathroomFunctions.BowelsMaxValue or 100 -- Get the max bowel value, default to 100 if not set
 	local bladderMaxValue = SandboxVars.BathroomFunctions.BladderMaxValue or 100 -- Get the max bladder value, default to 100 if not set
 
-	if moodle then
-		local defecationValue = BathroomFunctions.GetDefecateValue()
-		local defecationThreshold = {
-			[0.25] = 0.4,
-			[0.5] = 0.3,
-			[0.75] = 0.2,
-			[0.9] = 0.1  -- Change the 1.0 threshold to 0.9
-		}
+	local modOptions = PZAPI.ModOptions:getOptions("BathroomFunctions")
 
-		-- Calculate percentage of the max value
-		local defecationPercent = defecationValue / bowelsMaxValue
+	local showMoodles = modOptions:getOption("4")
+	if(showMoodles:getValue(1)) then
+		if moodle then
+			local defecationValue = BathroomFunctions.GetDefecateValue()
+			local defecationThreshold = {
+				[0.25] = 0.4,
+				[0.5] = 0.3,
+				[0.75] = 0.2,
+				[0.9] = 0.1  -- Change the 1.0 threshold to 0.9
+			}
 
-		if defecationPercent > 0.9 then
-			moodle:setValue(defecationThreshold[0.9])  -- Set value at 90%
-		elseif defecationPercent > 0.75 then
-			moodle:setValue(defecationThreshold[0.75])
-		elseif defecationPercent > 0.5 then
-			moodle:setValue(defecationThreshold[0.5])
-		elseif defecationPercent > 0.25 then
-			moodle:setValue(defecationThreshold[0.25])
-		else
-			moodle:setValue(0.5) -- Default value if defecation level is below 25%
+			-- Calculate percentage of the max value
+			local defecationPercent = defecationValue / bowelsMaxValue
+
+			if defecationPercent > 0.9 then
+				moodle:setValue(defecationThreshold[0.9])  -- Set value at 90%
+			elseif defecationPercent > 0.75 then
+				moodle:setValue(defecationThreshold[0.75])
+			elseif defecationPercent > 0.5 then
+				moodle:setValue(defecationThreshold[0.5])
+			elseif defecationPercent > 0.25 then
+				moodle:setValue(defecationThreshold[0.25])
+			else
+				moodle:setValue(0.5) -- Default value if defecation level is below 25%
+			end
+		end
+
+		if moodle2 then
+			local urinationValue = BathroomFunctions.GetUrinateValue()
+			local urinationThreshold = {
+				[0.25] = 0.4,
+				[0.5] = 0.3,
+				[0.75] = 0.2,
+				[0.9] = 0.1  -- Change the 1.0 threshold to 0.9
+			}
+
+			-- Calculate percentage of the max value
+			local urinationPercent = urinationValue / bladderMaxValue
+
+			if urinationPercent > 0.9 then
+				moodle2:setValue(urinationThreshold[0.9])  -- Set value at 90%
+			elseif urinationPercent > 0.75 then
+				moodle2:setValue(urinationThreshold[0.75])
+			elseif urinationPercent > 0.5 then
+				moodle2:setValue(urinationThreshold[0.5])
+			elseif urinationPercent > 0.25 then
+				moodle2:setValue(urinationThreshold[0.25])
+			else
+				moodle2:setValue(0.5) -- Default value if urination level is below 25%
+			end
+		end
+	else
+		if moodle and moodle2 then
+			moodle:setValue(.5)
+			moodle2:setValue(.5)
 		end
 	end
 
-	if moodle2 then
-		local urinationValue = BathroomFunctions.GetUrinateValue()
-		local urinationThreshold = {
-			[0.25] = 0.4,
-			[0.5] = 0.3,
-			[0.75] = 0.2,
-			[0.9] = 0.1  -- Change the 1.0 threshold to 0.9
-		}
+	local showSoiledMoodles = modOptions:getOption("6")
+	if(showSoiledMoodles:getValue(1)) then
+		if moodle3 then
+			local poopedSelfValue = BathroomFunctions.GetPoopedSelfValue()
+			local poopedSelfPercent = poopedSelfValue / 100 -- Assuming a max value of 100 for severity
 
-		-- Calculate percentage of the max value
-		local urinationPercent = urinationValue / bladderMaxValue
+			local poopedSelfThreshold = {
+				[0.25] = 0.4,
+				[0.5] = 0.3,
+				[0.75] = 0.2,
+				[1.0] = 0.1
+			}
 
-		if urinationPercent > 0.9 then
-			moodle2:setValue(urinationThreshold[0.9])  -- Set value at 90%
-		elseif urinationPercent > 0.75 then
-			moodle2:setValue(urinationThreshold[0.75])
-		elseif urinationPercent > 0.5 then
-			moodle2:setValue(urinationThreshold[0.5])
-		elseif urinationPercent > 0.25 then
-			moodle2:setValue(urinationThreshold[0.25])
-		else
-			moodle2:setValue(0.5) -- Default value if urination level is below 25%
+			-- Adjusted conditional logic to ensure correct thresholds
+			if poopedSelfPercent >= 1.0 then
+				moodle3:setValue(poopedSelfThreshold[1.0])
+			elseif poopedSelfPercent >= 0.75 then
+				moodle3:setValue(poopedSelfThreshold[0.75])
+			elseif poopedSelfPercent >= 0.5 then
+				moodle3:setValue(poopedSelfThreshold[0.5])
+			elseif poopedSelfPercent >= 0.25 then
+				moodle3:setValue(poopedSelfThreshold[0.25])
+			else
+				moodle3:setValue(0.5)
+			end
 		end
-	end
 
-	if moodle3 then
-		local poopedSelfValue = BathroomFunctions.GetPoopedSelfValue()
-		local poopedSelfPercent = poopedSelfValue / 100 -- Assuming a max value of 100 for severity
+		if moodle4 then
+			local peedSelfValue = BathroomFunctions.GetPeedSelfValue()
+			local peedSelfPercent = peedSelfValue / 100 -- Assuming a max value of 100 for severity
 
-		local poopedSelfThreshold = {
-			[0.25] = 0.4,
-			[0.5] = 0.3,
-			[0.75] = 0.2,
-			[1.0] = 0.1
-		}
+			local peedSelfThreshold = {
+				[0.25] = 0.4,
+				[0.5] = 0.3,
+				[0.75] = 0.2,
+				[1.0] = 0.1
+			}
 
-		-- Adjusted conditional logic to ensure correct thresholds
-		if poopedSelfPercent >= 1.0 then
-			moodle3:setValue(poopedSelfThreshold[1.0])
-		elseif poopedSelfPercent >= 0.75 then
-			moodle3:setValue(poopedSelfThreshold[0.75])
-		elseif poopedSelfPercent >= 0.5 then
-			moodle3:setValue(poopedSelfThreshold[0.5])
-		elseif poopedSelfPercent >= 0.25 then
-			moodle3:setValue(poopedSelfThreshold[0.25])
-		else
-			moodle3:setValue(0.5)
+			-- Adjusted conditional logic to ensure correct thresholds
+			if peedSelfPercent >= 1.0 then
+				moodle4:setValue(peedSelfThreshold[1.0])
+			elseif peedSelfPercent >= 0.75 then
+				moodle4:setValue(peedSelfThreshold[0.75])
+			elseif peedSelfPercent >= 0.5 then
+				moodle4:setValue(peedSelfThreshold[0.5])
+			elseif peedSelfPercent >= 0.25 then
+				moodle4:setValue(peedSelfThreshold[0.25])
+			else
+				moodle4:setValue(0.5)
+			end
 		end
-	end
-
-	if moodle4 then
-		local peedSelfValue = BathroomFunctions.GetPeedSelfValue()
-		local peedSelfPercent = peedSelfValue / 100 -- Assuming a max value of 100 for severity
-
-		local peedSelfThreshold = {
-			[0.25] = 0.4,
-			[0.5] = 0.3,
-			[0.75] = 0.2,
-			[1.0] = 0.1
-		}
-
-		-- Adjusted conditional logic to ensure correct thresholds
-		if peedSelfPercent >= 1.0 then
-			moodle4:setValue(peedSelfThreshold[1.0])
-		elseif peedSelfPercent >= 0.75 then
-			moodle4:setValue(peedSelfThreshold[0.75])
-		elseif peedSelfPercent >= 0.5 then
-			moodle4:setValue(peedSelfThreshold[0.5])
-		elseif peedSelfPercent >= 0.25 then
-			moodle4:setValue(peedSelfThreshold[0.25])
-		else
-			moodle4:setValue(0.5)
+	else
+		if moodle3 and moodle4 then
+			moodle3:setValue(.5)
+			moodle4:setValue(.5)
 		end
 	end
 

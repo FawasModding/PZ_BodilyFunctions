@@ -1,5 +1,16 @@
 gotta make SelfUrinate SelfDefecate happen if using ground or toilet action ends too quickly
 
+1/3/25
+-Removed "CanHavePoopPurpose", "CanHavePeePurpose", "CanPeeBottle" sandbox options
+-Added "PeeInContainersOption", "PeeSelfOption", "PoopSelfOption" native B42 mod options
+-Removed "DoMoodles" sandbox option
+-Added "ShowMoodles", "ShowSoiledMoodles" native B42 mod options
+-Added "MoodleType" native B42 mod option, not yet implemented though
+
+-Made player take off soilable clothing before pooping (and peeing if female).
+-Improved standing pee animation, still going to be recreated eventually.
+-Added "ShortPants" to GetSoilableClothing in BathroomUtils
+
 1/1/25
 -Made player force awake if they start peeing or pooping in their sleep.
 -Managing to halt the SelfDefecate or SelfUrinate action results in instant defecation / urination

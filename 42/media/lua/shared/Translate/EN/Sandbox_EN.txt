@@ -50,9 +50,6 @@ Sandbox_EN =
 	Sandbox_BathroomFunctions_CanHavePoopAccident = "Can Accidentally Poop Self*",
 	Sandbox_BathroomFunctions_CanHavePoopAccident_tooltip = "Whether or not you can poop yourself.",
 
-	Sandbox_BathroomFunctions_CanHavePoopPurpose = "Can Intentionally Poop Self",
-	Sandbox_BathroomFunctions_CanHavePoopPurpose_tooltip = "Whether or not the 'Poop Self' option shows in the context menu.",
-
 	Sandbox_BathroomFunctions_NightPoopAccidents = "Can Poop The Bed*",
 	Sandbox_BathroomFunctions_NightPoopAccidents_tooltip = "Whether or not you can poop yourself while asleep.",
 
@@ -106,9 +103,6 @@ Sandbox_EN =
 	Sandbox_BathroomFunctions_CanHavePeeAccident = "Can Accidentally Pee Self*",
 	Sandbox_BathroomFunctions_CanHavePeeAccident_tooltip = "Whether or not you can pee yourself.",
 
-	Sandbox_BathroomFunctions_CanHavePeePurpose = "Can Intentionally Pee Self",
-	Sandbox_BathroomFunctions_CanHavePeePurpose_tooltip = "Whether or not the 'Pee Self' option shows in the context menu.",
-
 	Sandbox_BathroomFunctions_NightPeeAccidents = "Can Wet The Bed*",
 	Sandbox_BathroomFunctions_NightPeeAccidents_tooltip = "Whether or not you can pee yourself while asleep.",
 
@@ -117,9 +111,6 @@ Sandbox_EN =
 
 	Sandbox_BathroomFunctions_VisiblePeeStain = "(Testing) Show Wet Spot",
 	Sandbox_BathroomFunctions_VisiblePeeStain_tooltip = "Whether or not to show a urine stain on wet bottoms. (Warning: May be unoptimized.)",
-
-	Sandbox_BathroomFunctions_CanPeeBottle = "Can Pee In Bottle*",
-	Sandbox_BathroomFunctions_CanPeeBottle_tooltip = "Enables peeing in bottles.",
 
 	Sandbox_BathroomFunctions_PEESELFHeader = "<=== INVOLUNTARY URINATION ===>",
 	Sandbox_BathroomFunctions_PEESELFHeader_tooltip = "Options for self urination.",

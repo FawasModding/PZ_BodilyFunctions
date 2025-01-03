@@ -423,6 +423,8 @@ function BathroomFunctions.BathroomRightClick(player, context, worldObjects)
     local poopOnGroundRequirement = SandboxVars.BathroomFunctions.PoopOnGroundRequirement or 80 -- Default to 80 if not set
     local poopInToiletRequirement = SandboxVars.BathroomFunctions.PoopInToiletRequirement or 70 -- Default to 70 if not set
 
+    local modOptions = PZAPI.ModOptions:getOptions("BathroomFunctions")
+
     -------------------------------------------------------------------------------------------------------------------
 
     -- Main menu option: "Bodily Functions"
@@ -480,7 +482,8 @@ function BathroomFunctions.BathroomRightClick(player, context, worldObjects)
 
     -- Using Self
 
-    if(SandboxVars.BathroomFunctions.CanHavePeePurpose == true) then
+    local canPeeSelfOption = modOptions:getOption("2")
+    if(canPeeSelfOption:getValue(1)) then
 
         local selfPeeOption = peeSubMenu:addOption((getText("ContextMenu_Pee") .. " " .. getText("ContextMenu_UseSelf")), worldObjects, BathroomFunctions.TriggerSelfUrinate, player)
         addTooltip(selfPeeOption, "Urinate on yourself. Very few situations where this would be useful. (Requires " .. peeOnSelfRequirement .. "%)")
@@ -493,7 +496,8 @@ function BathroomFunctions.BathroomRightClick(player, context, worldObjects)
 
     end
 
-    if(SandboxVars.BathroomFunctions.CanHavePoopPurpose == true) then
+    local canPoopSelfOption = modOptions:getOption("3")
+    if(canPoopSelfOption:getValue(1)) then
   
         local selfPoopOption = poopSubMenu:addOption((getText("ContextMenu_Poop") .. " " .. getText("ContextMenu_UseSelf")), worldObjects, BathroomFunctions.TriggerSelfDefecate, player)
         addTooltip(selfPoopOption, "Defecate on yourself. Very few situations where this would be useful. (Requires " .. poopOnSelfRequirement .. "%)")
@@ -592,26 +596,30 @@ function BathroomFunctions.BathroomRightClick(player, context, worldObjects)
 
     -- Using Containers (Pee)
 
-    local containerPeeOption = peeSubMenu:addOption((getText("ContextMenu_Pee") .. " " .. getText("ContextMenu_UseContainer")), worldObjects, nil)
-    addTooltip(containerPeeOption, "Urinate in a container. (Requires " .. peeInContainerRequirement .. "%)")
+    local canPeeContainerOption = modOptions:getOption("1")
+    if(canPeeContainerOption:getValue(1)) then
 
-    local containerSubMenu = ISContextMenu:getNew(peeSubMenu) -- Create submenu
-    peeSubMenu:addSubMenu(containerPeeOption, containerSubMenu) -- Attach submenu to `containerPeeOption`
+        local containerPeeOption = peeSubMenu:addOption((getText("ContextMenu_Pee") .. " " .. getText("ContextMenu_UseContainer")), worldObjects, nil)
+        addTooltip(containerPeeOption, "Urinate in a container. (Requires " .. peeInContainerRequirement .. "%)")
 
-    local hasValidContainers = false
+        local containerSubMenu = ISContextMenu:getNew(peeSubMenu) -- Create submenu
+        peeSubMenu:addSubMenu(containerPeeOption, containerSubMenu) -- Attach submenu to `containerPeeOption`
 
-    for i = 0, player:getInventory():getItems():size() - 1 do
-        local item = player:getInventory():getItems():get(i)
-        if item:getFluidContainer() and item:getFluidContainer():isEmpty() then
-            -- Add a valid pee option for each empty container
-            containerSubMenu:addOption("Use " .. item:getName(), item, BathroomFunctions.PeeInContainer)
-            hasValidContainers = true
+        local hasValidContainers = false
+
+        for i = 0, player:getInventory():getItems():size() - 1 do
+            local item = player:getInventory():getItems():get(i)
+            if item:getFluidContainer() and item:getFluidContainer():isEmpty() then
+                -- Add a valid pee option for each empty container
+                containerSubMenu:addOption("Use " .. item:getName(), item, BathroomFunctions.PeeInContainer)
+                hasValidContainers = true
+            end
         end
-    end
 
-    -- Make the "Use Container" option unavailable if no valid containers are found or pee in container requirement not met
-    if urinateValue < (peeInContainerRequirement / 100) * bladderMaxValue then
-        containerPeeOption.notAvailable = true
+        -- Make the "Use Container" option unavailable if no valid containers are found or pee in container requirement not met
+        if urinateValue < (peeInContainerRequirement / 100) * bladderMaxValue then
+            containerPeeOption.notAvailable = true
+        end
     end
 
     -------------------------------------------------------------------------------------------------------------------
@@ -702,13 +710,31 @@ end
 --
 -- =====================================================
 
+function BathroomFunctions.RemoveBottomClothing(player)
+    -- Get the list of soilable clothing body locations
+    local soilableClothing = BathroomFunctions.GetSoilableClothing()
+    for _, location in ipairs(soilableClothing) do
+        local clothingItem = player:getWornItem(location)
+        if clothingItem then
+            -- Remove the clothing with a timed action
+            ISTimedActionQueue.add(ISUnequipAction:new(player, clothingItem, 50))
+        end
+    end
+end
+
 function BathroomFunctions.TriggerToiletUrinate(object, player)
     local player = getPlayer()
     local urinateValue = BathroomFunctions.GetUrinateValue()
     local peeTime = urinateValue
 
-    -- Walk to toilet first
+    -- Walk to toilet
     ISTimedActionQueue.add(ISWalkToTimedAction:new(player, object))
+
+    -- If female, must take off clothing. Males would just unzip their pants.
+    if player:isFemale() == true then
+        -- Remove bottom clothing first
+        BathroomFunctions.RemoveBottomClothing(player)
+    end
 
     -- Urinate at the toilet
     ISTimedActionQueue.add(ToiletUrinate:new(player, peeTime, true, true, object))
@@ -719,27 +745,41 @@ function BathroomFunctions.TriggerToiletDefecate(object, player)
     local defecateValue = BathroomFunctions.GetDefecateValue()
     local poopTime = defecateValue * 2
 
-    -- Walk to toilet first
+    -- Walk to toilet
     ISTimedActionQueue.add(ISWalkToTimedAction:new(player, object))
+
+    -- Remove bottom clothing first
+    BathroomFunctions.RemoveBottomClothing(player)
 
     -- Defecate at the toilet
     ISTimedActionQueue.add(ToiletDefecate:new(player, poopTime, true, true, object))
 end
+
 function BathroomFunctions.TriggerGroundUrinate()
-	--check if pants are down or unzipped, if so, go on ground, otherwise, go on self
-	local player = getPlayer()
-	local urinateValue = BathroomFunctions.GetUrinateValue()
-	local peeTime = urinateValue
+    local player = getPlayer()
+    local urinateValue = BathroomFunctions.GetUrinateValue()
+    local peeTime = urinateValue
 
-	ISTimedActionQueue.add(GroundUrinate:new(player, peeTime, true, true))
+    -- If female, must take off clothing. Males would just unzip their pants.
+    if player:isFemale() == true then
+        -- Remove bottom clothing first
+        BathroomFunctions.RemoveBottomClothing(player)
+    end
+
+    -- Urinate on the ground
+    ISTimedActionQueue.add(GroundUrinate:new(player, peeTime, true, true))
 end
-function BathroomFunctions.TriggerGroundDefecate()
-	--check if pants are down or unzipped, if so, go on ground, otherwise, go on self
-	local player = getPlayer()
-	local defecateValue = BathroomFunctions.GetDefecateValue()
-	local poopTime = defecateValue * 2
 
-	ISTimedActionQueue.add(GroundDefecate:new(player, poopTime, true, true))
+function BathroomFunctions.TriggerGroundDefecate()
+    local player = getPlayer()
+    local defecateValue = BathroomFunctions.GetDefecateValue()
+    local poopTime = defecateValue * 2
+
+    -- Remove bottom clothing first
+    BathroomFunctions.RemoveBottomClothing(player)
+
+    -- Defecate on the ground
+    ISTimedActionQueue.add(GroundDefecate:new(player, poopTime, true, true))
 end
 function BathroomFunctions.TriggerSelfDefecate()
     local player = getPlayer() -- Fetch the current player object

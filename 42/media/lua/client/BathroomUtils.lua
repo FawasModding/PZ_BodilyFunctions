@@ -120,6 +120,6 @@ end
 Function defining all of the soilable clothing.
 ]]--
 function BathroomFunctions.GetSoilableClothing()
-    local bodyLocations = {"UnderwearBottom", "Torso1Legs1", "Legs1", "Pants", "BathRobe", "FullSuit", "FullSuitHead", "FullTop", "BodyCostume", "Underwear"}
+    local bodyLocations = {"UnderwearBottom", "Underwear", "Torso1Legs1", "Legs1", "Pants", "BathRobe", "FullSuit", "FullSuitHead", "FullTop", "BodyCostume", "ShortPants"}
     return bodyLocations
 end
