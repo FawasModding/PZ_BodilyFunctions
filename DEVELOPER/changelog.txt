@@ -1,5 +1,9 @@
 gotta make SelfUrinate SelfDefecate happen if using ground or toilet action ends too quickly
 
+1/4/25
+-Made Human Feces edible. Poisonous. And addable to evolved recipes (like sandwiches)
+-Remade Urine Puddle and Human Feces textures.
+
 1/3/25
 -Removed "CanHavePoopPurpose", "CanHavePeePurpose", "CanPeeBottle" sandbox options
 -Added "PeeInContainersOption", "PeeSelfOption", "PoopSelfOption" native B42 mod options
