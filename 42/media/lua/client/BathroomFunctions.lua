@@ -17,6 +17,7 @@ function BathroomFunctions.BathroomFunctionTimers()
         BathroomFunctions.UpdateBathroomValues() -- If the initial setup is done, update the player's bathroom values
         BathroomFunctions.CheckForAccident() -- Check whether or not the player has urinated or defecated themselves.
         BathroomFunctions.DirtyBottomsEffects()
+        BathroomFunctions.PlayUrgencyIdles()
     else
         BathroomFunctions.didFirstTimer = true -- If this is the first call, set the flag to true and skip updating values
     end
@@ -121,6 +122,37 @@ function BathroomFunctions.CheckForAccident()
     --    BathroomFunctions.TriggerSelfDefecate()
     --end
 
+end
+
+-- Function for playing urgency idle animations. Chance every 10 mins.
+function BathroomFunctions.PlayUrgencyIdles()
+    local urinateValue = BathroomFunctions.GetUrinateValue() -- Current bladder level
+    local defecateValue = BathroomFunctions.GetDefecateValue() -- Current bowel level
+    local player = getPlayer()
+
+    -- Retrieve maximum values from SandboxVars
+    local bladderMaxValue = SandboxVars.BathroomFunctions.BladderMaxValue or 100 -- Default to 100 if not set
+    local bowelsMaxValue = SandboxVars.BathroomFunctions.BowelsMaxValue or 100 -- Default to 100 if not set
+
+    -- Calculate thresholds
+    local peeUrgencyMin = 0.80 * bladderMaxValue -- 80% of max bladder value
+    local poopUrgencyMin = 0.80 * bowelsMaxValue -- 80% of max bowel value
+
+    -- Check bladder urgency and add random chance
+    if urinateValue > peeUrgencyMin then
+        if ZombRand(100) < 20 then -- 20% chance to play
+            player:playerVoiceSound("PainFromGlassCut")
+            ISTimedActionQueue.add(Idle_PeeUrgency:new(player, 40, false, true))
+        end
+    end
+
+    -- Check bowels urgency and add random chance
+    if defecateValue > poopUrgencyMin then
+        if ZombRand(100) < 20 then -- 20% chance to play
+            player:playerVoiceSound("PainFromGlassCut")
+            ISTimedActionQueue.add(Idle_PoopUrgency:new(player, 40, false, true))
+        end
+    end
 end
 
 
@@ -621,7 +653,6 @@ function BathroomFunctions.BathroomRightClick(player, context, worldObjects)
             containerPeeOption.notAvailable = true
         end
     end
-
     -------------------------------------------------------------------------------------------------------------------
 end
 
@@ -711,9 +742,9 @@ end
 -- =====================================================
 
 function BathroomFunctions.RemoveBottomClothing(player)
-    -- Get the list of soilable clothing body locations
-    local soilableClothing = BathroomFunctions.GetSoilableClothing()
-    for _, location in ipairs(soilableClothing) do
+    -- Get the list of excretion obstructive clothing body locations
+    local excreteObstructive = BathroomFunctions.GetExcreteObstructiveClothing()
+    for _, location in ipairs(excreteObstructive) do
         local clothingItem = player:getWornItem(location)
         if clothingItem then
             -- Remove the clothing with a timed action

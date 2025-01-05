@@ -1,5 +1,11 @@
 -gotta make SelfUrinate SelfDefecate happen if using ground or toilet action ends too quickly
--
+
+1/5/25
+-Player removes items listed in new function "BathroomFunctions.GetExcreteObstructiveClothing()" rather than "BathroomFunctions.GetSoilableClothing()"
+-Added "ShortsShort" body location to GetSoilableClothing and GetExcreteObstructiveClothing
+-Added "LongDress", "Dress", "LongSkirt", and "Skirt" body locations to GetExcreteObstructiveClothing
+-Added IdleUrgencyPee timed action, random chance of playing when bladder is above 80%
+-Added IdleUrgencyPoop timed action, random chance of playing when bowels is above 80%
 
 1/4/25
 -Made Human Feces edible. Poisonous. And addable to evolved recipes (like sandwiches)

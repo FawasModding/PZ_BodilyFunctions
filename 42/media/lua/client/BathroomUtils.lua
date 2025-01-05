@@ -120,6 +120,19 @@ end
 Function defining all of the soilable clothing.
 ]]--
 function BathroomFunctions.GetSoilableClothing()
-    local bodyLocations = {"UnderwearBottom", "Underwear", "Torso1Legs1", "Legs1", "Pants", "BathRobe", "FullSuit", "FullSuitHead", "FullTop", "BodyCostume", "ShortPants"}
+    local bodyLocations = {"UnderwearBottom", "Underwear", "Torso1Legs1", "Legs1", "Pants", "BathRobe", "FullSuit", "FullSuitHead", "FullTop", "BodyCostume", "ShortPants", "ShortsShort"}
     return bodyLocations
 end
+
+--[[
+Clothes that need to be removed before using the bathroom. Includes dresses and skirts, which cannot be soiled (yet)
+]]--
+function BathroomFunctions.GetExcreteObstructiveClothing()
+    local bodyLocations = {
+    "UnderwearBottom", "Underwear", "Torso1Legs1", "Legs1", "Pants", "BathRobe", "FullSuit", "FullSuitHead", "FullTop", "BodyCostume", "ShortPants", "ShortsShort",
+    "LongDress", "Dress", "LongSkirt", "Skirt"
+    }
+
+    return bodyLocations
+end
+
