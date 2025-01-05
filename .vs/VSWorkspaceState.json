@@ -7,10 +7,10 @@
     "\\42\\media\\AnimSets\\player",
     "\\42\\media\\AnimSets\\player\\actions",
     "\\42\\media\\lua",
+    "\\42\\media\\lua\\client",
     "\\42\\media\\lua\\shared",
     "\\42\\media\\scripts",
     "\\DEVELOPER"
   ],
-  "SelectedNode": "\\42\\media\\scripts\\Bathroom_Fluids.txt",
   "PreviewInSolutionExplorer": false
 }

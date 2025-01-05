@@ -1,8 +1,31 @@
-gotta make SelfUrinate SelfDefecate happen if using ground or toilet action ends too quickly
+-gotta make SelfUrinate SelfDefecate happen if using ground or toilet action ends too quickly
+-
 
 1/4/25
 -Made Human Feces edible. Poisonous. And addable to evolved recipes (like sandwiches)
 -Remade Urine Puddle and Human Feces textures.
+-Temporarily disabled peeing / pooping when sleeping. You now wake up on the verge.
+-Changed values: (based on realism and not being horrible to deal with)
+	PeeInToiletRequirement: 60% to 40%
+	PeeOnGroundRequirement: 70% to 50%
+	PeeOnSelfRequirement: 85% to 85%
+	PeeInContainerRequirement: 70% to 60%
+
+	PoopInToiletRequirement: 70% to 40%
+	PoopOnGroundRequirement: 80% to 50%
+	PoopOnSelfRequirement: 75% to 75%
+-Changed moodle thresholds: (no more being unable to use the bathroom when the urge shows up)
+		defecationThreshold
+			[0.4] = 0.4, -- Mild urge starts at 40%
+			[0.6] = 0.3, -- Moderate urge at 60%
+			[0.8] = 0.2, -- High urge at 80%
+			[0.9] = 0.1  -- Critical need at 90% or above
+		urinationThreshold
+			[0.4] = 0.4, -- Mild urge starts at 40%
+			[0.6] = 0.3, -- Moderate urge at 60%
+			[0.8] = 0.2, -- High urge at 80%
+			[0.9] = 0.1  -- Critical need at 90% or above
+-Simplified code in moodle calcualtion
 
 1/3/25
 -Removed "CanHavePoopPurpose", "CanHavePeePurpose", "CanPeeBottle" sandbox options

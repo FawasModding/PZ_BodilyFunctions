@@ -83,12 +83,12 @@ function BathroomFunctions.CheckForAccident()
     if player:isAsleep() then
         if urinateValue >= bladderThreshold then
             player:forceAwake()
-            BathroomFunctions.UrinateBottoms()
-            BathroomFunctions.SetUrinateValue(0)
+            --BathroomFunctions.UrinateBottoms()
+            --BathroomFunctions.SetUrinateValue(0)
         elseif defecateValue >= bowelsThreshold then
             player:forceAwake()
-            BathroomFunctions.DefecateBottoms()
-            BathroomFunctions.SetDefecateValue(0)
+            --BathroomFunctions.DefecateBottoms()
+            --BathroomFunctions.SetDefecateValue(0)
         end
     else
         if urinateValue >= bladderThreshold then
@@ -415,13 +415,13 @@ function BathroomFunctions.BathroomRightClick(player, context, worldObjects)
     local bowelsMaxValue = SandboxVars.BathroomFunctions.BowelsMaxValue or 100 -- Default to 100 if not set
 
     local peeOnSelfRequirement = SandboxVars.BathroomFunctions.PeeOnSelfRequirement or 85 -- Default to 85 if not set
-    local peeOnGroundRequirement = SandboxVars.BathroomFunctions.PeeOnGroundRequirement or 70 -- Default to 70 if not set
-    local peeInToiletRequirement = SandboxVars.BathroomFunctions.PeeInToiletRequirement or 60 -- Default to 60 if not set
-    local peeInContainerRequirement = SandboxVars.BathroomFunctions.PeeInContainerRequirement or 70 -- Default to 70 if not set
+    local peeOnGroundRequirement = SandboxVars.BathroomFunctions.PeeOnGroundRequirement or 50 -- Default to 50 if not set
+    local peeInToiletRequirement = SandboxVars.BathroomFunctions.PeeInToiletRequirement or 40 -- Default to 40 if not set
+    local peeInContainerRequirement = SandboxVars.BathroomFunctions.PeeInContainerRequirement or 60 -- Default to 70 if not set
 
     local poopOnSelfRequirement = SandboxVars.BathroomFunctions.PoopOnSelfRequirement or 75 -- Default to 75 if not set
-    local poopOnGroundRequirement = SandboxVars.BathroomFunctions.PoopOnGroundRequirement or 80 -- Default to 80 if not set
-    local poopInToiletRequirement = SandboxVars.BathroomFunctions.PoopInToiletRequirement or 70 -- Default to 70 if not set
+    local poopOnGroundRequirement = SandboxVars.BathroomFunctions.PoopOnGroundRequirement or 50 -- Default to 50 if not set
+    local poopInToiletRequirement = SandboxVars.BathroomFunctions.PoopInToiletRequirement or 40 -- Default to 40 if not set
 
     local modOptions = PZAPI.ModOptions:getOptions("BathroomFunctions")
 

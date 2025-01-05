@@ -47,7 +47,7 @@ Most people feel the urge to pee by this point and can comfortably use a toilet.
 */
 option BathroomFunctions.PoopInToiletRequirement
 {
-	type = double, min = 0, max = 100.0, default = 70.0,
+	type = double, min = 0, max = 100.0, default = 40.0,
 	page = Defecation, translation = BathroomFunctions_PoopInToiletRequirement,
 }
 
@@ -56,7 +56,7 @@ Peeing on the ground would require more desperation. People tend to avoid this u
 */
 option BathroomFunctions.PoopOnGroundRequirement
 {
-	type = double, min = 0, max = 100.0, default = 80.0,
+	type = double, min = 0, max = 100.0, default = 50.0,
 	page = Defecation, translation = BathroomFunctions_PoopOnGroundRequirement,
 }
 
@@ -159,7 +159,7 @@ Most people feel the urge to pee by this point and can comfortably use a toilet.
 */
 option BathroomFunctions.PeeInToiletRequirement
 {
-	type = double, min = 0, max = 100.0, default = 60.0,
+	type = double, min = 0, max = 100.0, default = 40.0,
 	page = Urination, translation = BathroomFunctions_PeeInToiletRequirement,
 }
 
@@ -168,7 +168,7 @@ Peeing on the ground would require more desperation. People tend to avoid this u
 */
 option BathroomFunctions.PeeOnGroundRequirement
 {
-	type = double, min = 0, max = 100.0, default = 70.0,
+	type = double, min = 0, max = 100.0, default = 50.0,
 	page = Urination, translation = BathroomFunctions_PeeOnGroundRequirement,
 }
 
@@ -186,7 +186,7 @@ Peeing in a container would require more desperation.
 */
 option BathroomFunctions.PeeInContainerRequirement
 {
-	type = double, min = 0, max = 100.0, default = 70.0,
+	type = double, min = 0, max = 100.0, default = 60.0,
 	page = Urination, translation = BathroomFunctions_PeeInContainerRequirement,
 }
 

@@ -21,51 +21,74 @@ local function CheckBathroomMeters(player)
 		if moodle then
 			local defecationValue = BathroomFunctions.GetDefecateValue()
 			local defecationThreshold = {
-				[0.25] = 0.4,
-				[0.5] = 0.3,
-				[0.75] = 0.2,
-				[0.9] = 0.1  -- Change the 1.0 threshold to 0.9
+				[0.4] = 0.4, -- Mild urge starts at 40%
+				[0.6] = 0.3, -- Moderate urge at 60%
+				[0.8] = 0.2, -- High urge at 80%
+				[0.9] = 0.1  -- Critical need at 90% or above
 			}
 
-			-- Calculate percentage of the max value
+			-- Defecation Logic
 			local defecationPercent = defecationValue / bowelsMaxValue
 
-			if defecationPercent > 0.9 then
-				moodle:setValue(defecationThreshold[0.9])  -- Set value at 90%
-			elseif defecationPercent > 0.75 then
-				moodle:setValue(defecationThreshold[0.75])
-			elseif defecationPercent > 0.5 then
-				moodle:setValue(defecationThreshold[0.5])
-			elseif defecationPercent > 0.25 then
-				moodle:setValue(defecationThreshold[0.25])
-			else
-				moodle:setValue(0.5) -- Default value if defecation level is below 25%
+			-- Sort the defecationThreshold keys in ascending order
+			local sortedDefecationThresholds = {}
+			for threshold in pairs(defecationThreshold) do
+				table.insert(sortedDefecationThresholds, threshold)
+			end
+			table.sort(sortedDefecationThresholds)
+
+			-- Track the previous moodle value
+			local previousDefecationMoodleValue = moodle:getValue()
+
+			-- Apply moodle value based on sorted thresholds
+			local newDefecationMoodleValue = 0.5 -- Default value
+			for _, threshold in ipairs(sortedDefecationThresholds) do
+				if defecationPercent > threshold then
+					newDefecationMoodleValue = defecationThreshold[threshold]
+				end
+			end
+
+			-- Only set the moodle value if it changes
+			if newDefecationMoodleValue ~= previousDefecationMoodleValue then
+				moodle:setValue(newDefecationMoodleValue)
 			end
 		end
 
 		if moodle2 then
 			local urinationValue = BathroomFunctions.GetUrinateValue()
 			local urinationThreshold = {
-				[0.25] = 0.4,
-				[0.5] = 0.3,
-				[0.75] = 0.2,
-				[0.9] = 0.1  -- Change the 1.0 threshold to 0.9
+				[0.4] = 0.4, -- Mild urge starts at 40%
+				[0.6] = 0.3, -- Moderate urge at 60%
+				[0.8] = 0.2, -- High urge at 80%
+				[0.9] = 0.1  -- Critical need at 90% or above
 			}
 
-			-- Calculate percentage of the max value
+			-- Urination Logic
 			local urinationPercent = urinationValue / bladderMaxValue
 
-			if urinationPercent > 0.9 then
-				moodle2:setValue(urinationThreshold[0.9])  -- Set value at 90%
-			elseif urinationPercent > 0.75 then
-				moodle2:setValue(urinationThreshold[0.75])
-			elseif urinationPercent > 0.5 then
-				moodle2:setValue(urinationThreshold[0.5])
-			elseif urinationPercent > 0.25 then
-				moodle2:setValue(urinationThreshold[0.25])
-			else
-				moodle2:setValue(0.5) -- Default value if urination level is below 25%
+			-- Sort the urinationThreshold keys in ascending order
+			local sortedUrinationThresholds = {}
+			for threshold in pairs(urinationThreshold) do
+				table.insert(sortedUrinationThresholds, threshold)
 			end
+			table.sort(sortedUrinationThresholds)
+
+			-- Track the previous moodle value
+			local previousMoodleValue = moodle2:getValue()
+
+			-- Apply moodle value based on sorted thresholds
+			local newMoodleValue = 0.5 -- Default value
+			for _, threshold in ipairs(sortedUrinationThresholds) do
+				if urinationPercent > threshold then
+					newMoodleValue = urinationThreshold[threshold]
+				end
+			end
+
+			-- Only set the moodle value if it changes
+			if newMoodleValue ~= previousMoodleValue then
+				moodle2:setValue(newMoodleValue)
+			end
+
 		end
 	else
 		if moodle and moodle2 then
