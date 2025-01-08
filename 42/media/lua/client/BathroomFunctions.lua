@@ -26,13 +26,19 @@ end
 -- Function to update the player's bathroom-related values (urination and defecation)
 function BathroomFunctions.UpdateBathroomValues()
     local player = getPlayer() -- Fetch the current player object
+    local stats = player:getStats() -- Fetch player stats (thirst, hunger, etc.)
 
+    -- =====================================================
     -- === URINATION ===
+    -- =====================================================
 
     -- Update the urination value
     local urinateValue = BathroomFunctions.GetUrinateValue() -- Get the current urination value
     local bladderMaxValue = SandboxVars.BathroomFunctions.BladderMaxValue or 100 -- Get the max bladder value, default to 100 if not set
-    local urinateIncrease = 0.01 * bladderMaxValue * SandboxVars.BathroomFunctions.BladderIncreaseMultiplier -- 1% of the max bladder value * multiplier
+    local thirst = stats:getThirst() -- Get player's thirst level (0 to 1)
+
+    -- 1.2% of the max bladder value * multiplier * inverse of thirst
+    local urinateIncrease = 0.012 * bladderMaxValue * (1 - thirst) * SandboxVars.BathroomFunctions.BladderIncreaseMultiplier
 
     urinateValue = urinateValue + urinateIncrease -- Increase the urination value by the calculated percentage
     player:getModData().urinateValue = tonumber(urinateValue) -- Save the updated value back to the player's modData
@@ -41,12 +47,17 @@ function BathroomFunctions.UpdateBathroomValues()
     local urinatePercentage = (urinateValue / bladderMaxValue) * 100
     print("Updated Urinate Value: " .. urinatePercentage .. "%") -- Debug print statement to display the updated urination value as a percentage
 
+    -- =====================================================
     -- === DEFECATION ===
+    -- =====================================================
 
     -- Update the defecation value
     local defecateValue = BathroomFunctions.GetDefecateValue() -- Get the current defecation value
     local bowelsMaxValue = SandboxVars.BathroomFunctions.BowelsMaxValue or 100 -- Get the max bowel value, default to 100 if not set
-    local defecateIncrease = 0.005 * bowelsMaxValue * SandboxVars.BathroomFunctions.BowelsIncreaseMultiplier -- 0.5% of the max bowel value * multiplier
+    local hunger = stats:getHunger() -- Get player's hunger level (0 to 1)
+
+    -- 0.5% of the max bowels value * multiplier * inverse of hunger
+    local defecateIncrease = 0.005 * bowelsMaxValue * (1 - hunger) * SandboxVars.BathroomFunctions.BowelsIncreaseMultiplier
 
     defecateValue = defecateValue + defecateIncrease -- Increase the defecation value by the calculated percentage
     player:getModData().defecateValue = tonumber(defecateValue) -- Save the updated value back to the player's modData

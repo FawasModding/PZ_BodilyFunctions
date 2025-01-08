@@ -13,13 +13,6 @@ module BathroomFunctions
 		IsDung = true,
 	}
 
-    model Urine_Model_Large
-    {
-		mesh = UrinePuddle,
-		texture = WorldItems/UrineTexture,
-		scale = 0.002,
-    }
-
 	item HumanUrine_Small
 	{
 		Weight = 1,
@@ -32,13 +25,6 @@ module BathroomFunctions
 		Tags = isCompostable,
 		IsDung = true,
 	}
-
-    model Urine_Model_Small
-    {
-		mesh = UrinePuddle,
-		texture = WorldItems/UrineTexture,
-		scale = 0.0015,
-    }
 
 	item HumanFeces
 	{
@@ -77,11 +63,4 @@ module BathroomFunctions
 		StressChange = 35,
 		UnhappyChange = 90,
 	}
-
-	model Feces_Model
-    {
-		mesh = PoopPile,
-		texture = WorldItems/FecesTexture,
-		scale = 0.075,
-    }
 }

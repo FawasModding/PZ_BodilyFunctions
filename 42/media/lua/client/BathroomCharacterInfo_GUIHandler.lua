@@ -9,6 +9,26 @@ end
 function BathroomCharacterInfo_GUIHandler:createChildren()
     self:setScrollChildren(true)
     self:addScrollBars()
+
+    -- Create the "Reset Sandbox Settings" button
+    local buttonWidth = 200
+    local buttonHeight = 30
+    local buttonX = (self.width - buttonWidth) / 2 -- Center horizontally
+    local buttonY = self.height - buttonHeight - 10 -- 10 pixels padding from the bottom
+
+    self.resetSandboxButton = ISButton:new(buttonX, buttonY, buttonWidth, buttonHeight, "Reset Sandbox Settings", self, BathroomCharacterInfo_GUIHandler.onResetSandboxSettings);
+    self.resetSandboxButton:initialise();
+    self.resetSandboxButton:instantiate();
+    self:addChild(self.resetSandboxButton);
+end
+
+function BathroomCharacterInfo_GUIHandler:onResetSandboxSettings()
+    -- Logic to reset the sandbox settings to their default values
+    SandboxVars.BathroomFunctions.BladderMaxValue = 100
+    SandboxVars.BathroomFunctions.BowelsMaxValue = 100
+
+    -- Update any necessary UI elements or values
+    print("Sandbox settings reset to default values.")
 end
 
 function BathroomCharacterInfo_GUIHandler:setVisible(visible)
@@ -94,8 +114,8 @@ function BathroomCharacterInfo_GUIHandler:render()
         maxHeight = maxHeight - ISWindow.TitleBarHeight 
     end
 
-    -- Increase the height by 20 pixels, kind of a fucked up way to do it but y'know, I'm a fucked up person
-    textY = textY + 40
+    -- Increase the height by 80 pixels, kind of a fucked up way to do it but y'know, I'm a fucked up person
+    textY = textY + 100
 
     self:setHeightAndParentHeight(math.min(textY, maxHeight))
     self:setScrollHeight(textY)

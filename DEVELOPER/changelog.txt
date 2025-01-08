@@ -1,5 +1,51 @@
 -gotta make SelfUrinate SelfDefecate happen if using ground or toilet action ends too quickly
 
+
+==============
+[VERSION 0.40]
+==============
+
+-Added code for a "Reset Sandbox Values" button in GUI. Maybe remove
+
+-Simplified the UrinePuddle model by removing unnecessary faces. It is now a flat plane.
+-Replaced the 3D model with a flat square plane, allowing for texture-based variations instead of relying on complex models.
+-Introduced new textures for urine puddles:
+	Hydrated texture (blue-er and clearer).
+	Dehydrated texture (yellowish).
+-Moved Bathroom_WasteProducts.txt models into Bathroom_Models.txt
+
+-Thirst and Hunger Mechanics:
+	Thirst and hunger levels now influence the production of urine and poop:
+	Higher thirst/hunger slows down production.
+	Lower thirst/hunger speeds it up.
+
+-Increased the base urine production rate from 1% to 1.2% per cycle, making the system slightly faster.
+
+-Added Traits:
+	Bladder Traits:
+
+	Small Bladder: Bladder fills quicker and more urgently. (-1 points)
+	Bedwetter: Involuntary urination while asleep. (-3 points)
+	Urinary Incontinence: Poor bladder control in general. (-5 points)
+	Paruresis: Urination is difficult when near zombies or players. (-4 points)
+	Shy Bladder: Urination is difficult without using the toilet. (-6 points)
+	Large Bladder: Bladder takes longer to fill. (+1 point)
+	Bladder Control: 75% chance to stop urination 5% of the way through peeing self. (+3 points)
+
+	Bowel Traits:
+
+	Small Bowels: Bowels fill quicker and more urgently. (-1 points)
+	Bedsoiler: Involuntary defecation while asleep. (-3 points)
+	Fecal Incontinence: Poor bowel control in general. (-6 points)
+	Parcopresis: Defecation is difficult when near zombies or players. (-4 points)
+	Shy Bowels: Defecation is difficult without using the toilet. (-5 points)
+	Large Bowels: Bowels take longer to fill. (+1 point)
+	Bowel Control: 75% chance to stop defecation 5% of the way through pooping self. (+3 points)
+
+==============
+[PRE-VERSIONS]
+==============
+
 1/5/25
 -Player removes items listed in new function "BathroomFunctions.GetExcreteObstructiveClothing()" rather than "BathroomFunctions.GetSoilableClothing()"
 -Added "ShortsShort" body location to GetSoilableClothing and GetExcreteObstructiveClothing
