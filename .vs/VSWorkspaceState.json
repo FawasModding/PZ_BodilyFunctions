@@ -6,11 +6,12 @@
     "\\42\\media\\lua",
     "\\42\\media\\lua\\client",
     "\\42\\media\\lua\\client\\TimedActions",
+    "\\42\\media\\scripts",
     "\\media",
     "\\media\\AnimSets",
     "\\media\\AnimSets\\player",
     "\\media\\AnimSets\\player\\actions"
   ],
-  "SelectedNode": "\\42\\media\\lua\\client\\TimedActions\\SelfDefecate.lua",
+  "SelectedNode": "\\42\\media\\lua\\client\\BathroomCharacterInfo_GUIHandler.lua",
   "PreviewInSolutionExplorer": false
 }

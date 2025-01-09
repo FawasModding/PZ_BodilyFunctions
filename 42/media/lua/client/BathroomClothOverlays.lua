@@ -38,7 +38,32 @@ function BathroomClothOverlays.populateTestItems()
         "Briefs_SmallTrunks_Black",
         "Briefs_SmallTrunks_Blue",
         "Briefs_SmallTrunks_Red",
-        "Briefs_SmallTrunks_WhiteTINT"
+        "Briefs_SmallTrunks_WhiteTINT",
+        "Shorts_CamoGreenLong",
+        "Shorts_CamoUrbanLong",
+        "Shorts_OliveDrabLong",
+        "Shorts_CamoDesertNewLong",
+        "Shorts_CamoMiliusLong",
+        "Shorts_CamoTigerStripeLong",
+        "Shorts_LongDenim",
+        "Shorts_LongDenim_Punk",
+        "Shorts_LongSport",
+        "Shorts_LongSport_Red",
+        "Shorts_BoxingRed",
+        "Shorts_BoxingBlue",
+        "Shorts_ShortDenim",
+        "Shorts_ShortFormal",
+        "Shorts_ShortSport",
+        "Shorts_FootballPants",
+        "Shorts_FootballPants_Black",
+        "Shorts_FootballPants_Gold",
+        "Shorts_FootballPants_White",
+        "Shorts_HockeyPants",
+        "Shorts_HockeyPants_Black",
+        "Shorts_HockeyPants_Red",
+        "Shorts_HockeyPants_UniBlue",
+        "Shorts_HockeyPants_White"
+
     }
 
 

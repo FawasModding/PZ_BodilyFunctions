@@ -15,9 +15,9 @@ This function is called periodically (e.g., every 10 in-game minutes).
 function BathroomFunctions.BathroomFunctionTimers()
     if BathroomFunctions.didFirstTimer then
         BathroomFunctions.UpdateBathroomValues() -- If the initial setup is done, update the player's bathroom values
-        BathroomFunctions.CheckForAccident() -- Check whether or not the player has urinated or defecated themselves.
+        BathroomFunctions.HandleInstantAccidents() -- Check whether or not the player has urinated or defecated themselves.
+        BathroomFunctions.HandleUrgencyHiccup() -- Do the hiccup system, aka player grabbing crotch and possibly pissing themselves or so on. Too tired to censor my shit lol
         BathroomFunctions.DirtyBottomsEffects()
-        BathroomFunctions.PlayUrgencyIdles()
     else
         BathroomFunctions.didFirstTimer = true -- If this is the first call, set the flag to true and skip updating values
     end
@@ -25,144 +25,167 @@ end
 
 -- Function to update the player's bathroom-related values (urination and defecation)
 function BathroomFunctions.UpdateBathroomValues()
-    local player = getPlayer() -- Fetch the current player object
-    local stats = player:getStats() -- Fetch player stats (thirst, hunger, etc.)
+    local player = getPlayer()
+    local stats = player:getStats()
 
-    -- =====================================================
-    -- === URINATION ===
-    -- =====================================================
+    -- Update Bladder Values
+    local urinateValue = BathroomFunctions.GetUrinateValue()
+    local bladderMaxValue = SandboxVars.BathroomFunctions.BladderMaxValue or 500
+    local thirst = stats:getThirst()
 
-    -- Update the urination value
-    local urinateValue = BathroomFunctions.GetUrinateValue() -- Get the current urination value
-    local bladderMaxValue = SandboxVars.BathroomFunctions.BladderMaxValue or 100 -- Get the max bladder value, default to 100 if not set
-    local thirst = stats:getThirst() -- Get player's thirst level (0 to 1)
-
-    -- 1.2% of the max bladder value * multiplier * inverse of thirst
     local urinateIncrease = 0.012 * bladderMaxValue * (1 - thirst) * SandboxVars.BathroomFunctions.BladderIncreaseMultiplier
+    urinateValue = urinateValue + urinateIncrease
+    player:getModData().urinateValue = tonumber(urinateValue)
 
-    urinateValue = urinateValue + urinateIncrease -- Increase the urination value by the calculated percentage
-    player:getModData().urinateValue = tonumber(urinateValue) -- Save the updated value back to the player's modData
+    -- Update Bowel Values
+    local defecateValue = BathroomFunctions.GetDefecateValue()
+    local bowelsMaxValue = SandboxVars.BathroomFunctions.BowelsMaxValue or 800
+    local hunger = stats:getHunger()
 
-    -- Convert to a percentage of the bladderMaxValue
-    local urinatePercentage = (urinateValue / bladderMaxValue) * 100
-    print("Updated Urinate Value: " .. urinatePercentage .. "%") -- Debug print statement to display the updated urination value as a percentage
-
-    -- =====================================================
-    -- === DEFECATION ===
-    -- =====================================================
-
-    -- Update the defecation value
-    local defecateValue = BathroomFunctions.GetDefecateValue() -- Get the current defecation value
-    local bowelsMaxValue = SandboxVars.BathroomFunctions.BowelsMaxValue or 100 -- Get the max bowel value, default to 100 if not set
-    local hunger = stats:getHunger() -- Get player's hunger level (0 to 1)
-
-    -- 0.5% of the max bowels value * multiplier * inverse of hunger
     local defecateIncrease = 0.005 * bowelsMaxValue * (1 - hunger) * SandboxVars.BathroomFunctions.BowelsIncreaseMultiplier
+    defecateValue = defecateValue + defecateIncrease
+    player:getModData().defecateValue = tonumber(defecateValue)
 
-    defecateValue = defecateValue + defecateIncrease -- Increase the defecation value by the calculated percentage
-    player:getModData().defecateValue = tonumber(defecateValue) -- Save the updated value back to the player's modData
-
-    -- Convert to a percentage of the bowelsMaxValue
-    local defecatePercentage = (defecateValue / bowelsMaxValue) * 100
-    print("Updated Defecate Value: " .. defecatePercentage .. "%") -- Debug print statement to display the updated defecation value as a percentage
-
+    -- Print Debug Info
+    print("Updated Urinate Value: " .. tostring((urinateValue / bladderMaxValue) * 100) .. "%")
+    print("Updated Defecate Value: " .. tostring((defecateValue / bowelsMaxValue) * 100) .. "%")
 end
 
-function BathroomFunctions.CheckForAccident()
+-- Make the player urinate / defecate in very "sudden" situations.
+-- Like, getting injured (car crash, shot). Overflowing (bladder max capacity).
+function BathroomFunctions.HandleInstantAccidents()
     local urinateValue = BathroomFunctions.GetUrinateValue() -- Current bladder level
     local defecateValue = BathroomFunctions.GetDefecateValue() -- Current bowel level
     local player = getPlayer()
 
-    -- Retrieve maximum values from SandboxVars
     local bladderMaxValue = SandboxVars.BathroomFunctions.BladderMaxValue or 100 -- Default to 100 if not set
     local bowelsMaxValue = SandboxVars.BathroomFunctions.BowelsMaxValue or 100 -- Default to 100 if not set
 
-    -- Calculate thresholds
+    -- Calculate overflow values
     local bladderThreshold = 0.95 * bladderMaxValue -- 95% of max bladder value
     local bowelsThreshold = 0.98 * bowelsMaxValue -- 98% of max bowel value
 
-    -- Moodle modifiers (activated only if moodles are enabled)
-    --local panicModifier = 0
-    --local stressedModifier = 0
-    --local drunkModifier = 0
-    --local heavyLoadModifier = 0
-    --local wetModifier = 0
-    --local painModifier = 0
-    --local coldModifier = 0
-
-    -- If you're asleep when you pee / poop yourself, it happens automatically and wakes you up.
-    -- If you're awake, it begins the pee / poop self action
+    -- Handle urination and defecation when the player is asleep or awake.
+    -- If the player is asleep and their bladder/bowels are full, it happens automatically and wakes them up.
+    -- If the player is awake and their bladder/bowels are full, the appropriate self-action (urinate/defecate) begins.
     if player:isAsleep() then
+
+        -- Check if the player needs to urinate while asleep
         if urinateValue >= bladderThreshold then
-            player:forceAwake()
-            --BathroomFunctions.UrinateBottoms()
-            --BathroomFunctions.SetUrinateValue(0)
+            player:forceAwake()  -- Wake the player up if they need to urinate
+
+            -- If the player has the "Bedwetter" trait, trigger the urination accident
+            if player:HasTrait("Bedwetter") then
+                BathroomFunctions.UrinateBottoms()  -- Simulate urinating in bed
+                BathroomFunctions.SetUrinateValue(0)  -- Reset urinate value after accident
+            end
+
+        -- Check if the player needs to defecate while asleep
         elseif defecateValue >= bowelsThreshold then
-            player:forceAwake()
-            --BathroomFunctions.DefecateBottoms()
-            --BathroomFunctions.SetDefecateValue(0)
+            player:forceAwake()  -- Wake the player up if they need to defecate
+
+            -- If the player has the "Bedsoiler" trait, trigger the defecation accident
+            if player:HasTrait("Bedsoiler") then
+                BathroomFunctions.DefecateBottoms()  -- Simulate defecating in bed
+                BathroomFunctions.SetDefecateValue(0)  -- Reset defecate value after accident
+            end
+
         end
     else
+        -- If the player is awake, start the urination or defecation process based on their bladder/bowel status
         if urinateValue >= bladderThreshold then
-            BathroomFunctions.TriggerSelfUrinate()
+            BathroomFunctions.TriggerSelfUrinate()  -- Trigger self urination action
         elseif defecateValue >= bowelsThreshold then
-            BathroomFunctions.TriggerSelfDefecate()
+            BathroomFunctions.TriggerSelfDefecate()  -- Trigger self defecation action
         end
     end
-
-    -- Check moodles for modifiers (if moodles are enabled)
-    --if player:getMoodles() then
-    --    panicModifier = player:getMoodles():getMoodleLevel(MoodleType.Panic) * 5 -- Panic increases accident likelihood
-    --    stressedModifier = player:getMoodles():getMoodleLevel(MoodleType.Stress) * 3 -- Stress increases chance
-    --    drunkModifier = player:getMoodles():getMoodleLevel(MoodleType.Drunk) * 10 -- Drunk increases chance for urination
-    --    heavyLoadModifier = player:getMoodles():getMoodleLevel(MoodleType.HeavyLoad) * 3 -- Heavy load increases chance
-    --    wetModifier = player:getMoodles():getMoodleLevel(MoodleType.Wet) * 5 -- Wet triggers a stronger urge
-    --    painModifier = player:getMoodles():getMoodleLevel(MoodleType.Pain) * 3 -- Pain increases likelihood
-    --    coldModifier = player:getMoodles():getMoodleLevel(MoodleType.HasACold) * 2 -- Cold increases chance
-    --end
-
-    -- Check if the player should urinate involuntarily
-    --if urinateValue >= bladderThreshold or 
-    --   (urinateValue > 0.5 * bladderMaxValue and (panicModifier > 0 or stressedModifier > 0 or drunkModifier > 0 or heavyLoadModifier > 0 or wetModifier > 0 or painModifier > 0 or coldModifier > 0)) then
-    --    BathroomFunctions.TriggerSelfUrinate()
-    --end
-
-    -- Check if the player should defecate involuntarily
-    --if defecateValue >= bowelsThreshold or 
-    --   (defecateValue > 0.5 * bowelsMaxValue and (panicModifier > 0 or stressedModifier > 0 or heavyLoadModifier > 0 or wetModifier > 0 or painModifier > 0 or coldModifier > 0)) then
-    --    BathroomFunctions.TriggerSelfDefecate()
-    --end
-
 end
 
--- Function for playing urgency idle animations. Chance every 10 mins.
-function BathroomFunctions.PlayUrgencyIdles()
-    local urinateValue = BathroomFunctions.GetUrinateValue() -- Current bladder level
-    local defecateValue = BathroomFunctions.GetDefecateValue() -- Current bowel level
+-- Function to handle the hiccup system. Every 10 minutes, this checks if the player should have a ""hiccup".
+-- Hiccup in this context is the slang definition, like a pause. Not a "hic" hiccup lol
+function BathroomFunctions.HandleUrgencyHiccup()
     local player = getPlayer()
+    local urinateValue = BathroomFunctions.GetUrinateValue()
+    local defecateValue = BathroomFunctions.GetDefecateValue()
+    local bladderMaxValue = SandboxVars.BathroomFunctions.BladderMaxValue or 500
+    local bowelsMaxValue = SandboxVars.BathroomFunctions.BowelsMaxValue or 800
 
-    -- Retrieve maximum values from SandboxVars
-    local bladderMaxValue = SandboxVars.BathroomFunctions.BladderMaxValue or 100 -- Default to 100 if not set
-    local bowelsMaxValue = SandboxVars.BathroomFunctions.BowelsMaxValue or 100 -- Default to 100 if not set
+    -- Base Hiccup Chance (until bladder/bowels are above 80% full)
+    local hiccupChance = 0 -- Base 0% chance
 
-    -- Calculate thresholds
-    local peeUrgencyMin = 0.80 * bladderMaxValue -- 80% of max bladder value
-    local poopUrgencyMin = 0.80 * bowelsMaxValue -- 80% of max bowel value
+    -- If the player is asleep, set hiccupChance to 0 regardless of bladder/bowel status
+    if player:isAsleep() then
+        hiccupChance = 0
+    else
+        -- Increase chance if bladder or bowels are 80% full or more
+        if urinateValue >= 0.8 * bladderMaxValue or defecateValue >= 0.8 * bowelsMaxValue then
+            hiccupChance = 10 -- 10% chance
+        end
 
-    -- Check bladder urgency and add random chance
-    if urinateValue > peeUrgencyMin then
-        if ZombRand(100) < 20 then -- 20% chance to play
-            player:playerVoiceSound("PainFromGlassCut")
-            ISTimedActionQueue.add(Idle_PeeUrgency:new(player, 40, false, true))
+        -- Panic modifier: increase hiccup chance if the player is panicked
+        if player:getMoodles():getMoodleLevel(MoodleType.Panic) > 0 then
+            hiccupChance = hiccupChance + (player:getMoodles():getMoodleLevel(MoodleType.Panic) * 2)  -- Increase by Panic level
         end
     end
 
-    -- Check bowels urgency and add random chance
-    if defecateValue > poopUrgencyMin then
-        if ZombRand(100) < 20 then -- 20% chance to play
-            player:playerVoiceSound("PainFromGlassCut")
-            ISTimedActionQueue.add(Idle_PoopUrgency:new(player, 40, false, true))
+    -- Print the hiccup chance each time it activates
+    print("Hiccup Chance: " .. hiccupChance .. "%")
+
+    -- Hiccup will only trigger if bladder or bowels are 40% or more full
+    if ZombRand(100) < hiccupChance then
+        local hiccupType = nil
+        
+        if urinateValue >= 0.4 * bladderMaxValue then
+            hiccupType = "bladder"
+        elseif defecateValue >= 0.4 * bowelsMaxValue then
+            hiccupType = "bowels"
         end
+
+        -- ====================================================================
+        -- THIS HERE, THIS IS THE SHIT. THIS IS WHERE IT ACTUALLY HAPPENS!!!!
+        -- ====================================================================
+
+        if hiccupType then
+            -- Trigger Hiccup and inform the type
+            print("Urgency Hiccup Occurred! Hiccup Type: " .. hiccupType)
+            player:Say("Oh no, I can't hold it!")
+            
+            -- This is where other stuff happens when the hiccup is happening
+            
+            -- Pass the hiccup type to PlayUrgencyIdles for the correct animation
+            BathroomFunctions.PlayUrgencyIdles(hiccupType, true)
+
+            -- Accident Chance (trigger accident if player is too full)
+            local accidentChance = 5 -- Base 5% chance
+            if player:getStats():getDrunkenness() > 0 then
+                accidentChance = accidentChance + 10 -- Drunk modifier
+            end
+
+            if ZombRand(100) < accidentChance then
+                if urinateValue >= 0.4 * bladderMaxValue then
+                    BathroomFunctions.TriggerSelfUrinate()
+                elseif defecateValue >= 0.4 * bowelsMaxValue then
+                    BathroomFunctions.TriggerSelfDefecate()
+                end
+            end
+        end
+    end
+end
+
+-- Function for playing urgency idle animations based on hiccup type.
+-- TODO: Make the speed value change depending on urination / defecation value. So slight urge makes it go quickly, bad urge makes them hold longer
+function BathroomFunctions.PlayUrgencyIdles(hiccupType, doTimedAction)
+    local player = getPlayer()
+
+    -- Based on the hiccupType (bladder or bowels), play the corresponding animation
+    if hiccupType == "bladder" then
+        print("Playing Urgent Pee Animation!")
+        player:playerVoiceSound("PainFromGlassCut")  -- Replace this with specific pee sound if you want
+        ISTimedActionQueue.add(Idle_PeeUrgency:new(player, 40, false, true))  -- Trigger bladder urgency animation
+    elseif hiccupType == "bowels" then
+        print("Playing Urgent Poop Animation!")
+        player:playerVoiceSound("PainFromGlassCut")  -- Replace this with specific poop sound if needed
+        ISTimedActionQueue.add(Idle_PoopUrgency:new(player, 40, false, true))  -- Trigger bowel urgency animation
     end
 end
 
@@ -219,7 +242,7 @@ function BathroomFunctions.UrinateBottoms()
     end
 
     if SandboxVars.BathroomFunctions.CreatePeeObject == true then
-		local urineItem = instanceItem("BathroomFunctions.HumanUrine_Small")
+		local urineItem = instanceItem("BathroomFunctions.Urine_Hydrated_0")
 		player:getCurrentSquare():AddWorldInventoryItem(urineItem, 0, 0, 0)
 	end
 
@@ -647,6 +670,7 @@ function BathroomFunctions.BathroomRightClick(player, context, worldObjects)
 
         local containerSubMenu = ISContextMenu:getNew(peeSubMenu) -- Create submenu
         peeSubMenu:addSubMenu(containerPeeOption, containerSubMenu) -- Attach submenu to `containerPeeOption`
+        containerPeeOption.iconTexture = getTexture("media/textures/Item_BottleOfPee.png");
 
         local hasValidContainers = false
 
@@ -716,6 +740,7 @@ function BathroomFunctions.WashingRightClick(player, context, worldObjects)
 		end
 
 		local washOption = context:addOptionOnTop("Wash Soiled Clothing", nil, nil)
+        washOption.iconTexture = getTexture("media/ui/PeedSelf.png");
 		local subMenu = ISContextMenu:getNew(context)
 		context:addSubMenu(washOption, subMenu)
 		local option = subMenu:addOption(soiledItem:getName(), player, BathroomFunctions.WashSoiled, square, soiledItem, soapItem, storeWater, soiledItemEquipped)
@@ -744,6 +769,66 @@ function BathroomFunctions.WashingRightClick(player, context, worldObjects)
 	end
 end
 
+function BathroomFunctions.CleaningRightClick(player, context, worldObjects)
+    local playerObj = getSpecificPlayer(player)
+    local inventory = playerObj:getInventory()
+
+    local potentialCleaningItems = {"Mop", "ToiletBrush", "DishCloth", "BathTowel"}
+    local urinePuddle = false
+    local puddleToRemove = nil  -- Store puddle item to remove later
+    local puddleSquare = nil    -- Store square where the puddle is located
+    local detectionRadius = 2
+
+    -- Search for urine puddles nearby
+    local playerSquare = playerObj:getSquare()
+    if playerSquare then
+        for dx = -detectionRadius, detectionRadius do
+            for dy = -detectionRadius, detectionRadius do
+                local nearbySquare = getCell():getGridSquare(playerSquare:getX() + dx, playerSquare:getY() + dy, playerSquare:getZ())
+                if nearbySquare then
+                    for i = 0, nearbySquare:getObjects():size() - 1 do
+                        local item = nearbySquare:getObjects():get(i)
+                        if item and item:getObjectName() == "WorldInventoryItem" then
+                            local worldItem = item:getItem()
+                            if worldItem and worldItem:getType() == "Urine_Hydrated_0" then
+                                urinePuddle = true
+                                puddleToRemove = item
+                                puddleSquare = nearbySquare
+                                break
+                            end
+                        end
+                    end
+                end
+                if urinePuddle then break end
+            end
+            if urinePuddle then break end
+        end
+    end
+
+    -- If a urine puddle was found, add cleaning options
+    if urinePuddle and puddleSquare and puddleToRemove then
+        for _, itemName in ipairs(potentialCleaningItems) do
+            -- Check if the player has any cleaning item in the inventory
+            if inventory:contains(itemName) then
+                local cleaningItem = inventory:getFirstType(itemName)  -- Get the first item of this type
+
+                -- Add context menu option for cleaning
+                local cleanOption = context:addOption("Clean Urine With " .. itemName, worldObjects, function()
+
+                    -- Timed action to walk to the puddle's square'
+                    ISTimedActionQueue.add(ISWalkToTimedAction:new(playerObj, puddleSquare))
+
+                    -- Trigger the cleaning Timed Action with the correct cleaning item
+                    ISTimedActionQueue.add(CleanWasteProduct:new(playerObj, 150, puddleSquare, puddleToRemove, cleaningItem)) -- 150 = duration
+
+                end)
+                cleanOption.iconTexture = getTexture("media/textures/Mop.png");
+
+                return
+            end
+        end
+    end
+end
 
 
 -- =====================================================
@@ -854,7 +939,7 @@ function BathroomFunctions.TriggerSelfUrinate()
         BathroomFunctions.UrinateBottoms()
     else -- if the player doesn't wear clothing while pooping
         if SandboxVars.BathroomFunctions.CreatePeeObject == true then
-		    local urineItem = instanceItem("BathroomFunctions.HumanUrine_Large")
+		    local urineItem = instanceItem("BathroomFunctions.Urine_Hydrated_0")
 		    player:getCurrentSquare():AddWorldInventoryItem(urineItem, 0, 0, 0)
 	    end
     end
@@ -898,6 +983,24 @@ function BathroomFunctions.WashSoiled(playerObj, square, soiledItem, bleachItem,
 	
 	ISTimedActionQueue.add(WashSoiled:new(playerObj, 400, square, soiledItem, bleachItem, storeWater))
 end
+function BathroomFunctions.CleanUrine()
+
+end
+
+-- Overwriting the base grab function so that you cannot pick up human urine
+-- TODO: Remove display name for urine so it doesn't show in the inventory, and implement custom cleaning mechanic with mop
+ISGrabItemAction.o_transferItem = ISGrabItemAction.transferItem
+
+function ISGrabItemAction:transferItem(item)
+    local itemObject = item:getItem()
+    if itemObject:getType() == "Urine_Hydrated_0" then
+        self.character:Say("I'll need to clean this up.")
+        print("Blocked picking up Urine_Hydrated_0!")
+    else
+        self:o_transferItem(item)
+    end
+end
+
 
 
 
@@ -941,3 +1044,4 @@ Events.OnGameBoot.Add(BathroomFunctions.onGameBoot)
 
 Events.OnFillWorldObjectContextMenu.Add(BathroomFunctions.BathroomRightClick)
 Events.OnFillWorldObjectContextMenu.Add(BathroomFunctions.WashingRightClick)
+Events.OnFillWorldObjectContextMenu.Add(BathroomFunctions.CleaningRightClick)

@@ -9,6 +9,7 @@ end
 
 function Idle_PeeUrgency:start()
 
+	UIManager.getSpeedControls():SetCurrentGameSpeed(1)
 	self:setActionAnim("idleUrgencyPee")
 
 end

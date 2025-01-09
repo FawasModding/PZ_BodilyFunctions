@@ -12,7 +12,13 @@
 -Introduced new textures for urine puddles:
 	Hydrated texture (blue-er and clearer).
 	Dehydrated texture (yellowish).
+-Added Icons To Context Options
+	Wash soiled clothing (uses PeedSelf texture)
+	Pee in container (uses pee water bottle texture)
 -Moved Bathroom_WasteProducts.txt models into Bathroom_Models.txt
+-Added most (if not all) shorts to different list, meaning they will no longer show the peed jeans overlay.
+-Renamed "Urine_Hydrated_0" to "Urine_Hydrated_0" and removed DisplayName
+-Renamed "Urine_Hydrated_0" to "Urine_Hydrated_0" and removed DisplayName
 
 -Thirst and Hunger Mechanics:
 	Thirst and hunger levels now influence the production of urine and poop:
@@ -21,26 +27,43 @@
 
 -Increased the base urine production rate from 1% to 1.2% per cycle, making the system slightly faster.
 
--Added Traits:
+-Added Traits: (Most are not yet fully implemented but will be worked on in future updates.)
 	Bladder Traits:
 
-	Small Bladder: Bladder fills quicker and more urgently. (-1 points)
-	Bedwetter: Involuntary urination while asleep. (-3 points)
-	Urinary Incontinence: Poor bladder control in general. (-5 points)
-	Paruresis: Urination is difficult when near zombies or players. (-4 points)
-	Shy Bladder: Urination is difficult without using the toilet. (-6 points)
-	Large Bladder: Bladder takes longer to fill. (+1 point)
-	Bladder Control: 75% chance to stop urination 5% of the way through peeing self. (+3 points)
+	Small Bladder: "Bladder fills quicker and more urgently." (+1 points)
+	Bedwetter: "Involuntary urination while asleep." (+3 points)
+	Urinary Incontinence: "Poor bladder control in general." (+5 points)
+	Paruresis: "Urination is difficult when near zombies or players." (+4 points)
+	Shy Bladder: "Urination is difficult without using the toilet." (+6 points)
+	Large Bladder: "Bladder takes longer to fill." (-1 point)
+	Bladder Control: "75% chance to stop urination 5% of the way through peeing self." (-3 points)
 
 	Bowel Traits:
 
-	Small Bowels: Bowels fill quicker and more urgently. (-1 points)
-	Bedsoiler: Involuntary defecation while asleep. (-3 points)
-	Fecal Incontinence: Poor bowel control in general. (-6 points)
-	Parcopresis: Defecation is difficult when near zombies or players. (-4 points)
-	Shy Bowels: Defecation is difficult without using the toilet. (-5 points)
-	Large Bowels: Bowels take longer to fill. (+1 point)
-	Bowel Control: 75% chance to stop defecation 5% of the way through pooping self. (+3 points)
+	Small Bowels: "Bowels fill quicker and more urgently. (+1 points)
+	Bedsoiler: "Involuntary defecation while asleep." (+3 points)
+	Fecal Incontinence: "Poor bowel control in general." (+6 points)
+	Parcopresis: "Defecation is difficult when near zombies or players." (+4 points)
+	Shy Bowels: "Defecation is difficult without using the toilet." (+5 points)
+	Large Bowels: "Bowels take longer to fill." (-1 point)
+	Bowel Control: "75% chance to stop defecation 5% of the way through pooping self." (-3 points)
+
+-Implemented Traits:
+	Bedwetter: You will pee the bed if your bladder reaches near max value.
+	Bedsoiler: You will poop the bed if your bowels reach near max value.
+
+-Urgency Hiccup System:
+	-Depending on your character's current mood and how full your bladder or bowels are, you might experience a "hiccup" of urgency. This could be a small reminder to go, or an unexpected accident.
+	-Currently the only modifiers are "Panic" (increases chance of hiccup, doesn't impact accident chance yet), and "Drunkenness" (increases accident chance)
+	-When you feel a sudden urgency, game speed slows down for a better reaction time.
+	-The function that manages sudden accidents (formerly "CheckForAccident") is now renamed to HandleInstantAccidents. It triggers accidents in very sudden situations like being injured or overflowing bladder or bowels.
+	-Hiccup chance is always 0 when sleeping, but as listed above, bedwetters and bedsoilers are still not safe.
+
+-Cleaning Urine Puddles
+	-Removed from inventory (as in not visible)
+	-They cannot be picked up with the Grab function
+	-They can be cleaned with either a Mop, Dish Towel, Bath Towel, or Toilet Brush
+	
 
 ==============
 [PRE-VERSIONS]
@@ -129,9 +152,9 @@
 -Revamped sandbox options page
 -Added more underwear to the clothing overlay list
 -Separated out "UrinateAction" and "DefecateAction" timed actions into three types
--Added HumanUrine_Small, HumanUrine_Large, HumanFeces items.
--Made HumanUrine_Small spawn when the player pees themselves wearing clothes
--Made HumanUrine_Large spawn when the player pees without clothes, either by squatting or having an accident without clothes
+-Added Urine_Hydrated_0, Urine_Hydrated_0, HumanFeces items.
+-Made Urine_Hydrated_0 spawn when the player pees themselves wearing clothes
+-Made Urine_Hydrated_0 spawn when the player pees without clothes, either by squatting or having an accident without clothes
 -Made HumanFeces spawn when the player poops on the ground
 -Shortened PeeToilet and PeeSelf sounds
 -Added functionality for:

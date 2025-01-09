@@ -1,10 +1,9 @@
 module BathroomFunctions
 {
-	item HumanUrine_Large
+	item Urine_Hydrated_0
 	{
 		Weight = 1,
 		Type = Food,
-		DisplayName = Pee Puddle (Large),
 		Icon = HumanUrine,
 		DaysFresh = 0,
 		DisplayCategory = Junk,
@@ -13,11 +12,10 @@ module BathroomFunctions
 		IsDung = true,
 	}
 
-	item HumanUrine_Small
+	item Urine_Hydrated_1
 	{
 		Weight = 1,
 		Type = Food,
-		DisplayName = Pee Puddle (Small),
 		Icon = HumanUrine,
 		DaysFresh = 0,
 		DisplayCategory = Junk,

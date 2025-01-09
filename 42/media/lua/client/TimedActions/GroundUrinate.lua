@@ -38,7 +38,7 @@ function GroundUrinate:perform()
 	--self.character:playSound("PeeSelf")
 
 	if SandboxVars.BathroomFunctions.CreatePeeObject == true then
-		local urineItem = instanceItem("BathroomFunctions.HumanUrine_Large")
+		local urineItem = instanceItem("BathroomFunctions.Urine_Hydrated_0")
 		self.character:getCurrentSquare():AddWorldInventoryItem(urineItem, 0, 0, 0)
 	end
 

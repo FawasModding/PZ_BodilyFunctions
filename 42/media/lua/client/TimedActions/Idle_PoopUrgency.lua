@@ -9,6 +9,7 @@ end
 
 function Idle_PoopUrgency:start()
 
+	UIManager.getSpeedControls():SetCurrentGameSpeed(1)
 	self:setActionAnim("idleUrgencyPoop")
 
 end
