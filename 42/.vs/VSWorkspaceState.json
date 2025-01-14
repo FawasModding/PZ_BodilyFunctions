@@ -4,8 +4,12 @@
     "\\media",
     "\\media\\lua",
     "\\media\\lua\\client",
-    "\\media\\lua\\client\\TimedActions"
+    "\\media\\lua\\client\\TimedActions",
+    "\\media\\lua\\shared",
+    "\\media\\lua\\shared\\Translate",
+    "\\media\\lua\\shared\\Translate\\EN",
+    "\\media\\ui\\Traits"
   ],
-  "SelectedNode": "\\media\\lua\\client\\TimedActions\\GroundDefecate.lua",
+  "SelectedNode": "\\media\\lua\\shared\\Translate\\EN\\Moodles_EN.txt",
   "PreviewInSolutionExplorer": false
 }

@@ -11,9 +11,9 @@ Moodles_EN {
 	Moodles_Urination_Bad_lvl1 = "Slight Urge",
 	Moodles_Urination_Bad_desc_lvl1 = "Faint need to pee.",
 	Moodles_Urination_Bad_lvl2 = "Building Pressure",
-	Moodles_Urination_Bad_desc_lvl2 = "Your bladder is filling up.",
+	Moodles_Urination_Bad_desc_lvl2 = "Your bladder is bothering you.",
 	Moodles_Urination_Bad_lvl3 = "Full Bladder",
-	Moodles_Urination_Bad_desc_lvl3 = "The need is impossible to ignore.",
+	Moodles_Urination_Bad_desc_lvl3 = "The need to go is impossible to ignore.",
 	Moodles_Urination_Bad_lvl4 = "On the Verge",
 	Moodles_Urination_Bad_desc_lvl4 = "About to burst!",
 
