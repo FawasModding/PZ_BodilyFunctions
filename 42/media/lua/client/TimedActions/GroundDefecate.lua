@@ -23,6 +23,9 @@ end
 
 function GroundDefecate:stop()
 	ISBaseTimedAction.stop(self)
+
+	-- If ending early, don't keep the items stored
+	BathroomFunctions.ResetRemovedClothing(self.character)
 end
 
 function GroundDefecate:perform()
@@ -41,6 +44,9 @@ function GroundDefecate:perform()
 
 	self.character:getModData().defecateValue = 0.0 --RESET DEFECATE VALUE
 	ISBaseTimedAction.perform(self)
+
+	-- Put back on bottom clothing afterwards
+    BathroomFunctions.ReequipBottomClothing(self.character)
 end
 
 function GroundDefecate:new(character, time, stopWalk, stopRun)

@@ -25,6 +25,9 @@ end
 
 function GroundUrinate:stop()
 	ISBaseTimedAction.stop(self)
+
+	-- If ending early, don't keep the items stored
+	BathroomFunctions.ResetRemovedClothing(self.character)
 end
 
 function GroundUrinate:perform()
@@ -44,6 +47,11 @@ function GroundUrinate:perform()
 
 	self.character:getModData().urinateValue = 0.0 --RESET URINE VALUE
 	ISBaseTimedAction.perform(self)
+
+	-- Put back on bottom clothing afterwards
+    if self.character:isFemale() == true then
+        BathroomFunctions.ReequipBottomClothing(self.character)
+    end
 end
 
 function GroundUrinate:new(character, time, stopWalk, stopRun)

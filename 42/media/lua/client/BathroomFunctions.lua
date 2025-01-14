@@ -33,7 +33,8 @@ function BathroomFunctions.UpdateBathroomValues()
     local bladderMaxValue = SandboxVars.BathroomFunctions.BladderMaxValue or 500
     local thirst = stats:getThirst()
 
-    local urinateIncrease = 0.012 * bladderMaxValue * (1 - thirst) * SandboxVars.BathroomFunctions.BladderIncreaseMultiplier
+    --local urinateIncrease = 0.012 * bladderMaxValue * (1 - thirst) * SandboxVars.BathroomFunctions.BladderIncreaseMultiplier
+    local urinateIncrease = 0.012 * bladderMaxValue * SandboxVars.BathroomFunctions.BladderIncreaseMultiplier
     urinateValue = urinateValue + urinateIncrease
     player:getModData().urinateValue = tonumber(urinateValue)
 
@@ -42,7 +43,8 @@ function BathroomFunctions.UpdateBathroomValues()
     local bowelsMaxValue = SandboxVars.BathroomFunctions.BowelsMaxValue or 800
     local hunger = stats:getHunger()
 
-    local defecateIncrease = 0.005 * bowelsMaxValue * (1 - hunger) * SandboxVars.BathroomFunctions.BowelsIncreaseMultiplier
+    --local defecateIncrease = 0.005 * bowelsMaxValue * (1 - hunger) * SandboxVars.BathroomFunctions.BowelsIncreaseMultiplier
+    local defecateIncrease = 0.005 * bowelsMaxValue * SandboxVars.BathroomFunctions.BowelsIncreaseMultiplier
     defecateValue = defecateValue + defecateIncrease
     player:getModData().defecateValue = tonumber(defecateValue)
 
@@ -838,16 +840,45 @@ end
 -- =====================================================
 
 function BathroomFunctions.RemoveBottomClothing(player)
+    local removedClothing = {}
+
     -- Get the list of excretion obstructive clothing body locations
     local excreteObstructive = BathroomFunctions.GetExcreteObstructiveClothing()
+
     for _, location in ipairs(excreteObstructive) do
         local clothingItem = player:getWornItem(location)
         if clothingItem then
+            -- Store the removed item in the array
+            table.insert(removedClothing, clothingItem)
+
             -- Remove the clothing with a timed action
             ISTimedActionQueue.add(ISUnequipAction:new(player, clothingItem, 50))
         end
     end
+
+    -- Store the removed items in the player's mod data for later re-equipping
+    player:getModData().removedClothing = removedClothing
 end
+function BathroomFunctions.ReequipBottomClothing(player)
+    local removedClothing = player:getModData().removedClothing
+
+    if removedClothing then
+        -- Re-equip each clothing item taken off before
+        for _, clothingItem in ipairs(removedClothing) do
+            if clothingItem then
+                -- Add the item back to the player with a timed action
+                ISTimedActionQueue.add(ISWearClothing:new(player, clothingItem))
+            end
+        end
+    end
+
+     BathroomFunctions.ResetRemovedClothing(player)
+end
+function BathroomFunctions.ResetRemovedClothing(player)
+    -- Clear the removed clothing list
+    player:getModData().removedClothing = nil
+end
+
 
 function BathroomFunctions.TriggerToiletUrinate(object, player)
     local player = getPlayer()

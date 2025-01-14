@@ -1,5 +1,11 @@
 -gotta make SelfUrinate SelfDefecate happen if using ground or toilet action ends too quickly
 
+==============
+[VERSION 0.50]
+==============
+
+-Added BathroomFunctions.ReequipBottomClothing and BathroomFunctions.ResetRemovedClothing
+-Implemented re-equiping clothes after taking them off during bathroom functions
 
 ==============
 [VERSION 0.40]
