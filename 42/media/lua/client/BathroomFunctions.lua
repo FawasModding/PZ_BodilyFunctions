@@ -336,47 +336,6 @@ function BathroomFunctions.HasClothingOn(player, ...)
     return false -- If none of the clothing items are found, return false
 end
 
-function BathroomFunctions.SetClothing(clothing)
-    local cleanName = nil
-
-    -- Check if the clothing name contains a parenthesis, for status modifier (like "(Peed)" or "(Pooped)")
-    if (string.find(clothing:getName(), "%(")) then
-        local startIndex = string.find(clothing:getName(), "%(")
-        -- Get base name of the clothing (without the status modifier in parentheses)
-        cleanName = string.sub(clothing:getName(), 0, startIndex - 2)
-    else
-        cleanName = clothing:getName()
-    end
-
-    -- Store the original clean name of the clothing in its mod data
-    clothing:getModData().originalName = cleanName
-
-    -- If the clothing is marked as "peed" (wet), modify the clothing's properties
-    if clothing:getModData().peed == true then
-        -- Update the name to include the "(Peed)" status
-        clothing:setName(cleanName .. " (Peed " .. clothing:getModData().peedSeverity .. "%)")
-        -- Set the wetness to maximum (500) to indicate the clothing is soaked
-        clothing:setWetness(500)
-        -- Set the dirtyness to maximum (100) to reflect the soiled condition
-        clothing:setDirtyness(100)
-    end
-
-    -- If the clothing is marked as "pooped" (dirty), modify the clothing's properties
-    if clothing:getModData().pooped == true then
-        -- Update the name to include the "(Pooped)" status
-        clothing:setName(cleanName .. " (Pooped " .. clothing:getModData().poopedSeverity .. "%)")
-        -- Set the dirtyness to maximum (100) to reflect the soiled condition
-        clothing:setDirtyness(100)
-        -- Reduce the player's run speed to simulate having poop in the clothing
-        clothing:setRunSpeedModifier(clothing:getRunSpeedModifier() - 0.2) -- slower movement, but may not be very noticeable
-    end
-
-    -- If both "peed" and "pooped" statuses are true, update the clothing name to reflect both conditions
-    if clothing:getModData().peed and clothing:getModData().pooped then
-        clothing:setName(cleanName .. " (Peed " .. clothing:getModData().peedSeverity .. "%" .. " & " .. "Pooped " .. clothing:getModData().poopedSeverity .. "%)")
-    end
-end
-
 --[[
 Use this to call function to to show the wearing urinated and defecated garments moodles. As well as affect the mood over time.
 ]]--
@@ -419,6 +378,7 @@ function BathroomFunctions.DirtyBottomsEffects()
     end
 end
 
+-- FOR CLOTHING SPECIFICALYY
 function BathroomFunctions.UpdateSoiledSeverity(clothing)
     local updatedPooped = false
     local updatedPeed = false
@@ -451,6 +411,72 @@ function BathroomFunctions.UpdateSoiledSeverity(clothing)
     --print("Updated PoopedSelfValue: " .. BathroomFunctions.GetPoopedSelfValue())
 
     return updatedPooped, updatedPeed
+end
+
+-- =====================================================
+--
+-- DIRTIED ITEMS FUNCTIONS
+--
+-- =====================================================
+
+-- FOR ITEMS IN GENERAL
+function BathroomFunctions.SetClothing(item)
+    local cleanName = nil
+
+    -- Check if the item name contains a parenthesis, for status modifier (like "(Peed)" or "(Pooped)")
+    if (string.find(item:getName(), "%(")) then
+        local startIndex = string.find(item:getName(), "%(")
+        -- Get base name of the item (without the status modifier in parentheses)
+        cleanName = string.sub(item:getName(), 0, startIndex - 2)
+    else
+        cleanName = item:getName()
+    end
+
+    -- Store the original clean name of the item in its mod data
+    item:getModData().originalName = cleanName
+
+
+    -- If the item is marked as "peed" (wet), modify the item's properties
+    if item:getModData().peed == true then
+
+        local peedSeverity = string.format("%.1f", item:getModData().peedSeverity)
+        -- Update the name to include the "(Peed)" status
+        item:setName(cleanName .. " (Peed " .. peedSeverity .. "%)")
+
+        -- Only apply clothing modifiers if clothing
+        if item:IsClothing() then
+            -- Set the wetness to maximum (500) to indicate the item is soaked
+            item:setWetness(500)
+            -- Set the dirtyness to maximum (100)
+            item:setDirtyness(100)
+        end
+
+    end
+
+    -- If the item is marked as "pooped" (dirty), modify the item's properties
+    if item:getModData().pooped == true then
+
+        local poopedSeverity = string.format("%.1f", item:getModData().poopedSeverity)
+        -- Update the name to include the "(Pooped)" status
+        item:setName(cleanName .. " (Pooped " .. poopedSeverity .. "%)")
+
+        -- Only apply clothing modifiers if clothing
+        if item:IsClothing() then
+            -- Set the dirtyness to maximum (100)
+            item:setDirtyness(100)
+            -- Reduce the player's run speed to simulate having poop in the clothing
+            item:setRunSpeedModifier(item:getRunSpeedModifier() - 0.2) -- slower movement, but may not be very noticeable
+        end
+        
+    end
+
+
+    -- If both "peed" and "pooped" statuses are true, update the item name to reflect both conditions
+    if item:getModData().peed and item:getModData().pooped then
+        local peedSeverity = string.format("%.1f", item:getModData().peedSeverity)
+        local poopedSeverity = string.format("%.1f", item:getModData().poopedSeverity)
+        item:setName(cleanName .. " (Peed " .. peedSeverity .. "%" .. " & " .. "Pooped " .. poopedSeverity .. "%)")
+    end
 end
 
 
@@ -832,6 +858,11 @@ function BathroomFunctions.CleaningRightClick(player, context, worldObjects)
     end
 end
 
+function BathroomFunctions.CheckForWiping(player, context, worldObjects)
+    -- get player, context, and worldobjects when checking
+    -- Check through all util Functions
+    -- if player has items like those, put them in the list under "In Toilet", or "On Ground"
+end
 
 -- =====================================================
 --

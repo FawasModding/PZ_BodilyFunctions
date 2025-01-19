@@ -136,3 +136,34 @@ function BathroomFunctions.GetExcreteObstructiveClothing()
     return bodyLocations
 end
 
+--[[
+Items (usually paper variants) that can be used to wipe either for peeing (females only) or for defecation.
+]]--
+
+-- These ones are things that have multiple per, like toilet paper
+function BathroomFunctions.GetDrainableWipeables()
+    local wipeItems =
+    {
+    "ToiletPaper"
+    }
+
+    return wipeItems
+end
+-- These ones are things that can only be used once. So paper, to poop you'll need 4 individual Paper items
+function BathroomFunctions.GetOneTimeWipeables()
+    local wipeItems =
+    {
+    "Tissue", "PaperNapkins2", "GraphPaper", "Paperwork", "SheetPaper2", "Receipt" 
+    }
+
+    return wipeItems
+end
+-- These ones are clothing. Sets the peed and pooped values to the ones that happen when you actually pee / poop, only soft / realistic materials can be included here.
+function BathroomFunctions.GetClothingWipeables()
+    local wipeItems = -- Bras and underwear bottoms are soft, therefore they'd be useable.
+    {
+    "UnderwearBottom", "UnderwearTop"
+    }
+
+    return wipeItems
+end

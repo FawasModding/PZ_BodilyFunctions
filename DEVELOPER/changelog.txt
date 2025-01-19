@@ -1,12 +1,24 @@
 -gotta make SelfUrinate SelfDefecate happen if using ground or toilet action ends too quickly
 
 ==============
-[VERSION 0.50]
+[VERSION 0.43]
+==============
+
+-Added rounding to the bladder / bowel values in the GUI, and the peed / pooped values on the soiled clothing.
+
+==============
+[VERSION 0.42]
 ==============
 
 -Added BathroomFunctions.ReequipBottomClothing and BathroomFunctions.ResetRemovedClothing
 -Implemented re-equiping clothes after taking them off during bathroom functions
 -Slightly modified Moodles_EN for consistency
+
+==============
+[VERSION 0.41]
+==============
+
+-Temporarily reversed thirst and hunger impacting bladder and bowel raise
 
 ==============
 [VERSION 0.40]
