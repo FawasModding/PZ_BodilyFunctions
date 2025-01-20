@@ -17,4 +17,11 @@ ContextMenu_EN = {
 	ContextMenu_Poop = "Poop"
 	ContextMenu_Peed = "Peed"
 	ContextMenu_Pooped = "Pooped"
+
+	ContextMenu_DontWipe = "Don't Wipe"
+	ContextMenu_WipeWith = "Wipe With: "
+
+	ContextMenu_tooltip_WipeDrainable = "Using a drainable item will decrease its uses by 1."
+	ContextMenu_tooltip_WipeOther = "Using a random paper item will give you a junk equivilant."
+	ContextMenu_tooltip_WipeClothing = "Using a clothing item will dirty it."
 }

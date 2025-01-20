@@ -521,27 +521,17 @@ function BathroomFunctions.BathroomRightClick(player, context, worldObjects)
 
     -------------------------------------------------------------------------------------------------------------------
 
-    -- Main menu option: "Bodily Functions"
-    local bathroomOption = context:addOption(getText("ContextMenu_BodilyFunctions"), worldObjects, nil)
-    bathroomOption.iconTexture = getTexture("media/textures/ContextMenuToilet.png");
+    -- Main menu option: "Urination"
+    local peeOption = context:addOption(getText("ContextMenu_Urinate"), worldObjects, nil)
+    local peeSubMenu = ISContextMenu:getNew(context)
+    context:addSubMenu(peeOption, peeSubMenu)
+    peeOption.iconTexture = getTexture("media/ui/Urination.png")
 
-    -- Submenu for "Bodily Functions"
-    local bathroomSubMenu = ISContextMenu:getNew(context)
-    context:addSubMenu(bathroomOption, bathroomSubMenu)
-
-    -------------------------------------------------------------------------------------------------------------------
-
-    -- Submenu for "Urination"
-    local peeOption = bathroomSubMenu:addOption(getText("ContextMenu_Urinate"), worldObjects, nil)
-    local peeSubMenu = ISContextMenu:getNew(bathroomSubMenu)
-    bathroomSubMenu:addSubMenu(peeOption, peeSubMenu)
-    peeOption.iconTexture = getTexture("media/ui/Urination.png");
-
-    -- Submenu for "Defecation"
-    local poopOption = bathroomSubMenu:addOption(getText("ContextMenu_Defecate"), worldObjects, nil)
-    local poopSubMenu = ISContextMenu:getNew(bathroomSubMenu)
-    bathroomSubMenu:addSubMenu(poopOption, poopSubMenu)
-    poopOption.iconTexture = getTexture("media/ui/Defecation.png");
+    -- Main menu option: "Defecation"
+    local poopOption = context:addOption(getText("ContextMenu_Defecate"), worldObjects, nil)
+    local poopSubMenu = ISContextMenu:getNew(context)
+    context:addSubMenu(poopOption, poopSubMenu)
+    poopOption.iconTexture = getTexture("media/ui/Defecation.png")
 
     -------------------------------------------------------------------------------------------------------------------
 
@@ -574,6 +564,39 @@ function BathroomFunctions.BathroomRightClick(player, context, worldObjects)
         groundPoopOption.notAvailable = true
     end
 
+    -- Wiping
+
+    -- Ensure options are enabled/disabled based on available wipeables
+    local wipeType, item = BathroomFunctions.CheckForWipeables(player)
+
+    local wipeTooltipSource = "ContextMenu_WipeWith"
+
+    -- Determine action based on the returned type
+    if wipeType == "usingDrainable" then
+        wipeTooltipSource = "ContextMenu_tooltip_WipeDrainable"
+
+    elseif wipeType == "usingOneTime" then
+        wipeTooltipSource = "ContextMenu_tooltip_WipeOther"
+
+    elseif wipeType == "usingClothing" then
+        wipeTooltipSource = "ContextMenu_tooltip_WipeClothing"
+    end
+
+    -- Create the "Wipe" submenu
+    local wipeSubMenu = ISContextMenu:getNew(poopSubMenu)
+    poopSubMenu:addSubMenu(groundPoopOption, wipeSubMenu)
+
+    -- Create the "Don't Wipe" option and add it to the submenu
+    local dontWipeOption = wipeSubMenu:addOption(getText("ContextMenu_DontWipe"), worldObjects, nil)
+    addTooltip(dontWipeOption, "Choose not to wipe after defecating.")
+
+    -- Add "Wipe With" option to the submenu
+    local doWipeOption = wipeSubMenu:addOption(getText("ContextMenu_WipeWith") .. item:getName(), worldObjects, nil)
+    addTooltip(doWipeOption, getText(wipeTooltipSource))
+
+
+    -------------------------------------------------------------------------------------------------------------------
+
     -- Using Self
 
     local canPeeSelfOption = modOptions:getOption("2")
@@ -602,6 +625,8 @@ function BathroomFunctions.BathroomRightClick(player, context, worldObjects)
         end
     
     end
+
+    -------------------------------------------------------------------------------------------------------------------
 
     -- Using Toilets
 
@@ -858,10 +883,57 @@ function BathroomFunctions.CleaningRightClick(player, context, worldObjects)
     end
 end
 
-function BathroomFunctions.CheckForWiping(player, context, worldObjects)
-    -- get player, context, and worldobjects when checking
-    -- Check through all util Functions
-    -- if player has items like those, put them in the list under "In Toilet", or "On Ground"
+function BathroomFunctions.CheckForWipeables(player)
+    local showWipeOption = false
+
+    -- Ensure constants or types are defined
+    local usingDrainable = "usingDrainable"
+    local usingOneTime = "usingOneTime"
+    local usingClothing = "usingClothing"
+
+    -- Check for drainable items (e.g., Toilet Paper)
+    local drainableItems = BathroomFunctions.GetDrainableWipeables()
+    for _, itemType in ipairs(drainableItems) do
+        local items = player:getInventory():getItems()  -- Get player's inventory items
+        for i = 0, items:size() - 1 do
+            local item = items:get(i)
+
+            if item:getType() == itemType and item:getCurrentUsesFloat() >= 1 then
+                showWipeOption = true
+                return usingDrainable, item  -- Return early with wipeType and item
+            end
+        end
+    end
+
+    -- Check for non-drainable wipeables (e.g., Tissue, Paper Napkins, etc.)
+    local nonDrainableItems = BathroomFunctions.GetOneTimeWipeables()
+    for _, itemType in ipairs(nonDrainableItems) do
+        local items = player:getInventory():getItems()  -- Get player's inventory items
+        for i = 0, items:size() - 1 do
+            local item = items:get(i)
+
+            if item:getType() == itemType then
+                showWipeOption = true
+                return usingOneTime, item  -- Return early with wipeType and item
+            end
+        end
+    end
+
+    -- Check for clothing wipeables (e.g., Bra, Underwear.)
+    local clothingWipeables = BathroomFunctions.GetClothingWipeables()
+    for _, bodyLocation in ipairs(clothingWipeables) do
+        local items = player:getInventory():getItems()  -- Get player's inventory items
+        for i = 0, items:size() - 1 do
+            local item = items:get(i)
+
+            if item:IsClothing() and item:getBodyLocation() == bodyLocation then
+                showWipeOption = true
+                return usingClothing, item  -- Return early with wipeType and item
+            end
+        end
+    end
+
+    return nil, nil  -- Explicitly return nil for both wipeType and item if no wipeable item is found
 end
 
 -- =====================================================
