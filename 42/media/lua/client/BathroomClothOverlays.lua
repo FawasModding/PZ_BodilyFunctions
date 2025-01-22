@@ -66,17 +66,15 @@ function BathroomClothOverlays.populateTestItems()
 
     }
 
-
-
     -- Insert the items into their respective arrays
-    for _, itemType in ipairs(suitTrousersMeshItems) do
-        table.insert(BathroomClothOverlays.suitTrousersMeshPeedItems, itemType)
+    for i = 1, #suitTrousersMeshItems do
+        table.insert(BathroomClothOverlays.suitTrousersMeshPeedItems, suitTrousersMeshItems[i])
     end
-    for _, itemType in ipairs(maleBoxersPantsItems) do
-        table.insert(BathroomClothOverlays.maleBoxersPantsItems, itemType)
+    for i = 1, #maleBoxersPantsItems do
+        table.insert(BathroomClothOverlays.maleBoxersPantsItems, maleBoxersPantsItems[i])
     end
-    for _, itemType in ipairs(femaleUnderpantsPeedItems) do
-        table.insert(BathroomClothOverlays.femaleUnderpantsPeedItems, itemType)
+    for i = 1, #femaleUnderpantsPeedItems do
+        table.insert(BathroomClothOverlays.femaleUnderpantsPeedItems, femaleUnderpantsPeedItems[i])
     end
 end
 

@@ -24,16 +24,7 @@ local function BathroomFunctionsConfig()
     options:addTitle("Moodles")
 
     config.showMoodles = options:addTickBox("4", getText("UI_BathroomFunctions_options_ShowMoodles"), true, getText("UI_BathroomFunctions_options_ShowMoodles_tooltip"))
-
-    config.moodleType = options:addComboBox("5", getText("UI_BathroomFunctions_options_MoodleType"), getText("UI_BathroomFunctions_options_MoodleType_tooltip"))
-    -- Create entries:
-    --- addItem(name, selected)
-    ---- whichever is set to "true" will be the initially selected box.
-    --- NOTE: calling getValue on the option will return the number of the entry. 
-    config.moodleType:addItem(getText("UI_BathroomFunctions_options_MoodleType_1"), true) -- getValue(): 1
-    config.moodleType:addItem(getText("UI_BathroomFunctions_options_MoodleType_2"), false) -- getValue(): 2
-
-    config.showSoiledMoodles = options:addTickBox("6", getText("UI_BathroomFunctions_options_ShowSoiledMoodles"), true, getText("UI_BathroomFunctions_options_ShowSoiledMoodles_tooltip"))
+    config.showSoiledMoodles = options:addTickBox("5", getText("UI_BathroomFunctions_options_ShowSoiledMoodles"), true, getText("UI_BathroomFunctions_options_ShowSoiledMoodles_tooltip"))
 
 end
 

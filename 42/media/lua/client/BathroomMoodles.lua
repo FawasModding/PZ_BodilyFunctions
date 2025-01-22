@@ -42,7 +42,8 @@ local function CheckBathroomMeters(player)
 
 			-- Apply moodle value based on sorted thresholds
 			local newDefecationMoodleValue = 0.5 -- Default value
-			for _, threshold in ipairs(sortedDefecationThresholds) do
+			for i = 1, #sortedDefecationThresholds do
+				local threshold = sortedDefecationThresholds[i]
 				if defecationPercent > threshold then
 					newDefecationMoodleValue = defecationThreshold[threshold]
 				end
@@ -78,7 +79,8 @@ local function CheckBathroomMeters(player)
 
 			-- Apply moodle value based on sorted thresholds
 			local newMoodleValue = 0.5 -- Default value
-			for _, threshold in ipairs(sortedUrinationThresholds) do
+			for i = 1, #sortedUrinationThresholds do
+				local threshold = sortedUrinationThresholds[i]
 				if urinationPercent > threshold then
 					newMoodleValue = urinationThreshold[threshold]
 				end
@@ -97,7 +99,7 @@ local function CheckBathroomMeters(player)
 		end
 	end
 
-	local showSoiledMoodles = modOptions:getOption("6")
+	local showSoiledMoodles = modOptions:getOption("5")
 	if(showSoiledMoodles:getValue(1)) then
 		if moodle3 then
 			local poopedSelfValue = BathroomFunctions.GetPoopedSelfValue()

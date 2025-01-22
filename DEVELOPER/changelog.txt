@@ -8,6 +8,9 @@
 -Removed "Bodily Functions" tab in the context menu for simplicity, might return at some point as a mod option
 -Added "https://steamcommunity.com/sharedfiles/filedetails/?id=3378285185&searchtext=starl" requirement
 -Added tooltips to peed / pooped clothing items, will remove text in the name next patch
+-Replaced many ipairs with for loops for optimization
+-Removed "Bladder / Bowel Moodle Type" mod option for now. Might come back eventually.
+-Renamed health menu tab from "Bathroom" to "Excretion"
 
 ==============
 [VERSION 0.42]

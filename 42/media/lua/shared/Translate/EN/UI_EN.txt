@@ -1,5 +1,5 @@
 UI_EN = {
-    UI_BodilyFunctions = "Bathroom",
+    UI_BodilyFunctions = "Excretion",
     UI_BodilyFunctionsPanel = "Bodily functions panel with all detailed values available.",
 
 

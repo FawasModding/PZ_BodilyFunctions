@@ -3,3 +3,4 @@
 # https://git-scm.com/docs/gitignore
 
 42/media/.vs/
+.vs/

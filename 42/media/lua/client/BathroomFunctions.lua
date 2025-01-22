@@ -491,8 +491,10 @@ end
 
 function BathroomFunctions.BathroomRightClick(player, context, worldObjects)
     local firstObject
-    for _, o in ipairs(worldObjects) do
-        if not firstObject then firstObject = o end
+    for i = 1, #worldObjects do
+        if not firstObject then
+            firstObject = worldObjects[i]
+        end
     end
 
     local player = getPlayer()
@@ -587,25 +589,26 @@ function BathroomFunctions.BathroomRightClick(player, context, worldObjects)
     local dontWipeOption = wipeSubMenu:addOption(getText("ContextMenu_DontWipe"), worldObjects, BathroomFunctions.TriggerGroundDefecate, player)
     addTooltip(dontWipeOption, "Choose not to wipe after defecating.")
 
--- Add "Wipe With" option to the submenu
-local doWipeOption
-if defecateValue >= (peeOnGroundRequirement / 100) * bowelsMaxValue then
-    if item then
-        -- Only add the wipe option if the threshold is met
-        doWipeOption = wipeSubMenu:addOption(getText("ContextMenu_WipeWith") .. item:getName(), worldObjects, BathroomFunctions.TriggerGroundDefecate, player)
-        addTooltip(doWipeOption, getText(wipeTooltipSource))
+    -- Add "Wipe With" option to the submenu
+    local doWipeOption
+    if defecateValue >= (peeOnGroundRequirement / 100) * bowelsMaxValue then
+        if item then
+            -- Only add the wipe option if the threshold is met
+            doWipeOption = wipeSubMenu:addOption(getText("ContextMenu_WipeWith") .. item:getName(), worldObjects, BathroomFunctions.TriggerGroundDefecate, player)
+            addTooltip(doWipeOption, getText(wipeTooltipSource))
+        end
     end
-end
 
--- Now, ensure the options are disabled if the defecation threshold is not met
-if defecateValue < (peeOnGroundRequirement / 100) * bowelsMaxValue then
-    groundPoopOption.notAvailable = true
-    dontWipeOption.notAvailable = true
+
+    -- Now, ensure the options are disabled if the defecation threshold is not met
+    if defecateValue < (peeOnGroundRequirement / 100) * bowelsMaxValue then
+        groundPoopOption.notAvailable = true
+        dontWipeOption.notAvailable = true
     
-    if doWipeOption then
-        doWipeOption.notAvailable = true  -- Disable the wipe option
+        if doWipeOption then
+            doWipeOption.notAvailable = true  -- Disable the wipe option
+        end
     end
-end
 
 
     -------------------------------------------------------------------------------------------------------------------
@@ -675,7 +678,8 @@ end
 
         -- Using urinal
         if not player:isFemale() then
-            for _, tile in ipairs(urinalTiles) do
+            for i = 1, #urinalTiles do
+                local tile = urinalTiles[i]
                 if object:getTextureName() == tile and object:getSquare():DistToProper(player:getSquare()) < 5 then
                     -- Pee option
                     local urinalPeeOption = peeSubMenu:addOption((getText("ContextMenu_Pee") .. " " .. getText("ContextMenu_UseUrinal")), object, BathroomFunctions.TriggerToiletUrinate, player)
@@ -691,8 +695,8 @@ end
                     addTooltip(urinalPoopOption, "Don't you fucking dare'.")
                     urinalPoopOption.notAvailable = true
 
-                    urinalPeeOption.iconTexture = getTexture("media/textures/ContextMenuToilet.png");
-                    urinalPoopOption.iconTexture = getTexture("media/textures/ContextMenuToilet.png");
+                    urinalPeeOption.iconTexture = getTexture("media/textures/ContextMenuToilet.png")
+                    urinalPoopOption.iconTexture = getTexture("media/textures/ContextMenuToilet.png")
 
                     break
                 end
@@ -700,13 +704,14 @@ end
         end
 
         -- Using outhouses
-        for _, tile in ipairs(outhouseTiles) do
+        for i = 1, #outhouseTiles do
+            local tile = outhouseTiles[i]
             if object:getTextureName() == tile and object:getSquare():DistToProper(player:getSquare()) < 5 then
                 local outhousePeeOption = peeSubMenu:addOption((getText("ContextMenu_Pee") .. " " .. getText("ContextMenu_UseOuthouse")), object, BathroomFunctions.TriggerToiletUrinate, player)
                 local outhousePoopOption = poopSubMenu:addOption((getText("ContextMenu_Poop") .. " " .. getText("ContextMenu_UseOuthouse")), object, BathroomFunctions.TriggerToiletDefecate, player)
-                
-                outhousePeeOption.iconTexture = getTexture("media/textures/ContextMenuToilet.png");
-                outhousePoopOption.iconTexture = getTexture("media/textures/ContextMenuToilet.png");
+        
+                outhousePeeOption.iconTexture = getTexture("media/textures/ContextMenuToilet.png")
+                outhousePoopOption.iconTexture = getTexture("media/textures/ContextMenuToilet.png")
 
                 addTooltip(outhousePeeOption, "Urinate in the outhouse. (Requires " .. peeInToiletRequirement .. "%)")
                 addTooltip(outhousePoopOption, "Defecate in the outhouse. (Requires " .. poopInToiletRequirement .. "%)")
@@ -784,9 +789,11 @@ function BathroomFunctions.WashingRightClick(player, context, worldObjects)
 	if hasSoiledItem then
 		local storeWater = nil
 		local firstObject = nil
-		for _, o in ipairs(worldObjects) do
-			if not firstObject then firstObject = o end
-		end
+        for i = 1, #worldObjects do
+            if not firstObject then
+                firstObject = worldObjects[i]
+            end
+        end
 
 		local square = firstObject:getSquare()
 		local worldObjects = square:getObjects()
@@ -1153,7 +1160,7 @@ local onFillItemTooltip = function(tooltip, layout, item)
     if item:getModData().peed == true then
         local peedSeverity = item:getModData().peedSeverity
         -- Format the severity value to 1 decimal place
-        local peedText = "Peed: " .. string.format("%.1f", peedSeverity)
+        local peedText = "Peed: " .. string.format("%.1f", peedSeverity) .. "%"
 
         local peedTooltip = LayoutItem.new()
         layout.items:add(peedTooltip)
@@ -1164,7 +1171,7 @@ local onFillItemTooltip = function(tooltip, layout, item)
     if item:getModData().pooped == true then
         local poopedSeverity = item:getModData().poopedSeverity
         -- Format the severity value to 1 decimal place
-        local poopedText = "Pooped: " .. string.format("%.1f", poopedSeverity)
+        local poopedText = "Pooped: " .. string.format("%.1f", poopedSeverity) .. "%"
 
         local poopedTooltip = LayoutItem.new()
         layout.items:add(poopedTooltip)
