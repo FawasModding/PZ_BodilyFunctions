@@ -6,7 +6,8 @@
 
 -Added rounding to the bladder / bowel values in the GUI, and the peed / pooped values on the soiled clothing.
 -Removed "Bodily Functions" tab in the context menu for simplicity, might return at some point as a mod option
--
+-Added "https://steamcommunity.com/sharedfiles/filedetails/?id=3378285185&searchtext=starl" requirement
+-Added tooltips to peed / pooped clothing items, will remove text in the name next patch
 
 ==============
 [VERSION 0.42]

@@ -2,4 +2,4 @@ name=Bathroom Functions DEV
 poster=poster.png
 id=bathroomfunctionsdev
 description=Realism in its harshest form.
-require=\MoodleFramework
+require=\StarlitLibrary,\MoodleFramework

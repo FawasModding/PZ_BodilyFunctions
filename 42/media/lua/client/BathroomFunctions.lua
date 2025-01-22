@@ -2,6 +2,8 @@ BathroomFunctions = {}
 BathroomFunctions.didFirstTimer = false
 FlySquares = {}
 
+local InventoryUI = require("Starlit/client/ui/InventoryUI")
+
 -- =====================================================
 --
 -- BATHROOM FUNCTIONALITY AND TIMERS
@@ -553,15 +555,12 @@ function BathroomFunctions.BathroomRightClick(player, context, worldObjects)
     addTooltip(groundPeeOption, "Urinate on the ground. (Requires " .. peeOnGroundRequirement .. "%)")
     groundPeeOption.iconTexture = getTexture("media/textures/ContextMenuGround.png");
 
-    local groundPoopOption = poopSubMenu:addOption((getText("ContextMenu_Poop") .. " " .. getText("ContextMenu_UseGround")), worldObjects, BathroomFunctions.TriggerGroundDefecate, player)
+    local groundPoopOption = poopSubMenu:addOption((getText("ContextMenu_Poop") .. " " .. getText("ContextMenu_UseGround")), worldObjects, nil)
     addTooltip(groundPoopOption, "Defecate on the ground. (Requires " .. poopOnGroundRequirement .. "%)")
     groundPoopOption.iconTexture = getTexture("media/textures/ContextMenuGround.png");
 
     if urinateValue < (peeOnGroundRequirement / 100) * bladderMaxValue then
         groundPeeOption.notAvailable = true
-    end
-    if defecateValue < (peeOnGroundRequirement / 100) * bowelsMaxValue then
-        groundPoopOption.notAvailable = true
     end
 
     -- Wiping
@@ -574,10 +573,8 @@ function BathroomFunctions.BathroomRightClick(player, context, worldObjects)
     -- Determine action based on the returned type
     if wipeType == "usingDrainable" then
         wipeTooltipSource = "ContextMenu_tooltip_WipeDrainable"
-
     elseif wipeType == "usingOneTime" then
         wipeTooltipSource = "ContextMenu_tooltip_WipeOther"
-
     elseif wipeType == "usingClothing" then
         wipeTooltipSource = "ContextMenu_tooltip_WipeClothing"
     end
@@ -587,12 +584,28 @@ function BathroomFunctions.BathroomRightClick(player, context, worldObjects)
     poopSubMenu:addSubMenu(groundPoopOption, wipeSubMenu)
 
     -- Create the "Don't Wipe" option and add it to the submenu
-    local dontWipeOption = wipeSubMenu:addOption(getText("ContextMenu_DontWipe"), worldObjects, nil)
+    local dontWipeOption = wipeSubMenu:addOption(getText("ContextMenu_DontWipe"), worldObjects, BathroomFunctions.TriggerGroundDefecate, player)
     addTooltip(dontWipeOption, "Choose not to wipe after defecating.")
 
-    -- Add "Wipe With" option to the submenu
-    local doWipeOption = wipeSubMenu:addOption(getText("ContextMenu_WipeWith") .. item:getName(), worldObjects, nil)
-    addTooltip(doWipeOption, getText(wipeTooltipSource))
+-- Add "Wipe With" option to the submenu
+local doWipeOption
+if defecateValue >= (peeOnGroundRequirement / 100) * bowelsMaxValue then
+    if item then
+        -- Only add the wipe option if the threshold is met
+        doWipeOption = wipeSubMenu:addOption(getText("ContextMenu_WipeWith") .. item:getName(), worldObjects, BathroomFunctions.TriggerGroundDefecate, player)
+        addTooltip(doWipeOption, getText(wipeTooltipSource))
+    end
+end
+
+-- Now, ensure the options are disabled if the defecation threshold is not met
+if defecateValue < (peeOnGroundRequirement / 100) * bowelsMaxValue then
+    groundPoopOption.notAvailable = true
+    dontWipeOption.notAvailable = true
+    
+    if doWipeOption then
+        doWipeOption.notAvailable = true  -- Disable the wipe option
+    end
+end
 
 
     -------------------------------------------------------------------------------------------------------------------
@@ -1135,7 +1148,29 @@ function ISGrabItemAction:transferItem(item)
     end
 end
 
+local onFillItemTooltip = function(tooltip, layout, item)
+    -- Check if the item has moddata with 'peed = true'
+    if item:getModData().peed == true then
+        local peedSeverity = item:getModData().peedSeverity
+        -- Format the severity value to 1 decimal place
+        local peedText = "Peed: " .. string.format("%.1f", peedSeverity)
 
+        local peedTooltip = LayoutItem.new()
+        layout.items:add(peedTooltip)
+        peedTooltip:setLabel(peedText, 0.6, 0.6, 0.33, 1)
+    end
+
+    -- Check if the item has moddata with 'pooped == true'
+    if item:getModData().pooped == true then
+        local poopedSeverity = item:getModData().poopedSeverity
+        -- Format the severity value to 1 decimal place
+        local poopedText = "Pooped: " .. string.format("%.1f", poopedSeverity)
+
+        local poopedTooltip = LayoutItem.new()
+        layout.items:add(poopedTooltip)
+        poopedTooltip:setLabel(poopedText, 0.49, 0.34, 0.24, 1)
+    end
+end
 
 
 -- =====================================================
@@ -1179,3 +1214,5 @@ Events.OnGameBoot.Add(BathroomFunctions.onGameBoot)
 Events.OnFillWorldObjectContextMenu.Add(BathroomFunctions.BathroomRightClick)
 Events.OnFillWorldObjectContextMenu.Add(BathroomFunctions.WashingRightClick)
 Events.OnFillWorldObjectContextMenu.Add(BathroomFunctions.CleaningRightClick)
+
+InventoryUI.onFillItemTooltip:addListener(onFillItemTooltip)

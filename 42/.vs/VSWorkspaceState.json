@@ -7,8 +7,7 @@
     "\\media\\lua\\client\\TimedActions",
     "\\media\\lua\\shared",
     "\\media\\lua\\shared\\Translate",
-    "\\media\\lua\\shared\\Translate\\EN",
-    "\\media\\ui\\Traits"
+    "\\media\\lua\\shared\\Translate\\EN"
   ],
   "SelectedNode": "\\media\\lua\\shared\\Translate\\EN\\Moodles_EN.txt",
   "PreviewInSolutionExplorer": false
