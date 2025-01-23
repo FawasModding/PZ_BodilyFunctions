@@ -246,10 +246,10 @@ function BathroomFunctions.UrinateBottoms()
             -- Update the clothing's condition after the accident
             BathroomFunctions.UpdateSoiledSeverity(clothing)
 
-            if SandboxVars.BathroomFunctions.ShowPeeStain == true then
+            --if SandboxVars.BathroomFunctions.ShowPeeStain == true then
                 BathroomClothOverlays.equipPeedOverlay(player, clothing)
                 print("Should have equipped pee overlay")
-            end
+            --end
         end
     end
 
@@ -438,27 +438,9 @@ end
 
 -- FOR ITEMS IN GENERAL
 function BathroomFunctions.SetClothing(item)
-    local cleanName = nil
-
-    -- Check if the item name contains a parenthesis, for status modifier (like "(Peed)" or "(Pooped)")
-    if (string.find(item:getName(), "%(")) then
-        local startIndex = string.find(item:getName(), "%(")
-        -- Get base name of the item (without the status modifier in parentheses)
-        cleanName = string.sub(item:getName(), 0, startIndex - 2)
-    else
-        cleanName = item:getName()
-    end
-
-    -- Store the original clean name of the item in its mod data
-    item:getModData().originalName = cleanName
-
 
     -- If the item is marked as "peed" (wet), modify the item's properties
     if item:getModData().peed == true then
-
-        local peedSeverity = string.format("%.1f", item:getModData().peedSeverity)
-        -- Update the name to include the "(Peed)" status
-        item:setName(cleanName .. " (Peed " .. peedSeverity .. "%)")
 
         -- Only apply clothing modifiers if clothing
         if item:IsClothing() then
@@ -473,10 +455,6 @@ function BathroomFunctions.SetClothing(item)
     -- If the item is marked as "pooped" (dirty), modify the item's properties
     if item:getModData().pooped == true then
 
-        local poopedSeverity = string.format("%.1f", item:getModData().poopedSeverity)
-        -- Update the name to include the "(Pooped)" status
-        item:setName(cleanName .. " (Pooped " .. poopedSeverity .. "%)")
-
         -- Only apply clothing modifiers if clothing
         if item:IsClothing() then
             -- Set the dirtyness to maximum (100)
@@ -485,14 +463,6 @@ function BathroomFunctions.SetClothing(item)
             item:setRunSpeedModifier(item:getRunSpeedModifier() - 0.2) -- slower movement, but may not be very noticeable
         end
         
-    end
-
-
-    -- If both "peed" and "pooped" statuses are true, update the item name to reflect both conditions
-    if item:getModData().peed and item:getModData().pooped then
-        local peedSeverity = string.format("%.1f", item:getModData().peedSeverity)
-        local poopedSeverity = string.format("%.1f", item:getModData().poopedSeverity)
-        item:setName(cleanName .. " (Peed " .. peedSeverity .. "%" .. " & " .. "Pooped " .. poopedSeverity .. "%)")
     end
 end
 
