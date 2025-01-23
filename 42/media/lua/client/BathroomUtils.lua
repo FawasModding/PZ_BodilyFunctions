@@ -1,6 +1,6 @@
 -- =====================================================
 --
--- BATHROOM VALUE GETTER / SETTER FUNCTIONS
+-- BODILY VALUE GETTER / SETTER FUNCTIONS
 --
 -- =====================================================
 
@@ -64,6 +64,12 @@ function BathroomFunctions.SetDefecateValue(newDefecateValue)
     end
 end
 
+-- =====================================================
+--
+-- PEED / POOPED GETTER / SETTER
+--
+-- =====================================================
+
 --[[
 Function to retrieve the player's current peed self value
 If the value isn't set or isn't a valid number, it defaults to 0.0.
@@ -116,6 +122,12 @@ function BathroomFunctions.SetPoopedSelfValue(newPoopedSelfValue)
     end
 end
 
+-- =====================================================
+--
+-- GET CLOTHING LISTS
+--
+-- =====================================================
+
 --[[
 Function defining all of the soilable clothing.
 ]]--
@@ -136,34 +148,70 @@ function BathroomFunctions.GetExcreteObstructiveClothing()
     return bodyLocations
 end
 
+-- =====================================================
+--
+-- GET WIPING LISTS
+--
+-- =====================================================
+
 --[[
 Items (usually paper variants) that can be used to wipe either for peeing (females only) or for defecation.
 ]]--
 
 -- These ones are things that have multiple per, like toilet paper
 function BathroomFunctions.GetDrainableWipeables()
-    local wipeItems =
-    {
-    "ToiletPaper"
-    }
+    local wipeItems = {
+    "ToiletPaper" }
 
     return wipeItems
 end
 -- These ones are things that can only be used once. So paper, to poop you'll need 4 individual Paper items
 function BathroomFunctions.GetOneTimeWipeables()
-    local wipeItems =
-    {
-    "Tissue", "PaperNapkins2", "GraphPaper", "Paperwork", "SheetPaper2", "Receipt" 
-    }
+    local wipeItems = {
+    "Tissue", "PaperNapkins2", "GraphPaper", "Paperwork",
+    "SheetPaper2", "Receipt" }
 
     return wipeItems
 end
 -- These ones are clothing. Sets the peed and pooped values to the ones that happen when you actually pee / poop, only soft / realistic materials can be included here.
 function BathroomFunctions.GetClothingWipeables()
-    local wipeItems = -- Bras and underwear bottoms are soft, therefore they'd be useable.
-    {
-    "UnderwearBottom", "UnderwearTop"
-    }
+    local wipeItems = { -- Bras and underwear bottoms are soft, therefore they'd be useable.
+    "UnderwearBottom", "UnderwearTop" }
 
     return wipeItems
+end
+
+-- =====================================================
+--
+-- GET TOILET / ALTERNATIVES LISTS
+--
+-- =====================================================
+
+function BathroomFunctions.GetUrinalTiles()
+    local urinalTiles = {
+    "fixtures_bathroom_01_8", "fixtures_bathroom_01_9", "fixtures_bathroom_01_10", "fixtures_bathroom_01_11" }
+
+    return urinalTiles
+end
+
+function BathroomFunctions.GetOuthouseTiles()
+    local outhouseTiles = {
+    "fixtures_bathroom_02_24", "fixtures_bathroom_02_25", "fixtures_bathroom_02_26", "fixtures_bathroom_02_27",
+    "fixtures_bathroom_02_4", "fixtures_bathroom_02_5", "fixtures_bathroom_02_14", "fixtures_bathroom_02_15" }
+
+    return outhouseTiles
+end
+
+function BathroomFunctions.GetShowerTiles()
+    local showerTiles = {
+    "nothingyet" }
+
+    return showerTiles
+end
+
+function BathroomFunctions.GetSinkTiles()
+    local sinkTiles = {
+    "nothingyet" }
+
+    return sinkTiles
 end

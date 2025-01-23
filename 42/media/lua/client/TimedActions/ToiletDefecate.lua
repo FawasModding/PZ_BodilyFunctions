@@ -16,18 +16,16 @@ function ToiletDefecate:update()
     local newValue = self.initialUrinateValue - (delta * self.initialUrinateValue)
     self.character:getModData().urinateValue = math.max(newValue, 0) -- Ensure it doesn't go below 0
 
-	if self.usingToilet then
-		local props = self.toiletObject:getProperties()
+	local props = self.toiletObject:getProperties()
 
-		if (props:Val("Facing") == "N") then
-			self.character:setDir(IsoDirections.N)
-		elseif (props:Val("Facing") == "E") then
-			self.character:setDir(IsoDirections.E)
-		elseif (props:Val("Facing") == "S") then
-			self.character:setDir(IsoDirections.S)
-		elseif (props:Val("Facing") == "W") then
-			self.character:setDir(IsoDirections.W)
-		end
+	if (props:Val("Facing") == "N") then
+		self.character:setDir(IsoDirections.N)
+	elseif (props:Val("Facing") == "E") then
+		self.character:setDir(IsoDirections.E)
+	elseif (props:Val("Facing") == "S") then
+		self.character:setDir(IsoDirections.S)
+	elseif (props:Val("Facing") == "W") then
+		self.character:setDir(IsoDirections.W)
 	end
 end
 

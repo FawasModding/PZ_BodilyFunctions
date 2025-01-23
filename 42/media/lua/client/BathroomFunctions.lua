@@ -516,8 +516,8 @@ function BathroomFunctions.BathroomRightClick(player, context, worldObjects)
     local worldObjects = square:getObjects()
     local toiletOptionAdded = false
 
-    local urinalTiles = {"fixtures_bathroom_01_8", "fixtures_bathroom_01_9", "fixtures_bathroom_01_10", "fixtures_bathroom_01_11"}
-    local outhouseTiles = {"fixtures_bathroom_02_24", "fixtures_bathroom_02_25", "fixtures_bathroom_02_26", "fixtures_bathroom_02_27", "fixtures_bathroom_02_4", "fixtures_bathroom_02_5", "fixtures_bathroom_02_14", "fixtures_bathroom_02_15"}
+    local urinalTiles = BathroomFunctions.GetUrinalTiles()
+    local outhouseTiles = BathroomFunctions.GetOuthouseTiles()
 
     local urinateValue = BathroomFunctions.GetUrinateValue()
     local defecateValue = BathroomFunctions.GetDefecateValue()
@@ -614,7 +614,7 @@ function BathroomFunctions.BathroomRightClick(player, context, worldObjects)
     end
 
 
-    -- Now, ensure the options are disabled if the defecation threshold is not met
+    -- Ensure the options are disabled if the defecation threshold is not met
     if defecateValue < (peeOnGroundRequirement / 100) * bowelsMaxValue then
         groundPoopOption.notAvailable = true
         dontWipeOption.notAvailable = true

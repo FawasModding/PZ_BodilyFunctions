@@ -13,6 +13,7 @@
 -Renamed health menu tab from "Bathroom" to "Excretion"
 -MASSIVE optimization for peed clothing textures. Therefore also removed the "(Testing)" text for the "(Testing) Show Wet Spot" sandbox option.
 -Added "'Say' Status" mod option that lets you choose if you want text displaying your status above your head.
+-Fixed "Improper Toilet Sitting" problem. Now rotates to face the same way the toilet does.
 
 ==============
 [VERSION 0.42]
