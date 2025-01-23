@@ -1,7 +1,7 @@
 -gotta make SelfUrinate SelfDefecate happen if using ground or toilet action ends too quickly
 
 ==============
-[VERSION 0.43]
+[VERSION 0.5]
 ==============
 
 -Added rounding to the bladder / bowel values in the GUI, and the peed / pooped values on the soiled clothing.
@@ -11,6 +11,7 @@
 -Replaced many ipairs with for loops for optimization
 -Removed "Bladder / Bowel Moodle Type" mod option for now. Might come back eventually.
 -Renamed health menu tab from "Bathroom" to "Excretion"
+-MASSIVE optimization for peed clothing textures. Therefore also removed the "(Testing)" text for the "(Testing) Show Wet Spot" sandbox option.
 
 ==============
 [VERSION 0.42]

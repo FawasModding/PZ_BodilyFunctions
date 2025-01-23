@@ -4,7 +4,7 @@ Sandbox_EN =
 	Sandbox_Bathroom = "Bathroom",
 	
 	Sandbox_BathroomFunctions_RequireWipe = "Require Wiping*",
-	Sandbox_BathroomFunctions_RequireWipe_tooltip = "Enable for consequences when pulling up your pants without wiping.",
+	Sandbox_BathroomFunctions_RequireWipe_tooltip = "Enable for the wiping mechanic to exist.",
 
 	Sandbox_BathroomFunctions_RequireOutfitUnequip = "Require Full-Body Unequip*",
 	Sandbox_BathroomFunctions_RequireOutfitUnequip_tooltip = "Enable for consequences when using the bathroom without unequipping full-body outfits (ex. Spiffo Suit).",
@@ -109,8 +109,8 @@ Sandbox_EN =
 	Sandbox_BathroomFunctions_CreatePeeObject = "Create Urine Objects*",
 	Sandbox_BathroomFunctions_CreatePeeObject_tooltip = "Enables urine objects when peeing on the ground or yourself.",
 
-	Sandbox_BathroomFunctions_VisiblePeeStain = "(Testing) Show Wet Spot",
-	Sandbox_BathroomFunctions_VisiblePeeStain_tooltip = "Whether or not to show a urine stain on wet bottoms. (Warning: May be unoptimized.)",
+	Sandbox_BathroomFunctions_VisiblePeeStain = "Show Wet Spot",
+	Sandbox_BathroomFunctions_VisiblePeeStain_tooltip = "Whether or not to show a urine stain on wet bottoms.",
 
 	Sandbox_BathroomFunctions_PEESELFHeader = "<=== INVOLUNTARY URINATION ===>",
 	Sandbox_BathroomFunctions_PEESELFHeader_tooltip = "Options for self urination.",
