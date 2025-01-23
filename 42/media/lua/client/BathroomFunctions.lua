@@ -247,7 +247,8 @@ function BathroomFunctions.UrinateBottoms()
             BathroomFunctions.UpdateSoiledSeverity(clothing)
 
             if SandboxVars.BathroomFunctions.ShowPeeStain == true then
-                BathroomClothOverlays.equipAllPeedOverlays(player)
+                BathroomClothOverlays.equipPeedOverlay(player, clothing)
+                print("Should have equipped pee overlay")
             end
         end
     end
