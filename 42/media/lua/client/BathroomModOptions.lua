@@ -6,12 +6,13 @@ local config = {
     showMoodles  = nil,
     moodleType  = nil,
     showSoiledMoodles = nil,
+    playerSayStatus = nil,
 }
 
 local function BathroomFunctionsConfig()
 
     -- ID, Display name
-    local options = PZAPI.ModOptions:create("BathroomFunctions", "Bathroom Functions")
+    local options = PZAPI.ModOptions:create("BathroomFunctions", "Bodily Functions")
 
     options:addTitle("Context Menu")
 
@@ -25,6 +26,8 @@ local function BathroomFunctionsConfig()
 
     config.showMoodles = options:addTickBox("4", getText("UI_BathroomFunctions_options_ShowMoodles"), true, getText("UI_BathroomFunctions_options_ShowMoodles_tooltip"))
     config.showSoiledMoodles = options:addTickBox("5", getText("UI_BathroomFunctions_options_ShowSoiledMoodles"), true, getText("UI_BathroomFunctions_options_ShowSoiledMoodles_tooltip"))
+
+    config.playerSayStatus = options:addTickBox("6", getText("UI_BathroomFunctions_options_PlayerSayStatus"), false, getText("UI_BathroomFunctions_options_PlayerSayStatus_tooltip"))
 
 end
 

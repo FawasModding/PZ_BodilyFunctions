@@ -23,4 +23,7 @@ UI_EN = {
     UI_BathroomFunctions_options_ShowSoiledMoodles = "Show Peed / Pooped Self Moodles",
     UI_BathroomFunctions_options_ShowSoiledMoodles_tooltip = "Whether to show peed and pooped self moodles.",
 
+    UI_BathroomFunctions_options_PlayerSayStatus = "'Say' Status",
+    UI_BathroomFunctions_options_PlayerSayStatus_tooltip = "Whether to announce player status above their head (ex. 'I've peed myself.').",
+
 }

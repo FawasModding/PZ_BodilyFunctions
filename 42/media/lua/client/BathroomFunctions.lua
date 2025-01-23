@@ -114,6 +114,8 @@ function BathroomFunctions.HandleUrgencyHiccup()
     local bladderMaxValue = SandboxVars.BathroomFunctions.BladderMaxValue or 500
     local bowelsMaxValue = SandboxVars.BathroomFunctions.BowelsMaxValue or 800
 
+    local modOptions = PZAPI.ModOptions:getOptions("BathroomFunctions")
+
     -- Base Hiccup Chance (until bladder/bowels are above 80% full)
     local hiccupChance = 0 -- Base 0% chance
 
@@ -152,7 +154,11 @@ function BathroomFunctions.HandleUrgencyHiccup()
         if hiccupType then
             -- Trigger Hiccup and inform the type
             print("Urgency Hiccup Occurred! Hiccup Type: " .. hiccupType)
-            player:Say("Oh no, I can't hold it!")
+
+            local playerSayStatus = modOptions:getOption("6")
+	        if(playerSayStatus:getValue(1)) then
+                player:Say(getText("IGUI_announce_UrgeHiccup"))
+            end
             
             -- This is where other stuff happens when the hiccup is happening
             
@@ -204,6 +210,7 @@ end
 -- Function to apply effects when the player has urinated in their clothing
 function BathroomFunctions.UrinateBottoms()
     local player = getPlayer()
+    local modOptions = PZAPI.ModOptions:getOptions("BathroomFunctions")
 
     local clothing = nil
     local bodyLocations = BathroomFunctions.GetSoilableClothing()
@@ -258,12 +265,16 @@ function BathroomFunctions.UrinateBottoms()
     player:getBodyDamage():setUnhappynessLevel(player:getBodyDamage():getUnhappynessLevel() + 5)
 
     -- The player says they have urinated themselves
-    player:Say("I've pissed myself")
+    local playerSayStatus = modOptions:getOption("6")
+	if(playerSayStatus:getValue(1)) then
+        player:Say(getText("IGUI_announce_IPeedMyself"))
+    end
 end
 
 -- Function to apply effects when the player has defecated in their clothing
 function BathroomFunctions.DefecateBottoms()
     local player = getPlayer()
+    local modOptions = PZAPI.ModOptions:getOptions("BathroomFunctions")
 
     local clothing = nil
     local bodyLocations = BathroomFunctions.GetSoilableClothing()
@@ -319,7 +330,10 @@ function BathroomFunctions.DefecateBottoms()
     player:getVisual():setDirt(BloodBodyPartType.UpperLeg_R, ZombRand(20, 50))
 
     -- The player says they have defecated themselves
-    player:Say("I've shit myself")
+    local playerSayStatus = modOptions:getOption("6")
+	if(playerSayStatus:getValue(1)) then
+        player:Say(getText("IGUI_announce_IPoopedMyself"))
+    end
 end
 
 
@@ -1148,8 +1162,13 @@ ISGrabItemAction.o_transferItem = ISGrabItemAction.transferItem
 function ISGrabItemAction:transferItem(item)
     local itemObject = item:getItem()
     if itemObject:getType() == "Urine_Hydrated_0" then
-        self.character:Say("I'll need to clean this up.")
-        print("Blocked picking up Urine_Hydrated_0!")
+        local modOptions = PZAPI.ModOptions:getOptions("BathroomFunctions")
+
+        local playerSayStatus = modOptions:getOption("6")
+	    if(playerSayStatus:getValue(1)) then
+            self.character:Say(getText("IGUI_announce_CantPickUpPee"))
+        end
+        --print("Blocked picking up Urine_Hydrated_0!")
     else
         self:o_transferItem(item)
     end
