@@ -12,32 +12,33 @@ function ToiletUrinate:update()
 
 	local props = self.toiletObject:getProperties()
 
-	-- Set facing direction based on "Facing" property
-	if (props:Val("Facing") == "N") then
-		self.character:setDir(IsoDirections.N)
-	elseif (props:Val("Facing") == "E") then
-		self.character:setDir(IsoDirections.E)
-	elseif (props:Val("Facing") == "S") then
-		self.character:setDir(IsoDirections.S)
-	elseif (props:Val("Facing") == "W") then
-		self.character:setDir(IsoDirections.W)
-	end
+    local facing = props:Val("Facing")
 
-	-- If the character is male, face the opposite direction
-	if not self.isFemale then
-		-- Flip the direction to the opposite
-		local currentDir = self.character:getDir()
-
-		if currentDir == IsoDirections.N then
-			self.character:setDir(IsoDirections.S)
-		elseif currentDir == IsoDirections.E then
-			self.character:setDir(IsoDirections.W)
-		elseif currentDir == IsoDirections.S then
-			self.character:setDir(IsoDirections.N)
-		elseif currentDir == IsoDirections.W then
-			self.character:setDir(IsoDirections.E)
-		end
-	end
+    if facing == "N" then
+        if self.character:isFemale() == true then
+            self.character:setDir(IsoDirections.N)
+        else
+            self.character:setDir(IsoDirections.S)
+        end
+    elseif facing == "E" then
+        if self.character:isFemale() == true then
+            self.character:setDir(IsoDirections.E)
+        else
+            self.character:setDir(IsoDirections.W)
+        end
+    elseif facing == "S" then
+        if self.character:isFemale() == true then
+            self.character:setDir(IsoDirections.S)
+        else
+            self.character:setDir(IsoDirections.N)
+        end
+    elseif facing == "W" then
+        if self.character:isFemale() == true then
+            self.character:setDir(IsoDirections.W)
+        else
+            self.character:setDir(IsoDirections.E)
+        end
+    end
 
 end
 
