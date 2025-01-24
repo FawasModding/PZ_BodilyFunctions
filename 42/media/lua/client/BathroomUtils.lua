@@ -187,6 +187,14 @@ end
 --
 -- =====================================================
 
+function BathroomFunctions.GetToiletTiles()
+    local toiletTiles = {
+    "fixtures_bathroom_01_0", "fixtures_bathroom_01_1", "fixtures_bathroom_01_2", "fixtures_bathroom_01_3", 
+    "fixtures_bathroom_01_4", "fixtures_bathroom_01_5", "fixtures_bathroom_01_6", "fixtures_bathroom_01_7"}
+
+    return toiletTiles
+end
+
 function BathroomFunctions.GetUrinalTiles()
     local urinalTiles = {
     "fixtures_bathroom_01_8", "fixtures_bathroom_01_9", "fixtures_bathroom_01_10", "fixtures_bathroom_01_11" }
@@ -204,14 +212,9 @@ end
 
 function BathroomFunctions.GetShowerTiles()
     local showerTiles = {
-    "nothingyet" }
+    "fixtures_bathroom_01_24", "fixtures_bathroom_01_25", "fixtures_bathroom_01_26", "fixtures_bathroom_01_27",
+    "fixtures_bathroom_01_32", "fixtures_bathroom_01_33", "fixtures_bathroom_01_52", "fixtures_bathroom_01_53",
+    "fixtures_bathroom_01_54", "fixtures_bathroom_01_55"}
 
     return showerTiles
-end
-
-function BathroomFunctions.GetSinkTiles()
-    local sinkTiles = {
-    "nothingyet" }
-
-    return sinkTiles
 end

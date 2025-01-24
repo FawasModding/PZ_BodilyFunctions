@@ -14,6 +14,9 @@
 -MASSIVE optimization for peed clothing textures. Therefore also removed the "(Testing)" text for the "(Testing) Show Wet Spot" sandbox option.
 -Added "'Say' Status" mod option that lets you choose if you want text displaying your status above your head.
 -Fixed "Improper Toilet Sitting" problem. Now rotates to face the right direction when using toilets.
+-Created "Wiped" variants of some items that replace wipe-able items.
+-Added "Pee In Sink" and "Pee In Shower" options.
+-Fixed the double toilet context menu option bug.
 
 ==============
 [VERSION 0.42]

@@ -487,8 +487,10 @@ function BathroomFunctions.BathroomRightClick(player, context, worldObjects)
     local worldObjects = square:getObjects()
     local toiletOptionAdded = false
 
+    local toiletTiles = BathroomFunctions.GetToiletTiles()
     local urinalTiles = BathroomFunctions.GetUrinalTiles()
     local outhouseTiles = BathroomFunctions.GetOuthouseTiles()
+    local showerTiles = BathroomFunctions.GetShowerTiles()
 
     local urinateValue = BathroomFunctions.GetUrinateValue()
     local defecateValue = BathroomFunctions.GetDefecateValue()
@@ -636,28 +638,31 @@ function BathroomFunctions.BathroomRightClick(player, context, worldObjects)
 
         -- Using toilet
         --if object:getTextureName() and luautils.stringStarts(object:getTextureName(), "fixtures_bathroom_01") and object:hasWater() and object:getSquare():DistToProper(player:getSquare()) < 1 then
-        if object:getTextureName() and luautils.stringStarts(object:getTextureName(), "fixtures_bathroom_01") and object:getSquare():DistToProper(player:getSquare()) < 5 then
-            local toiletPeeOption = peeSubMenu:addOption((getText("ContextMenu_Pee") .. " " .. getText("ContextMenu_UseToilet")), object, BathroomFunctions.TriggerToiletUrinate, player)
-            local toiletPoopOption = poopSubMenu:addOption((getText("ContextMenu_Poop") .. " " .. getText("ContextMenu_UseToilet")), object, BathroomFunctions.TriggerToiletDefecate, player)
+        for j = 1, #toiletTiles do
+            local tile = toiletTiles[j]
+            if object:getTextureName() == tile and object:getSquare():DistToProper(player:getSquare()) < 5 then
+                local toiletPeeOption = peeSubMenu:addOption((getText("ContextMenu_Pee") .. " " .. getText("ContextMenu_UseToilet")), object, BathroomFunctions.TriggerToiletUrinate, player)
+                local toiletPoopOption = poopSubMenu:addOption((getText("ContextMenu_Poop") .. " " .. getText("ContextMenu_UseToilet")), object, BathroomFunctions.TriggerToiletDefecate, player)
 
-            --if object:getWaterAmount() < 10.0 then
-            --    toiletPoopOption.notAvailable = true
-            --end
+                --if object:getWaterAmount() < 10.0 then
+                --    toiletPoopOption.notAvailable = true
+                --end
 
-            --addTooltip(toiletPeeOption, "Urinate in the toilet. (Requires " .. peeInToiletRequirement .. "% and sufficient water)")
-            --addTooltip(toiletPoopOption, "Defecate in the toilet. (Requires " .. poopInToiletRequirement .. "% and sufficient water)")
-            addTooltip(toiletPeeOption, "Urinate in the toilet. (Requires " .. peeInToiletRequirement .. "%")
-            addTooltip(toiletPoopOption, "Defecate in the toilet. (Requires " .. poopInToiletRequirement .. "%")
-            toiletOptionAdded = true
+                --addTooltip(toiletPeeOption, "Urinate in the toilet. (Requires " .. peeInToiletRequirement .. "% and sufficient water)")
+                --addTooltip(toiletPoopOption, "Defecate in the toilet. (Requires " .. poopInToiletRequirement .. "% and sufficient water)")
+                addTooltip(toiletPeeOption, "Urinate in the toilet. (Requires " .. peeInToiletRequirement .. "%")
+                addTooltip(toiletPoopOption, "Defecate in the toilet. (Requires " .. poopInToiletRequirement .. "%")
+                toiletOptionAdded = true
 
-            toiletPeeOption.iconTexture = getTexture("media/textures/ContextMenuToilet.png");
-            toiletPoopOption.iconTexture = getTexture("media/textures/ContextMenuToilet.png");
+                toiletPeeOption.iconTexture = getTexture("media/textures/ContextMenuToilet.png");
+                toiletPoopOption.iconTexture = getTexture("media/textures/ContextMenuToilet.png");
 
-            if urinateValue < (peeInToiletRequirement / 100) * bladderMaxValue then
-                toiletPeeOption.notAvailable = true
-            end
-            if defecateValue < (poopInToiletRequirement / 100) * bowelsMaxValue then
-                toiletPoopOption.notAvailable = true
+                if urinateValue < (peeInToiletRequirement / 100) * bladderMaxValue then
+                    toiletPeeOption.notAvailable = true
+                end
+                if defecateValue < (poopInToiletRequirement / 100) * bowelsMaxValue then
+                    toiletPoopOption.notAvailable = true
+                end
             end
         end
 
@@ -707,6 +712,39 @@ function BathroomFunctions.BathroomRightClick(player, context, worldObjects)
                 end
                 if defecateValue < (poopInToiletRequirement / 100) * bowelsMaxValue then
                     outhousePoopOption.notAvailable = true
+                end
+
+                break
+            end
+        end
+
+        -- Using sink
+        if object:getTextureName() and luautils.stringStarts(object:getTextureName(), "fixtures_sinks_01") and object:getSquare():DistToProper(player:getSquare()) < 5 then
+            local sinkPeeOption = peeSubMenu:addOption((getText("ContextMenu_Pee") .. " " .. getText("ContextMenu_UseSink")), object, BathroomFunctions.TriggerToiletUrinate, player)
+
+            addTooltip(sinkPeeOption, "Urinate in the sink. (Requires " .. peeInToiletRequirement .. "%")
+            toiletOptionAdded = true
+
+            sinkPeeOption.iconTexture = getTexture("media/textures/ContextMenuSink.png");
+
+            if urinateValue < (peeInToiletRequirement / 100) * bladderMaxValue then
+                sinkPeeOption.notAvailable = true
+            end
+        end
+
+        -- Using showers / baths
+        for i = 1, #showerTiles do
+            local tile = showerTiles[i]
+            if object:getTextureName() == tile and object:getSquare():DistToProper(player:getSquare()) < 5 then
+                local showerPeeOption = peeSubMenu:addOption((getText("ContextMenu_Pee") .. " " .. getText("ContextMenu_UseShower")), object, BathroomFunctions.TriggerToiletUrinate, player)
+        
+                showerPeeOption.iconTexture = getTexture("media/textures/ContextMenuShower.png")
+
+                addTooltip(showerPeeOption, "Urinate in the shower / bathtub. (Requires " .. peeInToiletRequirement .. "%)")
+                toiletOptionAdded = true
+
+                if urinateValue < (peeInToiletRequirement / 100) * bladderMaxValue then
+                    showerPeeOption.notAvailable = true
                 end
 
                 break
