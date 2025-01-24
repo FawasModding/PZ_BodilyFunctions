@@ -33,6 +33,11 @@
 		<path>media/clothing/clothingItems/Trousers_Short_Peed.xml</path>
 		<guid>692d84d0-47bb-4cfd-a71e-e288adc9dee4</guid>
 	</files>
+
+	<files>
+		<path>media/clothing/clothingItems/PulledDown_Trousers.xml</path>
+		<guid>f9c770d7-ef9b-46b7-892b-9dc2f682f8c4</guid>
+	</files>
     
 
 </fileGuidTable>
