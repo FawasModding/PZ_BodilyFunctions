@@ -3,15 +3,16 @@
     "",
     "\\42",
     "\\42\\media",
-    "\\42\\media\\AnimSets",
     "\\42\\media\\AnimSets\\player",
-    "\\42\\media\\AnimSets\\player\\actions",
     "\\42\\media\\lua",
-    "\\media",
-    "\\media\\AnimSets",
-    "\\media\\AnimSets\\player",
-    "\\media\\AnimSets\\player\\actions"
+    "\\42\\media\\lua\\client",
+    "\\42\\media\\lua\\client\\TimedActions",
+    "\\42\\media\\lua\\shared",
+    "\\42\\media\\lua\\shared\\Translate",
+    "\\42\\media\\lua\\shared\\Translate\\EN",
+    "\\42\\media\\scripts",
+    "\\42\\media\\sound"
   ],
-  "SelectedNode": "\\42\\media\\lua\\client\\TimedActions\\GroundDefecate.lua",
+  "SelectedNode": "\\42\\media\\lua\\client\\BathroomClothOverlays.lua",
   "PreviewInSolutionExplorer": false
 }

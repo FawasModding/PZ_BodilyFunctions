@@ -553,7 +553,7 @@ function BathroomFunctions.BathroomRightClick(player, context, worldObjects)
     -- Wiping
 
     -- Ensure options are enabled/disabled based on available wipeables
-    local wipeType, item = BathroomFunctions.CheckForWipeables(player)
+    local wipeType, wipeItem = BathroomFunctions.CheckForWipeables(player)
 
     local wipeTooltipSource = "ContextMenu_WipeWith"
 
@@ -571,15 +571,15 @@ function BathroomFunctions.BathroomRightClick(player, context, worldObjects)
     poopSubMenu:addSubMenu(groundPoopOption, wipeSubMenu)
 
     -- Create the "Don't Wipe" option and add it to the submenu
-    local dontWipeOption = wipeSubMenu:addOption(getText("ContextMenu_DontWipe"), worldObjects, BathroomFunctions.TriggerGroundDefecate, player)
+    local dontWipeOption = wipeSubMenu:addOption(getText("ContextMenu_DontWipe"), worldObjects, BathroomFunctions.TriggerGroundDefecate, player, false)
     addTooltip(dontWipeOption, "Choose not to wipe after defecating.")
 
     -- Add "Wipe With" option to the submenu
     local doWipeOption
     if defecateValue >= (peeOnGroundRequirement / 100) * bowelsMaxValue then
-        if item then
+        if wipeItem then
             -- Only add the wipe option if the threshold is met
-            doWipeOption = wipeSubMenu:addOption(getText("ContextMenu_WipeWith") .. item:getName(), worldObjects, BathroomFunctions.TriggerGroundDefecate, player)
+            doWipeOption = wipeSubMenu:addOption(getText("ContextMenu_WipeWith") .. wipeItem:getName(), true, BathroomFunctions.TriggerGroundDefecate, wipeType, wipeItem)
             addTooltip(doWipeOption, getText(wipeTooltipSource))
         end
     end
@@ -987,7 +987,6 @@ function BathroomFunctions.ResetRemovedClothing(player)
     player:getModData().removedClothing = nil
 end
 
-
 function BathroomFunctions.TriggerToiletUrinate(object, player)
     local player = getPlayer()
     local urinateValue = BathroomFunctions.GetUrinateValue()
@@ -1036,7 +1035,7 @@ function BathroomFunctions.TriggerGroundUrinate()
     ISTimedActionQueue.add(GroundUrinate:new(player, peeTime, true, true))
 end
 
-function BathroomFunctions.TriggerGroundDefecate()
+function BathroomFunctions.TriggerGroundDefecate(isWiping, wipeType, wipeItem)
     local player = getPlayer()
     local defecateValue = BathroomFunctions.GetDefecateValue()
     local poopTime = defecateValue * 2
@@ -1046,6 +1045,8 @@ function BathroomFunctions.TriggerGroundDefecate()
 
     -- Defecate on the ground
     ISTimedActionQueue.add(GroundDefecate:new(player, poopTime, true, true))
+
+    ISTimedActionQueue.add(WipeSelf:new(player, 20, wipeType, wipeItem, "poop"))
 end
 function BathroomFunctions.TriggerSelfDefecate()
     local player = getPlayer() -- Fetch the current player object
@@ -1085,9 +1086,6 @@ function BathroomFunctions.TriggerSelfUrinate()
 
     ISTimedActionQueue.add(SelfUrinate:new(player, peeTime, false, false, true, false, nil))
 
-    -- Set the urinate value to 0 as the player has urinated
-    --BathroomFunctions.SetUrinateValue(0)
-
     print("Updated Peed Self Value: " .. BathroomFunctions.GetPeedSelfValue()) -- Debug print statement to display the updated urination value
 end
 function BathroomFunctions.PeeInContainer(item)
@@ -1104,11 +1102,6 @@ function BathroomFunctions.PeeInContainer(item)
     -- Update the bladder to reflect the remaining urine
     local remainingBladderUrine = bladderUrine - amountToFill
     BathroomFunctions.SetUrinateValue(remainingBladderUrine)
-
-    -- Debugging statements to verify the process
-    --print("Peeing in container: " .. item:getName())
-    --print("Amount filled: " .. amountToFill .. " mL")
-    --print("Remaining bladder urine: " .. remainingBladderUrine .. " mL")
 end
 
 function BathroomFunctions.WashSoiled(playerObj, square, soiledItem, bleachItem, storeWater, soiledItemEquipped)
