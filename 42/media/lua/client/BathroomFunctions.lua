@@ -1181,22 +1181,22 @@ local onFillItemTooltip = function(tooltip, layout, item)
     if item:getModData().peed == true then
         local peedSeverity = item:getModData().peedSeverity
         -- Format the severity value to 1 decimal place
-        local peedText = "Peed: " .. string.format("%.1f", peedSeverity) .. "%"
+        local peedText = "Soiled (Pee): " .. string.format("%.1f", peedSeverity) .. "%"
 
         local peedTooltip = LayoutItem.new()
         layout.items:add(peedTooltip)
-        peedTooltip:setLabel(peedText, 0.6, 0.6, 0.33, 1)
+        peedTooltip:setLabel(peedText, 1.000, 0.867, 0.529, 1)
     end
 
     -- Check if the item has moddata with 'pooped == true'
     if item:getModData().pooped == true then
         local poopedSeverity = item:getModData().poopedSeverity
         -- Format the severity value to 1 decimal place
-        local poopedText = "Pooped: " .. string.format("%.1f", poopedSeverity) .. "%"
+        local poopedText = "Soiled (Poop): " .. string.format("%.1f", poopedSeverity) .. "%"
 
         local poopedTooltip = LayoutItem.new()
         layout.items:add(poopedTooltip)
-        poopedTooltip:setLabel(poopedText, 0.49, 0.34, 0.24, 1)
+        poopedTooltip:setLabel(poopedText, 0.678, 0.412, 0.235, 1)
     end
 end
 

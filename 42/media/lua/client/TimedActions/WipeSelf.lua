@@ -84,7 +84,8 @@ function WipeSelf:perform()
 
         end
 
-        BathroomFunctions.SetClothing(wipingWith)
+        -- FIX THIS NEXT PATCH
+        --BathroomFunctions.SetClothing(wipingWith)
 
         return
     end
