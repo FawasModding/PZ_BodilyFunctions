@@ -474,6 +474,45 @@ end
 --
 -- =====================================================
 
+-- Tooltips helper function
+function BathroomFunctions.AddTooltip(option, description)
+    if option then
+        local tooltip = ISToolTip:new()
+        tooltip:initialise()
+        tooltip:setVisible(false)
+        tooltip.description = description
+        option.toolTip = tooltip
+    end
+end
+
+-- Wiping options helper function
+function BathroomFunctions.AddWipingOptions(parentMenu, worldObjects, player, defecateValue, requirement, maxValue, wipeType, wipeItem, triggerFunction, targetObject)
+    -- Create the "Wipe" submenu
+    local wipeSubMenu = ISContextMenu:getNew(parentMenu)
+
+    -- Create the "Don't Wipe" option
+    if triggerFunction == BathroomFunctions.TriggerGroundDefecate then
+        local dontWipeOption = wipeSubMenu:addOption(getText("ContextMenu_DontWipe"), false, triggerFunction, wipeType, wipeItem)
+        BathroomFunctions.AddTooltip(dontWipeOption, "Choose not to wipe after defecating.")
+    else
+        local dontWipeOption = wipeSubMenu:addOption(getText("ContextMenu_DontWipe"), targetObject, triggerFunction, player, false, wipeType, wipeItem)
+        BathroomFunctions.AddTooltip(dontWipeOption, "Choose not to wipe after defecating.")
+    end
+
+    -- Add "Wipe With" option if wiping is possible
+    if defecateValue >= (requirement / 100) * maxValue and wipeItem then
+        if triggerFunction == BathroomFunctions.TriggerGroundDefecate then
+            local doWipeOption = wipeSubMenu:addOption(getText("ContextMenu_WipeWith") .. " " .. wipeItem:getName(), true, triggerFunction, wipeType, wipeItem)
+            BathroomFunctions.AddTooltip(doWipeOption, "Wipe using this item.")
+        else
+            local doWipeOption = wipeSubMenu:addOption(getText("ContextMenu_WipeWith") .. " " .. wipeItem:getName(), targetObject, triggerFunction, player, true, wipeType, wipeItem)
+            BathroomFunctions.AddTooltip(doWipeOption, "Wipe using this item.")
+        end
+    end
+
+    return wipeSubMenu
+end
+
 function BathroomFunctions.BathroomRightClick(player, context, worldObjects)
     local firstObject
     for i = 1, #worldObjects do
@@ -510,6 +549,8 @@ function BathroomFunctions.BathroomRightClick(player, context, worldObjects)
 
     local modOptions = PZAPI.ModOptions:getOptions("BathroomFunctions")
 
+    local wipeType, wipeItem = BathroomFunctions.CheckForWipeables(player)
+
     -------------------------------------------------------------------------------------------------------------------
 
     -- Main menu option: "Urination"
@@ -526,77 +567,37 @@ function BathroomFunctions.BathroomRightClick(player, context, worldObjects)
 
     -------------------------------------------------------------------------------------------------------------------
 
-    -- Tooltips function
-    local function addTooltip(option, description)
-        if option then
-            local tooltip = ISToolTip:new()
-            tooltip:initialise()
-            tooltip:setVisible(false)
-            tooltip.description = description
-            option.toolTip = tooltip
-        end
-    end
-
-    -------------------------------------------------------------------------------------------------------------------
-
     -- Using Ground
     local groundPeeOption = peeSubMenu:addOption((getText("ContextMenu_Pee") .. " " .. getText("ContextMenu_UseGround")), worldObjects, BathroomFunctions.TriggerGroundUrinate, player)
-    addTooltip(groundPeeOption, "Urinate on the ground. (Requires " .. peeOnGroundRequirement .. "%)")
+    BathroomFunctions.AddTooltip(groundPeeOption, "Urinate on the ground. (Requires " .. peeOnGroundRequirement .. "%)")
     groundPeeOption.iconTexture = getTexture("media/textures/ContextMenuGround.png");
 
     local groundPoopOption = poopSubMenu:addOption((getText("ContextMenu_Poop") .. " " .. getText("ContextMenu_UseGround")), worldObjects, nil)
-    addTooltip(groundPoopOption, "Defecate on the ground. (Requires " .. poopOnGroundRequirement .. "%)")
+    BathroomFunctions.AddTooltip(groundPoopOption, "Defecate on the ground. (Requires " .. poopOnGroundRequirement .. "%)")
     groundPoopOption.iconTexture = getTexture("media/textures/ContextMenuGround.png");
 
     if urinateValue < (peeOnGroundRequirement / 100) * bladderMaxValue then
         groundPeeOption.notAvailable = true
     end
 
-    -- Wiping
-
-    -- Ensure options are enabled/disabled based on available wipeables
-    local wipeType, wipeItem = BathroomFunctions.CheckForWipeables(player)
-
-    local wipeTooltipSource = "ContextMenu_WipeWith"
-
-    -- Determine action based on the returned type
-    if wipeType == "usingDrainable" then
-        wipeTooltipSource = "ContextMenu_tooltip_WipeDrainable"
-    elseif wipeType == "usingOneTime" then
-        wipeTooltipSource = "ContextMenu_tooltip_WipeOther"
-    elseif wipeType == "usingClothing" then
-        wipeTooltipSource = "ContextMenu_tooltip_WipeClothing"
-    end
-
-    -- Create the "Wipe" submenu
-    local wipeSubMenu = ISContextMenu:getNew(poopSubMenu)
-    poopSubMenu:addSubMenu(groundPoopOption, wipeSubMenu)
-
-    -- Create the "Don't Wipe" option and add it to the submenu
-    local dontWipeOption = wipeSubMenu:addOption(getText("ContextMenu_DontWipe"), worldObjects, BathroomFunctions.TriggerGroundDefecate, player, false)
-    addTooltip(dontWipeOption, "Choose not to wipe after defecating.")
-
-    -- Add "Wipe With" option to the submenu
-    local doWipeOption
-    if defecateValue >= (peeOnGroundRequirement / 100) * bowelsMaxValue then
-        if wipeItem then
-            -- Only add the wipe option if the threshold is met
-            doWipeOption = wipeSubMenu:addOption(getText("ContextMenu_WipeWith") .. wipeItem:getName(), true, BathroomFunctions.TriggerGroundDefecate, wipeType, wipeItem)
-            addTooltip(doWipeOption, getText(wipeTooltipSource))
-        end
-    end
-
-
-    -- Ensure the options are disabled if the defecation threshold is not met
-    if defecateValue < (peeOnGroundRequirement / 100) * bowelsMaxValue then
+    if defecateValue < (poopOnGroundRequirement / 100) * bowelsMaxValue then
         groundPoopOption.notAvailable = true
-        dontWipeOption.notAvailable = true
-    
-        if doWipeOption then
-            doWipeOption.notAvailable = true  -- Disable the wipe option
-        end
     end
 
+    -- Add wiping system for ground poop
+    local wipeSubMenuForGround = BathroomFunctions.AddWipingOptions(
+        poopSubMenu,
+        worldObjects,
+        player,
+        defecateValue,
+        poopOnGroundRequirement,
+        bowelsMaxValue,
+        wipeType,
+        wipeItem,
+        BathroomFunctions.TriggerGroundDefecate, -- Pass ground defecation function
+        nil -- No specific target object for ground defecation
+    )
+    poopSubMenu:addSubMenu(groundPoopOption, wipeSubMenuForGround)
 
     -------------------------------------------------------------------------------------------------------------------
 
@@ -606,7 +607,7 @@ function BathroomFunctions.BathroomRightClick(player, context, worldObjects)
     if(canPeeSelfOption:getValue(1)) then
 
         local selfPeeOption = peeSubMenu:addOption((getText("ContextMenu_Pee") .. " " .. getText("ContextMenu_UseSelf")), worldObjects, BathroomFunctions.TriggerSelfUrinate, player)
-        addTooltip(selfPeeOption, "Urinate on yourself. Very few situations where this would be useful. (Requires " .. peeOnSelfRequirement .. "%)")
+        BathroomFunctions.AddTooltip(selfPeeOption, "Urinate on yourself. Very few situations where this would be useful. (Requires " .. peeOnSelfRequirement .. "%)")
         selfPeeOption.iconTexture = getTexture("media/ui/PeedSelf.png");
 
         -- Disable "On Self" pee options if urinateValue too low
@@ -620,7 +621,7 @@ function BathroomFunctions.BathroomRightClick(player, context, worldObjects)
     if(canPoopSelfOption:getValue(1)) then
   
         local selfPoopOption = poopSubMenu:addOption((getText("ContextMenu_Poop") .. " " .. getText("ContextMenu_UseSelf")), worldObjects, BathroomFunctions.TriggerSelfDefecate, player)
-        addTooltip(selfPoopOption, "Defecate on yourself. Very few situations where this would be useful. (Requires " .. poopOnSelfRequirement .. "%)")
+        BathroomFunctions.AddTooltip(selfPoopOption, "Defecate on yourself. Very few situations where this would be useful. (Requires " .. poopOnSelfRequirement .. "%)")
         selfPoopOption.iconTexture = getTexture("media/ui/PoopedSelf.png");
 
         if defecateValue < (poopOnSelfRequirement / 100) * bowelsMaxValue then
@@ -648,10 +649,10 @@ function BathroomFunctions.BathroomRightClick(player, context, worldObjects)
                 --    toiletPoopOption.notAvailable = true
                 --end
 
-                --addTooltip(toiletPeeOption, "Urinate in the toilet. (Requires " .. peeInToiletRequirement .. "% and sufficient water)")
-                --addTooltip(toiletPoopOption, "Defecate in the toilet. (Requires " .. poopInToiletRequirement .. "% and sufficient water)")
-                addTooltip(toiletPeeOption, "Urinate in the toilet. (Requires " .. peeInToiletRequirement .. "%")
-                addTooltip(toiletPoopOption, "Defecate in the toilet. (Requires " .. poopInToiletRequirement .. "%")
+                --BathroomFunctions.AddTooltip(toiletPeeOption, "Urinate in the toilet. (Requires " .. peeInToiletRequirement .. "% and sufficient water)")
+                --BathroomFunctions.AddTooltip(toiletPoopOption, "Defecate in the toilet. (Requires " .. poopInToiletRequirement .. "% and sufficient water)")
+                BathroomFunctions.AddTooltip(toiletPeeOption, "Urinate in the toilet. (Requires " .. peeInToiletRequirement .. "%")
+                BathroomFunctions.AddTooltip(toiletPoopOption, "Defecate in the toilet. (Requires " .. poopInToiletRequirement .. "%")
                 toiletOptionAdded = true
 
                 toiletPeeOption.iconTexture = getTexture("media/textures/ContextMenuToilet.png");
@@ -663,6 +664,22 @@ function BathroomFunctions.BathroomRightClick(player, context, worldObjects)
                 if defecateValue < (poopInToiletRequirement / 100) * bowelsMaxValue then
                     toiletPoopOption.notAvailable = true
                 end
+
+                -- Add wiping option for toilet defecation
+                local wipeSubMenuForToilet = BathroomFunctions.AddWipingOptions(
+                    poopSubMenu,
+                    worldObjects,
+                    player,
+                    defecateValue,
+                    poopInToiletRequirement,
+                    bowelsMaxValue,
+                    wipeType,
+                    wipeItem,
+                    BathroomFunctions.TriggerToiletDefecate,  -- Pass the toilet defecation function
+                    object -- Pass the toilet object as the target
+                )
+                poopSubMenu:addSubMenu(toiletPoopOption, wipeSubMenuForToilet)
+
             end
         end
 
@@ -673,7 +690,7 @@ function BathroomFunctions.BathroomRightClick(player, context, worldObjects)
                 if object:getTextureName() == tile and object:getSquare():DistToProper(player:getSquare()) < 5 then
                     -- Pee option
                     local urinalPeeOption = peeSubMenu:addOption((getText("ContextMenu_Pee") .. " " .. getText("ContextMenu_UseUrinal")), object, BathroomFunctions.TriggerToiletUrinate, player)
-                    addTooltip(urinalPeeOption, "Urinate in the urinal. (Requires " .. peeInToiletRequirement .. "%)")
+                    BathroomFunctions.AddTooltip(urinalPeeOption, "Urinate in the urinal. (Requires " .. peeInToiletRequirement .. "%)")
                     toiletOptionAdded = true
 
                     if urinateValue < (peeInToiletRequirement / 100) * bladderMaxValue then
@@ -682,7 +699,7 @@ function BathroomFunctions.BathroomRightClick(player, context, worldObjects)
 
                     -- Poop option is always unavailable
                     local urinalPoopOption = poopSubMenu:addOption((getText("ContextMenu_Poop") .. " " .. getText("ContextMenu_UseUrinal")), object, nil, player)
-                    addTooltip(urinalPoopOption, "Don't you fucking dare'.")
+                    BathroomFunctions.AddTooltip(urinalPoopOption, "Don't you fucking dare'.")
                     urinalPoopOption.notAvailable = true
 
                     urinalPeeOption.iconTexture = getTexture("media/textures/ContextMenuToilet.png")
@@ -703,8 +720,8 @@ function BathroomFunctions.BathroomRightClick(player, context, worldObjects)
                 outhousePeeOption.iconTexture = getTexture("media/textures/ContextMenuToilet.png")
                 outhousePoopOption.iconTexture = getTexture("media/textures/ContextMenuToilet.png")
 
-                addTooltip(outhousePeeOption, "Urinate in the outhouse. (Requires " .. peeInToiletRequirement .. "%)")
-                addTooltip(outhousePoopOption, "Defecate in the outhouse. (Requires " .. poopInToiletRequirement .. "%)")
+                BathroomFunctions.AddTooltip(outhousePeeOption, "Urinate in the outhouse. (Requires " .. peeInToiletRequirement .. "%)")
+                BathroomFunctions.AddTooltip(outhousePoopOption, "Defecate in the outhouse. (Requires " .. poopInToiletRequirement .. "%)")
                 toiletOptionAdded = true
 
                 if urinateValue < (peeInToiletRequirement / 100) * bladderMaxValue then
@@ -714,6 +731,21 @@ function BathroomFunctions.BathroomRightClick(player, context, worldObjects)
                     outhousePoopOption.notAvailable = true
                 end
 
+                -- Add wiping option for toilet defecation
+                local wipeSubMenuForToilet = BathroomFunctions.AddWipingOptions(
+                    poopSubMenu,
+                    worldObjects,
+                    player,
+                    defecateValue,
+                    poopInToiletRequirement,
+                    bowelsMaxValue,
+                    wipeType,
+                    wipeItem,
+                    BathroomFunctions.TriggerToiletDefecate,  -- Pass the toilet defecation function
+                    object -- Pass the toilet object as the target
+                )
+                poopSubMenu:addSubMenu(outhousePoopOption, wipeSubMenuForToilet)
+
                 break
             end
         end
@@ -722,7 +754,7 @@ function BathroomFunctions.BathroomRightClick(player, context, worldObjects)
         if object:getTextureName() and luautils.stringStarts(object:getTextureName(), "fixtures_sinks_01") and object:getSquare():DistToProper(player:getSquare()) < 5 then
             local sinkPeeOption = peeSubMenu:addOption((getText("ContextMenu_Pee") .. " " .. getText("ContextMenu_UseSink")), object, BathroomFunctions.TriggerToiletUrinate, player)
 
-            addTooltip(sinkPeeOption, "Urinate in the sink. (Requires " .. peeInToiletRequirement .. "%")
+            BathroomFunctions.AddTooltip(sinkPeeOption, "Urinate in the sink. (Requires " .. peeInToiletRequirement .. "%")
             toiletOptionAdded = true
 
             sinkPeeOption.iconTexture = getTexture("media/textures/ContextMenuSink.png");
@@ -740,7 +772,7 @@ function BathroomFunctions.BathroomRightClick(player, context, worldObjects)
         
                 showerPeeOption.iconTexture = getTexture("media/textures/ContextMenuShower.png")
 
-                addTooltip(showerPeeOption, "Urinate in the shower / bathtub. (Requires " .. peeInToiletRequirement .. "%)")
+                BathroomFunctions.AddTooltip(showerPeeOption, "Urinate in the shower / bathtub. (Requires " .. peeInToiletRequirement .. "%)")
                 toiletOptionAdded = true
 
                 if urinateValue < (peeInToiletRequirement / 100) * bladderMaxValue then
@@ -760,7 +792,7 @@ function BathroomFunctions.BathroomRightClick(player, context, worldObjects)
     if(canPeeContainerOption:getValue(1)) then
 
         local containerPeeOption = peeSubMenu:addOption((getText("ContextMenu_Pee") .. " " .. getText("ContextMenu_UseContainer")), worldObjects, nil)
-        addTooltip(containerPeeOption, "Urinate in a container. (Requires " .. peeInContainerRequirement .. "%)")
+        BathroomFunctions.AddTooltip(containerPeeOption, "Urinate in a container. (Requires " .. peeInContainerRequirement .. "%)")
 
         local containerSubMenu = ISContextMenu:getNew(peeSubMenu) -- Create submenu
         peeSubMenu:addSubMenu(containerPeeOption, containerSubMenu) -- Attach submenu to `containerPeeOption`
@@ -856,7 +888,7 @@ function BathroomFunctions.WashingRightClick(player, context, worldObjects)
             end
         end
 
-		--local tooltip = ISWorldObjectContextMenu.addToolTip()
+		--local tooltip = ISWorldObjectContextMenu.BathroomFunctions.AddTooltip()
 		--tooltip.description = getText("ContextMenu_WaterSource") .. ": " .. source
 		--tooltip.description = tooltip.description .. " <LINE> Water: " .. tostring(math.min(waterRemaining, 15)) .. " / " .. tostring(15)
 		--tooltip.description = tooltip.description .. " <LINE> Bleach: " .. bleachText .. " / 0.3"
@@ -1043,7 +1075,7 @@ function BathroomFunctions.TriggerToiletUrinate(object, player)
     ISTimedActionQueue.add(ToiletUrinate:new(player, peeTime, true, true, object))
 end
 
-function BathroomFunctions.TriggerToiletDefecate(object, player)
+function BathroomFunctions.TriggerToiletDefecate(object, player, isWiping, wipeType, wipeItem)
     local player = getPlayer()
     local defecateValue = BathroomFunctions.GetDefecateValue()
     local poopTime = defecateValue * 2
@@ -1054,8 +1086,13 @@ function BathroomFunctions.TriggerToiletDefecate(object, player)
     -- Remove bottom clothing first
     BathroomFunctions.RemoveBottomClothing(player)
 
-    -- Defecate at the toilet
+    -- Defecate in the toilet
     ISTimedActionQueue.add(ToiletDefecate:new(player, poopTime, true, true, object))
+
+    -- Wipe afterwards if needed
+    ISTimedActionQueue.add(WipeSelf:new(player, 20, wipeType, wipeItem, "poop"))
+
+    -- Check in here if isWiping is false, if false, then add a small pooped value to the worn clothes.
 end
 
 function BathroomFunctions.TriggerGroundUrinate()
@@ -1084,7 +1121,10 @@ function BathroomFunctions.TriggerGroundDefecate(isWiping, wipeType, wipeItem)
     -- Defecate on the ground
     ISTimedActionQueue.add(GroundDefecate:new(player, poopTime, true, true))
 
+    -- Wipe afterwards if needed
     ISTimedActionQueue.add(WipeSelf:new(player, 20, wipeType, wipeItem, "poop"))
+
+    -- Check in here if isWiping is false, if false, then add a small pooped value to the worn clothes.
 end
 function BathroomFunctions.TriggerSelfDefecate()
     local player = getPlayer() -- Fetch the current player object
