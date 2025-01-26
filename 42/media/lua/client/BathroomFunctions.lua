@@ -259,7 +259,7 @@ function BathroomFunctions.UrinateBottoms()
 	end
 
     player:playerVoiceSound("SighBored")
-    getSoundManager():PlayWorldSound("PeeSelf", player:getCurrentSquare(), 0, 10, .2, false)
+    getSoundManager():PlayWorldSound("BF_PeeSelf", player:getCurrentSquare(), 0, 10, .2, false)
 
     -- Update player stats for the accident
     --player:getStats():setStress(player:getStats():getStress() + 0.6)
@@ -314,7 +314,7 @@ function BathroomFunctions.DefecateBottoms()
     end
 
     player:playerVoiceSound("JumpLow")
-    getSoundManager():PlayWorldSound("PoopSelf1", player:getCurrentSquare(), 0, 10, .05, false)
+    getSoundManager():PlayWorldSound("BF_PoopSelf1", player:getCurrentSquare(), 0, 10, .05, false)
 
     -- Update player stats for the accident
     --player:getStats():setStress(player:getStats():getStress() + 0.8)
