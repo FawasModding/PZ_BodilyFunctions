@@ -17,6 +17,7 @@
 -Created "Wiped" variants of some items that replace wipe-able items.
 -Added "Pee In Sink" and "Pee In Shower" options.
 -Fixed the double toilet context menu option bug.
+-Added "BF_" prefix to all sounds to prevent mod incompatabilities.
 
 ==============
 [VERSION 0.42]

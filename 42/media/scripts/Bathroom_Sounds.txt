@@ -1,6 +1,6 @@
 module Base
 {
-	sound WasteFlies
+	sound BF_WasteFlies
 	{
 		category = Bathroom,
 		clip
@@ -10,7 +10,7 @@ module Base
 		}
 	}
 
-	sound ToiletFlush
+	sound BF_ToiletFlush
 	{
 		category = Bathroom,
 		clip
@@ -20,7 +20,7 @@ module Base
 		}
 	}
 
-	sound StomachGrowl
+	sound BF_StomachGrowl
 	{
 		category = Bathroom,
 		clip
@@ -30,7 +30,7 @@ module Base
 		}
 	}
 
-	sound PeeToilet
+	sound BF_PeeToilet
 	{
 		category = Bathroom,
 		clip
@@ -40,7 +40,7 @@ module Base
 		}
 	}
 
-	sound PeeSelf
+	sound BF_PeeSelf
 	{
 		category = Bathroom,
 		clip
@@ -50,7 +50,7 @@ module Base
 		}
 	}
 
-	sound PoopSelf1
+	sound BF_PoopSelf1
 	{
 		category = Bathroom,
 		clip
@@ -60,7 +60,7 @@ module Base
 		}
 	}
 
-	sound PoopSelf2
+	sound BF_PoopSelf2
 	{
 		category = Bathroom,
 		clip
@@ -70,7 +70,7 @@ module Base
 		}
 	}
 
-	sound PoopSelf3
+	sound BF_PoopSelf3
 	{
 		category = Bathroom,
 		clip

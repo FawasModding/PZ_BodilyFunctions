@@ -246,10 +246,10 @@ function BathroomFunctions.UrinateBottoms()
             -- Update the clothing's condition after the accident
             BathroomFunctions.UpdateSoiledSeverity(clothing)
 
-            --if SandboxVars.BathroomFunctions.ShowPeeStain == true then
+            if SandboxVars.BathroomFunctions.VisiblePeeStain == true then
                 BathroomClothOverlays.equipPeedOverlay(player, clothing)
                 print("Should have equipped pee overlay")
-            --end
+            end
         end
     end
 
