@@ -2,9 +2,7 @@
 
 -- KNOWN BUGS TO FIX!!!
 
--- 1. Wiping clothing doesn't do anything
 -- 2. Each TP item needs its own pooped variant (WORKING)
--- 3. Actual TP stops being useable once used, even if it's only once!'
 -- 4. For each TP item that doesn't have its own variant, it must simply not give a wiped junk item'
 
 --

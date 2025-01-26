@@ -941,7 +941,7 @@ function BathroomFunctions.CheckForWipeables(player)
         for i = 0, items:size() - 1 do
             local item = items:get(i)
 
-            if item:getType() == itemType and item:getCurrentUsesFloat() >= 1 then
+            if item:getType() == itemType and item:getCurrentUses() >= 1 then
                 showWipeOption = true
                 return usingDrainable, item  -- Return early with wipeType and item
             end
