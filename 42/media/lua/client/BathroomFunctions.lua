@@ -1249,25 +1249,25 @@ end
 
 function BathroomFunctions.onGameBoot()
     local humanGroup = BodyLocations.getGroup("Human"); -- Get the BodyLocations group for humans
-    local peedUndiesLocation = humanGroup:getOrCreateLocation("PeedOverlay"); -- Create or fetch the PeedOverlay location
-    local peedPantsLocation = humanGroup:getOrCreateLocation("PeedOverlay2"); -- Create or fetch the PeedOverlay location
+    local peedOverlayLocation = humanGroup:getOrCreateLocation("PeedOverlay"); -- Create or fetch the PeedOverlay location
+    local poopedOverlayLocation = humanGroup:getOrCreateLocation("PoopedOverlay"); -- Create or fetch the PoopedOverlay location
 
-    -- Remove PeedOverlay if it already exists to avoid duplication
+    -- Remove peedOverlayLocation if it already exists to avoid duplication
     local list = getClassFieldVal(humanGroup, getClassField(humanGroup, 1));
-    list:remove(peedUndiesLocation);
+    list:remove(peedOverlayLocation);
 
-    -- Remove PeedOverlay2 if it already exists to avoid duplication
+    -- Remove poopedOverlayLocation if it already exists to avoid duplication
     local list = getClassFieldVal(humanGroup, getClassField(humanGroup, 1));
-    list:remove(peedPantsLocation);
+    list:remove(poopedOverlayLocation);
 
-    -- Find the index of Pants to ensure PeedOverlay renders above it
+    -- Find the index of Pants to ensure peedOverlayLocation renders above it
     local pantsIndex = humanGroup:indexOf("Pants");
 
-    -- Add PeedOverlay just after Pants
-    list:add(pantsIndex + 1, peedUndiesLocation);
+    -- Add peedOverlayLocation just after Pants
+    list:add(pantsIndex + 1, peedOverlayLocation);
 
-    -- Add PeedOverlay2 just after PeedOverlay
-    list:add(pantsIndex + 2, peedPantsLocation);
+    -- Add poopedOverlayLocation just after PeedOverlay
+    list:add(pantsIndex + 2, poopedOverlayLocation);
 end
 
 

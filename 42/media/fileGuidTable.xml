@@ -38,6 +38,12 @@
 		<path>media/clothing/clothingItems/PulledDown_Trousers.xml</path>
 		<guid>f9c770d7-ef9b-46b7-892b-9dc2f682f8c4</guid>
 	</files>
-    
+
+	
+	
+	<files>
+		<path>media/clothing/clothingItems/Female_Underpants_Pooped.xml</path>
+		<guid>9ac677fd-2639-4e80-bd3e-163cf9134428</guid>
+	</files>
 
 </fileGuidTable>

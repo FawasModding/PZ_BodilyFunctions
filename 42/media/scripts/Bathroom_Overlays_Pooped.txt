@@ -1,0 +1,15 @@
+module BathroomFunctions {
+    imports {
+        Base
+    }
+
+    item Female_Underpants_Pooped {
+        Type = Clothing,
+        DisplayName = Test,
+        ClothingItem = Female_Underpants_Pooped,
+        BodyLocation = PoopedOverlay,
+        IconsForTexture = PeedPants,
+        Tags = BathroomOverlay,
+        WorldStaticModel = Trousers_Ground,
+    }
+}
