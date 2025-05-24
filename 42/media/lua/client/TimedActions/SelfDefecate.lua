@@ -1,47 +1,68 @@
 SelfDefecate = ISBaseTimedAction:derive("SelfDefecate")
+
+-- Common clean-up: emptying the bowels (or leaving 95% if it's a leak)
+function SelfDefecate:finishDefecation()
+    if self.isLeak then
+        self.character:getModData().defecateValue = self.initialDefecateValue * 0.95
+    else
+        self.character:getModData().defecateValue = 0.0
+    end
+end
+
 function SelfDefecate:isValid()
-	return true
+    return true
 end
 
 function SelfDefecate:update()
-	-- Reduce urination value proportionally to the elapsed time
-    local delta = self:getJobDelta() -- Get the progress of the action (0.0 to 1.0)
-    local initialValue = self.character:getModData().defecateValue
-    local newValue = self.initialDefecateValue - (delta * self.initialDefecateValue)
-    self.character:getModData().defecateValue = math.max(newValue, 0) -- Ensure it doesn't go below 0
+    local delta = self:getJobDelta()  -- delta goes from 0.0 to 1.0 over the action time
+    local initialValue = self.initialDefecateValue or 0
+
+    if self.isLeak then
+        -- For a leak event, only 5% is released over time.
+        local newValue = initialValue * (1 - 0.05 * delta)
+        self.character:getModData().defecateValue = newValue
+    else
+        -- Normal defecation: bowels reduce to zero over time.
+        local newValue = initialValue * (1 - delta)
+        self.character:getModData().defecateValue = math.max(newValue, 0)
+    end
 end
 
 function SelfDefecate:start()
-	-- Save the initial defecate value at the start of the action
+    -- Save the initial defecate value when the action begins.
     self.initialDefecateValue = self.character:getModData().defecateValue or 0
 end
 
--- If action ends early
+-- If the action is cancelled or stops early.
 function SelfDefecate:stop()
-	-- You stop the action, you automatically poop yourself
-	self.character:getModData().defecateValue = 0.0
-
-	ISBaseTimedAction.stop(self)
+    self:finishDefecation()
+    ISBaseTimedAction.stop(self)
 end
 
+-- At the end of the action.
 function SelfDefecate:perform()
-	local defecateValue = BathroomFunctions.GetDefecateValue()
-
-	-- Ensure defecateValue is fully reset at the end of the action
-	self.character:getModData().defecateValue = 0.0
-	ISBaseTimedAction.perform(self)
+    self:finishDefecation()
+    ISBaseTimedAction.perform(self)
 end
 
-function SelfDefecate:new(character, time, stopWalk, stopRun, poopedSelf, usingToilet, toiletObject)
-	local o = {}
-	setmetatable(o, self)
-	self.__index = self
-	o.character = character
-	o.stopOnWalk = stopWalk
-	o.stopOnRun = stopRun
-	o.maxTime = time
-	o.poopedSelf = poopedSelf
-	o.usingToilet = usingToilet
-	o.toiletObject = toiletObject
-	return o
+-- Override cancel to ensure the finish logic runs only once.
+function SelfDefecate:cancel()
+    self:finishDefecation()
+    return ISBaseTimedAction.cancel(self)
+end
+
+-- Modified constructor: now includes an extra parameter "isLeak".
+function SelfDefecate:new(character, time, stopWalk, stopRun, defecatedSelf, usingToilet, toiletObject, isLeak)
+    local o = {}
+    setmetatable(o, self)
+    self.__index = self
+    o.character = character
+    o.stopOnWalk = stopWalk      -- Allow movement (set to false as needed)
+    o.stopOnRun  = stopRun       -- Allow movement (set to false as needed)
+    o.maxTime = time
+    o.defecatedSelf = defecatedSelf
+    o.usingToilet = usingToilet
+    o.toiletObject = toiletObject
+    o.isLeak = isLeak or false
+    return o
 end

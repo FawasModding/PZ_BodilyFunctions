@@ -10,6 +10,9 @@ module BathroomFunctions {
         IconsForTexture = PeedPants,
         Tags = BathroomOverlay,
         WorldStaticModel = Trousers_Ground,
+
+	    RunSpeedModifier = 0.9,
+	    DiscomfortModifier = 0.15,
     }
 
 	
@@ -20,6 +23,9 @@ module BathroomFunctions {
         IconsForTexture = PeedPants,
         Tags = BathroomOverlay,
         WorldStaticModel = Trousers_Ground,
+
+        RunSpeedModifier = 0.9,
+        DiscomfortModifier = 0.15,
     }
 
     item Female_Underpants_Peed {
@@ -29,6 +35,9 @@ module BathroomFunctions {
         IconsForTexture = PeedPants,
         Tags = BathroomOverlay,
         WorldStaticModel = Trousers_Ground,
+
+        RunSpeedModifier = 0.9,
+        DiscomfortModifier = 0.15,
     }
 
     item Male_Boxers_Peed {
@@ -38,15 +47,9 @@ module BathroomFunctions {
         IconsForTexture = PeedPants,
         Tags = BathroomOverlay,
         WorldStaticModel = Trousers_Ground,
-    }
 
-    item BoxingShorts_Peed {
-        Type = Clothing,
-        ClothingItem = BoxingShorts_Peed,
-        BodyLocation = PeedOverlay2,
-        IconsForTexture = PeedPants,
-        Tags = BathroomOverlay,
-        WorldStaticModel = Trousers_Ground,
+        RunSpeedModifier = 0.9,
+        DiscomfortModifier = 0.15,
     }
 
     item LongShorts_Peed {
@@ -56,6 +59,9 @@ module BathroomFunctions {
         IconsForTexture = PeedPants,
         Tags = BathroomOverlay,
         WorldStaticModel = Trousers_Ground,
+
+        RunSpeedModifier = 0.9,
+        DiscomfortModifier = 0.15,
     }
 
     item Male_SmallTrunks_Peed {
@@ -65,6 +71,9 @@ module BathroomFunctions {
         IconsForTexture = PeedPants,
         Tags = BathroomOverlay,
         WorldStaticModel = Trousers_Ground,
+
+        RunSpeedModifier = 0.9,
+        DiscomfortModifier = 0.15,
     }
 
     item Trousers_Short_Peed {
@@ -74,5 +83,20 @@ module BathroomFunctions {
         IconsForTexture = PeedPants,
         Tags = BathroomOverlay,
         WorldStaticModel = Trousers_Ground,
+
+        RunSpeedModifier = 0.9,
+        DiscomfortModifier = 0.15,
+    }
+
+    item BoxingShorts_Peed {
+        Type = Clothing,
+        ClothingItem = BoxingShorts_Peed,
+        BodyLocation = PeedOverlay2,
+        IconsForTexture = PeedPants,
+        Tags = BathroomOverlay,
+        WorldStaticModel = Trousers_Ground,
+
+        RunSpeedModifier = 0.9,
+        DiscomfortModifier = 0.15,
     }
 }

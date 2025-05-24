@@ -4,6 +4,41 @@ FlySquares = {}
 
 local InventoryUI = require("Starlit/client/ui/InventoryUI")
 
+-- Set BowelsMaxValue and BladderMaxValue
+-- Make sure the player is loaded.
+-- Define your override function first.
+function BathroomFunctions.OverrideSandboxMax()
+    local player = getSpecificPlayer(0)  -- using getSpecificPlayer(0) for singleplayer
+    if player then
+        local baseBladderMax = SandboxVars.BathroomFunctions.BladderMaxValue or 800
+        local baseBowelsMax  = SandboxVars.BathroomFunctions.BowelsMaxValue or 500
+
+        if player:HasTrait("SmallBladder") then
+            SandboxVars.BathroomFunctions.BladderMaxValue = baseBladderMax * 0.75
+        elseif player:HasTrait("BigBladder") then
+            SandboxVars.BathroomFunctions.BladderMaxValue = baseBladderMax * 1.25
+        end
+
+        if player:HasTrait("SmallBowels") then
+            SandboxVars.BathroomFunctions.BowelsMaxValue = baseBowelsMax * 0.75
+        elseif player:HasTrait("BigBowels") then
+            SandboxVars.BathroomFunctions.BowelsMaxValue = baseBowelsMax * 1.25
+        end
+
+        print("Adjusted Bladder Max Value: " .. SandboxVars.BathroomFunctions.BladderMaxValue)
+        print("Adjusted Bowels Max Value: " .. SandboxVars.BathroomFunctions.BowelsMaxValue)
+    else
+        print("Player not loaded!")
+    end
+end
+
+-- Then register the function to run once the game starts.
+Events.OnGameStart.Add(BathroomFunctions.OverrideSandboxMax)
+
+
+
+
+
 -- =====================================================
 --
 -- BATHROOM FUNCTIONALITY AND TIMERS
@@ -25,35 +60,102 @@ function BathroomFunctions.BathroomFunctionTimers()
     end
 end
 
+--[[
+
+Calories:       -2200   >     3700
+Protein:        -500    >     1000
+Lipids:         -500    >     1000
+Carbohydrates:  -500    >     1000
+
+Burn rate: 10 Calories per 10 min
+
+
+]]
+
+
 -- Function to update the player's bathroom-related values (urination and defecation)
 function BathroomFunctions.UpdateBathroomValues()
+
     local player = getPlayer()
-    local stats = player:getStats()
 
-    -- Update Bladder Values
+    -- Get player stats
+    local thirst = player:getStats():getThirst()
+    local hunger = player:getStats():getHunger()
+    local stress = player:getStats():getStress()
+    local endurance = player:getStats():getEndurance()
+
+    -- Calculate bladder multiplier where:
+    -- - At thirst 0 (fully hydrated): multiplier = 1.0 (standard rate)
+    -- - At thirst 1 (dehydrated): multiplier = 0.3 (30% of standard rate)
+    local bladderMultiplier = 1.0 - (thirst * 0.7)
+
+    -- Calculate bowel multiplier where:
+    -- - At hunger 0 (fully sationed): multiplier = 1.0 (standard rate)
+    -- - At hunger 1 (Starving): multiplier = 0.3 (30% of standard rate)
+    local bowelMultiplier = 1.0 - (hunger * 0.7)
+
+    -- Add stress effect: increased urgency when stressed
+    local stressEffect = stress * 0.3  -- Up to 30% increase when fully stressed
+
+    -- Simulate body needing nutrients to recover
+    local urgencyFactor = (1.0 - endurance) * 0.1
+    
+    -- Add random variation for a more realistic feel
+    local randomBladderFactor = 0.9 + (ZombRand(21) / 100) -- Range: 0.9 to 1.1
+    local randomBowelFactor = 0.9 + (ZombRand(21) / 100)   -- Range: 0.9 to 1.1
+
+    -- Calculate your base multiplier from player stats
+    local finalBladderMultiplier = bladderMultiplier + stressEffect + urgencyFactor
+    -- Then apply the random variation as a multiplier
+    finalBladderMultiplier = finalBladderMultiplier * randomBladderFactor
+
+    -- Calculate your base multiplier from player stats
+    local finalBowelMultiplier = bowelMultiplier + stressEffect + urgencyFactor
+    -- Then apply the random variation as a multiplier
+    finalBowelMultiplier = finalBowelMultiplier * randomBowelFactor
+
+    print("Thirst level: " .. tostring(thirst))
+    print("Bladder multiplier: " .. tostring(bladderMultiplier))
+    print("Final bladder multiplier: " .. tostring(finalBladderMultiplier))
+
+    print("Hunger level: " .. tostring(hunger))
+    print("Bowel multiplier: " .. tostring(bowelMultiplier))
+    print("Final bowel multiplier: " .. tostring(finalBowelMultiplier))
+
+    -- Retrieve the base maximum capacities (from SandboxVars or defaults).
+    local baseBladderMax = SandboxVars.BathroomFunctions.BladderMaxValue or 600
+    local baseBowelsMax  = SandboxVars.BathroomFunctions.BowelsMaxValue or 500
+
+    -- Retrieve the current fill values.
     local urinateValue = BathroomFunctions.GetUrinateValue()
-    local bladderMaxValue = SandboxVars.BathroomFunctions.BladderMaxValue or 500
-    local thirst = stats:getThirst()
-
-    --local urinateIncrease = 0.012 * bladderMaxValue * (1 - thirst) * SandboxVars.BathroomFunctions.BladderIncreaseMultiplier
-    local urinateIncrease = 0.012 * bladderMaxValue * SandboxVars.BathroomFunctions.BladderIncreaseMultiplier
-    urinateValue = urinateValue + urinateIncrease
-    player:getModData().urinateValue = tonumber(urinateValue)
-
-    -- Update Bowel Values
     local defecateValue = BathroomFunctions.GetDefecateValue()
-    local bowelsMaxValue = SandboxVars.BathroomFunctions.BowelsMaxValue or 800
-    local hunger = stats:getHunger()
 
-    --local defecateIncrease = 0.005 * bowelsMaxValue * (1 - hunger) * SandboxVars.BathroomFunctions.BowelsIncreaseMultiplier
-    local defecateIncrease = 0.005 * bowelsMaxValue * SandboxVars.BathroomFunctions.BowelsIncreaseMultiplier
+   
+    -- Base Increase Rates:
+    local urinateBaseRate = 10    -- Base bladder fill per 10-minute tick
+    local defecateBaseRate = 3.5  -- Base bowel fill per 10-minute tick
+
+    -- Apply the appropriate multipliers for the next tick.
+    -- (These multipliers get applied for the whole 10-minute interval.)
+    local urinateIncrease = urinateBaseRate * SandboxVars.BathroomFunctions.BladderIncreaseMultiplier * finalBladderMultiplier
+    local defecateIncrease = defecateBaseRate * SandboxVars.BathroomFunctions.BowelsIncreaseMultiplier * finalBowelMultiplier
+
+    -- Update the fill values.
+    urinateValue = urinateValue + urinateIncrease
     defecateValue = defecateValue + defecateIncrease
+
+    player:getModData().urinateValue = tonumber(urinateValue)
     player:getModData().defecateValue = tonumber(defecateValue)
 
-    -- Print Debug Info
-    print("Updated Urinate Value: " .. tostring((urinateValue / bladderMaxValue) * 100) .. "%")
-    print("Updated Defecate Value: " .. tostring((defecateValue / bowelsMaxValue) * 100) .. "%")
+    -- Calculate the current percentages for debugging/triggering events.
+    local urinatePercent = (urinateValue / baseBladderMax) * 100
+    local defecatePercent = (defecateValue / baseBowelsMax) * 100
+
+    print("Updated Urinate Value: " .. tostring(urinatePercent) .. "% (Effective Max: " .. baseBladderMax .. ")")
+    print("Updated Defecate Value: " .. tostring(defecatePercent) .. "% (Effective Max: " .. baseBowelsMax .. ")")
 end
+
+
 
 -- Make the player urinate / defecate in very "sudden" situations.
 -- Like, getting injured (car crash, shot). Overflowing (bladder max capacity).
@@ -68,6 +170,39 @@ function BathroomFunctions.HandleInstantAccidents()
     -- Calculate overflow values
     local bladderThreshold = 0.95 * bladderMaxValue -- 95% of max bladder value
     local bowelsThreshold = 0.98 * bowelsMaxValue -- 98% of max bowel value
+
+    -- Leaking feature for Incontinent traits --------------------------------------------------------------------------
+
+    -- Base leak chance
+    local leakChance = 2
+
+    -- Leak Chance drunkiness
+    if player:getStats():getDrunkenness() > 0 then
+        leakChance = leakChance + 5 -- Drunk modifier
+    end
+
+    -- Panic modifier: increase leak chance if the player is panicked
+    if player:getMoodles():getMoodleLevel(MoodleType.Panic) > 0 then
+        leakChance = leakChance + (player:getMoodles():getMoodleLevel(MoodleType.Panic)*2)  -- Increase by Panic level
+    end
+
+
+    -- Leaking feature for urination
+    if player:HasTrait("UrinaryIncontinence") and (urinateValue >= 0.2 * bladderMaxValue) then
+        if ZombRand(100) < leakChance then
+            BathroomFunctions.TriggerSelfUrinate(true)  -- Trigger self urination leak action
+            print("Leaked Pee" .. tostring(leakChance))
+        end
+    end
+
+    -- Leaking feature for defecation
+    if player:HasTrait("FecalIncontinence") and (defecateValue >= 0.2 * bowelsMaxValue) then
+        if ZombRand(100) < leakChance then
+            BathroomFunctions.TriggerSelfDefecate(true)  -- Trigger self defecation leak action
+            print("Leaked Poo" .. tostring(leakChance))
+        end
+    end
+
 
     -- Handle urination and defecation when the player is asleep or awake.
     -- If the player is asleep and their bladder/bowels are full, it happens automatically and wakes them up.
@@ -124,7 +259,7 @@ function BathroomFunctions.HandleUrgencyHiccup()
         hiccupChance = 0
     else
         -- Increase chance if bladder or bowels are 80% full or more
-        if urinateValue >= 0.8 * bladderMaxValue or defecateValue >= 0.8 * bowelsMaxValue then
+        if urinateValue >= 0.8 * bladderMaxValue or defecateValue >= 0.8 * bowelsMaxValue then 
             hiccupChance = 10 -- 10% chance
         end
 
@@ -132,6 +267,10 @@ function BathroomFunctions.HandleUrgencyHiccup()
         if player:getMoodles():getMoodleLevel(MoodleType.Panic) > 0 then
             hiccupChance = hiccupChance + (player:getMoodles():getMoodleLevel(MoodleType.Panic) * 2)  -- Increase by Panic level
         end
+
+        local panicLevel = player:getMoodles():getMoodleLevel(MoodleType.Panic)
+        print("Panic Level:", panicLevel, "Calculated Value:", panicLevel * 2)
+
     end
 
     -- Print the hiccup chance each time it activates
@@ -140,7 +279,7 @@ function BathroomFunctions.HandleUrgencyHiccup()
     -- Hiccup will only trigger if bladder or bowels are 40% or more full
     if ZombRand(100) < hiccupChance then
         local hiccupType = nil
-        
+
         if urinateValue >= 0.4 * bladderMaxValue then
             hiccupType = "bladder"
         elseif defecateValue >= 0.4 * bowelsMaxValue then
@@ -159,9 +298,9 @@ function BathroomFunctions.HandleUrgencyHiccup()
 	        if(playerSayStatus:getValue(1)) then
                 player:Say(getText("IGUI_announce_UrgeHiccup"))
             end
-            
+
             -- This is where other stuff happens when the hiccup is happening
-            
+
             -- Pass the hiccup type to PlayUrgencyIdles for the correct animation
             BathroomFunctions.PlayUrgencyIdles(hiccupType, true)
 
@@ -171,13 +310,44 @@ function BathroomFunctions.HandleUrgencyHiccup()
                 accidentChance = accidentChance + 10 -- Drunk modifier
             end
 
-            if ZombRand(100) < accidentChance then
+            -- Urination logic
+            if player:HasTrait("UrinaryIncontinence") then
+                -- Incontinent players always leak fully
+                BathroomFunctions.TriggerSelfUrinate()
+            elseif ZombRand(100) < accidentChance then
                 if urinateValue >= 0.4 * bladderMaxValue then
-                    BathroomFunctions.TriggerSelfUrinate()
-                elseif defecateValue >= 0.4 * bowelsMaxValue then
-                    BathroomFunctions.TriggerSelfDefecate()
+                    if player:HasTrait("BladderControl") then
+                        -- With BladderControl, 75% chance for a small leak vs 25% full leak
+                        if ZombRand(100) < 75 then
+                                BathroomFunctions.TriggerSelfUrinate(true)  -- small leak version
+                        else
+                                BathroomFunctions.TriggerSelfUrinate()        -- full leak
+                        end
+                    else
+                        BathroomFunctions.TriggerSelfUrinate()            -- no control trait → full leak
+                        print("Triggered full leak (no trait)")
+                    end
                 end
             end
+
+            -- Defecation logic
+            if player:HasTrait("FecalIncontinence") then
+                -- Incontinent players always defecate fully
+                BathroomFunctions.TriggerSelfDefecate()
+            elseif ZombRand(100) < accidentChance then
+                if defecateValue >= 0.4 * bowelsMaxValue then
+                    if player:HasTrait("BowelControl") then
+                        if ZombRand(100) < 75 then
+                                BathroomFunctions.TriggerSelfDefecate(true)
+                        else
+                                BathroomFunctions.TriggerSelfDefecate()
+                        end
+                    else
+                        BathroomFunctions.TriggerSelfDefecate()
+                    end
+                end
+            end
+
         end
     end
 end
@@ -208,134 +378,187 @@ end
 -- =====================================================
 
 -- Function to apply effects when the player has urinated in their clothing
-function BathroomFunctions.UrinateBottoms()
+-- Modified UrinateBottoms takes an optional parameter "leakTriggered"
+function BathroomFunctions.UrinateBottoms(leakTriggered)
     local player = getPlayer()
     local modOptions = PZAPI.ModOptions:getOptions("BathroomFunctions")
-
-    local clothing = nil
     local bodyLocations = BathroomFunctions.GetSoilableClothing()
 
-    local bladderMaxValue = SandboxVars.BathroomFunctions.BladderMaxValue or 100 -- Get the max bladder value, default to 100 if not set
+    local bladderMaxValue = SandboxVars.BathroomFunctions.BladderMaxValue or 100
+    -- For leak events, only 5% of the normal urine value is applied.
+    local leakMultiplier = leakTriggered and 0.05 or 1.0
 
-    -- Check if the player is wearing any of the specified clothing
+    -- Flags to decide later if a pee object should be created and to determine unhappiness change.
+    local showPeeObject = false
+    local maxPeeSeverity = 0
+
+    -- Process each clothing item.
     for i = 1, #bodyLocations do
-        clothing = player:getWornItem(bodyLocations[i])
+        local clothing = player:getWornItem(bodyLocations[i])
         if clothing then
             local modData = clothing:getModData()
 
-            -- Ensure 'peedSeverity' is initialized if it doesn't exist
             if modData.peedSeverity == nil then
                 modData.peedSeverity = 0
             end
 
-            -- Convert to a percentage of the bladderMaxValue
-            local urinatePercentage = (BathroomFunctions.GetUrinateValue() / bladderMaxValue) * 100
+            local peeValue = BathroomFunctions.GetUrinateValue()
+            local urinatePercentage = (peeValue / bladderMaxValue) * 100
+            urinatePercentage = urinatePercentage * leakMultiplier
 
-            -- Mark the clothing as soiled by urine
+            -- Mark this clothing item as soiled by urine.
             modData.peed = true
             modData.peedSeverity = modData.peedSeverity + urinatePercentage
 
-            -- Cap the 'peedSeverity' at 100
             if modData.peedSeverity >= 100 then
                 modData.peedSeverity = 100
             end
 
-            -- Update the clothing item and condition
-            BathroomFunctions.SetClothing(clothing)
-
-            -- Update the clothing's condition after the accident
-            BathroomFunctions.UpdateSoiledSeverity(clothing)
-
-            if SandboxVars.BathroomFunctions.VisiblePeeStain == true then
-                BathroomClothOverlays.equipPeedOverlay(player, clothing)
-                print("Should have equipped pee overlay")
+            -- Keep track of the highest peed severity among clothing pieces.
+            if modData.peedSeverity > maxPeeSeverity then
+                maxPeeSeverity = modData.peedSeverity
             end
+
+            -- Only equip the pee overlay if:
+            --   • Not a leak event, OR
+            --   • A leak event but this clothing's peed severity reached at least 25.
+            if SandboxVars.BathroomFunctions.VisiblePeeStain == true then
+                if (not leakTriggered) or (leakTriggered and modData.peedSeverity >= 25) then
+                    BathroomClothOverlays.equipPeedOverlay(player, clothing)
+                    print("Should have equipped pee overlay")
+                end
+            end
+
+            -- Mark that the pee object should be created if this clothing meets the threshold.
+            if modData.peedSeverity >= 90 then
+                showPeeObject = true
+            end
+
+            BathroomFunctions.SetClothing(clothing, leakTriggered)
+            BathroomFunctions.UpdateSoiledSeverity(clothing)
         end
     end
 
+    -- Only create the pee object if:
+    --   • Not a leak event, OR
+    --   • A leak event and at least one clothing item has a peed severity >= 25.
     if SandboxVars.BathroomFunctions.CreatePeeObject == true then
-		local urineItem = instanceItem("BathroomFunctions.Urine_Hydrated_0")
-		player:getCurrentSquare():AddWorldInventoryItem(urineItem, 0, 0, 0)
-	end
+        if (not leakTriggered) or (leakTriggered and showPeeObject) then
+            local urineItem = instanceItem("BathroomFunctions.Urine_Hydrated_0")
+            player:getCurrentSquare():AddWorldInventoryItem(urineItem, 0, 0, 0)
+        end
+    end
 
     player:playerVoiceSound("SighBored")
-    getSoundManager():PlayWorldSound("BF_PeeSelf", player:getCurrentSquare(), 0, 10, .2, false)
 
-    -- Update player stats for the accident
-    --player:getStats():setStress(player:getStats():getStress() + 0.6)
-    player:getBodyDamage():setUnhappynessLevel(player:getBodyDamage():getUnhappynessLevel() + 5)
-
-    -- The player says they have urinated themselves
-    local playerSayStatus = modOptions:getOption("6")
-	if(playerSayStatus:getValue(1)) then
-        player:Say(getText("IGUI_announce_IPeedMyself"))
+    if leakTriggered then
+        player:Say(getText("IGUI_announce_SilentOops"))
+    else
+        -- Keep sound for full accidents (non-leak events)
+        getSoundManager():PlayWorldSound("BF_PeeSelf", player:getCurrentSquare(), 0, 10, 0.2, false)
+        local playerSayStatus = modOptions:getOption("6")
+        if playerSayStatus:getValue(1) then
+            player:Say(getText("IGUI_announce_IPeedMyself"))
+        end
+        
     end
+
 end
 
+
+
 -- Function to apply effects when the player has defecated in their clothing
-function BathroomFunctions.DefecateBottoms()
+function BathroomFunctions.DefecateBottoms(leakTriggered)
     local player = getPlayer()
     local modOptions = PZAPI.ModOptions:getOptions("BathroomFunctions")
-
-    local clothing = nil
     local bodyLocations = BathroomFunctions.GetSoilableClothing()
+    local bowelsMaxValue = SandboxVars.BathroomFunctions.BowelsMaxValue or 100 -- Default max value for bowels
 
-    local bowelsMaxValue = SandboxVars.BathroomFunctions.BowelsMaxValue or 100 -- Get the max bowels value, default to 100 if not set
+    -- For leak events, only 5% of the normal defecate value is applied.
+    local leakMultiplier = leakTriggered and 0.05 or 1.0
 
-    -- Check if the player is wearing any of the specified clothing
+    -- Track the maximum pooped severity across all clothing pieces.
+    local maxPoopedSeverity = 0
+    
+    -- Flag to decide if a poop object should be created
+    local showPoopObject = false
+
+    -- Process each clothing item.
     for i = 1, #bodyLocations do
-        clothing = player:getWornItem(bodyLocations[i])
+        local clothing = player:getWornItem(bodyLocations[i])
         if clothing then
             local modData = clothing:getModData()
 
-            -- Ensure 'poopedSeverity' is initialized if it doesn't exist
+            -- Ensure 'poopedSeverity' is initialized.
             if modData.poopedSeverity == nil then
                 modData.poopedSeverity = 0
             end
 
-            -- Convert to a percentage of the bladderMaxValue
-            local defecatePercentage = (BathroomFunctions.GetDefecateValue() / bowelsMaxValue) * 100
+            -- Get the defecate value as a percentage of the maximum, then apply the multiplier.
+            local defecateValue = BathroomFunctions.GetDefecateValue()
+            local defecatePercentage = (defecateValue / bowelsMaxValue) * 100
+            defecatePercentage = defecatePercentage * leakMultiplier
 
-            -- Mark the clothing as soiled by urine
+            -- Mark the clothing as soiled by feces and update severity.
             modData.pooped = true
             modData.poopedSeverity = modData.poopedSeverity + defecatePercentage
 
-            -- Cap the 'poopedSeverity' at 100
+            -- Cap the severity at 100.
             if modData.poopedSeverity >= 100 then
                 modData.poopedSeverity = 100
             end
 
-            -- Update the clothing item and condition
-            BathroomFunctions.SetClothing(clothing)
+            -- Track the highest pooped severity.
+            if modData.poopedSeverity > maxPoopedSeverity then
+                maxPoopedSeverity = modData.poopedSeverity
+            end
+            
+            -- Only equip the poop overlay if:
+            -- • Not a leak event, OR
+            -- • A leak event but this clothing's pooped severity reached at least 25.
+            if SandboxVars.BathroomFunctions.VisiblePoopStain == true then
+                if (not leakTriggered) or (leakTriggered and modData.poopedSeverity >= 25) then
+                    BathroomClothOverlays.equipPoopedOverlay(player, clothing)
+                    print("Should have equipped poop overlay")
+                end
+            end
 
-            -- Update the player's condition after the accident
+            -- Update the clothing item's condition.
+            BathroomFunctions.SetClothing(clothing, leakTriggered)
             BathroomFunctions.UpdateSoiledSeverity(clothing)
         end
     end
 
+
+    -- Play the defecation sound and update player visuals.
     player:playerVoiceSound("JumpLow")
-    getSoundManager():PlayWorldSound("BF_PoopSelf1", player:getCurrentSquare(), 0, 10, .05, false)
-
-    -- Update player stats for the accident
-    --player:getStats():setStress(player:getStats():getStress() + 0.8)
-    player:getBodyDamage():setUnhappynessLevel(player:getBodyDamage():getUnhappynessLevel() + 10)
-    player:getStats():setFatigue(player:getStats():getFatigue() + 0.025)
-
-    -- Add dirt to simulate the mess
-    player:addDirt(BloodBodyPartType.Groin, ZombRand(20, 50), false)
-    player:addDirt(BloodBodyPartType.UpperLeg_L, ZombRand(20, 50), false)
-    player:addDirt(BloodBodyPartType.UpperLeg_R, ZombRand(20, 50), false)
-
-    player:getVisual():setDirt(BloodBodyPartType.Groin, ZombRand(20, 50))
-    player:getVisual():setDirt(BloodBodyPartType.UpperLeg_L, ZombRand(20, 50))
-    player:getVisual():setDirt(BloodBodyPartType.UpperLeg_R, ZombRand(20, 50))
-
-    -- The player says they have defecated themselves
-    local playerSayStatus = modOptions:getOption("6")
-	if(playerSayStatus:getValue(1)) then
-        player:Say(getText("IGUI_announce_IPoopedMyself"))
+    
+    -- Have the player speak a message based on the leak status.
+    if leakTriggered then
+        player:Say(getText("IGUI_announce_SilentOops"))
+    else
+        getSoundManager():PlayWorldSound("BF_PoopSelf1", player:getCurrentSquare(), 0, 10, 0.05, false)
+        local playerSayStatus = modOptions:getOption("6")
+        if playerSayStatus:getValue(1) then
+            player:Say(getText("IGUI_announce_IPoopedMyself"))
+        end
     end
+
+    
+
+    -- Apply dirt to the player's body, reduced based on leak conditions.
+    local dirtMultiplier = leakTriggered and 0.05 or 1.0
+    player:addDirt(BloodBodyPartType.Groin, ZombRand(4, 10) * dirtMultiplier, false)
+    player:addDirt(BloodBodyPartType.UpperLeg_L, ZombRand(4, 10) * dirtMultiplier, false)
+    player:addDirt(BloodBodyPartType.UpperLeg_R, ZombRand(4, 10) * dirtMultiplier, false)
+
+    player:getVisual():setDirt(BloodBodyPartType.Groin, ZombRand(4, 10) * dirtMultiplier)
+    player:getVisual():setDirt(BloodBodyPartType.UpperLeg_L, ZombRand(4, 10) * dirtMultiplier)
+    player:getVisual():setDirt(BloodBodyPartType.UpperLeg_R, ZombRand(4, 10) * dirtMultiplier)
+
+    
 end
+
 
 
 -- Helper function to check if the player is wearing any of the specified clothing
@@ -437,34 +660,34 @@ end
 -- =====================================================
 
 -- FOR ITEMS IN GENERAL
-function BathroomFunctions.SetClothing(item)
-
+function BathroomFunctions.SetClothing(item, isLeak)
+    -- Get the player object
+    local player = getSpecificPlayer(0)
+    local bodyDamage = player:getBodyDamage()
+    
     -- If the item is marked as "peed" (wet), modify the item's properties
     if item:getModData().peed == true then
-
-        -- Only apply clothing modifiers if clothing
         if item:IsClothing() then
-            -- Set the wetness to maximum (500) to indicate the item is soaked
-            item:setWetness(500)
-            -- Set the dirtyness to maximum (100)
-            item:setDirtyness(100)
+            local severity = item:getModData().peedSeverity / 100
+            -- Scale wetness and dirtyness based on severity
+            item:setWetness(math.min(500 * severity, 500))
+            item:setDirtyness(math.min(100 * severity, 100))
         end
-
     end
 
     -- If the item is marked as "pooped" (dirty), modify the item's properties
     if item:getModData().pooped == true then
-
-        -- Only apply clothing modifiers if clothing
         if item:IsClothing() then
-            -- Set the dirtyness to maximum (100)
-            item:setDirtyness(100)
-            -- Reduce the player's run speed to simulate having poop in the clothing
-            item:setRunSpeedModifier(item:getRunSpeedModifier() - 0.2) -- slower movement, but may not be very noticeable
+            -- Calculate severity for the fecal leak
+            local severity = item:getModData().poopedSeverity / 100
+            -- Scale dirtyness based on severity
+            item:setDirtyness(math.min(100 * severity, 100))
         end
-        
     end
 end
+
+
+
 
 
 
@@ -487,6 +710,24 @@ end
 
 -- Wiping options helper function
 function BathroomFunctions.AddWipingOptions(parentMenu, worldObjects, player, defecateValue, requirement, maxValue, wipeType, wipeItem, triggerFunction, targetObject)
+    -- Check if player actually needs to defecate first
+    if defecateValue < (requirement / 100) * maxValue then
+        -- Player doesn't need to defecate enough yet, don't show wiping options
+        return nil
+    end
+    
+    -- Check for shy traits
+    local hasShyBowels = player:HasTrait("ShyBowels")
+    local hasParcopresis = player:HasTrait("Parcopresis")
+    
+    -- Check if player is being watched (assuming this check is similar to what you have in BathroomRightClick)
+    local isBeingWatched = BathroomFunctions.IsBeingWatched(player)
+    
+    -- If player has shy traits and is being watched, don't show wiping options
+    if (hasShyBowels or hasParcopresis) and isBeingWatched then
+        return nil
+    end
+    
     -- Create the "Wipe" submenu
     local wipeSubMenu = ISContextMenu:getNew(parentMenu)
 
@@ -500,7 +741,7 @@ function BathroomFunctions.AddWipingOptions(parentMenu, worldObjects, player, de
     end
 
     -- Add "Wipe With" option if wiping is possible
-    if defecateValue >= (requirement / 100) * maxValue and wipeItem then
+    if wipeItem then
         if triggerFunction == BathroomFunctions.TriggerGroundDefecate then
             local doWipeOption = wipeSubMenu:addOption(getText("ContextMenu_WipeWith") .. " " .. wipeItem:getName(), true, triggerFunction, wipeType, wipeItem)
             BathroomFunctions.AddTooltip(doWipeOption, "Wipe using this item.")
@@ -511,6 +752,68 @@ function BathroomFunctions.AddWipingOptions(parentMenu, worldObjects, player, de
     end
 
     return wipeSubMenu
+end
+
+function BathroomFunctions.IsBeingWatched(player)
+    local isBeingWatched = false
+    
+    -- Only check if player has traits that might be affected
+    if player:HasTrait("Paruresis") or player:HasTrait("Parcopresis") or 
+       player:HasTrait("ShyBladder") or player:HasTrait("ShyBowels") then
+        
+        local checkRange = 10 -- 10 tiles radius
+        local playerX = player:getX()
+        local playerY = player:getY()
+        local playerZ = player:getZ()
+        local playerSquare = player:getSquare()
+        
+        -- Function to check if there's line of sight between two squares
+        local function hasLineOfSight(fromSquare, toSquare)
+            if not fromSquare or not toSquare then return false end
+            
+            -- Use the correct line of sight function
+            return LosUtil.lineClear(getCell(), fromSquare:getX(), fromSquare:getY(), fromSquare:getZ(), 
+                                     toSquare:getX(), toSquare:getY(), toSquare:getZ(), false)
+        end
+        
+        -- Check for zombies nearby with line of sight
+        local zombies = getCell():getZombieList()
+        for i = 0, zombies:size() - 1 do
+            local zombie = zombies:get(i)
+            if zombie:getZ() == playerZ and 
+               math.abs(zombie:getX() - playerX) <= checkRange and 
+               math.abs(zombie:getY() - playerY) <= checkRange then
+                
+                -- Check if zombie has line of sight to player
+                if hasLineOfSight(zombie:getSquare(), playerSquare) then
+                    isBeingWatched = true
+                    break
+                end
+            end
+        end
+        
+        -- Check for other players nearby with line of sight (for multiplayer)
+        if not isBeingWatched then
+            local players = getOnlinePlayers()
+            if players then
+                for i = 0, players:size() - 1 do
+                    local otherPlayer = players:get(i)
+                    if otherPlayer ~= player and otherPlayer:getZ() == playerZ and 
+                       math.abs(otherPlayer:getX() - playerX) <= checkRange and 
+                       math.abs(otherPlayer:getY() - playerY) <= checkRange then
+                        
+                        -- Check if other player has line of sight to this player
+                        if hasLineOfSight(otherPlayer:getSquare(), playerSquare) then
+                            isBeingWatched = true
+                            break
+                        end
+                    end
+                end
+            end
+        end
+    end
+    
+    return isBeingWatched
 end
 
 function BathroomFunctions.BathroomRightClick(player, context, worldObjects)
@@ -549,7 +852,20 @@ function BathroomFunctions.BathroomRightClick(player, context, worldObjects)
 
     local modOptions = PZAPI.ModOptions:getOptions("BathroomFunctions")
 
-    local wipeType, wipeItem = BathroomFunctions.CheckForWipeables(player)
+    --local wipeType, wipeItem = BathroomFunctions.CheckForWipeables(player) -- moved to induvidial function to reduce calls
+
+    -------------------------------------------------------------------------------------------------------------------
+
+        -- Check for Paruresis (shy bladder) and Parcopresis (shy bowel)
+    local hasParuresis = player:HasTrait("Paruresis")
+    local hasParcopresis = player:HasTrait("Parcopresis")
+
+    -- Add checks for new traits
+    local hasShyBladder = player:HasTrait("ShyBladder")
+    local hasShyBowels = player:HasTrait("ShyBowels")
+
+    -- Use our common function to check if being watched
+    local isBeingWatched = BathroomFunctions.IsBeingWatched(player)
 
     -------------------------------------------------------------------------------------------------------------------
 
@@ -558,12 +874,24 @@ function BathroomFunctions.BathroomRightClick(player, context, worldObjects)
     local peeSubMenu = ISContextMenu:getNew(context)
     context:addSubMenu(peeOption, peeSubMenu)
     peeOption.iconTexture = getTexture("media/ui/Urination.png")
+    
+    -- Disable all urination options if player has Paruresis and is being watched
+    if hasParuresis and isBeingWatched then
+        peeOption.notAvailable = true
+        BathroomFunctions.AddTooltip(peeOption, "You are too shy to urinate while being watched.")
+    end
 
     -- Main menu option: "Defecation"
     local poopOption = context:addOption(getText("ContextMenu_Defecate"), worldObjects, nil)
     local poopSubMenu = ISContextMenu:getNew(context)
     context:addSubMenu(poopOption, poopSubMenu)
     poopOption.iconTexture = getTexture("media/ui/Defecation.png")
+    
+    -- Disable all defecation options if player has Parcopresis and is being watched
+    if hasParcopresis and isBeingWatched then
+        poopOption.notAvailable = true
+        BathroomFunctions.AddTooltip(poopOption, "You are too shy to defecate while being watched.")
+    end
 
     -------------------------------------------------------------------------------------------------------------------
 
@@ -576,28 +904,43 @@ function BathroomFunctions.BathroomRightClick(player, context, worldObjects)
     BathroomFunctions.AddTooltip(groundPoopOption, "Defecate on the ground. (Requires " .. poopOnGroundRequirement .. "%)")
     groundPoopOption.iconTexture = getTexture("media/textures/ContextMenuGround.png");
 
-    if urinateValue < (peeOnGroundRequirement / 100) * bladderMaxValue then
+    -- Disable ground peeing for ShyBladder trait
+    if urinateValue < (peeOnGroundRequirement / 100) * bladderMaxValue or hasShyBladder then
         groundPeeOption.notAvailable = true
+        if hasShyBladder then
+            BathroomFunctions.AddTooltip(groundPeeOption, "You are too shy to urinate in public places.")
+        end
     end
 
-    if defecateValue < (poopOnGroundRequirement / 100) * bowelsMaxValue then
+    if defecateValue < (poopOnGroundRequirement / 100) * bowelsMaxValue or hasShyBowels then
         groundPoopOption.notAvailable = true
+        if hasShyBowels then
+            BathroomFunctions.AddTooltip(groundPoopOption, "You are too shy to defecate in public places.")
+        end
     end
 
-    -- Add wiping system for ground poop
-    local wipeSubMenuForGround = BathroomFunctions.AddWipingOptions(
-        poopSubMenu,
-        worldObjects,
-        player,
-        defecateValue,
-        poopOnGroundRequirement,
-        bowelsMaxValue,
-        wipeType,
-        wipeItem,
-        BathroomFunctions.TriggerGroundDefecate, -- Pass ground defecation function
-        nil -- No specific target object for ground defecation
-    )
-    poopSubMenu:addSubMenu(groundPoopOption, wipeSubMenuForGround)
+    -- Only add wiping options if the player can actually poop on the ground
+    if defecateValue >= (poopOnGroundRequirement / 100) * bowelsMaxValue and not (hasShyBowels and isBeingWatched) then
+        -- Only check for wipeables if we actually need them
+        local wipeType, wipeItem = BathroomFunctions.CheckForWipeables(player)
+        local wipeSubMenuForGround = BathroomFunctions.AddWipingOptions(
+            poopSubMenu,
+            worldObjects,
+            player,
+            defecateValue,
+            poopOnGroundRequirement,
+            bowelsMaxValue,
+            wipeType,
+            wipeItem,
+            BathroomFunctions.TriggerGroundDefecate,
+            nil
+        )
+        
+        -- Only add the submenu if it was actually created
+        if wipeSubMenuForGround then
+            poopSubMenu:addSubMenu(groundPoopOption, wipeSubMenuForGround)
+        end
+    end
 
     -------------------------------------------------------------------------------------------------------------------
 
@@ -610,9 +953,12 @@ function BathroomFunctions.BathroomRightClick(player, context, worldObjects)
         BathroomFunctions.AddTooltip(selfPeeOption, "Urinate on yourself. Very few situations where this would be useful. (Requires " .. peeOnSelfRequirement .. "%)")
         selfPeeOption.iconTexture = getTexture("media/ui/PeedSelf.png");
 
-        -- Disable "On Self" pee options if urinateValue too low
-        if urinateValue < (peeOnSelfRequirement / 100) * bladderMaxValue then
+        -- Disable "On Self" pee options if urinateValue too low or ShyBladder trait
+        if urinateValue < (peeOnSelfRequirement / 100) * bladderMaxValue or hasShyBladder then
             selfPeeOption.notAvailable = true
+            if hasShyBladder then
+                BathroomFunctions.AddTooltip(selfPeeOption, "You are too shy to urinate on yourself, even when alone.")
+            end
         end
 
     end
@@ -624,8 +970,11 @@ function BathroomFunctions.BathroomRightClick(player, context, worldObjects)
         BathroomFunctions.AddTooltip(selfPoopOption, "Defecate on yourself. Very few situations where this would be useful. (Requires " .. poopOnSelfRequirement .. "%)")
         selfPoopOption.iconTexture = getTexture("media/ui/PoopedSelf.png");
 
-        if defecateValue < (poopOnSelfRequirement / 100) * bowelsMaxValue then
+        if defecateValue < (poopOnSelfRequirement / 100) * bowelsMaxValue or hasShyBowels then
             selfPoopOption.notAvailable = true
+            if hasShyBowels then
+                BathroomFunctions.AddTooltip(selfPoopOption, "You are too shy to defecate on yourself, even when alone.")
+            end
         end
     
     end
@@ -666,6 +1015,8 @@ function BathroomFunctions.BathroomRightClick(player, context, worldObjects)
                 end
 
                 -- Add wiping option for toilet defecation
+                -- Only check for wipeables if we actually need them
+                local wipeType, wipeItem = BathroomFunctions.CheckForWipeables(player)
                 local wipeSubMenuForToilet = BathroomFunctions.AddWipingOptions(
                     poopSubMenu,
                     worldObjects,
@@ -731,6 +1082,8 @@ function BathroomFunctions.BathroomRightClick(player, context, worldObjects)
                     outhousePoopOption.notAvailable = true
                 end
 
+                -- Only check for wipeables if we actually need them
+                local wipeType, wipeItem = BathroomFunctions.CheckForWipeables(player)
                 -- Add wiping option for toilet defecation
                 local wipeSubMenuForToilet = BathroomFunctions.AddWipingOptions(
                     poopSubMenu,
@@ -759,8 +1112,12 @@ function BathroomFunctions.BathroomRightClick(player, context, worldObjects)
 
             sinkPeeOption.iconTexture = getTexture("media/textures/ContextMenuSink.png");
 
-            if urinateValue < (peeInToiletRequirement / 100) * bladderMaxValue then
+            -- Disable sink peeing for ShyBladder trait
+            if urinateValue < (peeInToiletRequirement / 100) * bladderMaxValue or hasShyBladder then
                 sinkPeeOption.notAvailable = true
+                if hasShyBladder then
+                    BathroomFunctions.AddTooltip(sinkPeeOption, "You are too shy to urinate in a sink.")
+                end
             end
         end
 
@@ -775,8 +1132,12 @@ function BathroomFunctions.BathroomRightClick(player, context, worldObjects)
                 BathroomFunctions.AddTooltip(showerPeeOption, "Urinate in the shower / bathtub. (Requires " .. peeInToiletRequirement .. "%)")
                 toiletOptionAdded = true
 
-                if urinateValue < (peeInToiletRequirement / 100) * bladderMaxValue then
+                -- Disable shower peeing for ShyBladder trait
+                if urinateValue < (peeInToiletRequirement / 100) * bladderMaxValue or hasShyBladder then
                     showerPeeOption.notAvailable = true
+                    if hasShyBladder then
+                        BathroomFunctions.AddTooltip(showerPeeOption, "You are too shy to urinate in a shower/bathtub.")
+                    end
                 end
 
                 break
@@ -810,8 +1171,12 @@ function BathroomFunctions.BathroomRightClick(player, context, worldObjects)
         end
 
         -- Make the "Use Container" option unavailable if no valid containers are found or pee in container requirement not met
-        if urinateValue < (peeInContainerRequirement / 100) * bladderMaxValue then
+        -- Also disable for ShyBladder trait
+        if urinateValue < (peeInContainerRequirement / 100) * bladderMaxValue or hasShyBladder or not hasValidContainers then
             containerPeeOption.notAvailable = true
+            if hasShyBladder then
+                BathroomFunctions.AddTooltip(containerPeeOption, "You are too shy to urinate in a container.")
+            end
         end
     end
     -------------------------------------------------------------------------------------------------------------------
@@ -867,6 +1232,11 @@ function BathroomFunctions.WashingRightClick(player, context, worldObjects)
 			return
 		end
 
+            -- Check soiled item name
+        if not soiledItem:getModData().originalName then
+            soiledItem:getModData().originalName = soiledItem:getName()
+        end
+
 		local washOption = context:addOptionOnTop("Wash Soiled Clothing", nil, nil)
         washOption.iconTexture = getTexture("media/ui/PeedSelf.png");
 		local subMenu = ISContextMenu:getNew(context)
@@ -874,7 +1244,7 @@ function BathroomFunctions.WashingRightClick(player, context, worldObjects)
 		local option = subMenu:addOption(soiledItem:getName(), player, BathroomFunctions.WashSoiled, square, soiledItem, soapItem, storeWater, soiledItemEquipped)
 
 
-		local waterRemaining = storeWater:getWaterAmount()
+		local waterRemaining = storeWater:getFluidAmount()
 		
 		if (waterRemaining < 15) then
 			option.notAvailable = true --Not enough water
@@ -1126,46 +1496,69 @@ function BathroomFunctions.TriggerGroundDefecate(isWiping, wipeType, wipeItem)
 
     -- Check in here if isWiping is false, if false, then add a small pooped value to the worn clothes.
 end
-function BathroomFunctions.TriggerSelfDefecate()
+
+function BathroomFunctions.TriggerSelfDefecate(isLeak)
+    local isLeak = isLeak or false
     local player = getPlayer() -- Fetch the current player object
     local defecateValue = BathroomFunctions.GetDefecateValue() -- Current bowel level
-    local poopTime = defecateValue / 4 -- Make this a quarter of the defecate value so the player isn't locked for long
-    local bowelsMaxValue = SandboxVars.BathroomFunctions.BowelsMaxValue or 100 -- Get the max bowel value, default to 100 if not set
+    local poopTime = defecateValue / 4 -- Use a quarter of the defecate value so the player isn't locked for long
+    local bowelsMaxValue = SandboxVars.BathroomFunctions.BowelsMaxValue or 100
 
-    -- Check if player has relevant clothing on and apply the "pooped bottoms" effects
+    -- Check if the player has relevant clothing on and apply the "pooped bottoms" effects.
     if BathroomFunctions.HasClothingOn(player, unpack(BathroomFunctions.GetSoilableClothing())) then
-        BathroomFunctions.DefecateBottoms()
-    else -- if the player doesn't wear clothing while pooping
-        
+        BathroomFunctions.DefecateBottoms(isLeak)
+    else
+        -- Optionally, you could create a world object or simply do nothing when no clothing is worn.
+        -- For defecation there may be no object spawned.
     end
 
-    ISTimedActionQueue.add(SelfDefecate:new(player, poopTime, false, false, true, false, nil))
+    -- Enqueue the self-defecation timed action.
+    -- The last parameter 'isLeak' determines whether it applies leak behavior.
+    ISTimedActionQueue.add(SelfDefecate:new(player, poopTime, false, false, true, false, nil, isLeak))
 
-    -- Set the defecate value to 0 as the player has defecated
-    --BathroomFunctions.SetDefecateValue(0)
+    print("Updated Pooped Self Value: " .. BathroomFunctions.GetPoopedSelfValue()) -- Debug print statement
+    if isLeak then
+        print("Leak triggered: Updated Pooped Self Value: " .. BathroomFunctions.GetPoopedSelfValue())
+    else
+        print("Updated Pooped Self Value: " .. BathroomFunctions.GetPoopedSelfValue())
+    end
 
-    print("Updated Pooped Self Value: " .. BathroomFunctions.GetPoopedSelfValue()) -- Debug print statement to display the updated defecation value
 end
-function BathroomFunctions.TriggerSelfUrinate()
+
+
+function BathroomFunctions.TriggerSelfUrinate(isLeak)
+    local isLeak = isLeak or false
     local player = getPlayer() -- Fetch the current player object
     local urinateValue = BathroomFunctions.GetUrinateValue() -- Current bladder level
-	local peeTime = urinateValue / 4 -- Make this a quarter of the urinate value so the player isn't locked for long
-    local bladderMaxValue = SandboxVars.BathroomFunctions.BladderMaxValue or 100 -- Get the max bladder value, default to 100 if not set
+    local peeTime = urinateValue / 4 -- Determine the time based on the bladder level
 
-    -- Check if player has relevant clothing on and apply the "peed bottoms" effects
+    -- Optionally, you can adjust the bladderMaxValue based on mode.
+    local bladderMaxValue = isLeak and (SandboxVars.BathroomFunctions.BladderMaxValue or 500)
+                                     or (SandboxVars.BathroomFunctions.BladderMaxValue or 100)
+
+    -- Check if player is wearing clothing that can be soiled.
     if BathroomFunctions.HasClothingOn(player, unpack(BathroomFunctions.GetSoilableClothing())) then
-        BathroomFunctions.UrinateBottoms()
-    else -- if the player doesn't wear clothing while pooping
+        BathroomFunctions.UrinateBottoms(isLeak)  -- Pass in the leak flag.
+    else
+        -- If the player isn't wearing clothing, create the pee object if that option is enabled.
         if SandboxVars.BathroomFunctions.CreatePeeObject == true then
-		    local urineItem = instanceItem("BathroomFunctions.Urine_Hydrated_0")
-		    player:getCurrentSquare():AddWorldInventoryItem(urineItem, 0, 0, 0)
-	    end
+            local urineItem = instanceItem("BathroomFunctions.Urine_Hydrated_0")
+            player:getCurrentSquare():AddWorldInventoryItem(urineItem, 0, 0, 0)
+        end
     end
 
-    ISTimedActionQueue.add(SelfUrinate:new(player, peeTime, false, false, true, false, nil))
+    -- Enqueue the self-urinate action.
+    -- The last parameter, `isLeak`, tells the timed action to use the leak behavior.
+    ISTimedActionQueue.add(SelfUrinate:new(player, peeTime, false, false, true, false, nil, isLeak))
 
-    print("Updated Peed Self Value: " .. BathroomFunctions.GetPeedSelfValue()) -- Debug print statement to display the updated urination value
+    if isLeak then
+        print("Leak triggered: Updated Peed Self Value: " .. BathroomFunctions.GetPeedSelfValue())
+    else
+        print("Updated Peed Self Value: " .. BathroomFunctions.GetPeedSelfValue())
+    end
 end
+
+
 function BathroomFunctions.PeeInContainer(item)
     local fluidContainer = item:getFluidContainer() -- Access the container
     local containerCapacity = fluidContainer:getCapacity() * 1000 -- Convert from L to mL (if it's in L)
@@ -1249,25 +1642,38 @@ end
 
 function BathroomFunctions.onGameBoot()
     local humanGroup = BodyLocations.getGroup("Human"); -- Get the BodyLocations group for humans
-    local peedOverlayLocation = humanGroup:getOrCreateLocation("PeedOverlay"); -- Create or fetch the PeedOverlay location
-    local poopedOverlayLocation = humanGroup:getOrCreateLocation("PoopedOverlay"); -- Create or fetch the PoopedOverlay location
+    local peedUndiesLocation = humanGroup:getOrCreateLocation("PeedOverlay"); -- Create or fetch the PeedOverlay location
+    local peedPantsLocation = humanGroup:getOrCreateLocation("PeedOverlay2"); -- Create or fetch the PeedOverlay2 location
+    local poopedUndiesLocation = humanGroup:getOrCreateLocation("PoopedOverlay"); -- Create or fetch the PoopedOverlay location
+    local poopedPantsLocation = humanGroup:getOrCreateLocation("PoopedOverlay2"); -- Create or fetch the PoopedOverlay2 location if needed
 
-    -- Remove peedOverlayLocation if it already exists to avoid duplication
+    -- Remove PeedOverlay if it already exists to avoid duplication
     local list = getClassFieldVal(humanGroup, getClassField(humanGroup, 1));
-    list:remove(peedOverlayLocation);
+    list:remove(peedUndiesLocation);
 
-    -- Remove poopedOverlayLocation if it already exists to avoid duplication
-    local list = getClassFieldVal(humanGroup, getClassField(humanGroup, 1));
-    list:remove(poopedOverlayLocation);
+    -- Remove PeedOverlay2 if it already exists to avoid duplication
+    list:remove(peedPantsLocation);
 
-    -- Find the index of Pants to ensure peedOverlayLocation renders above it
+    -- Remove PoopedOverlay if it already exists to avoid duplication
+    list:remove(poopedUndiesLocation);
+
+    -- Remove PoopedOverlay2 if it already exists to avoid duplication
+    list:remove(poopedPantsLocation);
+
+    -- Find the index of Pants to ensure overlays render above it
     local pantsIndex = humanGroup:indexOf("Pants");
 
-    -- Add peedOverlayLocation just after Pants
-    list:add(pantsIndex + 1, peedOverlayLocation);
+    -- Add PeedOverlay just after Pants
+    list:add(pantsIndex + 1, peedUndiesLocation);
 
-    -- Add poopedOverlayLocation just after PeedOverlay
-    list:add(pantsIndex + 2, poopedOverlayLocation);
+    -- Add PeedOverlay2 just after PeedOverlay
+    list:add(pantsIndex + 2, peedPantsLocation);
+
+    -- Add PoopedOverlay just after PeedOverlay2
+    list:add(pantsIndex + 3, poopedUndiesLocation);
+
+    -- Add PoopedOverlay2 just after PoopedOverlay if needed
+    list:add(pantsIndex + 4, poopedPantsLocation);
 end
 
 

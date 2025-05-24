@@ -45,6 +45,8 @@ Events.OnLoad.Add(function()
     BathroomClothOverlays.PopulatePeedModels()
     BathroomClothOverlays.removeAllPeedOverlays(getPlayer())
     BathroomClothOverlays.equipAllPeedOverlays(getPlayer())
+    BathroomClothOverlays.removeAllPoopedOverlays(getPlayer())
+    BathroomClothOverlays.equipAllPoopedOverlays(getPlayer())
 end)
 
 function table.contains(table, value)
@@ -77,19 +79,31 @@ end
 -- Helper function to determine which overlay should be used
 function BathroomClothOverlays.getPeedOverlayItem(item)
     if table.contains(BathroomClothOverlays.peedModelsSuitTrousersMesh, item:getType()) then
-        return "BathroomFunctions.SuitTrousersMesh_Peed"
+        return "BathroomFunctions.BoxingShorts_Peed"
     elseif table.contains(BathroomClothOverlays.peedModelsMaleBoxers, item:getType()) then
         return "BathroomFunctions.Male_Boxers_Peed"
     elseif table.contains(BathroomClothOverlays.peedModelsFemalePanties, item:getType()) then
         return "BathroomFunctions.Female_Underpants_Peed"
     end
-    return "BathroomFunctions.SuitTrousersMesh_Peed" -- Default is trousers. Most undefined clothing is pants
+    return "BathroomFunctions.BoxingShorts_Peed"
+end
+
+-- Helper function to determine which overlay should be used
+function BathroomClothOverlays.getPoopedOverlayItem(item)
+    if table.contains(BathroomClothOverlays.peedModelsSuitTrousersMesh, item:getType()) then
+        return "BathroomFunctions.BoxingShorts_Pooped"
+    elseif table.contains(BathroomClothOverlays.peedModelsMaleBoxers, item:getType()) then
+        return "BathroomFunctions.Male_Boxers_Pooped"
+    elseif table.contains(BathroomClothOverlays.peedModelsFemalePanties, item:getType()) then
+        return "BathroomFunctions.Female_Underpants_Pooped"
+    end
+    return "BathroomFunctions.BoxingShorts_Pooped"
 end
 
 -- Optimized equipPeedOverlay function
 function BathroomClothOverlays.equipPeedOverlay(player, wornItem)
-
-    if wornItem:getModData().peed == true then
+    local modData = wornItem:getModData()
+    if wornItem:getModData().peed == true and (modData.peedSeverity == nil or modData.peedSeverity >= 25) then
 
         local currentWornItems = BathroomClothOverlays.getCurrentWornItems(player)
         BathroomClothOverlays.removeAllPeedOverlays(player) -- Remove all existing peed overlays
@@ -100,6 +114,24 @@ function BathroomClothOverlays.equipPeedOverlay(player, wornItem)
             local itemToWear = player:getInventory():AddItem(overlayItemType) -- Add overlay item to player's inventory
             player:setWornItem("PeedOverlay", itemToWear) -- Set overlay item as worn by player
             wornItem:getModData().peeOverlayItemType = overlayItemType -- Store type of overlay item in ModData
+        end
+    end
+end
+
+-- New function to equip pooped overlay
+function BathroomClothOverlays.equipPoopedOverlay(player, wornItem)
+    local modData = wornItem:getModData()
+    if wornItem:getModData().pooped == true and (modData.poopedSeverity == nil or modData.poopedSeverity >= 25) then
+
+        local currentWornItems = BathroomClothOverlays.getCurrentWornItems(player)
+        BathroomClothOverlays.removeAllPoopedOverlays(player) -- Remove all existing pooped overlays
+        local overlayItemType = BathroomClothOverlays.getPoopedOverlayItem(wornItem) -- Get appropriate overlay item type
+
+        -- Only add overlay if it isn't already worn
+        if overlayItemType and not currentWornItems[overlayItemType] then
+            local itemToWear = player:getInventory():AddItem(overlayItemType) -- Add overlay item to player's inventory
+            player:setWornItem("PoopedOverlay", itemToWear) -- Set overlay item as worn by player
+            wornItem:getModData().pooOverlayItemType = overlayItemType -- Store type of overlay item in ModData
         end
     end
 end
@@ -126,13 +158,34 @@ function BathroomClothOverlays.removePeedOverlay(player, wornItem)
     end
 end
 
+-- New function to remove the "PoopedOverlayItem" associated with the WornItem
+function BathroomClothOverlays.removePoopedOverlay(player, wornItem)
+    if wornItem:getModData().pooped then
+        local inventory = player:getInventory()
+
+        local overlayItemType = wornItem:getModData().pooOverlayItemType -- Get overlay item type from ModData
+        if overlayItemType then
+            
+            local overlayItem = inventory:getItemFromType(overlayItemType) -- Search for the item in the inventory
+
+            -- If the overlay item is found, remove it
+            if overlayItem then
+                inventory:Remove(overlayItem)
+                player:removeWornItem(overlayItem)
+            end
+
+            wornItem:getModData().pooOverlayItemType = nil -- Clean up ModData
+        end
+    end
+end
+
 -- =====================================================
 --
 -- ACCIDENT FUNCTIONS
 --
 -- =====================================================
 
--- Remove all overlays from the inventory
+-- Remove all peed overlays from the inventory
 function BathroomClothOverlays.removeAllPeedOverlays(player)
     local inventory = player:getInventory()
     
@@ -142,7 +195,7 @@ function BathroomClothOverlays.removeAllPeedOverlays(player)
     -- Collect items tagged as "BathroomOverlay", the tag used by peed overlays
     for i = 0, inventory:getItems():size() - 1 do
         local item = inventory:getItems():get(i)
-        if item and item:hasTag("BathroomOverlay") then
+        if item and item:hasTag("BathroomOverlay") and not item:hasTag("PoopedOverlay") then
             table.insert(itemsToRemove, item)
         end
     end
@@ -155,6 +208,29 @@ function BathroomClothOverlays.removeAllPeedOverlays(player)
     end
 end
 
+-- New function to remove all pooped overlays from the inventory
+function BathroomClothOverlays.removeAllPoopedOverlays(player)
+    local inventory = player:getInventory()
+    
+    -- Create a list of items to remove
+    local itemsToRemove = {}
+
+    -- Collect items tagged as "PoopedOverlay", the tag used by pooped overlays
+    for i = 0, inventory:getItems():size() - 1 do
+        local item = inventory:getItems():get(i)
+        if item and item:hasTag("PoopedOverlay") then
+            table.insert(itemsToRemove, item)
+        end
+    end
+
+    -- Remove collected items from the inventory
+    for _, item in ipairs(itemsToRemove) do
+        inventory:Remove(item)
+        player:removeWornItem(item)
+        --print("Removed PoopedOverlay item: " .. tostring(item:getDisplayName()))
+    end
+end
+
 function BathroomClothOverlays.equipAllPeedOverlays(player)
     -- Get the player's worn items and remove any existing overlays
     local currentWornItems = BathroomClothOverlays.getCurrentWornItems(player)
@@ -162,7 +238,8 @@ function BathroomClothOverlays.equipAllPeedOverlays(player)
 
     -- Loop through worn items to find applicable overlays
     for wornItem, _ in pairs(currentWornItems) do
-        if wornItem:getModData().peed == true then
+        local modData = wornItem:getModData()
+        if wornItem:getModData().peed == true and (modData.peedSeverity == nil or modData.peedSeverity >= 25) then
             -- Get the appropriate overlay item type based on the worn item
             local overlayItemType = BathroomClothOverlays.getPeedOverlayItem(wornItem)
 
@@ -176,24 +253,101 @@ function BathroomClothOverlays.equipAllPeedOverlays(player)
     end
 end
 
--- =====================================================
---
--- ACCIDENT FUNCTIONS
---
--- =====================================================
+function BathroomClothOverlays.equipAllPoopedOverlays(player)
+    -- Debug: Begin equipping all pooped overlays
+    print("[DEBUG] Starting equipAllPoopedOverlays...")
 
--- Hook to Unequip Action
-ISUnequipAction.o_perform = ISUnequipAction.perform
-function ISUnequipAction:perform()
-    self:o_perform()
+    -- Get the player's worn items and remove any existing pooped overlays
+    local currentWornItems = BathroomClothOverlays.getCurrentWornItems(player)
+    BathroomClothOverlays.removeAllPoopedOverlays(player)
+    print("[DEBUG] Removed existing pooped overlays")
 
-    BathroomClothOverlays.removePeedOverlay(self.character, self.item)
+    -- Loop through worn items to find applicable overlays
+    for wornItem, _ in pairs(currentWornItems) do
+        local modData = wornItem:getModData()
+        if modData.pooped == true and (modData.poopedSeverity == nil or modData.poopedSeverity >= 25) then
+            print("[DEBUG] Item '" .. tostring(wornItem:getType()) .. "' qualifies for a pooped overlay")
+            -- Get the appropriate overlay item type based on the worn item
+            local overlayItemType = BathroomClothOverlays.getPoopedOverlayItem(wornItem)
+
+            if overlayItemType and not currentWornItems[overlayItemType] then -- Only apply if not already worn
+                local itemToWear = player:getInventory():AddItem(overlayItemType) -- Add the overlay item
+                player:setWornItem("PoopedOverlay", itemToWear) -- Set it as worn
+             
+                -- Debug: Check if the overlay is successfully equipped
+                local equippedOverlay = player:getWornItem("PoopedOverlay")
+                if equippedOverlay then
+                    print("[DEBUG] Pooped overlay successfully equipped: " .. tostring(equippedOverlay:getType()))
+                else
+                    print("[DEBUG] Failed to equip pooped overlay for item: " .. tostring(wornItem:getType()))
+                end
+
+                -- Store the overlay item type in ModData for reference.
+                modData.pooOverlayItemType = overlayItemType
+            else
+                print("[DEBUG] Overlay item type not found or already equipped for item: " .. tostring(wornItem:getType()))
+            end
+        else
+            print("[DEBUG] Item '" .. tostring(wornItem:getType()) .. "' does not qualify for a pooped overlay")
+        end
+    end
+    
+    print("[DEBUG] Completed equipping pooped overlays.")
 end
+
+
+-- =====================================================
+--
+-- EQUIP/UNEQUIP HOOKS
+--
+-- =====================================================
 
 -- Hook to Equip Action
 ISWearClothing.o_perform = ISWearClothing.perform
 function ISWearClothing:perform()
     self:o_perform()
+    
+    -- Immediately remove all overlays.
+    BathroomClothOverlays.removeAllPeedOverlays(getPlayer())
+    BathroomClothOverlays.removeAllPoopedOverlays(getPlayer())
+    
+    -- Delay before re-equipping the overlays (using tick counting)
+    local delayTicks = 10  -- 0.5 seconds if 60 ticks per second (adjust as needed)
+    local tickCount = 0
+    
+    local function delayedEquipOverlays()
+        tickCount = tickCount + 1
+        if tickCount >= delayTicks then
+            Events.OnTick.Remove(delayedEquipOverlays)
+            BathroomClothOverlays.equipAllPeedOverlays(getPlayer())
+            BathroomClothOverlays.equipAllPoopedOverlays(getPlayer())
+        end
+    end
+    
+    Events.OnTick.Add(delayedEquipOverlays)
+end
 
-    BathroomClothOverlays.equipPeedOverlay(self.character, self.item)
+-- Hook to Unequip Action (similar using tick-based delay)
+ISUnequipAction.o_perform = ISUnequipAction.perform
+function ISUnequipAction:perform()
+    self:o_perform()
+
+    -- Immediately remove all overlays.
+    BathroomClothOverlays.removeAllPeedOverlays(getPlayer())
+    BathroomClothOverlays.removeAllPoopedOverlays(getPlayer())
+    
+    -- Delay before re-equipping the overlays (using tick counting)
+    local delayTicks = 10
+    local tickCount = 0
+    
+    local function delayedEquipOverlays()
+        tickCount = tickCount + 1
+        if tickCount >= delayTicks then
+            Events.OnTick.Remove(delayedEquipOverlays)
+            BathroomClothOverlays.equipAllPeedOverlays(getPlayer())
+            BathroomClothOverlays.equipAllPoopedOverlays(getPlayer())
+        end
+    end
+    
+    Events.OnTick.Add(delayedEquipOverlays)
 end

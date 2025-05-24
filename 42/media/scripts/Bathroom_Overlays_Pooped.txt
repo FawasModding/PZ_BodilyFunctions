@@ -5,11 +5,39 @@ module BathroomFunctions {
 
     item Female_Underpants_Pooped {
         Type = Clothing,
-        DisplayName = Test,
         ClothingItem = Female_Underpants_Pooped,
         BodyLocation = PoopedOverlay,
         IconsForTexture = PeedPants,
         Tags = BathroomOverlay,
         WorldStaticModel = Trousers_Ground,
+
+	    RunSpeedModifier = 0.8,
+	    DiscomfortModifier = 0.6,
     }
+
+    item Male_Boxers_Pooped {
+        Type = Clothing,
+        ClothingItem = Male_Boxers_Pooped,
+        BodyLocation = PoopedOverlay,
+        IconsForTexture = PeedPants,
+        Tags = BathroomOverlay,
+        WorldStaticModel = Trousers_Ground,
+
+        RunSpeedModifier = 0.8,
+        DiscomfortModifier = 0.6,
+    }
+
+    item BoxingShorts_Pooped {
+        Type = Clothing,
+        ClothingItem = BoxingShorts_Pooped,
+        BodyLocation = PoopedOverlay2, 
+        IconsForTexture = PeedPants, 
+        Tags = PoopedOverlay, 
+        WorldStaticModel = Trousers_Ground,
+
+        RunSpeedModifier = 0.8,
+        DiscomfortModifier = 0.6,
+    }
+
+
 }

@@ -28,8 +28,29 @@ end
 function WashSoiled:perform()
 	self:stopSound()
 
-	self.soiledItem:setName(self.soiledItem:getModData().originalName)
-	self.soiledItem:getModData().originalName = nil
+	-- Debug logging
+    print("WashSoiled: Attempting to restore name")
+    print("soiledItem type: " .. tostring(self.soiledItem))
+
+    if self.soiledItem then
+        local modData = self.soiledItem:getModData()
+        print("modData: " .. tostring(modData))
+
+        if modData then
+            print("originalName: " .. tostring(modData.originalName))
+
+            if modData.originalName then
+                self.soiledItem:setName(modData.originalName)
+                modData.originalName = nil
+            else
+                print("WARNING: No original name found in mod data")
+            end
+        else
+            print("WARNING: modData is nil")
+        end
+    else
+        print("WARNING: soiledItem is nil")
+    end
 
 	self.soiledItem:setWetness(100)
 	self.soiledItem:setDirtyness(0)

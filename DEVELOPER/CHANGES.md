@@ -1,11 +1,119 @@
 -gotta make SelfUrinate SelfDefecate happen if using ground or toilet action ends too quickly
 
 ==============
-[VERSION 0.51]
+[VERSION 0.6]
 ==============
 
--Removed PeedOverlay2 bodylocation
--Added PoopedOverlay
+- Renamed "changelog.txt" to "CHANGES.md"
+- Updated fileGuidTable.xml to include pooped clothing
+- Added RunSpeedModifier and DiscomfortModifier to peed / pooped overlay items.
+- Added "Kate_Shorts_Peed.fbx"
+
+	============================
+	[ BathroomClothOverlays.lua ]
+	============================
+
+- Now stores overlay types for both peed and pooped items using:
+	- wornItem:getModData().peeOverlayItemType
+	- wornItem:getModData().pooOverlayItemType
+
+- Default overlay changed from "BathroomFunctions.SuitTrousersMesh_Peed" to "BathroomFunctions.BoxingShorts_Peed" (slightly safer, looks less weird for unadded clothing support)
+- Added matching pooped overlay visuals for each peed overlay type
+- Overlay only applies if peedSeverity or poopedSeverity is ≥ 25
+- After equipping/unequipping, overlays are re-applied after a short delay to avoid conflicts
+
+	============================
+	[ BathroomFunctions.lua ]
+	============================
+
+- Added new function: BathroomFunctions.OverrideSandboxMax()
+- Adjusts BladderMaxValue and BowelsMaxValue based on player traits:
+	- SmallBladder, BigBladder, SmallBowels, BigBowels
+	- Automatically runs when the game starts via Events.OnGameStart.Add()
+
+- Rewrote BathroomFunctions.UpdateBathroomValues()
+	- Now calculates urination and defecation rates with more realism.
+
+- New factors affecting urgency:
+	- Thirst level (affects bladder urgency)
+	- Hunger level (affects bowel urgency)
+	- Stress level (increases both bladder and bowel urgency)
+	- Endurance level (nutrient need affects urgency)
+	- Random variation added
+
+- Enhanced BathroomFunctions.HandleInstantAccidents()
+	- Added leak chance system that increases under: [ Drunkenness, Panic moodle level ]
+	- Players with UrinaryIncontinence or FecalIncontinence can leak at lower thresholds
+	- Leak chance can trigger self-urinate/defecate actions silently
+
+- Modified BathroomFunctions.UrinateBottoms(leakTriggered) and DefecateBottoms(leakTriggered)
+	- Both now accept an optional leakTriggered flag
+	- Apply only 5% of full accident severity for leaks
+	- Pee/poop overlays only applied if severity ≥ 25
+	- Pee/poop objects only created if threshold met (not for small leaks)
+
+- Improved BathroomFunctions.TriggerSelfUrinate(isLeak) and BathroomFunctions.TriggerSelfDefecate(isLeak)
+	- Both now accept isLeak parameter to differentiate between small leaks and full accidents
+	- Applies appropriate severity and messaging based on leak status
+
+- Enhanced right-click context menu logic
+	- Added trait-based restrictions:
+		- ShyBladder, ShyBowels: Prevent peeing/defecating in public
+		- Paruresis, Parcopresis: Prevent peeing/defecating when watched
+		- Added helper function: BathroomFunctions.IsBeingWatched(player) to check nearby zombies or players
+
+- Enhanced hygiene integration in BathroomFunctions.WashingRightClick(...)
+	- Tracks original name of soiled clothing using originalName
+	- Improved washing logic for soiled items
+
+- Body overlay rendering improved:
+	- PeedOverlay, PoopedOverlay rendered above pants
+	- Additional layers for undies and pants-specific stains
+	- Ensures proper visual layering of pee/poop overlays
+
+	============================
+	[ SelfDefecate.lua ]
+	============================
+
+- Added support for leak behavior with new constructor parameter: isLeak
+	- When true, only 5% of bowel content is released gradually during defecation (This allows small leaks without full accidents)
+- Updated start() and update() to track initial defecate value and simulate gradual release
+- Added new method: finishDefecation()
+	- Centralized logic to reset defecate value:
+		- Full reset (= 0.0) for normal defecation
+		- Partial reset (= 95% of original) for leak events
+- Overridden stop() and cancel() methods to ensure finishDefecation() runs once
+- Refactored perform() to call finishDefecation() before completing the action
+
+	============================
+	[ SelfUrinate.lua ]
+	============================
+
+- Added support for leak behavior with a new constructor parameter: isLeak
+	- When true, only 5% of bladder content is released gradually during urination (this allows small leaks without full accidents)
+- Updated start() and update() to track initial urinate value and simulate gradual release
+- Added new method: finishUrination()
+	- Centralized logic to reset urinate value:
+		- Full reset (= 0.0) for normal urination
+		- Partial reset (= 95% of original) for leak events
+- Overridden stop() and cancel() methods to ensure finishUrination() runs once
+- Refactored perform() to call finishUrination() before completing the action
+
+	============================
+	[ WashSoiled.lua ]
+	============================
+
+- Now properly restores the original name of a soiled item after washing:
+	- Retrieves originalName from the item's modData
+	- Sets the item's name back to its original value
+	- Clears the originalName flag after use
+- Resets visual and physical state:
+	- Sets wetness = 100 (to simulate fresh washing)
+	- Sets dirtyness = 0 (removes all dirtiness)
+
+==============
+[VERSION 0.51]
+==============
 
 ==============
 [VERSION 0.5]
