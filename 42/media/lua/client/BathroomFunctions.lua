@@ -856,7 +856,7 @@ function BathroomFunctions.BathroomRightClick(player, context, worldObjects)
 
     -------------------------------------------------------------------------------------------------------------------
 
-        -- Check for Paruresis (shy bladder) and Parcopresis (shy bowel)
+    -- Check for Paruresis (shy bladder) and Parcopresis (shy bowel)
     local hasParuresis = player:HasTrait("Paruresis")
     local hasParcopresis = player:HasTrait("Parcopresis")
 
@@ -1007,11 +1007,19 @@ function BathroomFunctions.BathroomRightClick(player, context, worldObjects)
                 toiletPeeOption.iconTexture = getTexture("media/textures/ContextMenuToilet.png");
                 toiletPoopOption.iconTexture = getTexture("media/textures/ContextMenuToilet.png");
 
+                -- Check if urinateValue meets the requirement to use the toilet for peeing
                 if urinateValue < (peeInToiletRequirement / 100) * bladderMaxValue then
                     toiletPeeOption.notAvailable = true
                 end
+
+                -- Check if defecateValue meets the requirement to use the toilet for pooping
                 if defecateValue < (poopInToiletRequirement / 100) * bowelsMaxValue then
                     toiletPoopOption.notAvailable = true
+                end
+
+                -- If either option was marked as not available, return early
+                if toiletPoopOption.notAvailable then
+                    return
                 end
 
                 -- Add wiping option for toilet defecation
@@ -1075,11 +1083,19 @@ function BathroomFunctions.BathroomRightClick(player, context, worldObjects)
                 BathroomFunctions.AddTooltip(outhousePoopOption, "Defecate in the outhouse. (Requires " .. poopInToiletRequirement .. "%)")
                 toiletOptionAdded = true
 
+                -- Check if urinateValue meets the requirement to use the toilet for peeing
                 if urinateValue < (peeInToiletRequirement / 100) * bladderMaxValue then
                     outhousePeeOption.notAvailable = true
                 end
+
+                -- Check if defecateValue meets the requirement to use the toilet for pooping
                 if defecateValue < (poopInToiletRequirement / 100) * bowelsMaxValue then
                     outhousePoopOption.notAvailable = true
+                end
+
+                -- If either option was marked as not available, return early
+                if outhousePoopOption.notAvailable then
+                    return
                 end
 
                 -- Only check for wipeables if we actually need them
@@ -1430,39 +1446,48 @@ end
 function BathroomFunctions.TriggerToiletUrinate(object, player)
     local player = getPlayer()
     local urinateValue = BathroomFunctions.GetUrinateValue()
-    local peeTime = urinateValue
+    local requirement = SandboxVars.BathroomFunctions.PeeInToiletRequirement or 40
+    local bladderMaxValue = SandboxVars.BathroomFunctions.BladderMaxValue or 100
+    local hasShyBladder = player:HasTrait("ShyBladder")
+    local isBeingWatched = BathroomFunctions.IsBeingWatched(player)
 
-    -- Walk to toilet
-    ISTimedActionQueue.add(ISWalkToTimedAction:new(player, object))
-
-    -- If female, must take off clothing. Males would just unzip their pants.
-    if player:isFemale() == true then
-        -- Remove bottom clothing first
-        BathroomFunctions.RemoveBottomClothing(player)
+    -- Only allow action if requirements are met
+    if urinateValue < (requirement / 100) * bladderMaxValue then
+        return
+    end
+    if hasShyBladder and isBeingWatched then
+        return
     end
 
-    -- Urinate at the toilet
-    ISTimedActionQueue.add(ToiletUrinate:new(player, peeTime, true, true, object))
+    -- Proceed with the action
+    ISTimedActionQueue.add(ISWalkToTimedAction:new(player, object))
+    if player:isFemale() == true then
+        BathroomFunctions.RemoveBottomClothing(player)
+    end
+    ISTimedActionQueue.add(ToiletUrinate:new(player, urinateValue, true, true, object))
 end
 
 function BathroomFunctions.TriggerToiletDefecate(object, player, isWiping, wipeType, wipeItem)
     local player = getPlayer()
     local defecateValue = BathroomFunctions.GetDefecateValue()
-    local poopTime = defecateValue * 2
+    local requirement = SandboxVars.BathroomFunctions.PoopInToiletRequirement or 40
+    local bowelsMaxValue = SandboxVars.BathroomFunctions.BowelsMaxValue or 100
+    local hasShyBowels = player:HasTrait("ShyBowels")
+    local isBeingWatched = BathroomFunctions.IsBeingWatched(player)
 
-    -- Walk to toilet
+    -- Only allow action if requirements are met
+    if defecateValue < (requirement / 100) * bowelsMaxValue then
+        return
+    end
+    if hasShyBowels and isBeingWatched then
+        return
+    end
+
+    -- Proceed with the action
     ISTimedActionQueue.add(ISWalkToTimedAction:new(player, object))
-
-    -- Remove bottom clothing first
     BathroomFunctions.RemoveBottomClothing(player)
-
-    -- Defecate in the toilet
-    ISTimedActionQueue.add(ToiletDefecate:new(player, poopTime, true, true, object))
-
-    -- Wipe afterwards if needed
+    ISTimedActionQueue.add(ToiletDefecate:new(player, defecateValue * 2, true, true, object))
     ISTimedActionQueue.add(WipeSelf:new(player, 20, wipeType, wipeItem, "poop"))
-
-    -- Check in here if isWiping is false, if false, then add a small pooped value to the worn clothes.
 end
 
 function BathroomFunctions.TriggerGroundUrinate()

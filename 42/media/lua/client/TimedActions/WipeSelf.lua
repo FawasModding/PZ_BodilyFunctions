@@ -34,14 +34,35 @@ function WipeSelf:perform()
         return
     end
 
-    -- Check for non-drainable wipeables (e.g., Tissue, Paper Napkins, etc.)
+    -- Check for non-drainable wipeables (Tissue, Magazines, Newspapers, etc.)
     if self.wipeType == "usingOneTime" then
-        -- Remove the one-time use item from inventory
+        local itemType = self.wipingWith:getType()
+        local poopedItem = nil
+
+        -- Remove original item
         self.character:getInventory():Remove(self.wipingWith)
 
-        -- Add an item of the type wipeType:getType() .. "Pooped"
-        local poopedItem = self.wipingWith:getType() .. "Pooped"
-        self.character:getInventory():AddItem("BathroomFunctions." .. poopedItem)
+        -- Determine which shared pooped item to give
+        if string.find(itemType, "Newspaper") then
+            poopedItem = "BathroomFunctions.NewspaperPooped"
+        elseif string.find(itemType, "Magazine") then
+            poopedItem = "BathroomFunctions.MagazinePooped"
+        elseif itemType == "HottieZ_New" or itemType == "HottieZ" then
+            poopedItem = "BathroomFunctions.HottieZPooped"
+        elseif itemType == "HunkZ" then
+            poopedItem = "BathroomFunctions.HunkZPooped"
+        else
+            -- Fallback if none of the above, try to append "Pooped" to the type
+            poopedItem = self.wipingWith:getType() .. "Pooped"
+        end
+
+        -- Add the appropriate pooped version if defined
+        if poopedItem then
+            self.character:getInventory():AddItem(poopedItem)
+            
+            -- Debug line: Print what item was added
+            print("DEBUG: Added pooped item: " .. poopedItem)
+        end
 
         return
     end

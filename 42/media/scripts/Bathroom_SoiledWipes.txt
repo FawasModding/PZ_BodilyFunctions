@@ -92,4 +92,40 @@ module BathroomFunctions
 		WorldStaticModel = Newspaper_Ground,
 		OnCreate = SpecialLootSpawns.OnCreateOldNewspaper,
 	}
+
+	item MagazinePooped
+	{
+		DisplayName = Magazine (Wiped),
+		DisplayCategory = Junk,
+		Type = Normal,
+		Weight = 0.5,
+		Icon = MagazinePooped,
+		StaticModel = Magazine,
+		WorldStaticModel = MagazineGround,
+		
+	}
+
+	item HottieZPooped
+	{
+		DisplayName = Magazine: HottieZ (Wiped),
+		DisplayCategory = Junk,
+		Type = Normal,
+		Weight = 0.5,
+		Icon = HottieZPooped,
+		OnCreate = SpecialLootSpawns.OnCreateHottieZ,
+		StaticModel = HottieZ,
+		WorldStaticModel = HottieZGround,
+	}
+
+	item HunkZPooped
+	{
+		DisplayName = Magazine: HunkZ (Wiped),
+		DisplayCategory = Junk,
+		Type = Normal,
+		Weight = 0.5,
+		Icon = HunkZPooped,
+		OnCreate = SpecialLootSpawns.OnCreateHunkZ,
+		StaticModel = HottieZ2,
+		WorldStaticModel = HottieZGround2,
+	}
 }

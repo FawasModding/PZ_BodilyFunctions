@@ -1,11 +1,16 @@
 -gotta make SelfUrinate SelfDefecate happen if using ground or toilet action ends too quickly
 
 ==============
-[VERSION 0.61]
+[VERSION 0.7]
 ==============
 
 - Added "RippedSheetsPooped" and "NewspaperPooped" items to Bathroom_SoiledWipes.txt
-- 
+- Added support for all newspapers + Ripped Sheets in BathroomUtils.lua (for wiping)
+
+- Added "MagazinePooped", "HottieZPooped", and "HunkZPooped" items to Bathroom_SoiledWipes.txt
+- Added support for all magazines + all HottieZ mags in BathroomUtils.lua (for wiping)
+
+- Fixed error where right clicking a toilet or outhouse toilet causes an error when you don't need to pee / poop
 
 ==============
 [VERSION 0.6]
