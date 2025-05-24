@@ -169,7 +169,8 @@ end
 function BathroomFunctions.GetOneTimeWipeables()
     local wipeItems = {
     "Tissue", "PaperNapkins2", "GraphPaper", "Paperwork",
-    "SheetPaper2", "Receipt" }
+    "SheetPaper2", "Receipt", "RippedSheets",
+    "Newspaper_Old", "Newspaper_Recent", "Newspaper_New", "Newspaper_Dispatch_New", "Newspaper_Herald_New", "Newspaper_Knews_New", "Newspaper_Times_New"}
 
     return wipeItems
 end

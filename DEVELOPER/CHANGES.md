@@ -1,6 +1,13 @@
 -gotta make SelfUrinate SelfDefecate happen if using ground or toilet action ends too quickly
 
 ==============
+[VERSION 0.61]
+==============
+
+- Added "RippedSheetsPooped" and "NewspaperPooped" items to Bathroom_SoiledWipes.txt
+- 
+
+==============
 [VERSION 0.6]
 ==============
 

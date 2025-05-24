@@ -68,4 +68,28 @@ module BathroomFunctions
 		StaticModel = SheetOfPaper,
 		WorldStaticModel = SheetOfPaper,
 	}
+
+	item RippedSheetsPooped
+	{
+		DisplayName = Rag (Wiped),
+		DisplayCategory = Junk,
+		Type = Normal,
+		Weight = 0.1,
+		Icon = RippedSheetsPooped,
+		WorldStaticModel = RippedSheets,
+		Tags = Binding;FitsWallet;IsFireFuel;IsFireTinder;NoPour,
+		FireFuelRatio = 0.25,
+	}
+
+	item NewspaperPooped
+	{
+		DisplayName = Newspaper (Wiped),
+		DisplayCategory = Junk,
+		Type = Normal,
+		Weight = 0.5,
+		Icon = NewspaperPooped,
+		StaticModel = Newspaper,
+		WorldStaticModel = Newspaper_Ground,
+		OnCreate = SpecialLootSpawns.OnCreateOldNewspaper,
+	}
 }
