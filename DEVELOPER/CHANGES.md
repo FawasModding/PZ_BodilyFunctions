@@ -12,6 +12,8 @@
 
 - Fixed error where right clicking a toilet or outhouse toilet causes an error when you don't need to pee / poop
 
+- Improved visuals of the BathroomCharacterInfo_GUIHandler tab ("Excretion" tab), includes gradient progress bars now.
+
 ==============
 [VERSION 0.6]
 ==============
