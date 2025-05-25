@@ -11,7 +11,10 @@
 - Changed "PeedOverlay" and "PeedOverlay2" to "PeedOverlay_Underwear" and "PeedOverlay_Pants"
 - Changed "PoopedOverlay" and "PoopedOverlay2" to "PoopedOverlay_Underwear" and "PoopedOverlay_Pants"
 - Fixed tags in pooped clothing overlays (PoopedOverlay)
-- 
+- Fixed BF_ClothingStains to allow having two overlays at once for each function. So underwear and pants both get overlays at once.
+
+- Added "Pants_Skinny" body location to BF_Lists. Allows them to be useable for urination / defecation.
+- Added support for more clothing types
 
 ==============
 [VERSION 0.7]

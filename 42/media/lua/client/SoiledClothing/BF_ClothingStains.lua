@@ -8,6 +8,7 @@ function BathroomClothOverlays.PopulatePeedModels()
     local peedModelsSuitTrousersMesh = {
         "Trousers_Suit", "Trousers_SuitTEXTURE", "Trousers_Scrubs",
         "Trousers", "Trousers_Jeans", "Trousers_Camo", "Trousers_Army", "Trousers_Denim",
+        "Trousers_Crafted_Cotton", "TrousersMesh_DenimLight", "Trousers_Crafted_Burlap",
         "Shorts_LongDenim", "Shorts_ShortDenim", "Shorts_ShortFormal",
         "Shorts_LongSport", "Shorts_LongSport_Red", "Shorts_BoxingRed", "Shorts_BoxingBlue",
         "Shorts_ShortSport", "Shorts_FootballPants", "Shorts_FootballPants_Black",
@@ -18,7 +19,8 @@ function BathroomClothOverlays.PopulatePeedModels()
     local peedModelsMaleBoxers = {
         "Boxers_White", "Male_Boxers_Pants_2", "Male_Boxers_Pants_3", "Boxers_Hearts",
         "Boxers_Silk_Black", "Boxers_Silk_Red", "Boxers_RedStripes", "Briefs_SmallTrunks_Black",
-        "Briefs_SmallTrunks_Blue", "Briefs_SmallTrunks_Red", "Briefs_SmallTrunks_WhiteTINT"
+        "Briefs_SmallTrunks_Blue", "Briefs_SmallTrunks_Red", "Briefs_SmallTrunks_WhiteTINT",
+        "Briefs_Garbage", "Briefs_Burlap", "Briefs_Denim", "Briefs_Hide", "Briefs_Rag", "Briefs_Tarp"
     }
     local peedModelsFemalePanties = {
         "Underpants_White", "Bikini_TINT", "Underpants_Black", "Underpants_RedSpots",
@@ -67,99 +69,104 @@ end
 
 function BathroomClothOverlays.getPeedOverlayItem(item)
     local itemType = item:getType()
-    if table.contains(BathroomClothOverlays.peedModelsSuitTrousersMesh, itemType) or
-       itemType:match("Pants") then
+    if table.contains(BathroomClothOverlays.peedModelsSuitTrousersMesh, itemType) then
         return "BathroomFunctions.SuitTrousersMesh_Peed"
-    elseif itemType:match("Shorts") then
-        return "BathroomFunctions.Trousers_Short_Peed"
     elseif table.contains(BathroomClothOverlays.peedModelsMaleBoxers, itemType) then
-        return "BathroomFunctions.Male_Boxers_Peed"
+        return "BathroomFunctions.Female_Underpants_Peed"
     elseif table.contains(BathroomClothOverlays.peedModelsFemalePanties, itemType) then
         return "BathroomFunctions.Female_Underpants_Peed"
+    else
+        -- Apply Female_Underpants_Peed to any other soilable clothing not in underwear lists
+        local soilableLocations = BathroomFunctions.GetSoilableClothing()
+        for _, location in ipairs(soilableLocations) do
+            local wornItem = getPlayer():getWornItem(location)
+            if wornItem and wornItem:getType() == itemType and location ~= "UnderwearBottom" and location ~= "Underwear" then
+                return "BathroomFunctions.Female_Underpants_Peed"
+            end
+        end
     end
     return nil
 end
 
 function BathroomClothOverlays.getPoopedOverlayItem(item)
     local itemType = item:getType()
-    if table.contains(BathroomClothOverlays.peedModelsSuitTrousersMesh, itemType) or
-       itemType:match("Pants") then
-        return "BathroomFunctions.BoxingShorts_Pooped"
-    elseif itemType:match("Shorts") then
-        return "BathroomFunctions.BoxingShorts_Pooped"
+    if table.contains(BathroomClothOverlays.peedModelsSuitTrousersMesh, itemType) then
+        return "BathroomFunctions.SuitTrousersMesh_Pooped"
     elseif table.contains(BathroomClothOverlays.peedModelsMaleBoxers, itemType) then
-        return "BathroomFunctions.Male_Boxers_Pooped"
+        return "BathroomFunctions.Female_Underpants_Pooped"
     elseif table.contains(BathroomClothOverlays.peedModelsFemalePanties, itemType) then
         return "BathroomFunctions.Female_Underpants_Pooped"
+    elseif itemType:match("Pants") or itemType:match("Shorts") then
+        return "BathroomFunctions.BoxingShorts_Pooped"
     end
     return nil
 end
 
-function BathroomClothOverlays.equipPeedOverlay(player, wornItem, location)
+function BathroomClothOverlays.equipPeedOverlay(player, wornItem, bodyLocation)
     local modData = wornItem:getModData()
-    if modData.peed == true and (modData.peedSeverity == nil or modData.peedSeverity >= 25) then
-        local currentWornItems = BathroomClothOverlays.getCurrentWornItems(player)
+    if modData.peed and (modData.peedSeverity == nil or modData.peedSeverity >= 25) then
         local overlayItemType = BathroomClothOverlays.getPeedOverlayItem(wornItem)
-        if overlayItemType and not currentWornItems[overlayItemType] then
-            local itemToWear = player:getInventory():AddItem(overlayItemType)
-            if itemToWear then
-                player:setWornItem(location, itemToWear)
-                modData.peeOverlayItemType = overlayItemType
-                print("Equipped peed overlay: " .. overlayItemType .. " for " .. wornItem:getType() .. " at " .. location)
-            else
-                print("Failed to add peed overlay item: " .. overlayItemType)
+        if overlayItemType then
+            local currentWornItems = BathroomClothOverlays.getCurrentWornItems(player)
+            if not currentWornItems[overlayItemType] then
+                local itemToWear = player:getInventory():AddItem(overlayItemType)
+                if itemToWear then
+                    player:setWornItem(bodyLocation, itemToWear)
+                    modData.peeOverlayItemType = overlayItemType
+                    print("Equipped peed overlay: " .. overlayItemType .. " for " .. wornItem:getType() .. " at " .. bodyLocation)
+                else
+                    print("Failed to add peed overlay item: " .. overlayItemType)
+                end
             end
         end
     end
 end
 
-function BathroomClothOverlays.equipPoopedOverlay(player, wornItem, location)
+function BathroomClothOverlays.equipPoopedOverlay(player, wornItem, bodyLocation)
     local modData = wornItem:getModData()
-    if modData.pooped == true and (modData.poopedSeverity == nil or modData.poopedSeverity >= 25) then
-        local currentWornItems = BathroomClothOverlays.getCurrentWornItems(player)
+    if modData.pooped and (modData.poopedSeverity == nil or modData.poopedSeverity >= 25) then
         local overlayItemType = BathroomClothOverlays.getPoopedOverlayItem(wornItem)
-        if overlayItemType and not currentWornItems[overlayItemType] then
-            local itemToWear = player:getInventory():AddItem(overlayItemType)
-            if itemToWear then
-                player:setWornItem(location, itemToWear)
-                modData.pooOverlayItemType = overlayItemType
-                print("Equipped pooped overlay: " .. overlayItemType .. " for " .. wornItem:getType() .. " at " .. location)
-            else
-                print("Failed to add pooped overlay item: " .. overlayItemType)
+        if overlayItemType then
+            local currentWornItems = BathroomClothOverlays.getCurrentWornItems(player)
+            if not currentWornItems[overlayItemType] then
+                local itemToWear = player:getInventory():AddItem(overlayItemType)
+                if itemToWear then
+                    player:setWornItem(bodyLocation, itemToWear)
+                    modData.pooOverlayItemType = overlayItemType
+                    print("Equipped pooped overlay: " .. overlayItemType .. " for " .. wornItem:getType() .. " at " .. bodyLocation)
+                else
+                    print("Failed to add pooped overlay item: " .. overlayItemType)
+                end
             end
         end
     end
 end
 
 function BathroomClothOverlays.removePeedOverlay(player, wornItem)
-    if wornItem:getModData().peed then
+    local modData = wornItem:getModData()
+    if modData.peeOverlayItemType then
         local inventory = player:getInventory()
-        local overlayItemType = wornItem:getModData().peeOverlayItemType
-        if overlayItemType then
-            local overlayItem = inventory:getItemFromType(overlayItemType)
-            if overlayItem then
-                inventory:Remove(overlayItem)
-                player:removeWornItem(overlayItem)
-                print("Removed peed overlay: " .. overlayItemType)
-            end
-            wornItem:getModData().peeOverlayItemType = nil
+        local overlayItem = inventory:getItemFromType(modData.peeOverlayItemType)
+        if overlayItem then
+            inventory:Remove(overlayItem)
+            player:removeWornItem(overlayItem)
+            print("Removed peed overlay: " .. modData.peeOverlayItemType)
         end
+        modData.peeOverlayItemType = nil
     end
 end
 
 function BathroomClothOverlays.removePoopedOverlay(player, wornItem)
-    if wornItem:getModData().pooped then
+    local modData = wornItem:getModData()
+    if modData.pooOverlayItemType then
         local inventory = player:getInventory()
-        local overlayItemType = wornItem:getModData().pooOverlayItemType
-        if overlayItemType then
-            local overlayItem = inventory:getItemFromType(overlayItemType)
-            if overlayItem then
-                inventory:Remove(overlayItem)
-                player:removeWornItem(overlayItem)
-                print("Removed pooped overlay: " .. overlayItemType)
-            end
-            wornItem:getModData().pooOverlayItemType = nil
+        local overlayItem = inventory:getItemFromType(modData.pooOverlayItemType)
+        if overlayItem then
+            inventory:Remove(overlayItem)
+            player:removeWornItem(overlayItem)
+            print("Removed pooped overlay: " .. modData.pooOverlayItemType)
         end
+        modData.pooOverlayItemType = nil
     end
 end
 
@@ -200,20 +207,14 @@ function BathroomClothOverlays.equipAllPeedOverlays(player)
     local currentWornItems = BathroomClothOverlays.getCurrentWornItems(player)
     BathroomClothOverlays.removeAllPeedOverlays(player)
 
-    local underwearLocations = {"UnderwearBottom", "Underwear"}
-    local pantsLocations = {"Torso1Legs1", "Legs1", "Pants", "ShortPants", "ShortsShort"}
-
-    for _, location in ipairs(underwearLocations) do
+    local soilableLocations = {"UnderwearBottom", "Underwear", "Torso1Legs1", "Legs1", "Pants", "ShortPants", "ShortsShort"}
+    for _, location in ipairs(soilableLocations) do
         local wornItem = player:getWornItem(location)
-        if wornItem and wornItem:getModData().peed == true and (wornItem:getModData().peedSeverity == nil or wornItem:getModData().peedSeverity >= 25) then
-            BathroomClothOverlays.equipPeedOverlay(player, wornItem, "PeedOverlay_Underwear")
-        end
-    end
-
-    for _, location in ipairs(pantsLocations) do
-        local wornItem = player:getWornItem(location)
-        if wornItem and wornItem:getModData().peed == true and (wornItem:getModData().peedSeverity == nil or wornItem:getModData().peedSeverity >= 25) then
-            BathroomClothOverlays.equipPeedOverlay(player, wornItem, "PeedOverlay_Pants")
+        if wornItem and wornItem:getModData().peed then
+            local bodyLocation = (table.contains(BathroomClothOverlays.peedModelsMaleBoxers, wornItem:getType()) or
+                                 table.contains(BathroomClothOverlays.peedModelsFemalePanties, wornItem:getType())) and
+                                "PeedOverlay_Underwear" or "PeedOverlay_Pants"
+            BathroomClothOverlays.equipPeedOverlay(player, wornItem, bodyLocation)
         end
     end
     print("[DEBUG] Completed equipAllPeedOverlays.")
@@ -224,20 +225,14 @@ function BathroomClothOverlays.equipAllPoopedOverlays(player)
     local currentWornItems = BathroomClothOverlays.getCurrentWornItems(player)
     BathroomClothOverlays.removeAllPoopedOverlays(player)
 
-    local underwearLocations = {"UnderwearBottom", "Underwear"}
-    local pantsLocations = {"Torso1Legs1", "Legs1", "Pants", "ShortPants", "ShortsShort"}
-
-    for _, location in ipairs(underwearLocations) do
+    local soilableLocations = {"UnderwearBottom", "Underwear", "Torso1Legs1", "Legs1", "Pants", "ShortPants", "ShortsShort"}
+    for _, location in ipairs(soilableLocations) do
         local wornItem = player:getWornItem(location)
-        if wornItem and wornItem:getModData().pooped == true and (wornItem:getModData().poopedSeverity == nil or wornItem:getModData().poopedSeverity >= 25) then
-            BathroomClothOverlays.equipPoopedOverlay(player, wornItem, "PoopedOverlay_Underwear")
-        end
-    end
-
-    for _, location in ipairs(pantsLocations) do
-        local wornItem = player:getWornItem(location)
-        if wornItem and wornItem:getModData().pooped == true and (wornItem:getModData().poopedSeverity == nil or wornItem:getModData().poopedSeverity >= 25) then
-            BathroomClothOverlays.equipPoopedOverlay(player, wornItem, "PoopedOverlay_Pants")
+        if wornItem and wornItem:getModData().pooped then
+            local bodyLocation = (table.contains(BathroomClothOverlays.peedModelsMaleBoxers, wornItem:getType()) or
+                                 table.contains(BathroomClothOverlays.peedModelsFemalePanties, wornItem:getType())) and
+                                "PoopedOverlay_Underwear" or "PoopedOverlay_Pants"
+            BathroomClothOverlays.equipPoopedOverlay(player, wornItem, bodyLocation)
         end
     end
     print("[DEBUG] Completed equipAllPoopedOverlays.")

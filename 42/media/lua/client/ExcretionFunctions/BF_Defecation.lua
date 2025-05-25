@@ -117,7 +117,7 @@ function BathroomFunctions.DefecateBottoms(leakTriggered)
 
         -- Apply overlay if severity meets threshold
         if SandboxVars.BathroomFunctions.VisiblePoopStain and (not leakTriggered or modData.poopedSeverity >= 25) then
-            BathroomClothOverlays.equipPoopedOverlay(player, underwear)
+            BathroomClothOverlays.equipPoopedOverlay(player, underwear, "PoopedOverlay_Underwear")
             print("Equipped poop overlay for underwear: " .. underwear:getType())
         end
 
@@ -149,7 +149,7 @@ function BathroomFunctions.DefecateBottoms(leakTriggered)
 
         -- Apply overlay if severity meets threshold
         if SandboxVars.BathroomFunctions.VisiblePoopStain and (not leakTriggered or modData.poopedSeverity >= 25) then
-            BathroomClothOverlays.equipPoopedOverlay(player, pants)
+            BathroomClothOverlays.equipPoopedOverlay(player, pants, "PoopedOverlay_Pants")
             print("Equipped poop overlay for pants: " .. pants:getType())
         end
 

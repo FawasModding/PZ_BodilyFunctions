@@ -72,9 +72,14 @@ function BathroomFunctions.UrinateBottoms(leakTriggered)
     local maxPeeSeverity = 0
 
     -- Get soilable clothing locations
-    local bodyLocations = BathroomFunctions.GetSoilableClothing()
     local underwearLocations = {"UnderwearBottom", "Underwear"}
-    local outerwearLocations = {"Torso1Legs1", "Legs1", "Pants", "ShortPants", "ShortsShort"}
+    local outerwearLocations = BathroomFunctions.GetSoilableClothing() -- Use all soilable locations
+    -- Remove underwear locations to avoid duplicate processing
+    for i = #outerwearLocations, 1, -1 do
+        if outerwearLocations[i] == "UnderwearBottom" or outerwearLocations[i] == "Underwear" then
+            table.remove(outerwearLocations, i)
+        end
+    end
 
     -- Step 1: Process underwear first
     local underwear = nil
@@ -87,11 +92,11 @@ function BathroomFunctions.UrinateBottoms(leakTriggered)
         end
     end
 
-    -- Step 2: Process outer garments (pants, shorts, etc.)
+    -- Step 2: Process outer garments (pants, suits, etc.)
     local pants = nil
     for i = 1, #outerwearLocations do
         local item = player:getWornItem(outerwearLocations[i])
-        if item then -- Broaden check to include any item in outerwear locations
+        if item then
             pants = item
             break
         end
@@ -119,7 +124,7 @@ function BathroomFunctions.UrinateBottoms(leakTriggered)
 
         -- Apply overlay if severity meets threshold
         if SandboxVars.BathroomFunctions.VisiblePeeStain and (not leakTriggered or modData.peedSeverity >= 25) then
-            BathroomClothOverlays.equipPeedOverlay(player, underwear)
+            BathroomClothOverlays.equipPeedOverlay(player, underwear, "PeedOverlay_Underwear")
             print("Equipped pee overlay for underwear: " .. underwear:getType())
         end
 
@@ -151,7 +156,7 @@ function BathroomFunctions.UrinateBottoms(leakTriggered)
 
         -- Apply overlay if severity meets threshold
         if SandboxVars.BathroomFunctions.VisiblePeeStain and (not leakTriggered or modData.peedSeverity >= 25) then
-            BathroomClothOverlays.equipPeedOverlay(player, pants)
+            BathroomClothOverlays.equipPeedOverlay(player, pants, "PeedOverlay_Pants")
             print("Equipped pee overlay for pants: " .. pants:getType())
         end
 
