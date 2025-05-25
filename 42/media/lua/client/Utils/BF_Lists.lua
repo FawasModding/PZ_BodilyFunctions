@@ -25,6 +25,7 @@ function BathroomFunctions.GetExcreteObstructiveClothing()
 end
 
 -- =====================================================
+--
 -- GET WIPING LISTS
 --
 -- =====================================================
