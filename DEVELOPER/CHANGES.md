@@ -1,6 +1,13 @@
 -gotta make SelfUrinate SelfDefecate happen if using ground or toilet action ends too quickly
 
 ==============
+[VERSION 0.8]
+==============
+
+- Lots of script reorganization
+- 
+
+==============
 [VERSION 0.7]
 ==============
 

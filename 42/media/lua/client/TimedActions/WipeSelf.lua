@@ -44,13 +44,13 @@ function WipeSelf:perform()
 
         -- Determine which shared pooped item to give
         if string.find(itemType, "Newspaper") then
-            poopedItem = "BathroomFunctions.NewspaperPooped"
+            poopedItem = "NewspaperPooped"
         elseif string.find(itemType, "Magazine") then
-            poopedItem = "BathroomFunctions.MagazinePooped"
+            poopedItem = "MagazinePooped"
         elseif itemType == "HottieZ_New" or itemType == "HottieZ" then
-            poopedItem = "BathroomFunctions.HottieZPooped"
+            poopedItem = "HottieZPooped"
         elseif itemType == "HunkZ" then
-            poopedItem = "BathroomFunctions.HunkZPooped"
+            poopedItem = "HunkZPooped"
         else
             -- Fallback if none of the above, try to append "Pooped" to the type
             poopedItem = self.wipingWith:getType() .. "Pooped"
@@ -58,7 +58,7 @@ function WipeSelf:perform()
 
         -- Add the appropriate pooped version if defined
         if poopedItem then
-            self.character:getInventory():AddItem(poopedItem)
+            self.character:getInventory():AddItem("BathroomFunctions." .. poopedItem)
             
             -- Debug line: Print what item was added
             print("DEBUG: Added pooped item: " .. poopedItem)
