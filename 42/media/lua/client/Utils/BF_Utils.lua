@@ -1,3 +1,14 @@
+-- Tooltips helper function
+function BathroomFunctions.AddTooltip(option, description)
+    if option then
+        local tooltip = ISToolTip:new()
+        tooltip:initialise()
+        tooltip:setVisible(false)
+        tooltip.description = description
+        option.toolTip = tooltip
+    end
+end
+
 -- =====================================================
 --
 -- BODILY VALUE GETTER / SETTER FUNCTIONS

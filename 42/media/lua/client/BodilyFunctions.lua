@@ -35,10 +35,6 @@ end
 -- Then register the function to run once the game starts.
 Events.OnGameStart.Add(BathroomFunctions.OverrideSandboxMax)
 
-
-
-
-
 -- =====================================================
 --
 -- BATHROOM FUNCTIONALITY AND TIMERS
@@ -68,91 +64,15 @@ Lipids:         -500    >     1000
 Carbohydrates:  -500    >     1000
 
 Burn rate: 10 Calories per 10 min
-
-
 ]]
 
 
 -- Function to update the player's bathroom-related values (urination and defecation)
 function BathroomFunctions.UpdateBathroomValues()
 
-    local player = getPlayer()
+    BathroomFunctions.UpdateUrinationValues()
+    BathroomFunctions.UpdateDefecationValues()
 
-    -- Get player stats
-    local thirst = player:getStats():getThirst()
-    local hunger = player:getStats():getHunger()
-    local stress = player:getStats():getStress()
-    local endurance = player:getStats():getEndurance()
-
-    -- Calculate bladder multiplier where:
-    -- - At thirst 0 (fully hydrated): multiplier = 1.0 (standard rate)
-    -- - At thirst 1 (dehydrated): multiplier = 0.3 (30% of standard rate)
-    local bladderMultiplier = 1.0 - (thirst * 0.7)
-
-    -- Calculate bowel multiplier where:
-    -- - At hunger 0 (fully sationed): multiplier = 1.0 (standard rate)
-    -- - At hunger 1 (Starving): multiplier = 0.3 (30% of standard rate)
-    local bowelMultiplier = 1.0 - (hunger * 0.7)
-
-    -- Add stress effect: increased urgency when stressed
-    local stressEffect = stress * 0.3  -- Up to 30% increase when fully stressed
-
-    -- Simulate body needing nutrients to recover
-    local urgencyFactor = (1.0 - endurance) * 0.1
-    
-    -- Add random variation for a more realistic feel
-    local randomBladderFactor = 0.9 + (ZombRand(21) / 100) -- Range: 0.9 to 1.1
-    local randomBowelFactor = 0.9 + (ZombRand(21) / 100)   -- Range: 0.9 to 1.1
-
-    -- Calculate your base multiplier from player stats
-    local finalBladderMultiplier = bladderMultiplier + stressEffect + urgencyFactor
-    -- Then apply the random variation as a multiplier
-    finalBladderMultiplier = finalBladderMultiplier * randomBladderFactor
-
-    -- Calculate your base multiplier from player stats
-    local finalBowelMultiplier = bowelMultiplier + stressEffect + urgencyFactor
-    -- Then apply the random variation as a multiplier
-    finalBowelMultiplier = finalBowelMultiplier * randomBowelFactor
-
-    print("Thirst level: " .. tostring(thirst))
-    print("Bladder multiplier: " .. tostring(bladderMultiplier))
-    print("Final bladder multiplier: " .. tostring(finalBladderMultiplier))
-
-    print("Hunger level: " .. tostring(hunger))
-    print("Bowel multiplier: " .. tostring(bowelMultiplier))
-    print("Final bowel multiplier: " .. tostring(finalBowelMultiplier))
-
-    -- Retrieve the base maximum capacities (from SandboxVars or defaults).
-    local baseBladderMax = SandboxVars.BathroomFunctions.BladderMaxValue or 600
-    local baseBowelsMax  = SandboxVars.BathroomFunctions.BowelsMaxValue or 500
-
-    -- Retrieve the current fill values.
-    local urinateValue = BathroomFunctions.GetUrinateValue()
-    local defecateValue = BathroomFunctions.GetDefecateValue()
-
-   
-    -- Base Increase Rates:
-    local urinateBaseRate = 10    -- Base bladder fill per 10-minute tick
-    local defecateBaseRate = 3.5  -- Base bowel fill per 10-minute tick
-
-    -- Apply the appropriate multipliers for the next tick.
-    -- (These multipliers get applied for the whole 10-minute interval.)
-    local urinateIncrease = urinateBaseRate * SandboxVars.BathroomFunctions.BladderIncreaseMultiplier * finalBladderMultiplier
-    local defecateIncrease = defecateBaseRate * SandboxVars.BathroomFunctions.BowelsIncreaseMultiplier * finalBowelMultiplier
-
-    -- Update the fill values.
-    urinateValue = urinateValue + urinateIncrease
-    defecateValue = defecateValue + defecateIncrease
-
-    player:getModData().urinateValue = tonumber(urinateValue)
-    player:getModData().defecateValue = tonumber(defecateValue)
-
-    -- Calculate the current percentages for debugging/triggering events.
-    local urinatePercent = (urinateValue / baseBladderMax) * 100
-    local defecatePercent = (defecateValue / baseBowelsMax) * 100
-
-    print("Updated Urinate Value: " .. tostring(urinatePercent) .. "% (Effective Max: " .. baseBladderMax .. ")")
-    print("Updated Defecate Value: " .. tostring(defecatePercent) .. "% (Effective Max: " .. baseBowelsMax .. ")")
 end
 
 
@@ -686,27 +606,11 @@ function BathroomFunctions.SetClothing(item, isLeak)
     end
 end
 
-
-
-
-
-
 -- =====================================================
 --
 -- RIGHT CLICK / INTERACTION FUNCTIONS
 --
 -- =====================================================
-
--- Tooltips helper function
-function BathroomFunctions.AddTooltip(option, description)
-    if option then
-        local tooltip = ISToolTip:new()
-        tooltip:initialise()
-        tooltip:setVisible(false)
-        tooltip.description = description
-        option.toolTip = tooltip
-    end
-end
 
 -- Wiping options helper function
 function BathroomFunctions.AddWipingOptions(parentMenu, worldObjects, player, defecateValue, requirement, maxValue, wipeType, wipeItem, triggerFunction, targetObject)
