@@ -7,6 +7,12 @@
 - Lots of script reorganization
 - Fixed wiping items not being created
 
+- Organized BF_Urination and BF_Defecation more
+- Changed "PeedOverlay" and "PeedOverlay2" to "PeedOverlay_Underwear" and "PeedOverlay_Pants"
+- Changed "PoopedOverlay" and "PoopedOverlay2" to "PoopedOverlay_Underwear" and "PoopedOverlay_Pants"
+- Fixed tags in pooped clothing overlays (PoopedOverlay)
+- 
+
 ==============
 [VERSION 0.7]
 ==============

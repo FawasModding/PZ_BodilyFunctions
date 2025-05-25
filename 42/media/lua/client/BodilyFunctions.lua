@@ -1262,10 +1262,10 @@ end
 
 function BathroomFunctions.onGameBoot()
     local humanGroup = BodyLocations.getGroup("Human"); -- Get the BodyLocations group for humans
-    local peedUndiesLocation = humanGroup:getOrCreateLocation("PeedOverlay"); -- Create or fetch the PeedOverlay location
-    local peedPantsLocation = humanGroup:getOrCreateLocation("PeedOverlay2"); -- Create or fetch the PeedOverlay2 location
-    local poopedUndiesLocation = humanGroup:getOrCreateLocation("PoopedOverlay"); -- Create or fetch the PoopedOverlay location
-    local poopedPantsLocation = humanGroup:getOrCreateLocation("PoopedOverlay2"); -- Create or fetch the PoopedOverlay2 location if needed
+    local peedUndiesLocation = humanGroup:getOrCreateLocation("PeedOverlay_Underwear"); -- Create or fetch the PeedOverlay location
+    local peedPantsLocation = humanGroup:getOrCreateLocation("PeedOverlay_Pants"); -- Create or fetch the PeedOverlay2 location
+    local poopedUndiesLocation = humanGroup:getOrCreateLocation("PoopedOverlay_Underwear"); -- Create or fetch the PoopedOverlay location
+    local poopedPantsLocation = humanGroup:getOrCreateLocation("PoopedOverlay_Pants"); -- Create or fetch the PoopedOverlay2 location if needed
 
     -- Remove PeedOverlay if it already exists to avoid duplication
     local list = getClassFieldVal(humanGroup, getClassField(humanGroup, 1));
