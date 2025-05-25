@@ -81,3 +81,38 @@ function BathroomFunctions.SetClothing(item, isLeak)
         end
     end
 end
+
+-- FOR CLOTHING SPECIFICALLY
+function BathroomFunctions.UpdateSoiledSeverity(clothing)
+    local updatedPooped = false
+    local updatedPeed = false
+
+    -- Ensure 'clothing' and its 'modData' are valid before proceeding
+    if clothing ~= nil and clothing:getModData() ~= nil then
+        local modData = clothing:getModData()
+
+        if modData.pooped ~= nil then -- Check if the worn item is defecated
+            BathroomFunctions.SetPoopedSelfValue(modData.poopedSeverity)
+            updatedPooped = true
+        else
+            -- If no pooped state, set to 0 (can be skipped here if handled at the end of the loop)
+            BathroomFunctions.SetPoopedSelfValue(0)
+        end
+
+        if modData.peed ~= nil then -- Check if the worn item is urinated
+            BathroomFunctions.SetPeedSelfValue(modData.peedSeverity)
+            updatedPeed = true
+        else
+            -- If no peed state, set to 0 (can be skipped here if handled at the end of the loop)
+            BathroomFunctions.SetPeedSelfValue(0)
+        end
+    else
+        print("Error: Clothing or mod data is nil in UpdateSoiledSeverity.")
+    end
+
+    -- Debugging output
+    --print("Updated PeedSelfValue: " .. BathroomFunctions.GetPeedSelfValue())
+    --print("Updated PoopedSelfValue: " .. BathroomFunctions.GetPoopedSelfValue())
+
+    return updatedPooped, updatedPeed
+end

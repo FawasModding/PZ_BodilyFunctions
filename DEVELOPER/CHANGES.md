@@ -5,7 +5,7 @@
 ==============
 
 - Lots of script reorganization
-- 
+- Fixed wiping items not being created
 
 ==============
 [VERSION 0.7]
