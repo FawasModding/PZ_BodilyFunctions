@@ -6,6 +6,7 @@
 
 - Lots of script reorganization
 - Fixed wiping items not being created
+- Added mechanic where soiling yourself will first go through underwear, then pants. For example, peeing 5% in underwear will only add 5% severity in underwear, until you're at 100%, then it does 5% for pants.
 
 - Organized BF_Urination and BF_Defecation more
 - Changed "PeedOverlay" and "PeedOverlay2" to "PeedOverlay_Underwear" and "PeedOverlay_Pants"
