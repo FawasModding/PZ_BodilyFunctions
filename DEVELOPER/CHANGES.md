@@ -1,6 +1,13 @@
 -gotta make SelfUrinate SelfDefecate happen if using ground or toilet action ends too quickly
 
 ==============
+[VERSION 0.81]
+==============
+
+- Replaced Bladder & Bowel moodles with more Zomboid B42 themed ones
+
+
+==============
 [VERSION 0.8]
 ==============
 
