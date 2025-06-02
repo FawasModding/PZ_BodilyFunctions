@@ -4,8 +4,18 @@
 [VERSION 0.81]
 ==============
 
-- Replaced Bladder & Bowel moodles with more Zomboid B42 themed ones
+- Made urine puddle object not appear when peeing in bed
+- Created Pills and Pill Boxes for
+	- Anti-Diarrheal Pills
+	- Laxative Pills
+	- Diuretic Pills
+	- Anticholinergic Pills
 
+==============
+[VERSION 0.81]
+==============
+
+- Replaced Bladder & Bowel moodles with more Zomboid B42 themed ones
 
 ==============
 [VERSION 0.8]
