@@ -14,6 +14,7 @@ module BathroomFunctions
 		Medical = TRUE,
 		Tooltip = Tooltip_AntiDiarrhealPill,
 		WorldStaticModel = Antibiotics,
+		OnEat = OnEat_AntiDiarrhealPill,
 	}
     item LaxativePill
 	{
@@ -27,6 +28,7 @@ module BathroomFunctions
 		Medical = TRUE,
 		Tooltip = Tooltip_LaxativePill,
 		WorldStaticModel = Antibiotics,
+		OnEat = OnEat_LaxativePill,
 	}
     item DiureticPill
 	{
@@ -40,6 +42,7 @@ module BathroomFunctions
 		Medical = TRUE,
 		Tooltip = Tooltip_DiureticPill,
 		WorldStaticModel = Antibiotics,
+		OnEat = OnEat_DiureticPill,
 	}
     item AnticholinergicPill
 	{
@@ -53,6 +56,7 @@ module BathroomFunctions
 		Medical = TRUE,
 		Tooltip = Tooltip_AnticholinergicPill,
 		WorldStaticModel = Antibiotics,
+		OnEat = OnEat_AnticholinergicPill,
 	}
 
 
