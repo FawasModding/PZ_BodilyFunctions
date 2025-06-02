@@ -11,6 +11,9 @@
 	- Diuretic Pills
 	- Anticholinergic Pills
 - Created BathroomFunctions.GetMaxBowelValue() and BathroomFunctions.GetMaxBladderValue() in BF_Utils.lua
+- Added Russian language support (from M1ST0R)
+- Added Espanol (ES) support (from AI, may be wrong, feel free to give suggestions on how to improve it)
+
 
 ==============
 [VERSION 0.81]
