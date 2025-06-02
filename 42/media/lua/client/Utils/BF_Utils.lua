@@ -133,3 +133,16 @@ function BathroomFunctions.SetPoopedSelfValue(newPoopedSelfValue)
     end
 end
 
+function BathroomFunctions.GetMaxBowelValue()
+    --local bowelsMaxValue = SandboxVars.BathroomFunctions.BowelsMaxValue or 500
+    local bowelsMaxValue = SandboxVars.BathroomFunctions.BowelsMaxValue or 100
+
+    return bowelsMaxValue
+end
+
+function BathroomFunctions.GetMaxBladderValue()
+    --local bladderMaxValue = SandboxVars.BathroomFunctions.BladderMaxValue or 800
+    local bladderMaxValue = SandboxVars.BathroomFunctions.BladderMaxValue or 100
+
+    return bladderMaxValue
+end

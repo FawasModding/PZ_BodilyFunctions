@@ -172,8 +172,7 @@ function BathroomFunctions.UrinateBottoms(leakTriggered)
     -- Step 5: Create pee object if conditions are met
     if SandboxVars.BathroomFunctions.CreatePeeObject and 
     (not leakTriggered or showPeeObject) and 
-    not player:isAsleep() and 
-    not player:isInBed() then
+    not player:isAsleep() then
 
         local urineItem = instanceItem("BathroomFunctions.Urine_Hydrated_0")
         player:getCurrentSquare():AddWorldInventoryItem(urineItem, 0, 0, 0)

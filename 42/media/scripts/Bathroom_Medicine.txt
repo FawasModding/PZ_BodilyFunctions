@@ -10,11 +10,11 @@ module BathroomFunctions
 		Weight = 0.1,
 		Icon = AntiDiarrhealPill,
 		CantBeFrozen = TRUE,
-		CustomContextMenu = Take,
+		CustomContextMenu = Take_AntiDiarrhealPill,
 		Medical = TRUE,
+		OnEat = OnEat_AntiDiarrhealPill,
 		Tooltip = Tooltip_AntiDiarrhealPill,
 		WorldStaticModel = Antibiotics,
-		OnEat = OnEat_AntiDiarrhealPill,
 	}
     item LaxativePill
 	{
@@ -24,11 +24,11 @@ module BathroomFunctions
 		Weight = 0.1,
 		Icon = Laxative,
 		CantBeFrozen = TRUE,
-		CustomContextMenu = Take,
+		CustomContextMenu = Take_LaxativePill,
 		Medical = TRUE,
+		OnEat = OnEat_LaxativePill,
 		Tooltip = Tooltip_LaxativePill,
 		WorldStaticModel = Antibiotics,
-		OnEat = OnEat_LaxativePill,
 	}
     item DiureticPill
 	{
@@ -38,11 +38,11 @@ module BathroomFunctions
 		Weight = 0.1,
 		Icon = PeePill,
 		CantBeFrozen = TRUE,
-		CustomContextMenu = Take,
+		CustomContextMenu = Take_DiureticPill,
 		Medical = TRUE,
+		OnEat = OnEat_DiureticPill,
 		Tooltip = Tooltip_DiureticPill,
 		WorldStaticModel = Antibiotics,
-		OnEat = OnEat_DiureticPill,
 	}
     item AnticholinergicPill
 	{
@@ -52,11 +52,11 @@ module BathroomFunctions
 		Weight = 0.1,
 		Icon = AnticholinergicPill,
 		CantBeFrozen = TRUE,
-		CustomContextMenu = Take,
+		CustomContextMenu = Take_AnticholinergicPill,
 		Medical = TRUE,
+		OnEat = OnEat_AnticholinergicPill,
 		Tooltip = Tooltip_AnticholinergicPill,
 		WorldStaticModel = Antibiotics,
-		OnEat = OnEat_AnticholinergicPill,
 	}
 
 

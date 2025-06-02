@@ -10,6 +10,7 @@
 	- Laxative Pills
 	- Diuretic Pills
 	- Anticholinergic Pills
+- Created BathroomFunctions.GetMaxBowelValue() and BathroomFunctions.GetMaxBladderValue() in BF_Utils.lua
 
 ==============
 [VERSION 0.81]
