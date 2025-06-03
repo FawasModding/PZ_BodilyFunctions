@@ -12,19 +12,17 @@
 	- MedicalStorageDrugs
 	- SafehouseMedical
 - Added crafting recipes for opening pill boxes.
-- All (most) shorts now use female underwear peed overlay instead of trousers, eventually needs their own model
-- Swim trunks are now able to be urinated / defecated
 - Medicine's tooltips are more accurate, showing that it just adds / removes from the value.
 
 - Created "BF_ClothingConfig.lua" for new mapping of overlays to clothing items
 - Renamed "BF_ClothingStains" to "BF_ClothingOverlays" and merged most of the functionality for simplicity (and better organization)
 - Ensured no dirt on the body when player pees or poops themselves
 
+- Most shorts now use female underwear peed overlay instead of trousers when their custom model is not yet implemented.
+- Swim trunks are now able to be urinated / defecated
 - Changed "SuitTrousersMesh_Peed.png" to feature urine on the inner legs, as well as the back.
 - Improved "Kate_SuitTrousers_Peed.fbx" to be significantly closer to the vanilla model. Less visible on the outside
 	- This also fixes the issue of poop overlays not being visible
-- Organized model files
-
 - Created "SuitTrousersMesh_Pooped" item
 - Made underwear poop overlay textures translucent
 - Added support for LongShorts_Peed and LongShorts_Pooped models
