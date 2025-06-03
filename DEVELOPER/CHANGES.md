@@ -14,6 +14,7 @@
 - Added crafting recipes for opening pill boxes.
 - All (most) shorts now use female underwear peed overlay instead of trousers, eventually needs their own model
 - Swim trunks are now able to be urinated / defecated
+- Medicine's tooltips are more accurate, showing that it just adds / removes from the value.
 
 - Created "BF_ClothingConfig.lua" for new mapping of overlays to clothing items
 - Renamed "BF_ClothingStains" to "BF_ClothingOverlays" and merged most of the functionality for simplicity (and better organization)
