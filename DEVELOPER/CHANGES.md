@@ -5,7 +5,16 @@
 ==============
 
 - Changed "Bathroom" to "BF" prefix for item scripts
-- 
+- Added all pill boxes to distributions:
+	- BathroomCabinet
+	- BathroomCounter
+	- MedicalClinicDrugs
+	- MedicalStorageDrugs
+	- SafehouseMedical
+- Added crafting recipes for opening pill boxes.
+
+- All (most) shorts now use female underwear peed overlay instead of trousers, eventually needs their own model
+- Swim trunks are now able to be urinated / defecated
 
 ==============
 [VERSION 0.9]
