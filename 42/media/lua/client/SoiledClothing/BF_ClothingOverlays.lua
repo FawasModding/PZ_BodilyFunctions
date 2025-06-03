@@ -113,10 +113,23 @@ function BF_ClothingOverlays.equipAllOverlays(player, stainType)
     for _, location in ipairs(locations) do
         local wornItem = player:getWornItem(location)
         if wornItem and wornItem:getModData()[stainType] then
-            local bodyLocation = (BF_Utils.tableContains(BF_ClothingConfig.clothingModels.maleUnderwear.types, wornItem:getType()) or
-                                 BF_Utils.tableContains(BF_ClothingConfig.clothingModels.femaleUnderwear.types, wornItem:getType())) and
-                                 stainType:gsub("^%l", string.upper) .. "Overlay_Underwear" or
-                                 stainType:gsub("^%l", string.upper) .. "Overlay_Pants"
+            local bodyLocation
+            if BF_Utils.tableContains(BF_ClothingConfig.clothingModels.maleUnderwear.types, wornItem:getType()) or
+            BF_Utils.tableContains(BF_ClothingConfig.clothingModels.femaleUnderwear.types, wornItem:getType()) then
+                -- Apply to underwear-specific overlay slot
+                if stainType == "peed" then
+                    bodyLocation = "PeedOverlay_Underwear"
+                else
+                    bodyLocation = "PoopedOverlay_Underwear"
+                end
+            else
+                -- Apply to pants/outer lower body overlay slot
+                if stainType == "peed" then
+                    bodyLocation = "PeedOverlay_Pants"
+                else
+                    bodyLocation = "PoopedOverlay_Pants"
+                end
+            end
             BF_ClothingOverlays.equipOverlay(player, wornItem, stainType, bodyLocation)
         end
     end
