@@ -20,6 +20,10 @@
 - Renamed "BF_ClothingStains" to "BF_ClothingOverlays" and merged most of the functionality for simplicity (and better organization)
 - Ensured no dirt on the body when player pees or poops themselves
 
+- Changed "SuitTrousersMesh_Peed.png" to feature urine on the inner legs, as well as the back.
+- Improved "Kate_SuitTrousers_Peed.fbx" to be significantly closer to the vanilla model. Less visible on the outside
+	- This also fixes the issue of poop overlays not being visible
+
 ==============
 [VERSION 0.9]
 ==============

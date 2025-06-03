@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <clothingItem>
 	<guid>9b2a8b56-206f-4c6c-bc42-8c9f611c7f9a</guid>
-	<m_MaleModel>skinned\clothes\bob_suittrousers_peed</m_MaleModel>
-	<m_FemaleModel>skinned\clothes\kate_suittrousers_peed</m_FemaleModel>
+	<m_MaleModel>skinned\clothes\peed\bob_suittrousers_peed</m_MaleModel>
+	<m_FemaleModel>skinned\clothes\peed\kate_suittrousers_peed</m_FemaleModel>
 	<m_AltMaleModel></m_AltMaleModel>
 	<m_AltFemaleModel></m_AltFemaleModel>
 	<m_Static>false</m_Static>
