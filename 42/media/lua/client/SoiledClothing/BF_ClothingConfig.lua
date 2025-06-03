@@ -14,7 +14,7 @@ BF_ClothingConfig = {
             poopOverlay = "BathroomFunctions.Male_Underpants_Pooped"
         },
         FemaleUnderwear = {
-            types = {"Underpants_White", "Bikini_TINT", "Underpants_Black", "Underpants_RedSpots", "Underpants_AnimalPrint", "Underpants_Hide", "FrillyUnderpants_Black", "FrillyUnderpants_Pink", "FrillyUnderpants_Red", "Briefs_White", "Briefs_AnimalPrints", "SwimTrunks_Blue", "SwimTrunks_Green", "SwimTrunks_Red", "SwimTrunks_Yellow", "Shorts_ShortDenim", "Shorts_ShortFormal", "Shorts_BoxingRed", "Shorts_BoxingBlue", "Shorts_ShortSport", "Shorts_FootballPants", "Shorts_FootballPants_Black", "Shorts_FootballPants_Gold", "Shorts_FootballPants_White", "Shorts_HockeyPants", "Shorts_HockeyPants_Black", "Shorts_HockeyPants_Red", "Shorts_HockeyPants_UniBlue", "Shorts_HockeyPants_White"},
+            types = {"Underpants_White", "Bikini_TINT", "Underpants_Black", "Underpants_RedSpots", "Underpants_AnimalPrint", "Underpants_Hide", "FrillyUnderpants_Black", "FrillyUnderpants_Pink", "FrillyUnderpants_Red", "Briefs_White", "Briefs_AnimalPrints", "SwimTrunks_Blue", "SwimTrunks_Green", "SwimTrunks_Red", "SwimTrunks_Yellow", "Shorts_ShortDenim", "Shorts_ShortFormal", "Shorts_ShortSport", "Shorts_FootballPants", "Shorts_FootballPants_Black", "Shorts_FootballPants_Gold", "Shorts_FootballPants_White", "Shorts_HockeyPants", "Shorts_HockeyPants_Black", "Shorts_HockeyPants_Red", "Shorts_HockeyPants_UniBlue", "Shorts_HockeyPants_White"},
             peeOverlay = "BathroomFunctions.Female_Underpants_Peed",
             poopOverlay = "BathroomFunctions.Female_Underpants_Pooped"
         },
@@ -24,7 +24,7 @@ BF_ClothingConfig = {
             poopOverlay = "BathroomFunctions.LongShorts_Pooped"
         },
         BoxingShorts = {
-            types = {},
+            types = {"Shorts_BoxingRed", "Shorts_BoxingBlue"},
             peeOverlay = "BathroomFunctions.BoxingShorts_Peed",
             poopOverlay = "BathroomFunctions.BoxingShorts_Pooped"
         }
