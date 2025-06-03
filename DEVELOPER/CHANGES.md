@@ -1,7 +1,7 @@
 -gotta make SelfUrinate SelfDefecate happen if using ground or toilet action ends too quickly
 
 ==============
-[VERSION 0.81]
+[VERSION 0.9]
 ==============
 
 - Made urine puddle object not appear when peeing in bed
