@@ -28,6 +28,8 @@
 - Created "SuitTrousersMesh_Pooped" item
 - Made underwear poop overlay textures translucent
 
+- Added support for LongShorts_Peed model
+
 ==============
 [VERSION 0.9]
 ==============

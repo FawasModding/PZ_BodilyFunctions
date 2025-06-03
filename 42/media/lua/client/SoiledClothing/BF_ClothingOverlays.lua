@@ -122,8 +122,8 @@ function BF_ClothingOverlays.equipAllOverlays(player, stainType)
         local wornItem = player:getWornItem(location)
         if wornItem and wornItem:getModData()[stainType] then
             local bodyLocation
-            if BF_Utils.tableContains(BF_ClothingConfig.clothingModels.maleUnderwear.types, wornItem:getType()) or
-            BF_Utils.tableContains(BF_ClothingConfig.clothingModels.femaleUnderwear.types, wornItem:getType()) then
+            if BF_Utils.tableContains(BF_ClothingConfig.clothingModels.MaleUnderwear.types, wornItem:getType()) or
+            BF_Utils.tableContains(BF_ClothingConfig.clothingModels.FemaleUnderwear.types, wornItem:getType()) then
                 -- Apply to underwear-specific overlay slot
                 if stainType == "peed" then
                     bodyLocation = "PeedOverlay_Underwear"
