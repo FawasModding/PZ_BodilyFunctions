@@ -1,6 +1,13 @@
 -gotta make SelfUrinate SelfDefecate happen if using ground or toilet action ends too quickly
 
 ==============
+[VERSION 0.10]
+==============
+
+- Changed "Bathroom" to "BF" prefix for item scripts
+- 
+
+==============
 [VERSION 0.9]
 ==============
 
@@ -13,7 +20,6 @@
 - Created BathroomFunctions.GetMaxBowelValue() and BathroomFunctions.GetMaxBladderValue() in BF_Utils.lua
 - Added Russian language support (from M1ST0R)
 - Added Espanol (ES) support (from AI, may be wrong, feel free to give suggestions on how to improve it)
-
 
 ==============
 [VERSION 0.81]
