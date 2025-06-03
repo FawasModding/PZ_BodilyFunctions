@@ -28,12 +28,21 @@ end
 function BF_ClothingOverlays.equipOverlay(player, wornItem, stainType, bodyLocation)
     local modData = wornItem:getModData()
     local severityKey = stainType == "peed" and "peedSeverity" or "poopedSeverity"
-    --print("[DEBUG] Checking overlay for item: " .. wornItem:getType() .. ", stainType: " .. stainType .. ", modData[" .. stainType .. "]: " .. tostring(modData[stainType]) .. ", severity: " .. tostring(modData[severityKey]))
+
+    -- Define minimum severity thresholds. 10% if peed, 25% if pooped
+    local minSeverity = stainType == "peed" and 10 or 25
+
+    -- Only apply overlay if severity is high enough
+    if modData[severityKey] and modData[severityKey] < minSeverity then
+        --print("[DEBUG] Overlay not applied: " .. stainType .. " severity too low (" .. tostring(modData[severityKey]) .. "%)")
+        return
+    end
+
     if modData[stainType] then
         local overlayItemType = BF_ClothingOverlays.getOverlayItem(wornItem, stainType)
         if overlayItemType then
-            if not BF_Utils.getWornItems(player)[overlayItemType] then
-                --print("[DEBUG] Attempting to add item: " .. overlayItemType)
+            local existing = player:getWornItem(bodyLocation)
+            if not existing or existing:getType() ~= overlayItemType then
                 local itemToWear = player:getInventory():AddItem(overlayItemType)
                 if itemToWear then
                     player:setWornItem(bodyLocation, itemToWear)
@@ -42,8 +51,6 @@ function BF_ClothingOverlays.equipOverlay(player, wornItem, stainType, bodyLocat
                 else
                     print("[ERROR] Failed to add overlay item: " .. overlayItemType .. " (check item definition or mod load order)")
                 end
-            else
-                --print("[DEBUG] Overlay not applied: Item already worn: " .. overlayItemType)
             end
         else
             print("[ERROR] Overlay not applied: Invalid overlay item type: " .. tostring(overlayItemType))
