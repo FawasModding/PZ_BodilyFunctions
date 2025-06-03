@@ -70,7 +70,8 @@ function BF_ClothingOverlays.removeOverlay(player, wornItem, stainType)
         else
             --print("[DEBUG] No overlay item found in inventory for: " .. modData[overlayKey])
         end
-        modData[overlayKey] = nil
+        -- DO NOT clear modData[overlayKey] here!
+        -- Only clear it when the stain is removed entirely
     end
 end
 
