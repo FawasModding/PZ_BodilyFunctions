@@ -3,20 +3,6 @@ module BathroomFunctions {
         Base
     }
 	
-    item Bathroom_PeedPants {
-        DisplayName = Bathroom_PeedPants,
-        Type = Clothing,
-        ClothingItem = Bathroom_PeedPants,
-        BodyLocation = PeedOverlay_Pants,
-        IconsForTexture = PeedPants,
-        Tags = BathroomOverlay,
-        WorldStaticModel = Trousers_Ground,
-
-	    RunSpeedModifier = 0.9,
-	    DiscomfortModifier = 0.15,
-    }
-
-	
     item SuitTrousersMesh_Peed {
         DisplayName = SuitTrousersMesh_Peed,
         Type = Clothing,

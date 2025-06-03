@@ -1,10 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <fileGuidTable>
 	<files>
-		<path>media/clothing/clothingItems/Bathroom_PeedPants.xml</path>
-		<guid>c821f4f6-94f6-43af-9f62-d951eed3f74b</guid>
-   	</files>
-	<files>
 		<path>media/clothing/clothingItems/SuitTrousersMesh_Peed.xml</path>
 		<guid>25571438-217c-4e55-a2d9-81446eee4afd</guid>
 	</files>
@@ -31,6 +27,10 @@
 	<files>
 		<path>media/clothing/clothingItems/LongShorts_Peed.xml</path>
 		<guid>846b59c0-79af-4a3c-a923-420fe105df92</guid>
+	</files>
+	<files>
+		<path>media/clothing/clothingItems/LongShorts_Pooped.xml</path>
+		<guid>846b59c0-79af-4a3c-a923-420fe105df26</guid>
 	</files>
 	<files>
 		<path>media/clothing/clothingItems/Male_SmallTrunks_Peed.xml</path>

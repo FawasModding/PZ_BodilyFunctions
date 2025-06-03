@@ -21,7 +21,7 @@ BF_ClothingConfig = {
         LongShorts = {
             types = {"Shorts_LongDenim", "Shorts_LongDenim_Punk", "Shorts_LongSport", "Shorts_LongSport_Red"},
             peeOverlay = "BathroomFunctions.LongShorts_Peed",
-            poopOverlay = "BathroomFunctions.LongShorts_Peed"
+            poopOverlay = "BathroomFunctions.LongShorts_Pooped"
         }
     }
 }

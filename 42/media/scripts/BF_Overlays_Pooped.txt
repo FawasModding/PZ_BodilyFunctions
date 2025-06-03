@@ -42,6 +42,19 @@ module BathroomFunctions {
         DiscomfortModifier = 0.6,
     }
 
+    item LongShorts_Pooped {
+        DisplayName = LongShorts_Pooped,
+        Type = Clothing,
+        ClothingItem = LongShorts_Pooped,
+        BodyLocation = PoopedOverlay_Pants,
+        IconsForTexture = PeedPants,
+        Tags = BathroomOverlay,
+        WorldStaticModel = Trousers_Ground,
+
+        RunSpeedModifier = 0.9,
+        DiscomfortModifier = 0.15,
+    }
+
     item BoxingShorts_Pooped {
         DisplayName = BoxingShorts_Pooped,
         Type = Clothing,
