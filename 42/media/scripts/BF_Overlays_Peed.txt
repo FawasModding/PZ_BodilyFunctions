@@ -4,6 +4,7 @@ module BathroomFunctions {
     }
 	
     item Bathroom_PeedPants {
+        DisplayName = Bathroom_PeedPants,
         Type = Clothing,
         ClothingItem = Bathroom_PeedPants,
         BodyLocation = PeedOverlay_Pants,
@@ -17,6 +18,7 @@ module BathroomFunctions {
 
 	
     item SuitTrousersMesh_Peed {
+        DisplayName = SuitTrousersMesh_Peed,
         Type = Clothing,
         ClothingItem = SuitTrousersMesh_Peed,
         BodyLocation = PeedOverlay_Pants,
@@ -29,6 +31,7 @@ module BathroomFunctions {
     }
 
     item Female_Underpants_Peed {
+        DisplayName = Female_Underpants_Peed,
         Type = Clothing,
         ClothingItem = Female_Underpants_Peed,
         BodyLocation = PeedOverlay_Underwear,
@@ -41,6 +44,7 @@ module BathroomFunctions {
     }
 
     item Male_Boxers_Peed {
+        DisplayName = Male_Boxers_Peed,
         Type = Clothing,
         ClothingItem = Male_Boxers_Peed,
         BodyLocation = PeedOverlay_Underwear,
@@ -53,6 +57,7 @@ module BathroomFunctions {
     }
 
     item LongShorts_Peed {
+        DisplayName = LongShorts_Peed,
         Type = Clothing,
         ClothingItem = LongShorts_Peed,
         BodyLocation = PeedOverlay_Pants,
@@ -65,6 +70,7 @@ module BathroomFunctions {
     }
 
     item Male_SmallTrunks_Peed {
+        DisplayName = Male_SmallTrunks_Peed,
         Type = Clothing,
         ClothingItem = Male_SmallTrunks_Peed,
         BodyLocation = PeedOverlay_Underwear,
@@ -77,6 +83,7 @@ module BathroomFunctions {
     }
 
     item Trousers_Short_Peed {
+        DisplayName = Trousers_Short_Peed,
         Type = Clothing,
         ClothingItem = Trousers_Short_Peed,
         BodyLocation = PeedOverlay_Pants,
@@ -89,6 +96,7 @@ module BathroomFunctions {
     }
 
     item BoxingShorts_Peed {
+        DisplayName = BoxingShorts_Peed,
         Type = Clothing,
         ClothingItem = BoxingShorts_Peed,
         BodyLocation = PeedOverlay_Pants,

@@ -4,7 +4,7 @@ BF_ClothingConfig = {
     soilableLocations = {"UnderwearBottom", "Underwear", "Torso1Legs1", "Legs1", "Pants", "BathRobe", "FullSuit", "FullSuitHead", "FullTop", "BodyCostume", "ShortPants", "ShortsShort", "Pants_Skinny"},
     clothingModels = {
         trousers = {
-            types = {"Trousers_Suit", "Trousers_SuitTEXTURE", "Trousers_Scrubs", "Trousers", "Trousers_Jeans", "Trousers_Camo", "Trousers_Army", "Trousers_Denim", "Trousers_Crafted_Cotton", "TrousersMesh_DenimLight", "Trousers_Crafted_Burlap"},
+            types = {"Trousers_Suit", "Trousers_SuitTEXTURE", "Trousers_SuitWhite", "Trousers_Scrubs", "Trousers", "Trousers_Jeans", "Trousers_Camo", "Trousers_Army", "Trousers_Denim", "Trousers_Crafted_Cotton", "TrousersMesh_DenimLight", "Trousers_Crafted_Burlap"},
             peeOverlay = "BathroomFunctions.SuitTrousersMesh_Peed",
             poopOverlay = "BathroomFunctions.SuitTrousersMesh_Pooped"
         },

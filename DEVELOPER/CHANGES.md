@@ -23,6 +23,10 @@
 - Changed "SuitTrousersMesh_Peed.png" to feature urine on the inner legs, as well as the back.
 - Improved "Kate_SuitTrousers_Peed.fbx" to be significantly closer to the vanilla model. Less visible on the outside
 	- This also fixes the issue of poop overlays not being visible
+- Organized model files
+
+- Created "SuitTrousersMesh_Pooped" item
+- Made underwear poop overlay textures translucent
 
 ==============
 [VERSION 0.9]
