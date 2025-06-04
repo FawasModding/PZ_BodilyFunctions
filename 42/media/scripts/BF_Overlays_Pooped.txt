@@ -3,6 +3,19 @@ module BathroomFunctions {
         Base
     }
 
+    item Trousers_Pooped {
+        DisplayName = Trousers_Pooped,
+        Type = Clothing,
+        ClothingItem = Trousers_Pooped,
+        BodyLocation = PoopedOverlay_Pants,
+        IconsForTexture = PeedPants,
+        Tags = BathroomOverlay,
+        WorldStaticModel = Trousers_Ground,
+
+        RunSpeedModifier = 0.9,
+        DiscomfortModifier = 0.15,
+    }
+
     item SuitTrousersMesh_Pooped {
         DisplayName = SuitTrousersMesh_Pooped,
         Type = Clothing,
@@ -51,8 +64,21 @@ module BathroomFunctions {
         Tags = BathroomOverlay,
         WorldStaticModel = Trousers_Ground,
 
-        RunSpeedModifier = 0.9,
-        DiscomfortModifier = 0.15,
+        RunSpeedModifier = 0.8,
+        DiscomfortModifier = 0.6,
+    }
+
+    item ShortShorts_Pooped {
+        DisplayName = ShortShorts_Pooped,
+        Type = Clothing,
+        ClothingItem = ShortShorts_Pooped,
+        BodyLocation = PoopedOverlay_Pants,
+        IconsForTexture = PeedPants,
+        Tags = BathroomOverlay,
+        WorldStaticModel = Trousers_Ground,
+
+        RunSpeedModifier = 0.8,
+        DiscomfortModifier = 0.6,
     }
 
     item BoxingShorts_Pooped {

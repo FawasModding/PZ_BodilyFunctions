@@ -3,6 +3,19 @@ module BathroomFunctions {
         Base
     }
 	
+    item Trousers_Peed {
+        DisplayName = Trousers_Peed,
+        Type = Clothing,
+        ClothingItem = Trousers_Peed,
+        BodyLocation = PeedOverlay_Pants,
+        IconsForTexture = PeedPants,
+        Tags = BathroomOverlay,
+        WorldStaticModel = Trousers_Ground,
+
+        RunSpeedModifier = 0.9,
+        DiscomfortModifier = 0.15,
+    }
+
     item SuitTrousersMesh_Peed {
         DisplayName = SuitTrousersMesh_Peed,
         Type = Clothing,
@@ -55,23 +68,10 @@ module BathroomFunctions {
         DiscomfortModifier = 0.15,
     }
 
-    item Male_SmallTrunks_Peed {
-        DisplayName = Male_SmallTrunks_Peed,
+    item ShortShorts_Peed {
+        DisplayName = ShortShorts_Peed,
         Type = Clothing,
-        ClothingItem = Male_SmallTrunks_Peed,
-        BodyLocation = PeedOverlay_Underwear,
-        IconsForTexture = PeedPants,
-        Tags = BathroomOverlay,
-        WorldStaticModel = Trousers_Ground,
-
-        RunSpeedModifier = 0.9,
-        DiscomfortModifier = 0.15,
-    }
-
-    item Trousers_Short_Peed {
-        DisplayName = Trousers_Short_Peed,
-        Type = Clothing,
-        ClothingItem = Trousers_Short_Peed,
+        ClothingItem = ShortShorts_Peed,
         BodyLocation = PeedOverlay_Pants,
         IconsForTexture = PeedPants,
         Tags = BathroomOverlay,
