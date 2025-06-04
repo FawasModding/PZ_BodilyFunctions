@@ -31,6 +31,8 @@
 
 - Deleted "Bathroom_PeedPants", previously used for testing the overlay system at the beginning.
 
+- Converted all script files from CRLF to LF to try to fix a potential Linux OS issue.
+
 ==============
 [VERSION 0.9]
 ==============
