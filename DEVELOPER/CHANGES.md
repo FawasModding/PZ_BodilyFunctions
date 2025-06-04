@@ -26,6 +26,8 @@
 - Created "SuitTrousersMesh_Pooped" item
 - Made underwear poop overlay textures translucent
 - Added support for LongShorts_Peed and LongShorts_Pooped models
+- Added support for BoxingShorts_Peed and BoxingShorts_Pooped models
+
 - Deleted "Bathroom_PeedPants", previously used for testing the overlay system at the beginning.
 
 ==============
