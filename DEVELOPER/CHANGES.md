@@ -1,7 +1,7 @@
 -gotta make SelfUrinate SelfDefecate happen if using ground or toilet action ends too quickly
 
 ==============
-[VERSION 0.10]
+[VERSION 0.10.0]
 ==============
 
 - Changed "Bathroom" to "BF" prefix for item scripts
