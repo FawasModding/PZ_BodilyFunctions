@@ -80,8 +80,8 @@ function BathroomFunctions.DefecateBottoms(leakTriggered)
     local underwear = nil
     for _, loc in ipairs(underwearLocations) do
         local item = player:getWornItem(loc)
-        if item and (BF_Utils.tableContains(BF_ClothingConfig.clothingModels.maleUnderwear.types, item:getType()) or
-                     BF_Utils.tableContains(BF_ClothingConfig.clothingModels.femaleUnderwear.types, item:getType())) then
+        if item and (BF_Utils.tableContains(BF_ClothingConfig.clothingModels.MaleUnderwear.types, item:getType()) or
+                     BF_Utils.tableContains(BF_ClothingConfig.clothingModels.FemaleUnderwear.types, item:getType())) then
             underwear = item
             break
         end

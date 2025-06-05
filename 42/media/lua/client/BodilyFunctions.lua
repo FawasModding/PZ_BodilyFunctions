@@ -1206,22 +1206,36 @@ local onFillItemTooltip = function(tooltip, layout, item)
     if item:getModData().peed == true then
         local peedSeverity = item:getModData().peedSeverity
         -- Format the severity value to 1 decimal place
-        local peedText = "Soiled (Pee): " .. string.format("%.1f", peedSeverity) .. "%"
+        --local peedText = "Soiled (Pee): " .. string.format("%.1f", peedSeverity) .. "%"
 
-        local peedTooltip = LayoutItem.new()
-        layout.items:add(peedTooltip)
-        peedTooltip:setLabel(peedText, 1.000, 0.867, 0.529, 1)
+        --local peedTooltip = LayoutItem.new()
+        --layout.items:add(peedTooltip)
+        --peedTooltip:setLabel(peedText, 1.000, 0.867, 0.529, 1)
+
+        -- Bar uses dark yellow
+        local peeBarColor = table.newarray(1.000, 0.867, 0.529, 1)
+        -- Label uses bright yellow
+        local peeLabelColor = table.newarray(1.000, 1.000, 0.000, 1)
+
+        InventoryUI.addTooltipBar(layout, "Urinated:", peedSeverity / 100, peeBarColor, peeLabelColor)
     end
 
     -- Check if the item has moddata with 'pooped == true'
     if item:getModData().pooped == true then
         local poopedSeverity = item:getModData().poopedSeverity
         -- Format the severity value to 1 decimal place
-        local poopedText = "Soiled (Poop): " .. string.format("%.1f", poopedSeverity) .. "%"
+        --local poopedText = "Soiled (Poop): " .. string.format("%.1f", poopedSeverity) .. "%"
 
-        local poopedTooltip = LayoutItem.new()
-        layout.items:add(poopedTooltip)
-        poopedTooltip:setLabel(poopedText, 0.678, 0.412, 0.235, 1)
+        --local poopedTooltip = LayoutItem.new()
+        --layout.items:add(poopedTooltip)
+        --poopedTooltip:setLabel(poopedText, 0.678, 0.412, 0.235, 1)
+
+        -- Bar uses dark brown
+        local poopBarColor = table.newarray(0.678, 0.412, 0.235, 1)
+        -- Label uses bright brown
+        local poopLabelColor = table.newarray(0.800, 0.522, 0.247, 1)
+
+        InventoryUI.addTooltipBar(layout, "Defecated:", poopedSeverity / 100, poopBarColor, poopLabelColor)
     end
 end
 

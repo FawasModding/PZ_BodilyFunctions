@@ -10,7 +10,8 @@
 
 - Fixed clothing with "Pants_Skinny" body location not being taken off when defecating (for example, Jeans)
 
-- 
+- Changed tooltip for soiled clothing from percentage number to progress bar
+- Changed "Soiled (Pee):" to "Urinated:", and "Soiled (Poop):" to "Defecated:".
 
 ==============
 [VERSION 0.10.0]
