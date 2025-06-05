@@ -1,8 +1,7 @@
 -- Function to update urination-related values
 function BathroomFunctions.UpdateUrinationValues()
-
     local player = getPlayer()
-
+    
     -- Get player stats
     local thirst = player:getStats():getThirst()
     local hunger = player:getStats():getHunger()
@@ -19,7 +18,7 @@ function BathroomFunctions.UpdateUrinationValues()
 
     -- Simulate body needing nutrients to recover
     local urgencyFactor = (1.0 - endurance) * 0.1
-    
+
     -- Add random variation for a more realistic feel
     local randomBladderFactor = 0.9 + (ZombRand(21) / 100) -- Range: 0.9 to 1.1
 
@@ -37,7 +36,7 @@ function BathroomFunctions.UpdateUrinationValues()
 
     -- Retrieve the current fill values.
     local urinateValue = BathroomFunctions.GetUrinateValue()
-   
+
     -- Base Increase Rates:
     local urinateBaseRate = 10    -- Base bladder fill per 10-minute tick
 
@@ -56,14 +55,11 @@ function BathroomFunctions.UpdateUrinationValues()
     print("Updated Urinate Value: " .. tostring(urinatePercent) .. "% (Effective Max: " .. baseBladderMax .. ")")
 end
 
-
-
 -- Function to apply effects when the player has urinated in their clothing
--- Modified UrinateBottoms takes an optional parameter "leakTriggered"
 function BathroomFunctions.UrinateBottoms(leakTriggered)
     local player = getPlayer()
     local modOptions = PZAPI.ModOptions:getOptions("BathroomFunctions")
-    local bladderMaxValue = SandboxVars.BathroomFunctions.BladderMaxValue or 100
+    local bladderMaxValue = BathroomFunctions.GetMaxBladderValue()
     local leakMultiplier = leakTriggered and 0.05 or 1.0
     local peeValue = BathroomFunctions.GetUrinateValue()
     local urinatePercentage = (peeValue / bladderMaxValue) * 100 * leakMultiplier
@@ -73,8 +69,7 @@ function BathroomFunctions.UrinateBottoms(leakTriggered)
 
     -- Get soilable clothing locations
     local underwearLocations = {"UnderwearBottom", "Underwear"}
-    local outerwearLocations = BathroomFunctions.GetSoilableClothing() -- Use all soilable locations
-    -- Remove underwear locations to avoid duplicate processing
+    local outerwearLocations = BF_ClothingConfig.soilableLocations
     for i = #outerwearLocations, 1, -1 do
         if outerwearLocations[i] == "UnderwearBottom" or outerwearLocations[i] == "Underwear" then
             table.remove(outerwearLocations, i)
@@ -83,10 +78,10 @@ function BathroomFunctions.UrinateBottoms(leakTriggered)
 
     -- Step 1: Process underwear first
     local underwear = nil
-    for i = 1, #underwearLocations do
-        local item = player:getWornItem(underwearLocations[i])
-        if item and (table.contains(BathroomClothOverlays.peedModelsMaleBoxers, item:getType()) or
-                     table.contains(BathroomClothOverlays.peedModelsFemalePanties, item:getType())) then
+    for _, loc in ipairs(underwearLocations) do
+        local item = player:getWornItem(loc)
+        if item and (BF_Utils.tableContains(BF_ClothingConfig.clothingModels.maleUnderwear.types, item:getType()) or
+                     BF_Utils.tableContains(BF_ClothingConfig.clothingModels.femaleUnderwear.types, item:getType())) then
             underwear = item
             break
         end
@@ -94,8 +89,8 @@ function BathroomFunctions.UrinateBottoms(leakTriggered)
 
     -- Step 2: Process outer garments (pants, suits, etc.)
     local pants = nil
-    for i = 1, #outerwearLocations do
-        local item = player:getWornItem(outerwearLocations[i])
+    for _, loc in ipairs(outerwearLocations) do
+        local item = player:getWornItem(loc)
         if item then
             pants = item
             break
@@ -124,31 +119,27 @@ function BathroomFunctions.UrinateBottoms(leakTriggered)
 
         -- Apply overlay if severity meets threshold
         if SandboxVars.BathroomFunctions.VisiblePeeStain and (not leakTriggered or modData.peedSeverity >= 25) then
-            BathroomClothOverlays.equipPeedOverlay(player, underwear, "PeedOverlay_Underwear")
-            print("Equipped pee overlay for underwear: " .. underwear:getType())
+            BF_ClothingOverlays.equipOverlay(player, underwear, "peed", "PeedOverlay_Underwear")
         end
 
         -- Update clothing properties
         BathroomFunctions.SetClothing(underwear, leakTriggered)
         BathroomFunctions.UpdateSoiledSeverity(underwear)
 
-        if modData.peedSeverity >= 90 then
-            showPeeObject = true
-        end
+        if modData.peedSeverity >= 90 then showPeeObject = true end
     end
 
     -- Step 4: Apply remaining severity to pants if applicable
     if pants and (remainingUrinatePercentage > 0 or urinatePercentage >= 50) then
         local modData = pants:getModData()
         modData.peed = true
+
         -- Apply spillover or partial severity for realism
         local pantsSeverity = remainingUrinatePercentage > 0 and remainingUrinatePercentage or urinatePercentage * 0.5
         modData.peedSeverity = (modData.peedSeverity or 0) + pantsSeverity
 
         -- Cap severity at 100
-        if modData.peedSeverity > 100 then
-            modData.peedSeverity = 100
-        end
+        if modData.peedSeverity > 100 then modData.peedSeverity = 100 end
 
         -- Update tooltip
         modData.tooltip = "Soiled (Urine): " .. math.floor(modData.peedSeverity) .. "%"
@@ -156,24 +147,18 @@ function BathroomFunctions.UrinateBottoms(leakTriggered)
 
         -- Apply overlay if severity meets threshold
         if SandboxVars.BathroomFunctions.VisiblePeeStain and (not leakTriggered or modData.peedSeverity >= 25) then
-            BathroomClothOverlays.equipPeedOverlay(player, pants, "PeedOverlay_Pants")
-            print("Equipped pee overlay for pants: " .. pants:getType())
+            BF_ClothingOverlays.equipOverlay(player, pants, "peed", "PeedOverlay_Pants")
         end
 
         -- Update clothing properties
         BathroomFunctions.SetClothing(pants, leakTriggered)
         BathroomFunctions.UpdateSoiledSeverity(pants)
 
-        if modData.peedSeverity >= 90 then
-            showPeeObject = true
-        end
+        if modData.peedSeverity >= 90 then showPeeObject = true end
     end
 
     -- Step 5: Create pee object if conditions are met
-    if SandboxVars.BathroomFunctions.CreatePeeObject and 
-    (not leakTriggered or showPeeObject) and 
-    not player:isAsleep() then
-
+    if SandboxVars.BathroomFunctions.CreatePeeObject and (not leakTriggered or showPeeObject) and not player:isAsleep() then
         local urineItem = instanceItem("BathroomFunctions.Urine_Hydrated_0")
         player:getCurrentSquare():AddWorldInventoryItem(urineItem, 0, 0, 0)
     end

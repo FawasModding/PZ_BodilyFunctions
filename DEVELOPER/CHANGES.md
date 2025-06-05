@@ -1,7 +1,7 @@
 -gotta make SelfUrinate SelfDefecate happen if using ground or toilet action ends too quickly
 
 ==============
-[VERSION 0.10]
+[VERSION 0.10.0]
 ==============
 
 - Changed "Bathroom" to "BF" prefix for item scripts
@@ -12,9 +12,26 @@
 	- MedicalStorageDrugs
 	- SafehouseMedical
 - Added crafting recipes for opening pill boxes.
+- Medicine's tooltips are more accurate, showing that it just adds / removes from the value.
 
-- All (most) shorts now use female underwear peed overlay instead of trousers, eventually needs their own model
-- Swim trunks are now able to be urinated / defecated
+- Created "BF_ClothingConfig.lua" for new mapping of overlays to clothing items
+- Renamed "BF_ClothingStains" to "BF_ClothingOverlays" and merged most of the functionality for simplicity (and better organization)
+- Ensured no dirt on the body when player pees or poops themselves
+
+- Changed "SuitTrousersMesh_Peed.png" to feature urine on the inner legs, as well as the back.
+- Improved "Kate_SuitTrousers_Peed.fbx" to be significantly closer to the vanilla model. Less visible on the outside
+	- This also fixes the issue of poop overlays not being visible
+
+- Made male and female pooped overlay textures translucent
+
+- Added support for LongShorts_Peed and LongShorts_Pooped models
+- Added support for ShortShorts_Peed and ShortShorts_Pooped models
+- Added support for BoxingShorts_Peed and BoxingShorts_Pooped models
+- Added support for Trousers_Peed and Trousers_Pooped models
+
+- Deleted "Bathroom_PeedPants", previously used for testing the overlay system at the beginning.
+
+- Converted all script files from CRLF to LF to try to fix a potential Linux OS issue.
 
 ==============
 [VERSION 0.9]

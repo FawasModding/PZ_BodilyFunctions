@@ -3,20 +3,21 @@ module BathroomFunctions {
         Base
     }
 	
-    item Bathroom_PeedPants {
+    item Trousers_Peed {
+        DisplayName = Trousers_Peed,
         Type = Clothing,
-        ClothingItem = Bathroom_PeedPants,
+        ClothingItem = Trousers_Peed,
         BodyLocation = PeedOverlay_Pants,
         IconsForTexture = PeedPants,
         Tags = BathroomOverlay,
         WorldStaticModel = Trousers_Ground,
 
-	    RunSpeedModifier = 0.9,
-	    DiscomfortModifier = 0.15,
+        RunSpeedModifier = 0.9,
+        DiscomfortModifier = 0.15,
     }
 
-	
     item SuitTrousersMesh_Peed {
+        DisplayName = SuitTrousersMesh_Peed,
         Type = Clothing,
         ClothingItem = SuitTrousersMesh_Peed,
         BodyLocation = PeedOverlay_Pants,
@@ -29,6 +30,7 @@ module BathroomFunctions {
     }
 
     item Female_Underpants_Peed {
+        DisplayName = Female_Underpants_Peed,
         Type = Clothing,
         ClothingItem = Female_Underpants_Peed,
         BodyLocation = PeedOverlay_Underwear,
@@ -41,6 +43,7 @@ module BathroomFunctions {
     }
 
     item Male_Boxers_Peed {
+        DisplayName = Male_Boxers_Peed,
         Type = Clothing,
         ClothingItem = Male_Boxers_Peed,
         BodyLocation = PeedOverlay_Underwear,
@@ -53,6 +56,7 @@ module BathroomFunctions {
     }
 
     item LongShorts_Peed {
+        DisplayName = LongShorts_Peed,
         Type = Clothing,
         ClothingItem = LongShorts_Peed,
         BodyLocation = PeedOverlay_Pants,
@@ -64,21 +68,10 @@ module BathroomFunctions {
         DiscomfortModifier = 0.15,
     }
 
-    item Male_SmallTrunks_Peed {
+    item ShortShorts_Peed {
+        DisplayName = ShortShorts_Peed,
         Type = Clothing,
-        ClothingItem = Male_SmallTrunks_Peed,
-        BodyLocation = PeedOverlay_Underwear,
-        IconsForTexture = PeedPants,
-        Tags = BathroomOverlay,
-        WorldStaticModel = Trousers_Ground,
-
-        RunSpeedModifier = 0.9,
-        DiscomfortModifier = 0.15,
-    }
-
-    item Trousers_Short_Peed {
-        Type = Clothing,
-        ClothingItem = Trousers_Short_Peed,
+        ClothingItem = ShortShorts_Peed,
         BodyLocation = PeedOverlay_Pants,
         IconsForTexture = PeedPants,
         Tags = BathroomOverlay,
@@ -89,6 +82,7 @@ module BathroomFunctions {
     }
 
     item BoxingShorts_Peed {
+        DisplayName = BoxingShorts_Peed,
         Type = Clothing,
         ClothingItem = BoxingShorts_Peed,
         BodyLocation = PeedOverlay_Pants,

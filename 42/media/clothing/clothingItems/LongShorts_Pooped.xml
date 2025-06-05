@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<clothingItem>
+	<m_GUID>846b59c0-79af-4a3c-a923-420fe105df26</m_GUID>
+	<m_MaleModel>skinned\clothes\pooped\bob_longshorts_pooped</m_MaleModel>
+	<m_FemaleModel>skinned\clothes\pooped\kate_longshorts_pooped</m_FemaleModel>
+	<m_AltMaleModel></m_AltMaleModel>
+	<m_AltFemaleModel></m_AltFemaleModel>
+	<m_Static>false</m_Static>
+	<m_AllowRandomHue>false</m_AllowRandomHue>
+	<m_AllowRandomTint>false</m_AllowRandomTint>
+	<m_AttachBone></m_AttachBone>
+	<textureChoices>clothing\Pants\Bathroom_Pooped_Base\Shorts_Textures\LongShorts_Pooped</textureChoices>
+</clothingItem>

@@ -32,12 +32,11 @@ function BathroomFunctions.UpdateDefecationValues()
     print("Final bowel multiplier: " .. tostring(finalBowelMultiplier))
 
     -- Retrieve the base maximum capacities (from SandboxVars or defaults).
-    local baseBladderMax = SandboxVars.BathroomFunctions.BladderMaxValue or 600
-    local baseBowelsMax  = SandboxVars.BathroomFunctions.BowelsMaxValue or 500
+    local baseBowelsMax  = BathroomFunctions.GetMaxBowelValue()
 
     -- Retrieve the current fill values.
     local defecateValue = BathroomFunctions.GetDefecateValue()
-
+    
     -- Base Increase Rates:
     local defecateBaseRate = 3.5  -- Base bowel fill per 10-minute tick
 
@@ -56,30 +55,33 @@ function BathroomFunctions.UpdateDefecationValues()
     print("Updated Defecate Value: " .. tostring(defecatePercent) .. "% (Effective Max: " .. baseBowelsMax .. ")")
 end
 
-
 -- Function to apply effects when the player has defecated in their clothing
 function BathroomFunctions.DefecateBottoms(leakTriggered)
     local player = getPlayer()
     local modOptions = PZAPI.ModOptions:getOptions("BathroomFunctions")
-    local bowelsMaxValue = SandboxVars.BathroomFunctions.BowelsMaxValue or 100
+    local bowelsMaxValue = BathroomFunctions.GetMaxBowelValue()
     local leakMultiplier = leakTriggered and 0.05 or 1.0
     local defecateValue = BathroomFunctions.GetDefecateValue()
     local defecatePercentage = (defecateValue / bowelsMaxValue) * 100 * leakMultiplier
-
+    
     local showPoopObject = false
     local maxPoopedSeverity = 0
 
     -- Get soilable clothing locations
-    local bodyLocations = BathroomFunctions.GetSoilableClothing()
     local underwearLocations = {"UnderwearBottom", "Underwear"}
-    local outerwearLocations = {"Torso1Legs1", "Legs1", "Pants", "ShortPants", "ShortsShort"}
+    local outerwearLocations = BF_ClothingConfig.soilableLocations
+    for i = #outerwearLocations, 1, -1 do
+        if outerwearLocations[i] == "UnderwearBottom" or outerwearLocations[i] == "Underwear" then
+            table.remove(outerwearLocations, i)
+        end
+    end
 
     -- Step 1: Process underwear first
     local underwear = nil
-    for i = 1, #underwearLocations do
-        local item = player:getWornItem(underwearLocations[i])
-        if item and (table.contains(BathroomClothOverlays.peedModelsMaleBoxers, item:getType()) or
-                     table.contains(BathroomClothOverlays.peedModelsFemalePanties, item:getType())) then
+    for _, loc in ipairs(underwearLocations) do
+        local item = player:getWornItem(loc)
+        if item and (BF_Utils.tableContains(BF_ClothingConfig.clothingModels.maleUnderwear.types, item:getType()) or
+                     BF_Utils.tableContains(BF_ClothingConfig.clothingModels.femaleUnderwear.types, item:getType())) then
             underwear = item
             break
         end
@@ -87,8 +89,8 @@ function BathroomFunctions.DefecateBottoms(leakTriggered)
 
     -- Step 2: Process outer garments (pants, shorts, etc.)
     local pants = nil
-    for i = 1, #outerwearLocations do
-        local item = player:getWornItem(outerwearLocations[i])
+    for _, loc in ipairs(outerwearLocations) do
+        local item = player:getWornItem(loc)
         if item then -- Accept any item in outerwear locations
             pants = item
             break
@@ -97,7 +99,7 @@ function BathroomFunctions.DefecateBottoms(leakTriggered)
 
     -- Step 3: Distribute poop severity (underwear first, then pants)
     local remainingDefecatePercentage = defecatePercentage
-
+    
     if underwear then
         local modData = underwear:getModData()
         modData.pooped = true
@@ -117,31 +119,27 @@ function BathroomFunctions.DefecateBottoms(leakTriggered)
 
         -- Apply overlay if severity meets threshold
         if SandboxVars.BathroomFunctions.VisiblePoopStain and (not leakTriggered or modData.poopedSeverity >= 25) then
-            BathroomClothOverlays.equipPoopedOverlay(player, underwear, "PoopedOverlay_Underwear")
-            print("Equipped poop overlay for underwear: " .. underwear:getType())
+            BF_ClothingOverlays.equipOverlay(player, underwear, "pooped", "PoopedOverlay_Underwear")
         end
 
         -- Update clothing properties
         BathroomFunctions.SetClothing(underwear, leakTriggered)
         BathroomFunctions.UpdateSoiledSeverity(underwear)
 
-        if modData.poopedSeverity >= 90 then
-            showPoopObject = true
-        end
+        if modData.poopedSeverity >= 90 then showPoopObject = true end
     end
 
     -- Step 4: Apply remaining severity to pants if applicable
     if pants and (remainingDefecatePercentage > 0 or defecatePercentage >= 50) then
         local modData = pants:getModData()
         modData.pooped = true
+
         -- Apply reduced spillover (50% of remaining) for realism
         local pantsSeverity = remainingDefecatePercentage > 0 and (remainingDefecatePercentage * 0.5) or (defecatePercentage * 0.25)
         modData.poopedSeverity = (modData.poopedSeverity or 0) + pantsSeverity
 
         -- Cap severity at 100
-        if modData.poopedSeverity > 100 then
-            modData.poopedSeverity = 100
-        end
+        if modData.poopedSeverity > 100 then modData.poopedSeverity = 100 end
 
         -- Update tooltip
         modData.tooltip = "Soiled (Feces): " .. math.floor(modData.poopedSeverity) .. "%"
@@ -149,27 +147,15 @@ function BathroomFunctions.DefecateBottoms(leakTriggered)
 
         -- Apply overlay if severity meets threshold
         if SandboxVars.BathroomFunctions.VisiblePoopStain and (not leakTriggered or modData.poopedSeverity >= 25) then
-            BathroomClothOverlays.equipPoopedOverlay(player, pants, "PoopedOverlay_Pants")
-            print("Equipped poop overlay for pants: " .. pants:getType())
+            BF_ClothingOverlays.equipOverlay(player, pants, "pooped", "PoopedOverlay_Pants")
         end
 
         -- Update clothing properties
         BathroomFunctions.SetClothing(pants, leakTriggered)
         BathroomFunctions.UpdateSoiledSeverity(pants)
 
-        if modData.poopedSeverity >= 90 then
-            showPoopObject = true
-        end
+        if modData.poopedSeverity >= 90 then showPoopObject = true end
     end
-
-    -- Step 5: Apply body dirt
-    local dirtMultiplier = leakTriggered and 0.05 or 1.0
-    player:addDirt(BloodBodyPartType.Groin, ZombRand(4, 10) * dirtMultiplier, false)
-    player:addDirt(BloodBodyPartType.UpperLeg_L, ZombRand(4, 10) * dirtMultiplier, false)
-    player:addDirt(BloodBodyPartType.UpperLeg_R, ZombRand(4, 10) * dirtMultiplier, false)
-    player:getVisual():setDirt(BloodBodyPartType.Groin, ZombRand(4, 10) * dirtMultiplier)
-    player:getVisual():setDirt(BloodBodyPartType.UpperLeg_L, ZombRand(4, 10) * dirtMultiplier)
-    player:getVisual():setDirt(BloodBodyPartType.UpperLeg_R, ZombRand(4, 10) * dirtMultiplier)
 
     -- Step 6: Apply sound and dialogue
     player:playerVoiceSound("JumpLow")
