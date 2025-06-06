@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <clothingItem>
 	<guid>36417b58-3abb-4088-a660-810b6c4654e3</guid>
-	<m_MaleModel>skinned\clothes\bob_suittrousers_peed</m_MaleModel>
-	<m_FemaleModel>skinned\clothes\Kate_Shorts_Peed</m_FemaleModel>
+	<m_MaleModel>skinned\clothes\peed\bob_boxingshorts_peed</m_MaleModel>
+	<m_FemaleModel>skinned\clothes\peed\kate_boxingshorts_peed</m_FemaleModel>
 	<m_AltMaleModel></m_AltMaleModel>
 	<m_AltFemaleModel></m_AltFemaleModel>
 	<m_Static>false</m_Static>
 	<m_AllowRandomHue>false</m_AllowRandomHue>
 	<m_AllowRandomTint>false</m_AllowRandomTint>
 	<m_AttachBone></m_AttachBone>
-	<textureChoices>clothing\Pants\Bathroom_Peed_Base\Shorts_Textures\Bathroom_PeedShorts</textureChoices>
+	<textureChoices>clothing\Pants\Bathroom_Peed_Base\Shorts_Textures\BoxingShorts_Peed</textureChoices>
 </clothingItem>

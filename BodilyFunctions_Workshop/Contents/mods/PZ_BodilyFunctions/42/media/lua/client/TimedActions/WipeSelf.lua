@@ -25,89 +25,117 @@ function WipeSelf:stop()
 end
 
 function WipeSelf:perform()
-	ISBaseTimedAction.perform(self)
+    ISBaseTimedAction.perform(self)
+    local wipeEfficiency = 1.0 -- Default to 100% wipe
 
     -- Check for drainable items (e.g., Toilet Paper)
     if self.wipeType == "usingDrainable" then
-        -- Reduce the drainable item's uses left
-        self.wipingWith:Use()
-        return
+        local itemType = self.wipingWith:getType()
+        local requiredUses = BF_WipingConfig.drainableWipeables[itemType].usesRequired
+        local availableUses = self.wipingWith:getCurrentUses()
+        wipeEfficiency = math.min(availableUses / requiredUses, 1.0)
+        for i = 1, math.min(availableUses, requiredUses) do
+            -- Reduce the drainable item's uses left
+            self.wipingWith:Use()
+        end
     end
 
     -- Check for non-drainable wipeables (Tissue, Magazines, Newspapers, etc.)
     if self.wipeType == "usingOneTime" then
         local itemType = self.wipingWith:getType()
-        local poopedItem = nil
-
-        -- Remove original item
-        self.character:getInventory():Remove(self.wipingWith)
-
-        -- Determine which shared pooped item to give
-        if string.find(itemType, "Newspaper") then
-            poopedItem = "NewspaperPooped"
-        elseif string.find(itemType, "Magazine") then
-            poopedItem = "MagazinePooped"
-        elseif itemType == "HottieZ_New" or itemType == "HottieZ" then
-            poopedItem = "HottieZPooped"
-        elseif itemType == "HunkZ" then
-            poopedItem = "HunkZPooped"
-        else
-            -- Fallback if none of the above, try to append "Pooped" to the type
-            poopedItem = self.wipingWith:getType() .. "Pooped"
-        end
-
-        -- Add the appropriate pooped version if defined
-        if poopedItem then
+        local requiredUses = BF_WipingConfig.oneTimeWipeables[itemType].usesRequired
+        local availableItems = self.character:getInventory():getNumberOfItem(itemType)
+        wipeEfficiency = math.min(availableItems / requiredUses, 1.0)
+        
+        -- Consume up to the required number of items
+        local itemsToConsume = math.min(availableItems, requiredUses)
+        for i = 1, itemsToConsume do
+            self.character:getInventory():RemoveOneOf(itemType)
+            -- Add pooped variant for each consumed item
+            local poopedItem = itemType .. "Pooped"
             self.character:getInventory():AddItem("BathroomFunctions." .. poopedItem)
-            
-            -- Debug line: Print what item was added
-            print("DEBUG: Added pooped item: " .. poopedItem)
         end
-
-        return
+        print("DEBUG: Consumed " .. itemsToConsume .. " items and added " .. itemsToConsume .. " pooped items: " .. itemType .. "Pooped")
     end
 
-    -- Check for clothing wipeables (e.g., Bra, Underwear, etc.)
+    -- Apply soiling penalty if wipeEfficiency < 1.0 and wiping poop
+    if (self.wipeType == "usingOneTime" or self.wipeType == "usingDrainable") and wipeEfficiency < 1.0 and self.bodilyFunction == "poop" then
+        local soilPenalty = 5 * (1 - wipeEfficiency) -- e.g., 2.5 for 50% efficiency
+        local applied = false
+        local underwearLocations = {"UnderwearBottom", "Underwear"} -- Potential underwear locations
+
+        -- Get unequipped clothing from modData
+        local removedClothing = self.character:getModData().removedClothing or {}
+        print("DEBUG: Unequipped clothing check:")
+
+        -- First, check for unequipped underwear
+        print("DEBUG: Checking unequipped underwear locations: " .. table.concat(underwearLocations, ", "))
+        for _, bodyLocation in ipairs(underwearLocations) do
+            for _, entry in ipairs(removedClothing) do
+                if entry:getBodyLocation() == bodyLocation then
+                    local clothingItem = entry
+                    local modData = clothingItem:getModData()
+                    modData.pooped = true
+                    modData.poopedSeverity = (modData.poopedSeverity or 0) + soilPenalty
+                    modData.poopedSeverity = math.min(modData.poopedSeverity, 100)
+                    print("DEBUG: Applied " .. soilPenalty .. "% soiling to unequipped " .. clothingItem:getType() .. " at " .. bodyLocation)
+                    applied = true
+                    return -- Stop after soiling underwear
+                end
+            end
+        end
+
+        -- If no underwear, soil unequipped non-underwear items
+        if not applied then
+            local soilableClothing = BathroomFunctions.GetSoilableClothing()
+            local nonUnderwearLocations = {}
+            for _, loc in ipairs(soilableClothing) do
+                if not (loc == "UnderwearBottom" or loc == "Underwear") then
+                    table.insert(nonUnderwearLocations, loc)
+                end
+            end
+            print("DEBUG: Checking unequipped non-underwear locations: " .. table.concat(nonUnderwearLocations, ", "))
+            for _, bodyLocation in ipairs(nonUnderwearLocations) do
+                for _, entry in ipairs(removedClothing) do
+                    if entry:getBodyLocation() == bodyLocation then
+                        local clothingItem = entry
+                        local modData = clothingItem:getModData()
+                        modData.pooped = true
+                        modData.poopedSeverity = (modData.poopedSeverity or 0) + soilPenalty
+                        modData.poopedSeverity = math.min(modData.poopedSeverity, 100)
+                        print("DEBUG: Applied " .. soilPenalty .. "% soiling to unequipped " .. clothingItem:getType() .. " at " .. bodyLocation)
+                        applied = true
+                        return -- Stop after soiling non-underwear
+                    end
+                end
+            end
+            if not applied then
+                print("DEBUG: No unequipped soilable clothing found, no soiling penalty applied")
+            end
+        end
+    end
+
+    -- Check for clothing wipeables (e.g., UnderwearBottom, UnderwearTop)
     if self.wipeType == "usingClothing" then
         local modData = self.wipingWith:getModData()
-            
+        local itemType = self.wipingWith:getBodyLocation()
+        local config = BF_WipingConfig.clothingWipeables[itemType]
+        local soilPenalty = config.soilPenalty or 5
+
         if self.bodilyFunction == "pee" then
-            -- Ensure 'peedSeverity' is initialized if it doesn't exist
-            if modData.peedSeverity == nil then
-                modData.peedSeverity = 0
-            end
-
-            -- Mark the clothing as soiled by urine
             modData.peed = true
-            modData.peedSeverity = modData.peedSeverity + 5
-
-            -- Cap the 'peedSeverity' at 100
-            if modData.peedSeverity >= 100 then
-                modData.peedSeverity = 100
-            end
-
+            modData.peedSeverity = (modData.peedSeverity or 0) + soilPenalty
+            modData.peedSeverity = math.min(modData.poopedSeverity, 100)
         elseif self.bodilyFunction == "poop" then
-            -- Ensure 'poopedSeverity' is initialized if it doesn't exist
-            if modData.poopedSeverity == nil then
-                modData.poopedSeverity = 0
-            end
-
-            -- Mark the clothing as soiled by feces
             modData.pooped = true
-            modData.poopedSeverity = modData.poopedSeverity + 5
-
-            -- Cap the 'poopedSeverity' at 100
-            if modData.poopedSeverity >= 100 then
-                modData.poopedSeverity = 100
-            end
-
+            modData.poopedSeverity = (modData.poopedSeverity or 0) + soilPenalty
+            modData.poopedSeverity = math.min(modData.poopedSeverity, 100)
         end
-
-        -- FIX THIS NEXT PATCH
-        --BathroomFunctions.SetClothing(wipingWith)
-
-        return
+        print("DEBUG: Applied " .. soilPenalty .. "% soiling to wiping clothing " .. self.wipingWith:getType() .. " at " .. itemType)
     end
+
+    --BathroomFunctions.ResetRemovedClothing(self.character) -- reset removed clothing
+    --self.character:getModData().removedClothing = nil
 end
 
 function WipeSelf:new(character, time, wipeType, wipingWith, bodilyFunction)

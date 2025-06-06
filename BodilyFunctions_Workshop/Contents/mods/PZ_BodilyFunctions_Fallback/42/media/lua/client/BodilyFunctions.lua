@@ -10,8 +10,8 @@ local InventoryUI = require("Starlit/client/ui/InventoryUI")
 function BathroomFunctions.OverrideSandboxMax()
     local player = getSpecificPlayer(0)  -- using getSpecificPlayer(0) for singleplayer
     if player then
-        local baseBladderMax = SandboxVars.BathroomFunctions.BladderMaxValue or 800
-        local baseBowelsMax  = SandboxVars.BathroomFunctions.BowelsMaxValue or 500
+        local baseBladderMax = BathroomFunctions.GetMaxBladderValue()
+        local baseBowelsMax  = BathroomFunctions.GetMaxBowelValue()
 
         if player:HasTrait("SmallBladder") then
             SandboxVars.BathroomFunctions.BladderMaxValue = baseBladderMax * 0.75

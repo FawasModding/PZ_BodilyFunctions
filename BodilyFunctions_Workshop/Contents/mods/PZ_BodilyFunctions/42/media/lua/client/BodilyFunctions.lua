@@ -305,45 +305,47 @@ end
 
 -- Wiping options helper function
 function BathroomFunctions.AddWipingOptions(parentMenu, worldObjects, player, defecateValue, requirement, maxValue, wipeType, wipeItem, triggerFunction, targetObject)
-    -- Check if player actually needs to defecate first
     if defecateValue < (requirement / 100) * maxValue then
-        -- Player doesn't need to defecate enough yet, don't show wiping options
         return nil
     end
-    
-    -- Check for shy traits
+
     local hasShyBowels = player:HasTrait("ShyBowels")
     local hasParcopresis = player:HasTrait("Parcopresis")
-    
-    -- Check if player is being watched (assuming this check is similar to what you have in BathroomRightClick)
     local isBeingWatched = BathroomFunctions.IsBeingWatched(player)
-    
-    -- If player has shy traits and is being watched, don't show wiping options
+
     if (hasShyBowels or hasParcopresis) and isBeingWatched then
         return nil
     end
-    
-    -- Create the "Wipe" submenu
+
     local wipeSubMenu = ISContextMenu:getNew(parentMenu)
+    local _, _, wipeEfficiency = BathroomFunctions.CheckForWipeables(player)
 
-    -- Create the "Don't Wipe" option
+    -- "Don't Wipe" option
+    local dontWipeOption
     if triggerFunction == BathroomFunctions.TriggerGroundDefecate then
-        local dontWipeOption = wipeSubMenu:addOption(getText("ContextMenu_DontWipe"), false, triggerFunction, wipeType, wipeItem)
-        BathroomFunctions.AddTooltip(dontWipeOption, "Choose not to wipe after defecating.")
+        dontWipeOption = wipeSubMenu:addOption(getText("ContextMenu_DontWipe"), false, triggerFunction, wipeType, wipeItem, 0)
     else
-        local dontWipeOption = wipeSubMenu:addOption(getText("ContextMenu_DontWipe"), targetObject, triggerFunction, player, false, wipeType, wipeItem)
-        BathroomFunctions.AddTooltip(dontWipeOption, "Choose not to wipe after defecating.")
+        dontWipeOption = wipeSubMenu:addOption(getText("ContextMenu_DontWipe"), targetObject, triggerFunction, player, false, wipeType, wipeItem, 0)
     end
+    BathroomFunctions.AddTooltip(dontWipeOption, "Choose not to wipe after defecating. (5% soiling penalty)")
 
-    -- Add "Wipe With" option if wiping is possible
+    -- "Wipe With" option if wipeItem exists
     if wipeItem then
+        local wipePercentage = wipeType == "usingClothing" and 0 or math.floor(wipeEfficiency * 100)
+        local penaltyPercentage = wipeType == "usingClothing" and 5 or 5 * (1 - wipeEfficiency)
+        local doWipeOption
         if triggerFunction == BathroomFunctions.TriggerGroundDefecate then
-            local doWipeOption = wipeSubMenu:addOption(getText("ContextMenu_WipeWith") .. " " .. wipeItem:getName(), true, triggerFunction, wipeType, wipeItem)
-            BathroomFunctions.AddTooltip(doWipeOption, "Wipe using this item.")
+            doWipeOption = wipeSubMenu:addOption(
+                getText("ContextMenu_WipeWith") .. " " .. wipeItem:getName() .. (wipeType == "usingClothing" and "" or " (" .. wipePercentage .. "%)"),
+                true, triggerFunction, wipeType, wipeItem, wipeEfficiency
+            )
         else
-            local doWipeOption = wipeSubMenu:addOption(getText("ContextMenu_WipeWith") .. " " .. wipeItem:getName(), targetObject, triggerFunction, player, true, wipeType, wipeItem)
-            BathroomFunctions.AddTooltip(doWipeOption, "Wipe using this item.")
+            doWipeOption = wipeSubMenu:addOption(
+                getText("ContextMenu_WipeWith") .. " " .. wipeItem:getName() .. (wipeType == "usingClothing" and "" or " (" .. wipePercentage .. "%)"),
+                targetObject, triggerFunction, player, true, wipeType, wipeItem, wipeEfficiency
+            )
         end
+        BathroomFunctions.AddTooltip(doWipeOption, "Wipe using this item. (" .. string.format("%.2f", penaltyPercentage) .. "% soiling penalty)")
     end
 
     return wipeSubMenu
@@ -939,59 +941,6 @@ function BathroomFunctions.CleaningRightClick(player, context, worldObjects)
     end
 end
 
-function BathroomFunctions.CheckForWipeables(player)
-    local showWipeOption = false
-
-    -- Ensure constants or types are defined
-    local usingDrainable = "usingDrainable"
-    local usingOneTime = "usingOneTime"
-    local usingClothing = "usingClothing"
-
-    -- Check for drainable items (e.g., Toilet Paper)
-    local drainableItems = BathroomFunctions.GetDrainableWipeables()
-    for _, itemType in ipairs(drainableItems) do
-        local items = player:getInventory():getItems()  -- Get player's inventory items
-        for i = 0, items:size() - 1 do
-            local item = items:get(i)
-
-            if item:getType() == itemType and item:getCurrentUses() >= 1 then
-                showWipeOption = true
-                return usingDrainable, item  -- Return early with wipeType and item
-            end
-        end
-    end
-
-    -- Check for non-drainable wipeables (e.g., Tissue, Paper Napkins, etc.)
-    local nonDrainableItems = BathroomFunctions.GetOneTimeWipeables()
-    for _, itemType in ipairs(nonDrainableItems) do
-        local items = player:getInventory():getItems()  -- Get player's inventory items
-        for i = 0, items:size() - 1 do
-            local item = items:get(i)
-
-            if item:getType() == itemType then
-                showWipeOption = true
-                return usingOneTime, item  -- Return early with wipeType and item
-            end
-        end
-    end
-
-    -- Check for clothing wipeables (e.g., Bra, Underwear.)
-    local clothingWipeables = BathroomFunctions.GetClothingWipeables()
-    for _, bodyLocation in ipairs(clothingWipeables) do
-        local items = player:getInventory():getItems()  -- Get player's inventory items
-        for i = 0, items:size() - 1 do
-            local item = items:get(i)
-
-            if item:IsClothing() and item:getBodyLocation() == bodyLocation then
-                showWipeOption = true
-                return usingClothing, item  -- Return early with wipeType and item
-            end
-        end
-    end
-
-    return nil, nil  -- Explicitly return nil for both wipeType and item if no wipeable item is found
-end
-
 -- =====================================================
 --
 -- EVENT REGISTRATION
@@ -1031,7 +980,8 @@ function BathroomFunctions.ReequipBottomClothing(player)
         end
     end
 
-     BathroomFunctions.ResetRemovedClothing(player)
+    -- This was moved to be directly inside of the trigger functions, so it happens after wiping.
+     --BathroomFunctions.ResetRemovedClothing(player)
 end
 function BathroomFunctions.ResetRemovedClothing(player)
     -- Clear the removed clothing list
@@ -1062,7 +1012,7 @@ function BathroomFunctions.TriggerToiletUrinate(object, player)
     ISTimedActionQueue.add(ToiletUrinate:new(player, urinateValue, true, true, object))
 end
 
-function BathroomFunctions.TriggerToiletDefecate(object, player, isWiping, wipeType, wipeItem)
+function BathroomFunctions.TriggerToiletDefecate(object, player, isWiping, wipeType, wipeItem, wipeEfficiency)
     local player = getPlayer()
     local defecateValue = BathroomFunctions.GetDefecateValue()
     local requirement = SandboxVars.BathroomFunctions.PoopInToiletRequirement or 40
@@ -1070,19 +1020,31 @@ function BathroomFunctions.TriggerToiletDefecate(object, player, isWiping, wipeT
     local hasShyBowels = player:HasTrait("ShyBowels")
     local isBeingWatched = BathroomFunctions.IsBeingWatched(player)
 
-    -- Only allow action if requirements are met
-    if defecateValue < (requirement / 100) * bowelsMaxValue then
-        return
-    end
-    if hasShyBowels and isBeingWatched then
+    if defecateValue < (requirement / 100) * bowelsMaxValue or (hasShyBowels and isBeingWatched) then
         return
     end
 
-    -- Proceed with the action
     ISTimedActionQueue.add(ISWalkToTimedAction:new(player, object))
     BathroomFunctions.RemoveBottomClothing(player)
     ISTimedActionQueue.add(ToiletDefecate:new(player, defecateValue * 2, true, true, object))
-    ISTimedActionQueue.add(WipeSelf:new(player, 20, wipeType, wipeItem, "poop"))
+    
+    if isWiping then
+        ISTimedActionQueue.add(WipeSelf:new(player, 20, wipeType, wipeItem, "poop"))
+    else
+        -- Apply 5% soiling penalty to worn clothing if not wiping
+        local soilableClothing = BathroomFunctions.GetSoilableClothing()
+        for _, bodyLocation in ipairs(soilableClothing) do
+            local clothingItem = player:getWornItem(bodyLocation)
+            if clothingItem then
+                local modData = clothingItem:getModData()
+                modData.pooped = true
+                modData.poopedSeverity = (modData.poopedSeverity or 0) + 5
+                modData.poopedSeverity = math.min(modData.poopedSeverity, 100)
+            end
+        end
+
+        BathroomFunctions.ResetRemovedClothing(player) -- reset removed clothing
+    end
 end
 
 function BathroomFunctions.TriggerGroundUrinate()
@@ -1100,21 +1062,31 @@ function BathroomFunctions.TriggerGroundUrinate()
     ISTimedActionQueue.add(GroundUrinate:new(player, peeTime, true, true))
 end
 
-function BathroomFunctions.TriggerGroundDefecate(isWiping, wipeType, wipeItem)
+function BathroomFunctions.TriggerGroundDefecate(isWiping, wipeType, wipeItem, wipeEfficiency)
     local player = getPlayer()
     local defecateValue = BathroomFunctions.GetDefecateValue()
     local poopTime = defecateValue * 2
 
-    -- Remove bottom clothing first
     BathroomFunctions.RemoveBottomClothing(player)
-
-    -- Defecate on the ground
     ISTimedActionQueue.add(GroundDefecate:new(player, poopTime, true, true))
 
-    -- Wipe afterwards if needed
-    ISTimedActionQueue.add(WipeSelf:new(player, 20, wipeType, wipeItem, "poop"))
+    if isWiping then
+        ISTimedActionQueue.add(WipeSelf:new(player, 20, wipeType, wipeItem, "poop"))
+    else
+        -- Apply 5% soiling penalty to worn clothing if not wiping
+        local soilableClothing = BathroomFunctions.GetSoilableClothing()
+        for _, bodyLocation in ipairs(soilableClothing) do
+            local clothingItem = player:getWornItem(bodyLocation)
+            if clothingItem then
+                local modData = clothingItem:getModData()
+                modData.pooped = true
+                modData.poopedSeverity = (modData.poopedSeverity or 0) + 5
+                modData.poopedSeverity = math.min(modData.poopedSeverity, 100)
+            end
+        end
 
-    -- Check in here if isWiping is false, if false, then add a small pooped value to the worn clothes.
+        BathroomFunctions.ResetRemovedClothing(player) -- reset removed clothing
+    end
 end
 
 function BathroomFunctions.TriggerSelfDefecate(isLeak)
@@ -1234,22 +1206,36 @@ local onFillItemTooltip = function(tooltip, layout, item)
     if item:getModData().peed == true then
         local peedSeverity = item:getModData().peedSeverity
         -- Format the severity value to 1 decimal place
-        local peedText = "Soiled (Pee): " .. string.format("%.1f", peedSeverity) .. "%"
+        --local peedText = "Soiled (Pee): " .. string.format("%.1f", peedSeverity) .. "%"
 
-        local peedTooltip = LayoutItem.new()
-        layout.items:add(peedTooltip)
-        peedTooltip:setLabel(peedText, 1.000, 0.867, 0.529, 1)
+        --local peedTooltip = LayoutItem.new()
+        --layout.items:add(peedTooltip)
+        --peedTooltip:setLabel(peedText, 1.000, 0.867, 0.529, 1)
+
+        -- Bar uses dark yellow
+        local peeBarColor = table.newarray(1.000, 0.867, 0.529, 1)
+        -- Label uses bright yellow
+        local peeLabelColor = table.newarray(1.000, 1.000, 0.000, 1)
+
+        InventoryUI.addTooltipBar(layout, "Urinated:", peedSeverity / 100, peeBarColor, peeLabelColor)
     end
 
     -- Check if the item has moddata with 'pooped == true'
     if item:getModData().pooped == true then
         local poopedSeverity = item:getModData().poopedSeverity
         -- Format the severity value to 1 decimal place
-        local poopedText = "Soiled (Poop): " .. string.format("%.1f", poopedSeverity) .. "%"
+        --local poopedText = "Soiled (Poop): " .. string.format("%.1f", poopedSeverity) .. "%"
 
-        local poopedTooltip = LayoutItem.new()
-        layout.items:add(poopedTooltip)
-        poopedTooltip:setLabel(poopedText, 0.678, 0.412, 0.235, 1)
+        --local poopedTooltip = LayoutItem.new()
+        --layout.items:add(poopedTooltip)
+        --poopedTooltip:setLabel(poopedText, 0.678, 0.412, 0.235, 1)
+
+        -- Bar uses dark brown
+        local poopBarColor = table.newarray(0.678, 0.412, 0.235, 1)
+        -- Label uses bright brown
+        local poopLabelColor = table.newarray(0.800, 0.522, 0.247, 1)
+
+        InventoryUI.addTooltipBar(layout, "Defecated:", poopedSeverity / 100, poopBarColor, poopLabelColor)
     end
 end
 

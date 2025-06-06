@@ -1,3 +1,5 @@
+BF_Utils = {}
+
 -- Tooltips helper function
 function BathroomFunctions.AddTooltip(option, description)
     if option then
@@ -7,6 +9,22 @@ function BathroomFunctions.AddTooltip(option, description)
         tooltip.description = description
         option.toolTip = tooltip
     end
+end
+
+function BF_Utils.tableContains(tbl, value)
+    for _, v in ipairs(tbl) do
+        if v == value then return true end
+    end
+    return false
+end
+
+function BF_Utils.getWornItems(player)
+    local items = {}
+    for i = 0, player:getWornItems():size() - 1 do
+        local item = player:getWornItems():getItemByIndex(i)
+        if item then items[item:getType()] = item end
+    end
+    return items
 end
 
 -- =====================================================
@@ -133,3 +151,16 @@ function BathroomFunctions.SetPoopedSelfValue(newPoopedSelfValue)
     end
 end
 
+function BathroomFunctions.GetMaxBowelValue()
+    --local bowelsMaxValue = SandboxVars.BathroomFunctions.BowelsMaxValue or 500
+    local bowelsMaxValue = SandboxVars.BathroomFunctions.BowelsMaxValue or 100
+
+    return bowelsMaxValue
+end
+
+function BathroomFunctions.GetMaxBladderValue()
+    --local bladderMaxValue = SandboxVars.BathroomFunctions.BladderMaxValue or 800
+    local bladderMaxValue = SandboxVars.BathroomFunctions.BladderMaxValue or 100
+
+    return bladderMaxValue
+end
