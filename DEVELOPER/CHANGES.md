@@ -1,6 +1,19 @@
 -gotta make SelfUrinate SelfDefecate happen if using ground or toilet action ends too quickly
 
 ==============
+[VERSION 0.11.0]
+==============
+
+- Moved wipeable items to BF_WipingConfig
+- Added partial wiping if you don't have enough of a certain item.
+- Added the need to use multiple of each item type for wiping. For example, to fully wipe with paper, you need 4 of them.
+
+- Fixed clothing with "Pants_Skinny" body location not being taken off when defecating (for example, Jeans)
+
+- Changed tooltip for soiled clothing from percentage number to progress bar
+- Changed "Soiled (Pee):" to "Urinated:", and "Soiled (Poop):" to "Defecated:".
+
+==============
 [VERSION 0.10.0]
 ==============
 
