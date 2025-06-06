@@ -1,0 +1,6 @@
+name=Bathroom Functions (v0.81)
+poster=poster.png
+id=bathroomfunctionsfallback
+description=Realism in its harshest form.
+require=\StarlitLibrary,\MoodleFramework
+icon=icon.png

@@ -1,0 +1,5 @@
+name=Bathroom Functions
+poster=poster.png
+id=bathroomfunctions
+description=Realism in its harshest form.
+require=\StarlitLibrary,\MoodleFramework

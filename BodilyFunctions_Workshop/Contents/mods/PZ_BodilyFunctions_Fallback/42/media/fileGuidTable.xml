@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<fileGuidTable>
+	<files>
+		<path>media/clothing/clothingItems/Bathroom_PeedPants.xml</path>
+		<guid>c821f4f6-94f6-43af-9f62-d951eed3f74b</guid>
+   	</files>
+	<files>
+		<path>media/clothing/clothingItems/SuitTrousersMesh_Peed.xml</path>
+		<guid>25571438-217c-4e55-a2d9-81446eee4afd</guid>
+	</files>
+	<files>
+		<path>media/clothing/clothingItems/Female_Underpants_Peed.xml</path>
+		<guid>9ac677fd-2639-4e80-bd3e-163cf9136428</guid>
+	</files>
+	<files>
+		<path>media/clothing/clothingItems/Female_Underpants_Pooped.xml</path>
+		<guid>2aj677rd-2619-4b00-gd3a-123bx9236418</guid>
+	</files>
+	<files>
+		<path>media/clothing/clothingItems/BoxingShorts_Peed.xml</path>
+		<guid>36417b58-3abb-4088-a660-810b6c4654e3</guid>
+	</files>
+	<files>
+		<path>media/clothing/clothingItems/BoxingShorts_Pooped.xml</path>
+		<guid>26317b28-9acb-4078-h612-720c3c2624a3</guid>
+	</files>
+	<files>
+		<path>media/clothing/clothingItems/LongShorts_Peed.xml</path>
+		<guid>846b59c0-79af-4a3c-a923-420fe105df92</guid>
+	</files>
+	<files>
+		<path>media/clothing/clothingItems/Male_SmallTrunks_Peed.xml</path>
+		<guid>9b2a8b56-206f-4c6c-bc42-8c9f611c7f9a</guid>
+	</files>
+	<files>
+		<path>media/clothing/clothingItems/Trousers_Short_Peed.xml</path>
+		<guid>692d84d0-47bb-4cfd-a71e-e288adc9dee4</guid>
+	</files>
+	<files>
+		<path>media/clothing/clothingItems/PulledDown_Trousers.xml</path>
+		<guid>f9c770d7-ef9b-46b7-892b-9dc2f682f8c4</guid>
+	</files>
+	<files>
+		<path>media/clothing/clothingItems/Male_Boxers_Peed.xml</path>
+		<guid>c5c5a2df-4fac-42d0-a2ba-449120d047f2</guid>
+	</files>
+	<files>
+		<path>media/clothing/clothingItems/Male_Boxers_Pooped.xml</path>
+		<guid>7792df86-45e4-4bd7-9739-1e3d834b832b</guid>
+	</files>
+
+    
+
+</fileGuidTable>

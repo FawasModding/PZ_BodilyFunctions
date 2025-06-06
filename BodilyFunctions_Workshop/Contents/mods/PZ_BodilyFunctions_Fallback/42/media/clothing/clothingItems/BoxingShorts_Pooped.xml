@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<clothingItem>
+	<guid>26317b28-9acb-4078-h612-720c3c2624a3</guid>
+	<m_MaleModel>skinned\clothes\bob_suittrousers_peed</m_MaleModel>
+	<m_FemaleModel>skinned\clothes\Kate_Shorts_Peed</m_FemaleModel>
+	<m_AltMaleModel></m_AltMaleModel>
+	<m_AltFemaleModel></m_AltFemaleModel>
+	<m_Static>false</m_Static>
+	<m_AllowRandomHue>false</m_AllowRandomHue>
+	<m_AllowRandomTint>false</m_AllowRandomTint>
+	<m_AttachBone></m_AttachBone>
+	<textureChoices>clothing\Pants\Bathroom_Pooped_Base\Shorts_Textures\Bathroom_PoopedShorts</textureChoices>
+</clothingItem>
