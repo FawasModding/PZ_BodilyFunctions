@@ -1,6 +1,14 @@
-name=Bathroom Functions (0.11.0)
+name=Bodily Functions (0.11.0)
 poster=poster.png
-id=bathroomfunctions
-description=Realism in its harshest form.
+id=bodilyfunctions
+author=Fawas Interactive
+description=<H1><WHITE>BODILY FUNCTIONS EA
+description=<BR>
+description=<RED>Realism in its harshest form.
+description=<BR>
+description=Features Defecation & Defecation
+modversion=0.11.0
+url=https://www.fawasinteractive.com
 require=\StarlitLibrary,\MoodleFramework
+incompatible=\bodilyfunctionsfallback
 icon=icon.png
