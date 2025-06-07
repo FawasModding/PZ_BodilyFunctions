@@ -6,8 +6,10 @@
 
 - Reorganized Sandbox Menu.
 - Changed "BodilyFunctions" function prefix to "BF"
+
 - Flies now appear on human feces, whether it's on the ground or being held by the player.
 - Standing near feces now applied food sickness (nausea) and unhappiness.
+- Human Feces can now be used as fuel for fires.
 
 - Added custom smell moodle (Bodily Fumes), for reacting to bodily fluids / functions (farting, poop, etc.)
 
