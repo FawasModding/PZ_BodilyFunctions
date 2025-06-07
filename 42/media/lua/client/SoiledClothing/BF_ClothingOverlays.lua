@@ -1,3 +1,4 @@
+---@diagnostic disable: duplicate-set-field
 BF_ClothingOverlays = {}
 
 Events.OnLoad.Add(function()
