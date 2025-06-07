@@ -1,5 +1,5 @@
 -- Helper function to check if the player is wearing any of the specified clothing
-function BathroomFunctions.HasClothingOn(player, ...)
+function BF.HasClothingOn(player, ...)
     local bodyLocations = {...} -- Receive the clothing items to check
 
     -- Iterate through the clothing items to check if the player is wearing any of them
@@ -16,7 +16,7 @@ end
 --[[
 Use this to call function to to show the wearing urinated and defecated garments moodles. As well as affect the mood over time.
 ]]--
-function BathroomFunctions.DirtyBottomsEffects()
+function BF.DirtyBottomsEffects()
     local player = getPlayer()
     local totalPoopedSeverity = 0
     local totalPeedSeverity = 0
@@ -28,7 +28,7 @@ function BathroomFunctions.DirtyBottomsEffects()
         -- Ensure the item is not nil before calling UpdateSoiledSeverity
         if item ~= nil then
             -- Update values for pooped and peed states based on item mod data
-            local itemUpdatedPooped, itemUpdatedPeed = BathroomFunctions.UpdateSoiledSeverity(item)
+            local itemUpdatedPooped, itemUpdatedPeed = BF.UpdateSoiledSeverity(item)
 
             -- Accumulate the total pooped and peed severity
             if itemUpdatedPooped and item:getModData().poopedSeverity then
@@ -44,19 +44,19 @@ function BathroomFunctions.DirtyBottomsEffects()
 
     -- Update global values for pooped and peed after all items are processed
     if totalPoopedSeverity > 0 then
-        BathroomFunctions.SetPoopedSelfValue(totalPoopedSeverity)
+        BF.SetPoopedSelfValue(totalPoopedSeverity)
     else
-        BathroomFunctions.SetPoopedSelfValue(0)
+        BF.SetPoopedSelfValue(0)
     end
     if totalPeedSeverity > 0 then
-        BathroomFunctions.SetPeedSelfValue(totalPeedSeverity)
+        BF.SetPeedSelfValue(totalPeedSeverity)
     else
-        BathroomFunctions.SetPeedSelfValue(0)
+        BF.SetPeedSelfValue(0)
     end
 end
 
 -- FOR ITEMS IN GENERAL
-function BathroomFunctions.SetClothing(item, isLeak)
+function BF.SetClothing(item, isLeak)
     -- Get the player object
     local player = getSpecificPlayer(0)
     local bodyDamage = player:getBodyDamage()
@@ -83,7 +83,7 @@ function BathroomFunctions.SetClothing(item, isLeak)
 end
 
 -- FOR CLOTHING SPECIFICALLY
-function BathroomFunctions.UpdateSoiledSeverity(clothing)
+function BF.UpdateSoiledSeverity(clothing)
     local updatedPooped = false
     local updatedPeed = false
 
@@ -92,27 +92,27 @@ function BathroomFunctions.UpdateSoiledSeverity(clothing)
         local modData = clothing:getModData()
 
         if modData.pooped ~= nil then -- Check if the worn item is defecated
-            BathroomFunctions.SetPoopedSelfValue(modData.poopedSeverity)
+            BF.SetPoopedSelfValue(modData.poopedSeverity)
             updatedPooped = true
         else
             -- If no pooped state, set to 0 (can be skipped here if handled at the end of the loop)
-            BathroomFunctions.SetPoopedSelfValue(0)
+            BF.SetPoopedSelfValue(0)
         end
 
         if modData.peed ~= nil then -- Check if the worn item is urinated
-            BathroomFunctions.SetPeedSelfValue(modData.peedSeverity)
+            BF.SetPeedSelfValue(modData.peedSeverity)
             updatedPeed = true
         else
             -- If no peed state, set to 0 (can be skipped here if handled at the end of the loop)
-            BathroomFunctions.SetPeedSelfValue(0)
+            BF.SetPeedSelfValue(0)
         end
     else
         print("Error: Clothing or mod data is nil in UpdateSoiledSeverity.")
     end
 
     -- Debugging output
-    --print("Updated PeedSelfValue: " .. BathroomFunctions.GetPeedSelfValue())
-    --print("Updated PoopedSelfValue: " .. BathroomFunctions.GetPoopedSelfValue())
+    --print("Updated PeedSelfValue: " .. BF.GetPeedSelfValue())
+    --print("Updated PoopedSelfValue: " .. BF.GetPoopedSelfValue())
 
     return updatedPooped, updatedPeed
 end

@@ -21,7 +21,7 @@ function BF_ClothingOverlays.getOverlayItem(item, stainType)
             end
         end
     end
-    local fallback = stainType == "peed" and "BathroomFunctions.Female_Underpants_Peed" or "BathroomFunctions.BoxingShorts_Pooped"
+    local fallback = stainType == "peed" and "BF.Female_Underpants_Peed" or "BF.BoxingShorts_Pooped"
     --print("[DEBUG] Using fallback overlay: " .. fallback)
     return fallback
 end

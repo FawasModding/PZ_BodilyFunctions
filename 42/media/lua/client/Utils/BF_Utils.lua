@@ -1,7 +1,7 @@
 BF_Utils = {}
 
 -- Tooltips helper function
-function BathroomFunctions.AddTooltip(option, description)
+function BF.AddTooltip(option, description)
     if option then
         local tooltip = ISToolTip:new()
         tooltip:initialise()
@@ -37,7 +37,7 @@ end
 Function to retrieve the player's current urination value
 If the value isn't set or isn't a valid number, it defaults to 0.0.
 ]]--
-function BathroomFunctions.GetUrinateValue()
+function BF.GetUrinateValue()
     local player = getPlayer() -- Fetch the current player object
     local urinateValue = player:getModData().urinateValue -- Retrieve the urination value from the player's modData
 
@@ -52,7 +52,7 @@ end
 Function to retrieve the player's current defecation value
 If the value isn't set or isn't a valid number, it defaults to 0.0.
 ]]--
-function BathroomFunctions.GetDefecateValue()
+function BF.GetDefecateValue()
     local player = getPlayer() -- Fetch the current player object
     local defecateValue = player:getModData().defecateValue -- Retrieve the defecation value from the player's modData
 
@@ -67,7 +67,7 @@ end
 Function to set the player's current urination value
 Ensures the value is a valid number and updates the player's modData.
 ]]
-function BathroomFunctions.SetUrinateValue(newUrinateValue)
+function BF.SetUrinateValue(newUrinateValue)
     local player = getPlayer() -- Fetch the current player object
 
     -- Ensure the new value is a valid number
@@ -82,7 +82,7 @@ end
 Function to set the player's current defecation value
 Ensures the value is a valid number and updates the player's modData.
 ]]
-function BathroomFunctions.SetDefecateValue(newDefecateValue)
+function BF.SetDefecateValue(newDefecateValue)
     local player = getPlayer() -- Fetch the current player object
 
     -- Ensure the new value is a valid number
@@ -103,7 +103,7 @@ end
 Function to retrieve the player's current peed self value
 If the value isn't set or isn't a valid number, it defaults to 0.0.
 ]]--
-function BathroomFunctions.GetPeedSelfValue()
+function BF.GetPeedSelfValue()
     local player = getPlayer() -- Fetch the current player object
     local peedSelfValue = player:getModData().peedSelfValue -- Retrieve the peed self value from the player's modData
 
@@ -118,7 +118,7 @@ end
 Function to retrieve the player's current pooped self value
 If the value isn't set or isn't a valid number, it defaults to 0.0.
 ]]--
-function BathroomFunctions.GetPoopedSelfValue()
+function BF.GetPoopedSelfValue()
     local player = getPlayer() -- Fetch the current player object
     local poopedSelfValue = player:getModData().poopedSelfValue -- Retrieve the pooped self value from the player's modData
 
@@ -129,7 +129,7 @@ function BathroomFunctions.GetPoopedSelfValue()
     return poopedSelfValue -- Return the pooped self value
 end
 
-function BathroomFunctions.SetPeedSelfValue(newPeedSelfValue)
+function BF.SetPeedSelfValue(newPeedSelfValue)
     local player = getPlayer() -- Fetch the current player object
 
     -- Ensure the new value is a valid number
@@ -140,7 +140,7 @@ function BathroomFunctions.SetPeedSelfValue(newPeedSelfValue)
     end
 end
 
-function BathroomFunctions.SetPoopedSelfValue(newPoopedSelfValue)
+function BF.SetPoopedSelfValue(newPoopedSelfValue)
     local player = getPlayer() -- Fetch the current player object
 
     -- Ensure the new value is a valid number
@@ -151,16 +151,16 @@ function BathroomFunctions.SetPoopedSelfValue(newPoopedSelfValue)
     end
 end
 
-function BathroomFunctions.GetMaxBowelValue()
-    --local bowelsMaxValue = SandboxVars.BathroomFunctions.BowelsMaxValue or 500
-    local bowelsMaxValue = SandboxVars.BathroomFunctions.BowelsMaxValue or 100
+function BF.GetMaxBowelValue()
+    --local bowelsMaxValue = SandboxVars.BF.BowelsMaxValue or 500
+    local bowelsMaxValue = SandboxVars.BF.BowelsMaxValue or 100
 
     return bowelsMaxValue
 end
 
-function BathroomFunctions.GetMaxBladderValue()
-    --local bladderMaxValue = SandboxVars.BathroomFunctions.BladderMaxValue or 800
-    local bladderMaxValue = SandboxVars.BathroomFunctions.BladderMaxValue or 100
+function BF.GetMaxBladderValue()
+    --local bladderMaxValue = SandboxVars.BF.BladderMaxValue or 800
+    local bladderMaxValue = SandboxVars.BF.BladderMaxValue or 100
 
     return bladderMaxValue
 end

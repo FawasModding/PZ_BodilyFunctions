@@ -1,4 +1,4 @@
-module BathroomFunctions
+module BF
 {
 	item TissuePooped
 	{

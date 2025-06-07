@@ -1,6 +1,6 @@
 name=Bathroom Functions DEV
 poster=poster.png
-id=bathroomfunctionsdev
+id=BFdev
 description=Realism in its harshest form.
 require=\StarlitLibrary,\MoodleFramework
 icon=icon.png

@@ -7,7 +7,7 @@
 --[[
 Function defining all of the soilable clothing.
 ]]--
-function BathroomFunctions.GetSoilableClothing()
+function BF.GetSoilableClothing()
     local bodyLocations = {"UnderwearBottom", "Underwear", "Torso1Legs1", "Legs1", "Pants", "BathRobe", "FullSuit", "FullSuitHead", "FullTop", "BodyCostume", "ShortPants", "ShortsShort", "Pants_Skinny"}
     return bodyLocations
 end
@@ -15,7 +15,7 @@ end
 --[[
 Clothes that need to be removed before using the bathroom. Includes dresses and skirts, which cannot be soiled (yet)
 ]]--
-function BathroomFunctions.GetExcreteObstructiveClothing()
+function BF.GetExcreteObstructiveClothing()
     local bodyLocations = {
     "UnderwearBottom", "Underwear", "Torso1Legs1", "Legs1", "Pants", "BathRobe", "FullSuit", "FullSuitHead", "FullTop", "BodyCostume", "ShortPants", "ShortsShort",
     "LongDress", "Dress", "LongSkirt", "Skirt", "Pants_Skinny"
@@ -35,14 +35,14 @@ Items (usually paper variants) that can be used to wipe either for peeing (femal
 ]]--
 
 -- These ones are things that have multiple per, like toilet paper
-function BathroomFunctions.GetDrainableWipeables()
+function BF.GetDrainableWipeables()
     local wipeItems = {
     "ToiletPaper" }
 
     return wipeItems
 end
 -- These ones are things that can only be used once. So paper, to poop you'll need 4 individual Paper items
-function BathroomFunctions.GetOneTimeWipeables()
+function BF.GetOneTimeWipeables()
     local wipeItems = {
     "Tissue", "PaperNapkins2", "GraphPaper", "Paperwork",
     "SheetPaper2", "Receipt", "RippedSheets",
@@ -55,7 +55,7 @@ function BathroomFunctions.GetOneTimeWipeables()
     return wipeItems
 end
 -- These ones are clothing. Sets the peed and pooped values to the ones that happen when you actually pee / poop, only soft / realistic materials can be included here.
-function BathroomFunctions.GetClothingWipeables()
+function BF.GetClothingWipeables()
     local wipeItems = { -- Bras and underwear bottoms are soft, therefore they'd be useable.
     "UnderwearBottom", "UnderwearTop" }
 
@@ -68,7 +68,7 @@ end
 --
 -- =====================================================
 
-function BathroomFunctions.GetToiletTiles()
+function BF.GetToiletTiles()
     local toiletTiles = {
     "fixtures_bathroom_01_0", "fixtures_bathroom_01_1", "fixtures_bathroom_01_2", "fixtures_bathroom_01_3", 
     "fixtures_bathroom_01_4", "fixtures_bathroom_01_5", "fixtures_bathroom_01_6", "fixtures_bathroom_01_7"}
@@ -76,14 +76,14 @@ function BathroomFunctions.GetToiletTiles()
     return toiletTiles
 end
 
-function BathroomFunctions.GetUrinalTiles()
+function BF.GetUrinalTiles()
     local urinalTiles = {
     "fixtures_bathroom_01_8", "fixtures_bathroom_01_9", "fixtures_bathroom_01_10", "fixtures_bathroom_01_11" }
 
     return urinalTiles
 end
 
-function BathroomFunctions.GetOuthouseTiles()
+function BF.GetOuthouseTiles()
     local outhouseTiles = {
     "fixtures_bathroom_02_24", "fixtures_bathroom_02_25", "fixtures_bathroom_02_26", "fixtures_bathroom_02_27",
     "fixtures_bathroom_02_4", "fixtures_bathroom_02_5", "fixtures_bathroom_02_14", "fixtures_bathroom_02_15" }
@@ -91,7 +91,7 @@ function BathroomFunctions.GetOuthouseTiles()
     return outhouseTiles
 end
 
-function BathroomFunctions.GetShowerTiles()
+function BF.GetShowerTiles()
     local showerTiles = {
     "fixtures_bathroom_01_24", "fixtures_bathroom_01_25", "fixtures_bathroom_01_26", "fixtures_bathroom_01_27",
     "fixtures_bathroom_01_32", "fixtures_bathroom_01_33", "fixtures_bathroom_01_52", "fixtures_bathroom_01_53",

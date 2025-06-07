@@ -19,7 +19,7 @@ function BathroomCharacterInfo_GUIHandler:createChildren()
     -- Clear existing children to prevent duplicates
     self:clearChildren()
 
-    if not SandboxVars.BathroomFunctions then return end
+    if not SandboxVars.BF then return end
 
     self:setScrollChildren(true)
     self:addScrollBars()
@@ -155,16 +155,16 @@ function BathroomCharacterInfo_GUIHandler:render()
     self:setWidthAndParentWidth(WINDOW_WIDTH)
     self:setHeightAndParentHeight(WINDOW_HEIGHT)
 
-    if SandboxVars.BathroomFunctions then
-        local bladderMax = SandboxVars.BathroomFunctions.BladderMaxValue or 100
-        local bowelsMax = SandboxVars.BathroomFunctions.BowelsMaxValue or 100
+    if SandboxVars.BF then
+        local bladderMax = SandboxVars.BF.BladderMaxValue or 100
+        local bowelsMax = SandboxVars.BF.BowelsMaxValue or 100
 
-        local bladderValue = BathroomFunctions.GetUrinateValue() or 0
+        local bladderValue = BF.GetUrinateValue() or 0
         local bladderPercent = bladderValue / bladderMax
         updateBar(self.bladderBar, bladderPercent)
         updateLabel(self.labelBladderValue, string.format("%.1f%%", bladderPercent * 100))
 
-        local bowelValue = BathroomFunctions.GetDefecateValue() or 0
+        local bowelValue = BF.GetDefecateValue() or 0
         local bowelPercent = bowelValue / bowelsMax
         updateBar(self.bowelBar, bowelPercent)
         updateLabel(self.labelBowelValue, string.format("%.1f%%", bowelPercent * 100))

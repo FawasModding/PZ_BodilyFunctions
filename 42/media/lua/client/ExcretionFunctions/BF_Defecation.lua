@@ -1,5 +1,5 @@
 -- Function to update defecation-related values
-function BathroomFunctions.UpdateDefecationValues()
+function BF.UpdateDefecationValues()
     local player = getPlayer()
 
     -- Get player stats
@@ -32,17 +32,17 @@ function BathroomFunctions.UpdateDefecationValues()
     print("Final bowel multiplier: " .. tostring(finalBowelMultiplier))
 
     -- Retrieve the base maximum capacities (from SandboxVars or defaults).
-    local baseBowelsMax  = BathroomFunctions.GetMaxBowelValue()
+    local baseBowelsMax  = BF.GetMaxBowelValue()
 
     -- Retrieve the current fill values.
-    local defecateValue = BathroomFunctions.GetDefecateValue()
+    local defecateValue = BF.GetDefecateValue()
     
     -- Base Increase Rates:
     local defecateBaseRate = 3.5  -- Base bowel fill per 10-minute tick
 
     -- Apply the appropriate multipliers for the next tick.
     -- (These multipliers get applied for the whole 10-minute interval.)
-    local defecateIncrease = defecateBaseRate * SandboxVars.BathroomFunctions.BowelsIncreaseMultiplier * finalBowelMultiplier
+    local defecateIncrease = defecateBaseRate * SandboxVars.BF.BowelsIncreaseMultiplier * finalBowelMultiplier
 
     -- Update the fill values.
     defecateValue = defecateValue + defecateIncrease
@@ -56,12 +56,12 @@ function BathroomFunctions.UpdateDefecationValues()
 end
 
 -- Function to apply effects when the player has defecated in their clothing
-function BathroomFunctions.DefecateBottoms(leakTriggered)
+function BF.DefecateBottoms(leakTriggered)
     local player = getPlayer()
-    local modOptions = PZAPI.ModOptions:getOptions("BathroomFunctions")
-    local bowelsMaxValue = BathroomFunctions.GetMaxBowelValue()
+    local modOptions = PZAPI.ModOptions:getOptions("BF")
+    local bowelsMaxValue = BF.GetMaxBowelValue()
     local leakMultiplier = leakTriggered and 0.05 or 1.0
-    local defecateValue = BathroomFunctions.GetDefecateValue()
+    local defecateValue = BF.GetDefecateValue()
     local defecatePercentage = (defecateValue / bowelsMaxValue) * 100 * leakMultiplier
     
     local showPoopObject = false
@@ -118,13 +118,13 @@ function BathroomFunctions.DefecateBottoms(leakTriggered)
         maxPoopedSeverity = math.max(maxPoopedSeverity, modData.poopedSeverity)
 
         -- Apply overlay if severity meets threshold
-        if SandboxVars.BathroomFunctions.VisiblePoopStain and (not leakTriggered or modData.poopedSeverity >= 25) then
+        if SandboxVars.BF.VisiblePoopStain and (not leakTriggered or modData.poopedSeverity >= 25) then
             BF_ClothingOverlays.equipOverlay(player, underwear, "pooped", "PoopedOverlay_Underwear")
         end
 
         -- Update clothing properties
-        BathroomFunctions.SetClothing(underwear, leakTriggered)
-        BathroomFunctions.UpdateSoiledSeverity(underwear)
+        BF.SetClothing(underwear, leakTriggered)
+        BF.UpdateSoiledSeverity(underwear)
 
         if modData.poopedSeverity >= 90 then showPoopObject = true end
     end
@@ -146,13 +146,13 @@ function BathroomFunctions.DefecateBottoms(leakTriggered)
         maxPoopedSeverity = math.max(maxPoopedSeverity, modData.poopedSeverity)
 
         -- Apply overlay if severity meets threshold
-        if SandboxVars.BathroomFunctions.VisiblePoopStain and (not leakTriggered or modData.poopedSeverity >= 25) then
+        if SandboxVars.BF.VisiblePoopStain and (not leakTriggered or modData.poopedSeverity >= 25) then
             BF_ClothingOverlays.equipOverlay(player, pants, "pooped", "PoopedOverlay_Pants")
         end
 
         -- Update clothing properties
-        BathroomFunctions.SetClothing(pants, leakTriggered)
-        BathroomFunctions.UpdateSoiledSeverity(pants)
+        BF.SetClothing(pants, leakTriggered)
+        BF.UpdateSoiledSeverity(pants)
 
         if modData.poopedSeverity >= 90 then showPoopObject = true end
     end

@@ -1,236 +1,208 @@
 VERSION = 1,
 
-option BathroomFunctions.EnableUrination
+/* General Bodily Functions */
+option BF.EnableUrination
 {
-	type = boolean, default = true,
-	page = Bathroom, translation = BathroomFunctions_EnableUrination,
+    type = boolean, default = true,
+    page = Bathroom, translation = BF_EnableUrination,
+}
+option BF.EnableDefecation
+{
+    type = boolean, default = true,
+    page = Bathroom, translation = BF_EnableDefecation,
+}
+option BF.EnableVomiting
+{
+    type = boolean, default = true,
+    page = Bathroom, translation = BF_EnableVomiting,
+}
+option BF.EnableFarting
+{
+    type = boolean, default = true,
+    page = Bathroom, translation = BF_EnableFarting,
+}
+option BF.EnableBurping
+{
+    type = boolean, default = true,
+    page = Bathroom, translation = BF_EnableBurping,
+}
+option BF.EnableSneezing
+{
+    type = boolean, default = true,
+    page = Bathroom, translation = BF_EnableSneezing,
+}
+option BF.EnableCoughing
+{
+    type = boolean, default = true,
+    page = Bathroom, translation = BF_EnableCoughing,
 }
 
-option BathroomFunctions.EnableDefecation
+/* Defecation Settings */
+option BF.BowelsMaxValue
 {
-	type = boolean, default = true,
-	page = Bathroom, translation = BathroomFunctions_EnableDefecation,
+    type = double, min = 200.0, max = 1000.0, default = 500.0,
+    page = Defecation, translation = BF_BowelsMaxValue,
+    /* Realistic Range: Rectum holds 0.2-0.5 liters (200-500 mL), up to 1 liter (1,000 mL) in extreme cases. Default: 0.5 liters. */
+}
+option BF.BowelsIncreaseMultiplier
+{
+    type = double, min = 0, max = 100.0, default = 1.0,
+    page = Defecation, translation = BF_BowelsIncreaseMultiplier,
+}
+option BF.DefecateSpeedMultiplier
+{
+    type = double, min = 0, max = 100.0, default = 1.0,
+    page = Defecation, translation = BF_DefecateSpeedMultiplier,
+}
+option BF.EnableDiarrhea
+{
+    type = boolean, default = true,
+    page = Defecation, translation = BF_EnableDiarrhea,
 }
 
-/*
-Realistic Range: The amount of fecal matter the bowels can hold before needing to defecate varies. On average:
-The rectum can hold 0.2-0.5 liters (200-500 mL) of stool before needing to empty.
-In extreme cases, it can stretch to about 1 liter (1,000 mL).
-Default Maximum: Max bowel capacity to 0.5 liters (500 mL).
-*/
-option BathroomFunctions.BowelsMaxValue
+/* Defecation Action Requirements */
+option BF.POOPREQUIREMENTSHeader
 {
-	type = double, min = 200.0, max = 1000.0, default = 500.0,
-	page = Defecation, translation = BathroomFunctions_BowelsMaxValue,
+    type = boolean, default = false,
+    page = Defecation, translation = BF_POOPREQUIREMENTSHeader,
+}
+option BF.PoopInToiletRequirement
+{
+    type = double, min = 0, max = 100.0, default = 40.0,
+    page = Defecation, translation = BF_PoopInToiletRequirement,
+    /* Most people feel urge and can use toilet at this point. */
+}
+option BF.PoopOnGroundRequirement
+{
+    type = double, min = 0, max = 100.0, default = 50.0,
+    page = Defecation, translation = BF_PoopOnGroundRequirement,
+    /* Requires more desperation to poop on ground. */
+}
+option BF.PoopOnSelfRequirement
+{
+    type = double, min = 0, max = 100.0, default = 75.0,
+    page = Defecation, translation = BF_PoopOnSelfRequirement,
+    /* Difficult to consciously poop self, even near full. */
 }
 
-option BathroomFunctions.BowelsIncreaseMultiplier
+/* Defecation Involuntary Settings */
+option BF.POOPSELFHeader
 {
-	type = double, min = 0, max = 100.0, default = 1.0,
-	page = Defecation, translation = BathroomFunctions_BowelsIncreaseMultiplier,
+    type = boolean, default = false,
+    page = Defecation, translation = BF_POOPSELFHeader,
+}
+option BF.CanHavePoopAccident
+{
+    type = boolean, default = true,
+    page = Defecation, translation = BF_CanHavePoopAccident,
+}
+option BF.NightPoopAccidents
+{
+    type = boolean, default = true,
+    page = Defecation, translation = BF_NightPoopAccidents,
 }
 
-option BathroomFunctions.DefecateSpeedMultiplier
+/* Defecation Extras */
+option BF.POOPEXTRAHeader
 {
-	type = double, min = 0, max = 100.0, default = 1.0,
-	page = Defecation, translation = BathroomFunctions_DefecateSpeedMultiplier,
+    type = boolean, default = false,
+    page = Defecation, translation = BF_POOPEXTRAHeader,
+}
+option BF.CreatePoopObject
+{
+    type = boolean, default = true,
+    page = Defecation, translation = BF_CreatePoopObject,
+}
+option BF.FliesOnPoop
+{
+    type = boolean, default = true,
+    page = Defecation, translation = BF_FliesOnPoop,
+}
+option BF.VisiblePoopStain
+{
+    type = boolean, default = true,
+    page = Defecation, translation = BF_VisiblePoopStain,
 }
 
-option BathroomFunctions.POOPREQUIREMENTSHeader
+/* Urination Settings */
+option BF.BladderMaxValue
 {
-	type = boolean, default = false,
-	page = Defecation, translation = BathroomFunctions_POOPREQUIREMENTSHeader,
+    type = double, min = 400.0, max = 1000.0, default = 800.0,
+    page = Urination, translation = BF_BladderMaxValue,
+    /* Realistic Range: Bladder holds 0.4-0.6 liters, up to 0.8-1.0 liters in extreme cases. Default: 0.8 liters. */
+}
+option BF.BladderIncreaseMultiplier
+{
+    type = double, min = 0, max = 100.0, default = 1.0,
+    page = Urination, translation = BF_BladderIncreaseMultiplier,
+}
+option BF.UrinateSpeedMultiplier
+{
+    type = double, min = 0, max = 100.0, default = 1.0,
+    page = Urination, translation = BF_UrinateSpeedMultiplier,
 }
 
-/*
-Most people feel the urge to pee by this point and can comfortably use a toilet.
-*/
-option BathroomFunctions.PoopInToiletRequirement
+/* Urination Action Requirements */
+option BF.PEEREQUIREMENTSHeader
 {
-	type = double, min = 0, max = 100.0, default = 40.0,
-	page = Defecation, translation = BathroomFunctions_PoopInToiletRequirement,
+    type = boolean, default = false,
+    page = Urination, translation = BF_PEEREQUIREMENTSHeader,
+}
+option BF.PeeInToiletRequirement
+{
+    type = double, min = 0, max = 100.0, default = 40.0,
+    page = Urination, translation = BF_PeeInToiletRequirement,
+    /* Most people feel urge and can use toilet at this point. */
+}
+option BF.PeeOnGroundRequirement
+{
+    type = double, min = 0, max = 100.0, default = 50.0,
+    page = Urination, translation = BF_PeeOnGroundRequirement,
+    /* Requires more desperation to pee on ground. */
+}
+option BF.PeeInContainerRequirement
+{
+    type = double, min = 0, max = 100.0, default = 60.0,
+    page = Urination, translation = BF_PeeInContainerRequirement,
+    /* Requires more desperation to pee in container. */
+}
+option BF.PeeOnSelfRequirement
+{
+    type = double, min = 0, max = 100.0, default = 85.0,
+    page = Urination, translation = BF_PeeOnSelfRequirement,
+    /* Difficult to consciously pee self, even near full. */
 }
 
-/*
-Peeing on the ground would require more desperation. People tend to avoid this unless their bladder is pressing.
-*/
-option BathroomFunctions.PoopOnGroundRequirement
+/* Urination Involuntary Settings */
+option BF.PEESELFHeader
 {
-	type = double, min = 0, max = 100.0, default = 50.0,
-	page = Defecation, translation = BathroomFunctions_PoopOnGroundRequirement,
+    type = boolean, default = false,
+    page = Urination, translation = BF_PEESELFHeader,
+}
+option BF.CanHavePeeAccident
+{
+    type = boolean, default = true,
+    page = Urination, translation = BF_CanHavePeeAccident,
+}
+option BF.NightPeeAccidents
+{
+    type = boolean, default = true,
+    page = Urination, translation = BF_NightPeeAccidents,
 }
 
-/*
-It's difficult for most people to consciously pee themselves, even when the bladder is nearly full.
-*/
-option BathroomFunctions.PoopOnSelfRequirement
+/* Urination Extras */
+option BF.PEEEXTRAHeader
 {
-	type = double, min = 0, max = 100.0, default = 75.0,
-	page = Defecation, translation = BathroomFunctions_PoopOnSelfRequirement,
+    type = boolean, default = false,
+    page = Urination, translation = BF_PEEEXTRAHeader,
 }
-
-/*
-50 is a decent percentage, anywhere before that wouldn't realistically impact someone if they were scared or something.
-*/
-option BathroomFunctions.PoopAccidentRequirement
+option BF.CreatePeeObject
 {
-	type = double, min = 0, max = 100.0, default = 50.0,
-	page = Defecation, translation = BathroomFunctions_PoopAccidentRequirement,
+    type = boolean, default = true,
+    page = Urination, translation = BF_CreatePeeObject,
 }
-
-option BathroomFunctions.POOPSELFHeader
+option BF.VisiblePeeStain
 {
-	type = boolean, default = false,
-	page = Defecation, translation = BathroomFunctions_POOPSELFHeader,
-}
-
-option BathroomFunctions.CanHavePoopAccident
-{
-	type = boolean, default = true,
-	page = Defecation, translation = BathroomFunctions_CanHavePoopAccident,
-}
-
-option BathroomFunctions.VisiblePoopStain
-{
-	type = boolean, default = true,
-	page = Defecation, translation = BathroomFunctions_VisiblePoopStain,
-}
-
-option BathroomFunctions.NightPoopAccidents
-{
-	type = boolean, default = true,
-	page = Defecation, translation = BathroomFunctions_NightPoopAccidents,
-}
-
-option BathroomFunctions.POOPEXTRAHeader
-{
-	type = boolean, default = false,
-	page = Defecation, translation = BathroomFunctions_POOPEXTRAHeader,
-}
-
-option BathroomFunctions.CreatePoopObject
-{
-	type = boolean, default = true,
-	page = Defecation, translation = BathroomFunctions_CreatePoopObject,
-}
-
-option BathroomFunctions.FliesOnPoop
-{
-	type = boolean, default = true,
-	page = Defecation, translation = BathroomFunctions_FliesOnPoop,
-}
-
-option BathroomFunctions.EnableDiarrhea
-{
-	type = boolean, default = true,
-	page = Defecation, translation = BathroomFunctions_EnableDiarrhea,
-}
-
-/*
-Realistic Range: Human bladder typically holds 400-600 mL (0.4-0.6 liters) of urine before a strong urge occurs. However, it can stretch to a maximum of about 800-1,000 mL (0.8-1.0 liters) in extreme cases.
-Default Maximum: Max bladder capacity to 0.8 liters (800 mL).
-*/
-option BathroomFunctions.BladderMaxValue
-{
-	type = double, min = 400.0, max = 1000.0, default = 800.0,
-	page = Urination, translation = BathroomFunctions_BladderMaxValue,
-}
-
-option BathroomFunctions.BladderIncreaseMultiplier
-{
-	type = double, min = 0, max = 100.0, default = 1.0,
-	page = Urination, translation = BathroomFunctions_BladderIncreaseMultiplier,
-}
-
-option BathroomFunctions.UrinateSpeedMultiplier
-{
-	type = double, min = 0, max = 100.0, default = 1.0,
-	page = Urination, translation = BathroomFunctions_UrinateSpeedMultiplier,
-}
-
-option BathroomFunctions.PEEREQUIREMENTSHeader
-{
-	type = boolean, default = false,
-	page = Urination, translation = BathroomFunctions_PEEREQUIREMENTSHeader,
-}
-
-/*
-Most people feel the urge to pee by this point and can comfortably use a toilet.
-*/
-option BathroomFunctions.PeeInToiletRequirement
-{
-	type = double, min = 0, max = 100.0, default = 40.0,
-	page = Urination, translation = BathroomFunctions_PeeInToiletRequirement,
-}
-
-/*
-Peeing on the ground would require more desperation. People tend to avoid this unless their bladder is pressing.
-*/
-option BathroomFunctions.PeeOnGroundRequirement
-{
-	type = double, min = 0, max = 100.0, default = 50.0,
-	page = Urination, translation = BathroomFunctions_PeeOnGroundRequirement,
-}
-
-/*
-It's difficult for most people to consciously pee themselves, even when the bladder is nearly full.
-*/
-option BathroomFunctions.PeeOnSelfRequirement
-{
-	type = double, min = 0, max = 100.0, default = 85.0,
-	page = Urination, translation = BathroomFunctions_PeeOnSelfRequirement,
-}
-
-/*
-Peeing in a container would require more desperation.
-*/
-option BathroomFunctions.PeeInContainerRequirement
-{
-	type = double, min = 0, max = 100.0, default = 60.0,
-	page = Urination, translation = BathroomFunctions_PeeInContainerRequirement,
-}
-
-/*
-50 is a decent percentage, anywhere before that wouldn't realistically impact someone if they were scared or something.
-*/
-option BathroomFunctions.PeeAccidentRequirement
-{
-	type = double, min = 0, max = 100.0, default = 50.0,
-	page = Urination, translation = BathroomFunctions_PeeAccidentRequirement,
-}
-
-option BathroomFunctions.PEESELFHeader
-{
-	type = boolean, default = false,
-	page = Urination, translation = BathroomFunctions_PEESELFHeader,
-}
-
-option BathroomFunctions.CanHavePeeAccident
-{
-	type = boolean, default = true,
-	page = Urination, translation = BathroomFunctions_CanHavePeeAccident,
-}
-
-option BathroomFunctions.VisiblePeeStain
-{
-	type = boolean, default = true,
-	page = Urination, translation = BathroomFunctions_VisiblePeeStain,
-}
-
-option BathroomFunctions.NightPeeAccidents
-{
-	type = boolean, default = true,
-	page = Urination, translation = BathroomFunctions_NightPeeAccidents,
-}
-
-option BathroomFunctions.PEEEXTRAHeader
-{
-	type = boolean, default = false,
-	page = Urination, translation = BathroomFunctions_PEEEXTRAHeader,
-}
-
-option BathroomFunctions.CreatePeeObject
-{
-	type = boolean, default = true,
-	page = Urination, translation = BathroomFunctions_CreatePeeObject,
+    type = boolean, default = true,
+    page = Urination, translation = BF_VisiblePeeStain,
 }

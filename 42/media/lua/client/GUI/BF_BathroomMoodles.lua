@@ -11,15 +11,15 @@ local function CheckBathroomMeters(player)
 	local moodle3 = MF.getMoodle("PoopedSelf",playerNum)
 	local moodle4 = MF.getMoodle("PeedSelf",playerNum)
 
-	local bowelsMaxValue = SandboxVars.BathroomFunctions.BowelsMaxValue or 100 -- Get the max bowel value, default to 100 if not set
-	local bladderMaxValue = SandboxVars.BathroomFunctions.BladderMaxValue or 100 -- Get the max bladder value, default to 100 if not set
+	local bowelsMaxValue = SandboxVars.BF.BowelsMaxValue or 100 -- Get the max bowel value, default to 100 if not set
+	local bladderMaxValue = SandboxVars.BF.BladderMaxValue or 100 -- Get the max bladder value, default to 100 if not set
 
-	local modOptions = PZAPI.ModOptions:getOptions("BathroomFunctions")
+	local modOptions = PZAPI.ModOptions:getOptions("BF")
 
 	local showMoodles = modOptions:getOption("4")
 	if(showMoodles:getValue(1)) then
 		if moodle then
-			local defecationValue = BathroomFunctions.GetDefecateValue()
+			local defecationValue = BF.GetDefecateValue()
 			local defecationThreshold = {
 				[0.4] = 0.4, -- Mild urge starts at 40%
 				[0.6] = 0.3, -- Moderate urge at 60%
@@ -56,7 +56,7 @@ local function CheckBathroomMeters(player)
 		end
 
 		if moodle2 then
-			local urinationValue = BathroomFunctions.GetUrinateValue()
+			local urinationValue = BF.GetUrinateValue()
 			local urinationThreshold = {
 				[0.4] = 0.4, -- Mild urge starts at 40%
 				[0.6] = 0.3, -- Moderate urge at 60%
@@ -102,7 +102,7 @@ local function CheckBathroomMeters(player)
 	local showSoiledMoodles = modOptions:getOption("5")
 	if(showSoiledMoodles:getValue(1)) then
 		if moodle3 then
-			local poopedSelfValue = BathroomFunctions.GetPoopedSelfValue()
+			local poopedSelfValue = BF.GetPoopedSelfValue()
 			local poopedSelfPercent = poopedSelfValue / 100 -- Assuming a max value of 100 for severity
 
 			local poopedSelfThreshold = {
@@ -127,7 +127,7 @@ local function CheckBathroomMeters(player)
 		end
 
 		if moodle4 then
-			local peedSelfValue = BathroomFunctions.GetPeedSelfValue()
+			local peedSelfValue = BF.GetPeedSelfValue()
 			local peedSelfPercent = peedSelfValue / 100 -- Assuming a max value of 100 for severity
 
 			local peedSelfThreshold = {

@@ -1,4 +1,4 @@
-module BathroomFunctions
+module BF
 {
 	item Urine_Hydrated_0
 	{
@@ -7,7 +7,7 @@ module BathroomFunctions
 		Icon = HumanUrine,
 		DaysFresh = 0,
 		DisplayCategory = Junk,
-		WorldStaticModel = BathroomFunctions.Urine_Model_Large,
+		WorldStaticModel = BF.Urine_Model_Large,
 		Tags = isCompostable,
 		IsDung = true,
 	}
@@ -19,7 +19,7 @@ module BathroomFunctions
 		Icon = HumanUrine,
 		DaysFresh = 0,
 		DisplayCategory = Junk,
-		WorldStaticModel = BathroomFunctions.Urine_Model_Small,
+		WorldStaticModel = BF.Urine_Model_Small,
 		Tags = isCompostable,
 		IsDung = true,
 	}
@@ -32,7 +32,7 @@ module BathroomFunctions
 		Icon = HumanFeces,
 		DaysFresh = 0,
 		DisplayCategory = Junk,
-		WorldStaticModel = BathroomFunctions.Feces_Model,
+		WorldStaticModel = BF.Feces_Model,
 		Tags = isCompostable,
 		IsDung = true,
 
