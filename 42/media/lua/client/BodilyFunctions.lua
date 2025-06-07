@@ -1,6 +1,5 @@
 BF = {}
 BF.didFirstTimer = false
-FlySquares = {}
 
 local InventoryUI = require("Starlit/client/ui/InventoryUI")
 

@@ -1,6 +1,17 @@
 -gotta make SelfUrinate SelfDefecate happen if using ground or toilet action ends too quickly
 
 ==============
+[VERSION 0.12.0]
+==============
+
+- Reorganized Sandbox Menu.
+- Changed "BodilyFunctions" function prefix to "BF"
+- Flies now appear on human feces, whether it's on the ground or being held by the player.
+- Standing near feces now applied food sickness (nausea) and unhappiness.
+
+- Added custom smell moodle (Bodily Fumes), for reacting to bodily fluids / functions (farting, poop, etc.)
+
+==============
 [VERSION 0.11.0]
 ==============
 
