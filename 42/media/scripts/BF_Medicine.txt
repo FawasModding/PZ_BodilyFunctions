@@ -13,6 +13,7 @@ module BF
 		CustomContextMenu = Take_AntiDiarrhealPill,
 		Medical = TRUE,
 		OnEat = OnEat_AntiDiarrhealPill,
+		UseDelta = 0.1,
 		Tooltip = Tooltip_AntiDiarrhealPill,
 		WorldStaticModel = Antibiotics,
 	}
@@ -27,6 +28,7 @@ module BF
 		CustomContextMenu = Take_LaxativePill,
 		Medical = TRUE,
 		OnEat = OnEat_LaxativePill,
+		UseDelta = 0.1,
 		Tooltip = Tooltip_LaxativePill,
 		WorldStaticModel = Antibiotics,
 	}
@@ -41,6 +43,7 @@ module BF
 		CustomContextMenu = Take_DiureticPill,
 		Medical = TRUE,
 		OnEat = OnEat_DiureticPill,
+		UseDelta = 0.1,
 		Tooltip = Tooltip_DiureticPill,
 		WorldStaticModel = Antibiotics,
 	}
@@ -55,6 +58,7 @@ module BF
 		CustomContextMenu = Take_AnticholinergicPill,
 		Medical = TRUE,
 		OnEat = OnEat_AnticholinergicPill,
+		UseDelta = 0.1,
 		Tooltip = Tooltip_AnticholinergicPill,
 		WorldStaticModel = Antibiotics,
 	}

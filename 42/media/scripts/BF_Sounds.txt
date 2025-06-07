@@ -79,4 +79,14 @@ module Base
 			volume = 1,
 		}
 	}
+
+	sound BF_PoopLanding
+	{
+		category = Bathroom,
+		clip
+		{
+			file = media/sound/PoopLanding.ogg,
+			volume = 1,
+		}
+	}
 }
