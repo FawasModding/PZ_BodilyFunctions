@@ -45,11 +45,17 @@ function BF.DirtyBottomsEffects()
     -- Update global values for pooped and peed after all items are processed
     if totalPoopedSeverity > 0 then
         BF.SetPoopedSelfValue(totalPoopedSeverity)
+
+        -- Set bodily fumes moodle to 50 (stage 2 of 4)
+        BF.SetBodilyFumesValue(50)
     else
         BF.SetPoopedSelfValue(0)
     end
     if totalPeedSeverity > 0 then
         BF.SetPeedSelfValue(totalPeedSeverity)
+
+        -- Set bodily fumes moodle to 30 (stage 1 of 4)
+        BF.SetBodilyFumesValue(30)
     else
         BF.SetPeedSelfValue(0)
     end

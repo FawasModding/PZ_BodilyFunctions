@@ -72,6 +72,14 @@ function BF.UpdateBathroomValues()
     BF.UpdateUrinationValues()
     BF.UpdateDefecationValues()
 
+    -- Decay bodily fumes (smell moodle) by 10% every 10 seconds
+    --local currentFumes = BF.GetBodilyFumesValue()
+    --local reducedFumes = currentFumes * 0.9
+    --BF.SetBodilyFumesValue(reducedFumes)
+
+    -- Instantly clear bodily fumes
+    BF.SetBodilyFumesValue(0)
+
 end
 
 

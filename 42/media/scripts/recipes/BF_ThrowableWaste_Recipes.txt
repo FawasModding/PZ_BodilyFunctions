@@ -5,7 +5,7 @@ module BF
         timedAction = UnPackBox_Small,
 		Time = 1,
 		Tags = InHandCraft;Packing;CanBeDoneInDark,
-        category = Packing,
+        category = Miscellaneous,
 		inputs
 		{
 			item 1 [BF.HumanFeces] flags[AllowFavorite;InheritFavorite],

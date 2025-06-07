@@ -56,6 +56,9 @@ BF_WasteProducts.ApplyWasteExposureEffects = function(lastFecesSquare, fecesAmou
     -- 0.5 seems fine, most people could be in these conditions without becoming suicidal, but maybe it'll be raised eventually.
     player:getBodyDamage():setUnhappynessLevel(player:getBodyDamage():getUnhappynessLevel() + (0.05 * fecesAmount))
 
+    -- Set bodily fumes moodle to 75 (stage 3 of 4)
+    BF.SetBodilyFumesValue(75)
+
     if (not lastFecesSquare:hasFlies()) then
         lastFecesSquare:setHasFlies(true)
         table.insert(BF_WasteProducts.wasteProductSquares, lastFecesSquare)
