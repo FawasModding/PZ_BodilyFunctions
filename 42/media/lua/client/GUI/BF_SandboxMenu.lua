@@ -15,8 +15,8 @@ local panels = {
         borderColor = {r=0.1, g=0.1, b=0.1, a=0.5},
         buttonColor = { r = 0, g = 0, b = 0, a = 0.8 }, -- black button
         buttonBorderColor = {r=0.7, g=0.7, b=0.7, a=1}, -- Light gray border on button
-        buttonText = "Sandbox_Bathroom_CustomButton",
-        buttonTooltip = "Sandbox_Bathroom_CustomButton_tooltip"
+        headerText1 = "Sandbox_BF_UNIMPLEMENTEDHeader",
+        headerText1Tooltip = "Sandbox_BF_UNIMPLEMENTEDHeader_tooltip",
     },
     {
         name = "Sandbox_Defecation",
@@ -93,7 +93,17 @@ end
 local function CreatePanel(panel, config)
     CustomizeSandboxOptionPanel.SetPanelColor(panel, config.panelColor, config.borderColor)
 
-    if config.name == "Sandbox_Defecation" then
+    if config.name == "Sandbox_Bathroom" then
+        AddMultipleButtons(panel, {
+            {
+                optionKeyTop = "BF.EnableDefecation",
+                optionKeyBottom = "BF.EnableVomiting",
+                headerText = config.headerText1,
+                headerTooltip = config.headerText1Tooltip,
+            },
+        }, config.name, config.buttonColor, config.buttonBorderColor)
+
+    elseif config.name == "Sandbox_Defecation" then
         AddMultipleButtons(panel, {
             {
                 optionKeyTop = "BF.EnableDiarrhea",

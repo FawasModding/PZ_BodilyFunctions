@@ -8,28 +8,31 @@ Sandbox_EN = {
 
     -- Enable/Disable Specific Functions
     Sandbox_BF_EnableDefecation = "[Pooping] Defecation Enabled*",
-    Sandbox_BF_EnableDefecation_tooltip = "Enable/disable defecation mechanics.",
+        Sandbox_BF_EnableDefecation_tooltip = "Enable/disable defecation mechanics.",
     Sandbox_BF_EnableUrination = "[Peeing] Urination Enabled*",
-    Sandbox_BF_EnableUrination_tooltip = "Enable/disable urination mechanics.",
+        Sandbox_BF_EnableUrination_tooltip = "Enable/disable urination mechanics.",
     Sandbox_BF_EnableVomiting = "[Vomiting] Emesis Enabled*",
-    Sandbox_BF_EnableVomiting_tooltip = "Enable/disable vomiting mechanics.",
+        Sandbox_BF_EnableVomiting_tooltip = "Enable/disable vomiting mechanics.",
     Sandbox_BF_EnableFarting = "[Farting] Flatulence Enabled*",
-    Sandbox_BF_EnableFarting_tooltip = "Enable/disable flatulence mechanics.",
+        Sandbox_BF_EnableFarting_tooltip = "Enable/disable flatulence mechanics.",
     Sandbox_BF_EnableBurping = "[Burping] Eructation Enabled*",
-    Sandbox_BF_EnableBurping_tooltip = "Enable/disable burping mechanics.",
+        Sandbox_BF_EnableBurping_tooltip = "Enable/disable burping mechanics.",
     Sandbox_BF_EnableSneezing = "[Sneezing] Sternuation (Expanded) Enabled*",
-    Sandbox_BF_EnableSneezing_tooltip = "Enable/disable sneezing mechanics.",
+        Sandbox_BF_EnableSneezing_tooltip = "Enable/disable sneezing mechanics.",
     Sandbox_BF_EnableCoughing = "[Coughing] Tussis (Expanded) Enabled*",
-    Sandbox_BF_EnableCoughing_tooltip = "Enable/disable coughing mechanics.",
+        Sandbox_BF_EnableCoughing_tooltip = "Enable/disable coughing mechanics.",
+
+    Sandbox_BF_UNIMPLEMENTEDHeader = "Features Coming Soon!",
+    Sandbox_BF_UNIMPLEMENTEDHeader_tooltip = "These are features that don't currently exist, but are planned.",
 
     -- Defecation Settings
     Sandbox_Defecation = "Bodily Functions - Defecation",
     Sandbox_BF_BowelsMaxValue = "Bowels Max Capacity",
-    Sandbox_BF_BowelsMaxValue_tooltip = "Maximum bowel fullness.",
+        Sandbox_BF_BowelsMaxValue_tooltip = "Maximum bowel fullness.",
     Sandbox_BF_BowelsIncreaseMultiplier = "Bowels Fill Rate",
-    Sandbox_BF_BowelsIncreaseMultiplier_tooltip = "Bowel meter increase per 10 minutes.",
+        Sandbox_BF_BowelsIncreaseMultiplier_tooltip = "Bowel meter increase per 10 minutes.",
     Sandbox_BF_DefecateSpeedMultiplier = "Defecation Speed*",
-    Sandbox_BF_DefecateSpeedMultiplier_tooltip = "Time taken to defecate.",
+        Sandbox_BF_DefecateSpeedMultiplier_tooltip = "Time taken to defecate.",
     
     -- Defecation Action Requirements
     Sandbox_BF_POOPREQUIREMENTSHeader = "Voluntary Defecation",
