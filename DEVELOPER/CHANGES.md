@@ -13,14 +13,14 @@
 - Human Feces can now be turned into "Throwable Human Feces", which can be thrown, picked up, thrown again, and alerts zombies. Cause why the hell not.
 
 - Added custom smell moodle (Bodily Fumes), for reacting to bodily fluids / functions (farting, poop, etc.)
-
-- Lowered time it takes to consume any of the Bodily Functions medicine types
-
 - Smell Moodle Values:
 	- Near Feces Pile: 75%
 	- Near Urine Puddle: 40%
 	- Wearing Pooped Pants: 50%
 	- Wearing Peed Pants: 30%
+
+- Lowered time it takes to consume any of the Bodily Functions medicine types
+- Groin (Bladder) starts developing muscle strain after 60% fullness, scaling proportionally.
 
 ==============
 [VERSION 0.11.0]

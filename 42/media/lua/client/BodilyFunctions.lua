@@ -948,6 +948,16 @@ function BF.CleaningRightClick(player, context, worldObjects)
     end
 end
 
+function BF.PainInBladder(player, pain)
+	local part = player:getBodyDamage():getBodyPart(BodyPartType.Groin)
+	part:setStiffness(pain)
+end
+
+function BF.PainInColon(player, pain)
+	local part = player:getBodyDamage():getBodyPart(BodyPartType.Torso_Lower)
+	part:setStiffness(pain)
+end
+
 -- =====================================================
 --
 -- EVENT REGISTRATION
