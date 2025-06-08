@@ -13,7 +13,8 @@ local panels = {
         name = "Sandbox_Bathroom",
         panelColor = {r=1, g=1, b=1, a=0.5}, -- White tint
         borderColor = {r=0.1, g=0.1, b=0.1, a=0.5},
-        buttonColor = {r=1, g=1, b=1, a=0.8},
+        buttonColor = { r = 0, g = 0, b = 0, a = 0.8 }, -- black button
+        buttonBorderColor = {r=0.7, g=0.7, b=0.7, a=1}, -- Light gray border on button
         buttonText = "Sandbox_Bathroom_CustomButton",
         buttonTooltip = "Sandbox_Bathroom_CustomButton_tooltip"
     },
@@ -21,7 +22,7 @@ local panels = {
         name = "Sandbox_Defecation",
         panelColor = {r=0.3, g=0.15, b=0.05, a=0.5}, -- Dark brown
         borderColor = {r=0.15, g=0.07, b=0.02, a=0.5}, -- Very dark brown border
-        buttonColor = { r = 0.1, g = 0.1, b = 0.1, a = 0.8 }, -- Near-black button
+        buttonColor = { r = 0, g = 0, b = 0, a = 0.8 }, -- black button
         buttonBorderColor = {r=0.7, g=0.7, b=0.7, a=1}, -- Light gray border on button
         headerText1 = "Sandbox_BF_POOPREQUIREMENTSHeader",
         headerText1Tooltip = "Sandbox_BF_POOPREQUIREMENTSHeader_tooltip",
@@ -34,9 +35,14 @@ local panels = {
         name = "Sandbox_Urination",
         panelColor = {r=0.6, g=0.5, b=0.15, a=0.5}, -- Mustard yellow
         borderColor = {r=0.25, g=0.2, b=0.05, a=0.5}, -- Darker mustard border
-        buttonColor = {r=0.7, g=0.6, b=0.2, a=0.8}, -- Slightly brighter mustard button
-        buttonText = "Sandbox_Urination_CustomButton",
-        buttonTooltip = "Sandbox_Urination_CustomButton_tooltip"
+        buttonColor = { r = 0, g = 0, b = 0, a = 0.8 }, -- black button
+        buttonBorderColor = {r=0.7, g=0.7, b=0.7, a=1}, -- Light gray border on button
+        headerText1 = "Sandbox_BF_PEEREQUIREMENTSHeader",
+        headerText1Tooltip = "Sandbox_BF_PEEREQUIREMENTSHeader_tooltip",
+        headerText2 = "Sandbox_BF_PEESELFHeader",
+        headerText2Tooltip = "Sandbox_BF_PEESELFHeader_tooltip",
+        headerText3 = "Sandbox_BF_PEEEXTRAHeader",
+        headerText3Tooltip = "Sandbox_BF_PEEEXTRAHeader_tooltip"
     }
 }
 
@@ -65,58 +71,73 @@ local function AddButtonBetweenOptions(panel, optionKeyTop, optionKeyBottom, but
     )
 end
 
-local function CreatePanel(panel, config)
-    CustomizeSandboxOptionPanel.SetPanelColor(panel, config.panelColor, config.borderColor)
-
-    if config.name == "Sandbox_Defecation" then
-        local buttonHeight = 40
-
-        local x, _, width = CustomizeSandboxOptionPanel.GetTotalOptionDimensions(panel)
-
-
+local function AddMultipleButtons(panel, buttonConfigs, baseName, buttonColor, borderColor)
+    local buttonHeight = 40
+    for i, cfg in ipairs(buttonConfigs) do
         AddButtonBetweenOptions(
             panel,
-            "BF.EnableDiarrhea",
-            "BF.PoopInToiletRequirement",
+            cfg.optionKeyTop,
+            cfg.optionKeyBottom,
             buttonHeight,
-            "poopHeader1_" .. config.name,
-            config.headerText1,
-            config.headerText1Tooltip,
-            config.buttonColor,
-            config.buttonBorderColor,
-            function() print(config.name .. " button clicked!") end
+            ("header%d_%s"):format(i, baseName),
+            cfg.headerText,
+            cfg.headerTooltip,
+            buttonColor,
+            borderColor,
+            function() print(baseName .. " button clicked!") end
         )
-
-        AddButtonBetweenOptions(
-            panel,
-            "BF.PoopOnSelfRequirement",
-            "BF.CanHavePoopAccident",
-            buttonHeight,
-            "poopHeader2_" .. config.name,
-            config.headerText2,
-            config.headerText2Tooltip,
-            config.buttonColor,
-            config.buttonBorderColor,
-            function() print(config.name .. " button clicked!") end
-        )
-
-        AddButtonBetweenOptions(
-            panel,
-            "BF.VisiblePoopStain",
-            "BF.CreatePoopObject",
-            buttonHeight,
-            "poopHeader3_" .. config.name,
-            config.headerText3,
-            config.headerText3Tooltip,
-            config.buttonColor,
-            config.buttonBorderColor,
-            function() print(config.name .. " button clicked!") end
-        )
-
     end
 end
 
 
+local function CreatePanel(panel, config)
+    CustomizeSandboxOptionPanel.SetPanelColor(panel, config.panelColor, config.borderColor)
+
+    if config.name == "Sandbox_Defecation" then
+        AddMultipleButtons(panel, {
+            {
+                optionKeyTop = "BF.EnableDiarrhea",
+                optionKeyBottom = "BF.PoopInToiletRequirement",
+                headerText = config.headerText1,
+                headerTooltip = config.headerText1Tooltip,
+            },
+            {
+                optionKeyTop = "BF.PoopOnSelfRequirement",
+                optionKeyBottom = "BF.CanHavePoopAccident",
+                headerText = config.headerText2,
+                headerTooltip = config.headerText2Tooltip,
+            },
+            {
+                optionKeyTop = "BF.VisiblePoopStain",
+                optionKeyBottom = "BF.CreatePoopObject",
+                headerText = config.headerText3,
+                headerTooltip = config.headerText3Tooltip,
+            },
+        }, config.name, config.buttonColor, config.buttonBorderColor)
+
+    elseif config.name == "Sandbox_Urination" then
+        AddMultipleButtons(panel, {
+            {
+                optionKeyTop = "BF.UrinateSpeedMultiplier",
+                optionKeyBottom = "BF.PeeInToiletRequirement",
+                headerText = config.headerText1,
+                headerTooltip = config.headerText1Tooltip,
+            },
+            {
+                optionKeyTop = "BF.PeeOnSelfRequirement",
+                optionKeyBottom = "BF.CanHavePeeAccident",
+                headerText = config.headerText2,
+                headerTooltip = config.headerText2Tooltip,
+            },
+            {
+                optionKeyTop = "BF.VisiblePeeStain",
+                optionKeyBottom = "BF.CreatePeeObject",
+                headerText = config.headerText3,
+                headerTooltip = config.headerText3Tooltip,
+            },
+        }, config.name, config.buttonColor, config.buttonBorderColor)
+    end
+end
 
 -- Register listeners
 for _, config in ipairs(panels) do

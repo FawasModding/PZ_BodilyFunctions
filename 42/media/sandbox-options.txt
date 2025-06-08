@@ -131,11 +131,6 @@ option BF.UrinateSpeedMultiplier
 }
 
 /* Urination Action Requirements */
-option BF.PEEREQUIREMENTSHeader
-{
-    type = boolean, default = false,
-    page = Urination, translation = BF_PEEREQUIREMENTSHeader,
-}
 option BF.PeeInToiletRequirement
 {
     type = double, min = 0, max = 100.0, default = 40.0,
@@ -162,11 +157,6 @@ option BF.PeeOnSelfRequirement
 }
 
 /* Urination Involuntary Settings */
-option BF.PEESELFHeader
-{
-    type = boolean, default = false,
-    page = Urination, translation = BF_PEESELFHeader,
-}
 option BF.CanHavePeeAccident
 {
     type = boolean, default = true,
@@ -184,11 +174,6 @@ option BF.VisiblePeeStain
 }
 
 /* Urination Extras */
-option BF.PEEEXTRAHeader
-{
-    type = boolean, default = false,
-    page = Urination, translation = BF_PEEEXTRAHeader,
-}
 option BF.CreatePeeObject
 {
     type = boolean, default = true,

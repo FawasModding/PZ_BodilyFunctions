@@ -32,7 +32,7 @@ Sandbox_EN = {
     Sandbox_BF_DefecateSpeedMultiplier_tooltip = "Time taken to defecate.",
     
     -- Defecation Action Requirements
-    Sandbox_BF_POOPREQUIREMENTSHeader = "<=== DEFECATION ACTIONS ===>",
+    Sandbox_BF_POOPREQUIREMENTSHeader = "Voluntary Defecation",
     	Sandbox_BF_POOPREQUIREMENTSHeader_tooltip = "Bowel fullness thresholds for actions.",
     Sandbox_BF_PoopOnSelfRequirement = "Intentional Self-Poop Threshold",
     	Sandbox_BF_PoopOnSelfRequirement_tooltip = "Bowel fullness to intentionally poop self.",
@@ -42,7 +42,7 @@ Sandbox_EN = {
     	Sandbox_BF_PoopInToiletRequirement_tooltip = "Bowel fullness to poop in toilet.",
 
     -- Defecation Involuntary Settings
-    Sandbox_BF_POOPSELFHeader = "<=== INVOLUNTARY DEFECATION ===>",
+    Sandbox_BF_POOPSELFHeader = "Involuntary Defecation",
     	Sandbox_BF_POOPSELFHeader_tooltip = "Involuntary defecation options.",
     Sandbox_BF_CanHavePoopAccident = "Enable Accidental Poop*",
     	Sandbox_BF_CanHavePoopAccident_tooltip = "Allow accidental self-defecation.",
@@ -50,7 +50,7 @@ Sandbox_EN = {
     	Sandbox_BF_NightPoopAccidents_tooltip = "Allow defecation during sleep.",
 
     -- Defecation Extras
-    Sandbox_BF_POOPEXTRAHeader = "<=== DEFECATION EXTRAS ===>",
+    Sandbox_BF_POOPEXTRAHeader = "Extra Settings",
     	Sandbox_BF_POOPEXTRAHeader_tooltip = "Additional defecation settings.",
 	Sandbox_BF_VisiblePoopStain = "Show Poop Stain",
     	Sandbox_BF_VisiblePoopStain_tooltip = "Show fecal stain on soiled clothing.",
@@ -78,7 +78,7 @@ Sandbox_EN = {
     	Sandbox_BF_UrinateSpeedMultiplier_tooltip = "Time taken to urinate.",
 
     -- Urination Action Requirements
-    Sandbox_BF_PEEREQUIREMENTSHeader = "<=== URINATION ACTIONS ===>",
+    Sandbox_BF_PEEREQUIREMENTSHeader = "Voluntary Urination",
     	Sandbox_BF_PEEREQUIREMENTSHeader_tooltip = "Bladder fullness thresholds for actions.",
     Sandbox_BF_PeeOnSelfRequirement = "Intentional Self-Pee Threshold",
     	Sandbox_BF_PeeOnSelfRequirement_tooltip = "Bladder fullness to intentionally pee self.",
@@ -90,7 +90,7 @@ Sandbox_EN = {
     	Sandbox_BF_PeeInContainerRequirement_tooltip = "Bladder fullness to pee in container.",
 
     -- Urination Involuntary Settings
-    Sandbox_BF_PEESELFHeader = "<=== INVOLUNTARY URINATION ===>",
+    Sandbox_BF_PEESELFHeader = "Involuntary Urination",
     	Sandbox_BF_PEESELFHeader_tooltip = "Involuntary urination options.",
     Sandbox_BF_CanHavePeeAccident = "Enable Accidental Pee*",
     	Sandbox_BF_CanHavePeeAccident_tooltip = "Allow accidental self-urination.",
@@ -98,7 +98,7 @@ Sandbox_EN = {
     	Sandbox_BF_NightPeeAccidents_tooltip = "Allow urination during sleep.",
 
     -- Urination Extras
-    Sandbox_BF_PEEEXTRAHeader = "<=== URINATION EXTRAS ===>",
+    Sandbox_BF_PEEEXTRAHeader = "Extra Settings",
     	Sandbox_BF_PEEEXTRAHeader_tooltip = "Additional urination settings.",
 	Sandbox_BF_VisiblePeeStain = "Show Wet Spot",
     	Sandbox_BF_VisiblePeeStain_tooltip = "Show urine stain on wet clothing.",
