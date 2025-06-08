@@ -13,11 +13,7 @@ local panels = {
         borderColor = {r=0.1, g=0.1, b=0.1, a=0.5},
         buttonColor = {r=1, g=1, b=1, a=0.8},
         buttonText = "Sandbox_Bathroom_CustomButton",
-        buttonTooltip = "Sandbox_Bathroom_CustomButton_tooltip",
-        headers = {
-            ["BF.EnableBurping"] = getText("Sandbox_Bathroom_BurpingHeader"),
-            ["BF.EnableSneezing"] = getText("Sandbox_Bathroom_SneezingHeader")
-        }
+        buttonTooltip = "Sandbox_Bathroom_CustomButton_tooltip"
     },
     {
         name = "Sandbox_Defecation",
@@ -25,8 +21,7 @@ local panels = {
         borderColor = {r=0.11, g=0.05, b=0.01, a=0.5},
         buttonColor = {r=0.55, g=0.27, b=0.07, a=0.8},
         buttonText = "Sandbox_Defecation_CustomButton",
-        buttonTooltip = "Sandbox_Defecation_CustomButton_tooltip",
-        headers = {}
+        buttonTooltip = "Sandbox_Defecation_CustomButton_tooltip"
     },
     {
         name = "Sandbox_Urination",
@@ -34,21 +29,15 @@ local panels = {
         borderColor = {r=0.2, g=0.2, b=0.04, a=0.5},
         buttonColor = {r=1, g=1, b=0.2, a=0.8},
         buttonText = "Sandbox_Urination_CustomButton",
-        buttonTooltip = "Sandbox_Urination_CustomButton_tooltip",
-        headers = {}
+        buttonTooltip = "Sandbox_Urination_CustomButton_tooltip"
     }
 }
 
--- Add custom panel, headers, and button
+-- Add custom panel and button
 local function CreatePanel(panel, config)
     CustomizeSandboxOptionPanel.SetPanelColor(panel, config.panelColor, config.borderColor)
 
-    -- Add headers for specified options
-    for optionName, headerText in pairs(config.headers) do
-        CustomizeSandboxOptionPanel.AddHeader(panel, optionName, headerText)
-    end
-
-    local x, y, width = CustomizeSandboxOptionPanel.GetTotalOptionDimensions(panel, config.headers)
+    local x, y, width = CustomizeSandboxOptionPanel.GetTotalOptionDimensions(panel)
 
     -- Add custom button
     local _, button = ISDebugUtils.addButton(
