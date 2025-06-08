@@ -89,5 +89,51 @@ CustomizeSandboxOptionPanel.SetScrollBarHeight = function(panel,height)
     panel:setScrollHeight(height)
 end
 
+--- Inserts a custom UI element between two existing options.
+---@param panel SandboxOptionsScreenPanel
+---@param optionKeyTop string  -- Option key above the element
+---@param optionKeyBottom string  -- Option key below the element
+---@param elementHeight number
+---@param addElementCallback fun(x:number, y:number):UIElement  -- Function that adds your element and returns it
+CustomizeSandboxOptionPanel.InsertElementBetweenOptions = function(panel, optionKeyTop, optionKeyBottom, elementHeight, addElementCallback)
+    local top = CustomizeSandboxOptionPanel.GetOption(optionKeyTop)
+    local bottom = CustomizeSandboxOptionPanel.GetOption(optionKeyBottom)
+
+    if not top or not bottom or not top.label or not bottom.label then
+        print("Error: Missing labels or options for insertion between " .. optionKeyTop .. " and " .. optionKeyBottom)
+        return
+    end
+
+    local spacing = UI_BORDER_SPACING
+    local insertY = top.label:getY() + top.label:getHeight() + spacing
+    local x, _, width = CustomizeSandboxOptionPanel.GetTotalOptionDimensions(panel)
+
+    -- Add your custom element
+    local element = addElementCallback(x, insertY)
+    table.insert(panel.customUI, {
+        element = element,
+        position = "between",
+        optionTop = optionKeyTop,
+        optionBottom = optionKeyBottom
+    })
+
+    -- Shift everything below the *bottom* option
+    local shiftFromY = bottom.label:getY()
+    local shiftY = elementHeight + spacing
+
+    for name, control in pairs(panel.controls) do
+        local label = panel.labels[name]
+        if label and control and label:getY() >= shiftFromY then
+            label:setY(label:getY() + shiftY)
+            control:setY(control:getY() + shiftY)
+        end
+    end
+
+    -- Resize scroll height
+    local _, y = CustomizeSandboxOptionPanel.GetTotalOptionDimensions(panel)
+    CustomizeSandboxOptionPanel.SetScrollBarHeight(panel, y + UI_BORDER_SPACING)
+end
+
+
 
 return CustomizeSandboxOptionPanel
