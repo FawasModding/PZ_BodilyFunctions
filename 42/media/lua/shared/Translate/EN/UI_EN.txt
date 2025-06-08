@@ -2,7 +2,6 @@ UI_EN = {
     UI_BodilyFunctions = "Excretion",
     UI_BodilyFunctionsPanel = "Bodily functions panel with all detailed values available.",
 
-
     UI_BF_options_PeeInContainersOption = "Pee In Containers Option",
     UI_BF_options_PeeInContainersOption_tooltip = "Show options for peeing in containers in the context menu.",
 

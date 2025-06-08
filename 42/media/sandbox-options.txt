@@ -60,12 +60,6 @@ option BF.EnableDiarrhea
     page = Defecation, translation = BF_EnableDiarrhea,
 }
 
-/* Defecation Action Requirements */
-option BF.POOPREQUIREMENTSHeader
-{
-    type = boolean, default = false,
-    page = Defecation, translation = BF_POOPREQUIREMENTSHeader,
-}
 option BF.PoopInToiletRequirement
 {
     type = double, min = 0, max = 100.0, default = 40.0,
@@ -85,12 +79,6 @@ option BF.PoopOnSelfRequirement
     /* Difficult to consciously poop self, even near full. */
 }
 
-/* Defecation Involuntary Settings */
-option BF.POOPSELFHeader
-{
-    type = boolean, default = false,
-    page = Defecation, translation = BF_POOPSELFHeader,
-}
 option BF.CanHavePoopAccident
 {
     type = boolean, default = true,
@@ -108,11 +96,6 @@ option BF.VisiblePoopStain
 }
 
 /* Defecation Extras */
-option BF.POOPEXTRAHeader
-{
-    type = boolean, default = false,
-    page = Defecation, translation = BF_POOPEXTRAHeader,
-}
 option BF.CreatePoopObject
 {
     type = boolean, default = true,
