@@ -19,22 +19,51 @@ local panels = {
     },
     {
         name = "Sandbox_Defecation",
-        panelColor = {r=0.55, g=0.27, b=0.07, a=0.5}, -- Brown tint
-        borderColor = {r=0.11, g=0.05, b=0.01, a=0.5},
-        buttonColor = { r = 0, g = 0, b = 0, a = 0.8 },
-        --buttonText = "Sandbox_Defecation_CustomButton",
-        buttonText = "Sandbox_Defecation_CustomButton",
-        buttonTooltip = "Sandbox_Defecation_CustomButton_tooltip"
+        panelColor = {r=0.3, g=0.15, b=0.05, a=0.5}, -- Dark brown
+        borderColor = {r=0.15, g=0.07, b=0.02, a=0.5}, -- Very dark brown border
+        buttonColor = { r = 0.1, g = 0.1, b = 0.1, a = 0.8 }, -- Near-black button
+        buttonBorderColor = {r=0.7, g=0.7, b=0.7, a=1}, -- Light gray border on button
+        headerText1 = "Sandbox_BF_POOPREQUIREMENTSHeader",
+        headerText1Tooltip = "Sandbox_BF_POOPREQUIREMENTSHeader_tooltip",
+        headerText2 = "Sandbox_BF_POOPSELFHeader",
+        headerText2Tooltip = "Sandbox_BF_POOPSELFHeader_tooltip",
+        headerText3 = "Sandbox_BF_POOPEXTRAHeader",
+        headerText3Tooltip = "Sandbox_BF_POOPEXTRAHeader_tooltip"
     },
     {
         name = "Sandbox_Urination",
-        panelColor = {r=1, g=1, b=0.2, a=0.5}, -- Yellow tint
-        borderColor = {r=0.2, g=0.2, b=0.04, a=0.5},
-        buttonColor = {r=1, g=1, b=0.2, a=0.8},
+        panelColor = {r=0.6, g=0.5, b=0.15, a=0.5}, -- Mustard yellow
+        borderColor = {r=0.25, g=0.2, b=0.05, a=0.5}, -- Darker mustard border
+        buttonColor = {r=0.7, g=0.6, b=0.2, a=0.8}, -- Slightly brighter mustard button
         buttonText = "Sandbox_Urination_CustomButton",
         buttonTooltip = "Sandbox_Urination_CustomButton_tooltip"
     }
 }
+
+-- Util function for adding buttons / headers
+local function AddButtonBetweenOptions(panel, optionKeyTop, optionKeyBottom, buttonHeight, buttonIDSuffix, buttonTextKey, buttonTooltipKey, buttonColor, borderColor, onClick)
+    local x, _, width = CustomizeSandboxOptionPanel.GetTotalOptionDimensions(panel)
+    CustomizeSandboxOptionPanel.InsertElementBetweenOptions(
+        panel,
+        optionKeyTop,
+        optionKeyBottom,
+        buttonHeight,
+        function(_, y)
+            local _, button = ISDebugUtils.addButton(
+                panel,
+                "customButton_" .. buttonIDSuffix,
+                x, y,
+                width, buttonHeight,
+                getText(buttonTextKey),
+                onClick
+            )
+            button.backgroundColor = buttonColor
+            button.borderColor = borderColor
+            button.tooltip = getText(buttonTooltipKey)
+            return button
+        end
+    )
+end
 
 local function CreatePanel(panel, config)
     CustomizeSandboxOptionPanel.SetPanelColor(panel, config.panelColor, config.borderColor)
@@ -44,77 +73,48 @@ local function CreatePanel(panel, config)
 
         local x, _, width = CustomizeSandboxOptionPanel.GetTotalOptionDimensions(panel)
 
-        local optionKeyTop1 = "BF.EnableDiarrhea"
-        local optionKeyBottom1 = "BF.PoopInToiletRequirement"
-        CustomizeSandboxOptionPanel.InsertElementBetweenOptions(
+
+        AddButtonBetweenOptions(
             panel,
-            optionKeyTop1,
-            optionKeyBottom1,
+            "BF.EnableDiarrhea",
+            "BF.PoopInToiletRequirement",
             buttonHeight,
-            function(_, y)
-                local _, button = ISDebugUtils.addButton(
-                    panel,
-                    "customButton_poopHeader1_" .. config.name,
-                    x, y,
-                    width, buttonHeight,
-                    getText(config.buttonText),
-                    function() print(config.name .. " button clicked!") end
-                )
-                button.backgroundColor = config.buttonColor
-                button.borderColor = {r=1, g=1, b=1, a=1}
-                button.tooltip = getText(config.buttonTooltip)
-                return button
-            end
+            "poopHeader1_" .. config.name,
+            config.headerText1,
+            config.headerText1Tooltip,
+            config.buttonColor,
+            config.buttonBorderColor,
+            function() print(config.name .. " button clicked!") end
         )
 
-        local optionKeyTop2 = "BF.PoopOnSelfRequirement"
-        local optionKeyBottom2 = "BF.CanHavePoopAccident"
-        CustomizeSandboxOptionPanel.InsertElementBetweenOptions(
+        AddButtonBetweenOptions(
             panel,
-            optionKeyTop2,
-            optionKeyBottom2,
+            "BF.PoopOnSelfRequirement",
+            "BF.CanHavePoopAccident",
             buttonHeight,
-            function(_, y)
-                local _, button = ISDebugUtils.addButton(
-                    panel,
-                    "customButton_poopHeader2_" .. config.name,
-                    x, y,
-                    width, buttonHeight,
-                    getText(config.buttonText),
-                    function() print(config.name .. " button clicked!") end
-                )
-                button.backgroundColor = config.buttonColor
-                button.borderColor = {r=1, g=1, b=1, a=1}
-                button.tooltip = getText(config.buttonTooltip)
-                return button
-            end
+            "poopHeader2_" .. config.name,
+            config.headerText2,
+            config.headerText2Tooltip,
+            config.buttonColor,
+            config.buttonBorderColor,
+            function() print(config.name .. " button clicked!") end
         )
 
-        local optionKeyTop3 = "BF.VisiblePoopStain"
-        local optionKeyBottom3 = "BF.CreatePoopObject"
-        CustomizeSandboxOptionPanel.InsertElementBetweenOptions(
+        AddButtonBetweenOptions(
             panel,
-            optionKeyTop3,
-            optionKeyBottom3,
+            "BF.VisiblePoopStain",
+            "BF.CreatePoopObject",
             buttonHeight,
-            function(_, y)
-                local _, button = ISDebugUtils.addButton(
-                    panel,
-                    "customButton_poopHeader3_" .. config.name,
-                    x, y,
-                    width, buttonHeight,
-                    getText(config.buttonText),
-                    function() print(config.name .. " button clicked!") end
-                )
-                button.backgroundColor = config.buttonColor
-                button.borderColor = {r=1, g=1, b=1, a=1}
-                button.tooltip = getText(config.buttonTooltip)
-                return button
-            end
+            "poopHeader3_" .. config.name,
+            config.headerText3,
+            config.headerText3Tooltip,
+            config.buttonColor,
+            config.buttonBorderColor,
+            function() print(config.name .. " button clicked!") end
         )
+
     end
 end
-
 
 
 
