@@ -101,6 +101,11 @@ option BF.NightPoopAccidents
     type = boolean, default = true,
     page = Defecation, translation = BF_NightPoopAccidents,
 }
+option BF.VisiblePoopStain
+{
+    type = boolean, default = true,
+    page = Defecation, translation = BF_VisiblePoopStain,
+}
 
 /* Defecation Extras */
 option BF.POOPEXTRAHeader
@@ -118,10 +123,10 @@ option BF.FliesOnPoop
     type = boolean, default = true,
     page = Defecation, translation = BF_FliesOnPoop,
 }
-option BF.VisiblePoopStain
+option BF.EnableFecalFootprints
 {
-    type = boolean, default = true,
-    page = Defecation, translation = BF_VisiblePoopStain,
+    type = enum, default = 1, numValues = 3,
+    page = Defecation, translation = BF_EnableFecalFootprints,
 }
 
 /* Urination Settings */
@@ -189,6 +194,11 @@ option BF.NightPeeAccidents
     type = boolean, default = true,
     page = Urination, translation = BF_NightPeeAccidents,
 }
+option BF.VisiblePeeStain
+{
+    type = boolean, default = true,
+    page = Urination, translation = BF_VisiblePeeStain,
+}
 
 /* Urination Extras */
 option BF.PEEEXTRAHeader
@@ -200,9 +210,4 @@ option BF.CreatePeeObject
 {
     type = boolean, default = true,
     page = Urination, translation = BF_CreatePeeObject,
-}
-option BF.VisiblePeeStain
-{
-    type = boolean, default = true,
-    page = Urination, translation = BF_VisiblePeeStain,
 }

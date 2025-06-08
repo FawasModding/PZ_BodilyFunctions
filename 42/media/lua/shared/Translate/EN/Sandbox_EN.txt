@@ -7,19 +7,19 @@ Sandbox_EN = {
     Sandbox_BF_DoMoodles_tooltip = "Enable/disable pee/poop moodles.",
 
     -- Enable/Disable Specific Functions
-    Sandbox_BF_EnableDefecation = "Defecation Enabled*",
+    Sandbox_BF_EnableDefecation = "[Pooping] Defecation Enabled*",
     Sandbox_BF_EnableDefecation_tooltip = "Enable/disable defecation mechanics.",
-    Sandbox_BF_EnableUrination = "Urination Enabled*",
+    Sandbox_BF_EnableUrination = "[Peeing] Urination Enabled*",
     Sandbox_BF_EnableUrination_tooltip = "Enable/disable urination mechanics.",
-    Sandbox_BF_EnableVomiting = "Emesis Enabled*",
+    Sandbox_BF_EnableVomiting = "[Vomiting] Emesis Enabled*",
     Sandbox_BF_EnableVomiting_tooltip = "Enable/disable vomiting mechanics.",
-    Sandbox_BF_EnableFarting = "Flatulence Enabled*",
+    Sandbox_BF_EnableFarting = "[Farting] Flatulence Enabled*",
     Sandbox_BF_EnableFarting_tooltip = "Enable/disable flatulence mechanics.",
-    Sandbox_BF_EnableBurping = "Eructation Enabled*",
+    Sandbox_BF_EnableBurping = "[Burping] Eructation Enabled*",
     Sandbox_BF_EnableBurping_tooltip = "Enable/disable burping mechanics.",
-    Sandbox_BF_EnableSneezing = "Sternuation (Expanded) Enabled*",
+    Sandbox_BF_EnableSneezing = "[Sneezing] Sternuation (Expanded) Enabled*",
     Sandbox_BF_EnableSneezing_tooltip = "Enable/disable sneezing mechanics.",
-    Sandbox_BF_EnableCoughing = "Tussis (Expanded) Enabled*",
+    Sandbox_BF_EnableCoughing = "[Coughing] Tussis (Expanded) Enabled*",
     Sandbox_BF_EnableCoughing_tooltip = "Enable/disable coughing mechanics.",
 
     -- Defecation Settings
@@ -54,12 +54,19 @@ Sandbox_EN = {
     	Sandbox_BF_POOPEXTRAHeader_tooltip = "Additional defecation settings.",
 	Sandbox_BF_VisiblePoopStain = "Show Poop Stain",
     	Sandbox_BF_VisiblePoopStain_tooltip = "Show fecal stain on soiled clothing.",
+    Sandbox_BF_EnableDiarrhea = "Enable Diarrhea*",
+    	Sandbox_BF_EnableDiarrhea_tooltip = "Enable/disable diarrhea mechanics.",
     Sandbox_BF_CreatePoopObject = "Create Poop Piles*",
     	Sandbox_BF_CreatePoopObject_tooltip = "Enable poop objects on ground/self.",
     Sandbox_BF_FliesOnPoop = "Flies Around Poop*",
     	Sandbox_BF_FliesOnPoop_tooltip = "Enable fly particles around feces.",
-	Sandbox_BF_EnableDiarrhea = "Enable Diarrhea*",
-    	Sandbox_BF_EnableDiarrhea_tooltip = "Enable/disable diarrhea mechanics.",
+    Sandbox_BF_EnableFecalFootprints = "Footprints When Stepping On Poop",
+    Sandbox_BF_EnableFecalFootprints_option1 = "No Footprints",
+        Sandbox_BF_EnableFecalFootprints_option1_tooltip = "Neither players nor zombies can track poop when walking on poop.",
+    Sandbox_BF_EnableFecalFootprints_option2 = "Players Only",
+        Sandbox_BF_EnableFecalFootprints_option2_tooltip = "Players (no zombies) can track poop if they stand on it. Should be optimized.",
+    Sandbox_BF_EnableFecalFootprints_option3 = "Players And Zombies",
+        Sandbox_BF_EnableFecalFootprints_option3_tooltip = "Both players and zombies can track poop if they stand on it. May be unoptimized.",
 
     -- Urination Settings
     Sandbox_Urination = "Bodily Functions - Urination",
@@ -79,6 +86,8 @@ Sandbox_EN = {
     	Sandbox_BF_PeeOnGroundRequirement_tooltip = "Bladder fullness to pee on ground.",
     Sandbox_BF_PeeInToiletRequirement = "Pee in Toilet Threshold",
     	Sandbox_BF_PeeInToiletRequirement_tooltip = "Bladder fullness to pee in toilet.",
+    Sandbox_BF_PeeInContainerRequirement = "Pee in Container Threshold",
+    	Sandbox_BF_PeeInContainerRequirement_tooltip = "Bladder fullness to pee in container.",
 
     -- Urination Involuntary Settings
     Sandbox_BF_PEESELFHeader = "<=== INVOLUNTARY URINATION ===>",

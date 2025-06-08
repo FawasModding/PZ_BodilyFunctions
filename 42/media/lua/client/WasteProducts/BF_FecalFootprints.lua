@@ -4,7 +4,8 @@ end
 
 -- Configuration
 BF_FecalFootprints.Config = {
-    enableZombieFootsteps = true, -- Toggle for zombie footprints
+    enablePlayerFootsteps = true,  -- Toggle for player footprints
+    enableZombieFootsteps = true,  -- Toggle for zombie footprints
     maxFootprints = 200,          -- Max footprints displayed
     footprintLifespan = 4500,     -- Footprint duration (seconds)
     zombieMaxDistance = 25,       -- Max distance for zombie footprints
@@ -121,6 +122,8 @@ end
 
 -- Player footprint handling
 BF_FecalFootprints.AddPlayerFootprints = function()
+    if not BF_FecalFootprints.Config.enablePlayerFootsteps then return end
+
     local player = getSpecificPlayer(0)
     if not player or player:getVehicle() then
         BF_FecalFootprints.State.lastSquare = player and player:getSquare()
@@ -223,6 +226,8 @@ end
 
 -- Cleanup
 BF_FecalFootprints.CleanupFootprints = function()
+    if not BF_FecalFootprints.Config.enablePlayerFootsteps and not BF_FecalFootprints.Config.enableZombieFootsteps then return end
+
     local gameTime = getGameTime()
     BF_FecalFootprints.State.cleanupTimer = BF_FecalFootprints.State.cleanupTimer + gameTime:getTimeDelta() * 1000
     if BF_FecalFootprints.State.cleanupTimer < 5000 then return end
@@ -267,10 +272,21 @@ BF_FecalFootprints.OnGameStart = function()
     BF_FecalFootprints.State.lastCleanupTime = 0
     BF_FecalFootprints.State.zombieIndex = 0
     BF_FecalFootprints.State.lastTickProcessed = 0
-    print("[FecalFootprints] Mod initialized with feces-based zombie support")
+    print("[FecalFootprints] Mod initialized with feces-based player and zombie support")
 end
 
-Events.OnGameStart.Add(BF_FecalFootprints.OnGameStart)
-Events.OnPlayerMove.Add(BF_FecalFootprints.AddPlayerFootprints)
-Events.OnTick.Add(BF_FecalFootprints.AddZombieFootprints)
-Events.OnTick.Add(BF_FecalFootprints.CleanupFootprints)
+-- Event registration with conditional checks
+BF_FecalFootprints.RegisterEvents = function()
+    Events.OnGameStart.Add(BF_FecalFootprints.OnGameStart)
+    if BF_FecalFootprints.Config.enablePlayerFootsteps then
+        Events.OnPlayerMove.Add(BF_FecalFootprints.AddPlayerFootprints)
+    end
+    if BF_FecalFootprints.Config.enableZombieFootsteps then
+        Events.OnTick.Add(BF_FecalFootprints.AddZombieFootprints)
+    end
+    if BF_FecalFootprints.Config.enablePlayerFootsteps or BF_FecalFootprints.Config.enableZombieFootsteps then
+        Events.OnTick.Add(BF_FecalFootprints.CleanupFootprints)
+    end
+end
+
+BF_FecalFootprints.RegisterEvents()

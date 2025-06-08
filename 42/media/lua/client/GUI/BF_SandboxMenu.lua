@@ -1,0 +1,75 @@
+-- Caching
+local CustomizeSandboxOptionPanel = require "CustomSandboxMenu/Sandbox_Customize"
+local OnCreateSandboxOptions = require "CustomSandboxMenu/Sandbox_OnCreate"
+
+-- UI constants
+local UI_BORDER_SPACING = 10
+
+-- Panel configurations
+local panels = {
+    {
+        name = "Sandbox_Bathroom",
+        panelColor = {r=1, g=1, b=1, a=0.5}, -- White tint
+        borderColor = {r=0.1, g=0.1, b=0.1, a=0.5},
+        buttonColor = {r=1, g=1, b=1, a=0.8},
+        buttonText = "Sandbox_Bathroom_CustomButton",
+        buttonTooltip = "Sandbox_Bathroom_CustomButton_tooltip",
+        headers = {
+            ["BF.EnableBurping"] = getText("Sandbox_Bathroom_BurpingHeader"),
+            ["BF.EnableSneezing"] = getText("Sandbox_Bathroom_SneezingHeader")
+        }
+    },
+    {
+        name = "Sandbox_Defecation",
+        panelColor = {r=0.55, g=0.27, b=0.07, a=0.5}, -- Brown tint
+        borderColor = {r=0.11, g=0.05, b=0.01, a=0.5},
+        buttonColor = {r=0.55, g=0.27, b=0.07, a=0.8},
+        buttonText = "Sandbox_Defecation_CustomButton",
+        buttonTooltip = "Sandbox_Defecation_CustomButton_tooltip",
+        headers = {}
+    },
+    {
+        name = "Sandbox_Urination",
+        panelColor = {r=1, g=1, b=0.2, a=0.5}, -- Yellow tint
+        borderColor = {r=0.2, g=0.2, b=0.04, a=0.5},
+        buttonColor = {r=1, g=1, b=0.2, a=0.8},
+        buttonText = "Sandbox_Urination_CustomButton",
+        buttonTooltip = "Sandbox_Urination_CustomButton_tooltip",
+        headers = {}
+    }
+}
+
+-- Add custom panel, headers, and button
+local function CreatePanel(panel, config)
+    CustomizeSandboxOptionPanel.SetPanelColor(panel, config.panelColor, config.borderColor)
+
+    -- Add headers for specified options
+    for optionName, headerText in pairs(config.headers) do
+        CustomizeSandboxOptionPanel.AddHeader(panel, optionName, headerText)
+    end
+
+    local x, y, width = CustomizeSandboxOptionPanel.GetTotalOptionDimensions(panel, config.headers)
+
+    -- Add custom button
+    local _, button = ISDebugUtils.addButton(
+        panel,
+        "customButton_" .. config.name,
+        x, y,
+        width, 40,
+        getText(config.buttonText),
+        function() print(config.name .. " button clicked!") end
+    )
+    button.backgroundColor = config.buttonColor
+    button.borderColor = {r=1, g=1, b=1, a=1}
+    button.tooltip = getText(config.buttonTooltip)
+
+    -- Update scrollbar
+    CustomizeSandboxOptionPanel.SetScrollBarHeight(panel, y + 40 + UI_BORDER_SPACING)
+end
+
+-- Register listeners
+for _, config in ipairs(panels) do
+    OnCreateSandboxOptions.addListener(getText(config.name), function(panel)
+        CreatePanel(panel, config)
+    end)
+end
