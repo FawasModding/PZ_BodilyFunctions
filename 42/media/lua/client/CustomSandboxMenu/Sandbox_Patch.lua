@@ -1,35 +1,44 @@
-
---Retrieve every option panels from the sandbox option panel.
+-- Sandbox_Patch.lua
 
 --- DEFINITIONS
----@class OptionPanels
----@field OPTION_PANELS table<string, SandboxOptionsScreenPanel> -- list of option panels
+--- @class CustomSandboxOptionsScreenPanel : SandboxOptionsScreenPanel
+--- @field titles table
+--- @field controls table
+--- @field labels table
+--- @field customUI table -- Custom UI elements (e.g., headers)
+--- @class OptionPanels
+--- @field OPTION_PANELS table<string, CustomSandboxOptionsScreenPanel> -- list of option panels
+--- @field OPTIONS table<string, table> -- list of options by name
 local OptionPanels = {
-    OPTION_PANELS = {}, -- list of option panels
+    OPTION_PANELS = {},
+    OPTIONS = {}
 }
 
----@class SandboxOptionsScreenPanel
----@field titles table
----@field controls table
----@field labels table
-
 --- CACHING
--- custom event
 local OnCreateSandboxOptions = require "CustomSandboxMenu/Sandbox_OnCreate"
 
---[[ ================================================ ]]--
 --- RETRIEVING SandboxOptionsScreenPanel ---
---[[ ================================================ ]]--
-
 local SandboxOptionsScreen_createPanel = SandboxOptionsScreen.createPanel
 
----Intercept the creation of the panel to store each option based on their name.
----@param page table
----@return table
+--- Intercept the creation of the panel to store each option and initialize custom UI.
+--- @param page table
+--- @return CustomSandboxOptionsScreenPanel
 function SandboxOptionsScreen:createPanel(page)
     local panel = SandboxOptionsScreen_createPanel(self, page)
 
     OptionPanels.OPTION_PANELS[page.name] = panel
+
+    -- Initialize customUI table
+    panel.customUI = {}
+
+    -- Store references to individual options
+    for name, control in pairs(panel.controls) do
+        OptionPanels.OPTIONS[name] = {
+            label = panel.labels[name],
+            control = control,
+            panel = panel
+        }
+    end
 
     local event = OnCreateSandboxOptions.events[page.name]
     if event then
@@ -39,15 +48,22 @@ function SandboxOptionsScreen:createPanel(page)
     return panel
 end
 
----Retrieves the option panel based on its name, needs to be the exact name as in the sandbox option panel which can be retrieved with your page name in `sandbox-options.txt` by using `getText()`.
----@param name string
----@return SandboxOptionsScreenPanel|nil
-OptionPanels.GetOptionPanel = function(name)
+--- Retrieves the option panel based on its name.
+--- @param name string
+--- @return CustomSandboxOptionsScreenPanel|nil
+function OptionPanels.GetOptionPanel(name)
     local panel = OptionPanels.OPTION_PANELS[name]
-    if panel then
-        return panel
-    end
+    if panel then return panel end
     error("Option panel not found for name: " .. tostring(name))
+end
+
+--- Retrieves an option by its name.
+--- @param name string
+--- @return table|nil
+function OptionPanels.GetOption(name)
+    local option = OptionPanels.OPTIONS[name]
+    if option then return option end
+    error("Option not found for name: " .. tostring(name))
 end
 
 return OptionPanels

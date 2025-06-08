@@ -1,3 +1,5 @@
+-- Sandbox_OnCreate.lua
+
 local LuaEvent = require "Starlit/LuaEvent"
 local OnCreateSandboxOptions = {
     events = {},

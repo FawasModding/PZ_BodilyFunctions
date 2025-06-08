@@ -1,3 +1,5 @@
+-- BF_SandboxMenu.lua
+
 -- Caching
 local CustomizeSandboxOptionPanel = require "CustomSandboxMenu/Sandbox_Customize"
 local OnCreateSandboxOptions = require "CustomSandboxMenu/Sandbox_OnCreate"
@@ -33,28 +35,66 @@ local panels = {
     }
 }
 
--- Add custom panel and button
 local function CreatePanel(panel, config)
     CustomizeSandboxOptionPanel.SetPanelColor(panel, config.panelColor, config.borderColor)
 
     local x, y, width = CustomizeSandboxOptionPanel.GetTotalOptionDimensions(panel)
 
-    -- Add custom button
-    local _, button = ISDebugUtils.addButton(
-        panel,
-        "customButton_" .. config.name,
-        x, y,
-        width, 40,
-        getText(config.buttonText),
-        function() print(config.name .. " button clicked!") end
-    )
-    button.backgroundColor = config.buttonColor
-    button.borderColor = {r=1, g=1, b=1, a=1}
-    button.tooltip = getText(config.buttonTooltip)
+    if config.name == "Sandbox_Bathroom" then
+        local targetOptionName = "BF.EnableFarting"
+        local option = CustomizeSandboxOptionPanel.GetOption(targetOptionName)
+        if not option or not option.label then
+            print("Error: Target option '" .. targetOptionName .. "' not found or missing label")
+            return
+        end
 
-    -- Update scrollbar
-    CustomizeSandboxOptionPanel.SetScrollBarHeight(panel, y + 40 + UI_BORDER_SPACING)
+        -- Find the option above the target (3rd option)
+        local previousOption = CustomizeSandboxOptionPanel.GetOption("BF.EnableVomiting")
+        if not previousOption or not previousOption.label then
+            print("Error: Previous option 'BF.EnableVomiting' not found or missing label")
+            return
+        end
+
+        local buttonHeight = 40
+        local spacing = UI_BORDER_SPACING
+
+        -- Place the button *below* the previous (3rd) option
+        local buttonY = previousOption.label:getY() + previousOption.label:getHeight() + spacing
+
+        -- Add button
+        local _, button = ISDebugUtils.addButton(
+            panel,
+            "customButton_farting_" .. config.name,
+            x, buttonY,
+            width, buttonHeight,
+            getText(config.buttonText),
+            function() print(config.name .. " button clicked!") end
+        )
+
+        button.backgroundColor = config.buttonColor
+        button.borderColor = {r=1, g=1, b=1, a=1}
+        button.tooltip = getText(config.buttonTooltip)
+
+        table.insert(panel.customUI, { element = button, position = "above", option = targetOptionName })
+
+        -- Calculate how far to shift elements
+        local shiftY = buttonHeight + spacing
+
+        -- Shift all controls at or below the target option
+        local targetY = option.label:getY()
+        for name, control in pairs(panel.controls) do
+            local label = panel.labels[name]
+            if label and control and label:getY() >= targetY then
+                label:setY(label:getY() + shiftY)
+                control:setY(control:getY() + shiftY)
+            end
+        end
+
+        -- Update scroll bar height based on new layout
+        CustomizeSandboxOptionPanel.SetScrollBarHeight(panel, y + 40 + UI_BORDER_SPACING)
+    end
 end
+
 
 -- Register listeners
 for _, config in ipairs(panels) do

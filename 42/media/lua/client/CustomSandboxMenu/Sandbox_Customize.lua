@@ -1,3 +1,4 @@
+-- Sandbox_Customize.lua
 
 --- DEFINITIONS
 ---@class CustomizeSandboxOptionPanel
@@ -12,6 +13,7 @@ local CustomizeSandboxOptionPanel = {}
 --- REQUIREMENTS
 local OptionPanels = require "CustomSandboxMenu/Sandbox_Patch"
 CustomizeSandboxOptionPanel.GetOptionPanel = OptionPanels.GetOptionPanel
+CustomizeSandboxOptionPanel.GetOption = OptionPanels.GetOption
 
 
 --- CACHING
@@ -51,6 +53,13 @@ CustomizeSandboxOptionPanel.GetTotalOptionDimensions = function(panel)
         -- pimp control
         control.backgroundColor = {r=1,g=0.80,b=0,a=0.5}
         control.borderColor = {r=1,g=0.80,b=0,a=1}
+    end
+
+    -- Account for custom UI elements (e.g., headers)
+    if panel.customUI then
+        for _, ui in ipairs(panel.customUI) do
+            y = y + ui.element:getHeight() + UI_BORDER_SPACING
+        end
     end
 
     return x,y,width
