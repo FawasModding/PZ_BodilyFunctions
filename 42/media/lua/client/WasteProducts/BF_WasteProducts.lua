@@ -22,13 +22,13 @@ BF_WasteProducts.ScanNearbyForWaste = function()
                         fecesAmount = fecesAmount + 1
                         lastFecesSquare = sq
                         if sq == player:getSquare() then
-                            BF_FecalFootprints.fecesSteps = 10
+                            BF_FecalFootprints.fecesSteps = 5
                         end
                     elseif (object ~= nil and objectContainer ~= nil) then
                         fecesAmount = fecesAmount + objectContainer:getCountTypeRecurse("HumanFeces")
                         lastFecesSquare = sq
                         if sq == player:getSquare() then
-                            BF_FecalFootprints.fecesSteps = 10
+                            BF_FecalFootprints.fecesSteps = 5
                         end
                     end
 
@@ -43,11 +43,10 @@ BF_WasteProducts.ScanNearbyForWaste = function()
     end
 
     local playerInventory = player:getInventory()
-    if (not insertedInTable and (fecesAmount + playerInventory:getCountType("HumanFeces") > 0)) then
+    if (not insertedInTable and playerInventory:getCountType("HumanFeces") > 0) then
         fecesAmount = fecesAmount + playerInventory:getCountType("HumanFeces")
-        lastFecesSquare = player:getSquare()
-        BF_FecalFootprints.fecesSteps = 10
-        BF_WasteProducts.ApplyWasteExposureEffects(lastFecesSquare, fecesAmount)
+        -- Apply exposure effects without setting lastFecesSquare to player's square
+        BF_WasteProducts.ApplyWasteExposureEffects(player:getSquare(), fecesAmount)
     end
 end
 
@@ -86,20 +85,19 @@ BF_WasteProducts.UpdateWasteFlies = function()
         local worldObjects = fecesSquare:getObjects()
         local fecesFound = false
 
-        if (not fecesFound) then
-            for j = 0, worldObjects:size() - 1 do
-                local object = worldObjects:get(j)
-                local objectContainer = object:getContainer()
-                if (object ~= nil and object:getObjectName() == "WorldInventoryItem" and object:getItem():getType() == "HumanFeces") then
-                    fecesFound = true
-                    break
-                elseif (object ~= nil and objectContainer ~= nil and objectContainer:getCountType("HumanFeces") > 0) then
-                    fecesFound = true
-                    break
-                end
+        for j = 0, worldObjects:size() - 1 do
+            local object = worldObjects:get(j)
+            local objectContainer = object:getContainer()
+            if (object ~= nil and object:getObjectName() == "WorldInventoryItem" and object:getItem():getType() == "HumanFeces") then
+                fecesFound = true
+                break
+            elseif (object ~= nil and objectContainer ~= nil and objectContainer:getCountType("HumanFeces") > 0) then
+                fecesFound = true
+                break
             end
         end
 
+        -- Only check inventory for flies if the square is the player's current square
         if (not fecesFound and player:getInventory():getCountType("HumanFeces") > 0 and fecesSquare:DistToProper(player:getSquare()) < 1) then
             fecesFound = true
         end
