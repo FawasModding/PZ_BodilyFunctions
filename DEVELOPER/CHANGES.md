@@ -12,6 +12,8 @@
 - Human Feces can now be used as fuel for fires.
 - Human Feces can now be turned into "Throwable Human Feces", which can be thrown, picked up, thrown again, and alerts zombies. Cause why the hell not.
 
+- Added "GrassTuft" aka "Grass Cutting" as a wipable item. Required 8 per wipe.
+
 - Added custom smell moodle (Bodily Fumes), for reacting to bodily fluids / functions (farting, poop, etc.)
 - Smell Moodle Values:
 	- Near Feces Pile: 75%
