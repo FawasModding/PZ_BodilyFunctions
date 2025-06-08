@@ -1,4 +1,8 @@
-local FOOTPRINT_TILES = {
+if not SnowFootprints then
+    SnowFootprints = {}
+end
+
+SnowFootprints.FOOTPRINT_TILES = {
     [0] = {left = "fecal_footsteps_8", right = "fecal_footsteps_0"},
     [1] = {left = "fecal_footsteps_1", right = "fecal_footsteps_9"},
     [2] = {left = "fecal_footsteps_24", right = "fecal_footsteps_16"},
@@ -9,38 +13,54 @@ local FOOTPRINT_TILES = {
     [7] = {left = "fecal_footsteps_3", right = "fecal_footsteps_11"},
 }
 
-local DIRECTION_OFFSETS = {
-    [0] = {x = 0,  y = 1},
-    [1] = {x = -1, y = 0},
-    [2] = {x = 0,  y = -1},
-    [3] = {x = 1,  y = 0},
-    [4] = {x = -1, y = 1},
-    [5] = {x = 1,  y = -1},
-    [6] = {x = 1,  y = 1},
-    [7] = {x = -1, y = -1},
-}
+SnowFootprints.CreateFootprint = function(character, direction, isLeftStep)
+    if character:getVehicle() then return end
 
-local placedFootprints = {}
-local footprintQueue = {}
-local MAX_FOOTPRINTS = 250
-local footprintLifespan = 7200
-local isLeftStep = true
-local player = nil
-local lastSquare = nil
-local cell = nil
+    local square = getCell():getGridSquare(character:getX(), character:getY(), character:getZ())
+    if not square then return end
 
--- Timer-based approach from the first file
-local FOOTPRINT_INTERVAL = 350  -- Time in milliseconds for footprint creation interval
-local footprintTimer = 0
-local cleanupTimer = 0
-local CLEANUP_INTERVAL = 5000  -- Cleanup interval in milliseconds
+    local side = isLeftStep and "left" or "right"
+    local tile = SnowFootprints.FOOTPRINT_TILES[direction] and SnowFootprints.FOOTPRINT_TILES[direction][side]
+    if not tile then return end
 
--- Get current game time in ticks
-local function getCurrentGameTime()
-    return getGameTime():getWorldAgeHours() * 3600
+    local isAlready = false
+    for _, v in pairs(square:getLuaTileObjectList()) do
+        if v:getName() == "footprint" then
+            isAlready = true
+            break
+        end
+    end
+
+    if isAlready then return end
+
+    local footprint = IsoObject.new(square, tile, "footprint", false)
+    if getWorld():getGameMode() == "Multiplayer" then
+        square:transmitAddObjectToSquare(footprint, 1)
+    else
+        square:AddTileObject(footprint)
+    end
 end
 
-local function getMovementDirection(lastSquare, square)
+SnowFootprints.OnPlayerMove = function()
+    local player = getSpecificPlayer(0)
+    if not player or not SnowFootprints.lastSquare then
+        SnowFootprints.lastSquare = player and player:getSquare()
+        return
+    end
+
+    local square = player:getSquare()
+    if square == SnowFootprints.lastSquare then return end
+
+    local direction = SnowFootprints.GetMovementDirection(SnowFootprints.lastSquare, square)
+    if direction then
+        SnowFootprints.CreateFootprint(player, direction, SnowFootprints.isLeftStep)
+        SnowFootprints.isLeftStep = not SnowFootprints.isLeftStep
+    end
+
+    SnowFootprints.lastSquare = square
+end
+
+SnowFootprints.GetMovementDirection = function(lastSquare, square)
     if not lastSquare or not square then return nil end
 
     local dx = square:getX() - lastSquare:getX()
@@ -58,129 +78,12 @@ local function getMovementDirection(lastSquare, square)
     return nil
 end
 
--- Helper function to remove a footprint by key
-local function removeFootprint(key)
-    local data = placedFootprints[key]
-    if data and data.square and data.square:getChunk() and data.footprint then
-        data.square:RemoveTileObject(data.footprint)
-    end
-    placedFootprints[key] = nil
+SnowFootprints.OnGameStart = function()
+    SnowFootprints.lastSquare = nil
+    SnowFootprints.isLeftStep = true
 end
 
-local function createFootprint(square, direction)
-    if not square or not direction then return end
+Events.OnGameStart.Add(SnowFootprints.OnGameStart)
+Events.OnPlayerMove.Add(SnowFootprints.OnPlayerMove)
 
-    local x, y, z = square:getX(), square:getY(), square:getZ()
-    local key = x * 10000 + y * 10 + z
-
-    if placedFootprints[key] then return end
-
-    local side = isLeftStep and "left" or "right"
-    local tile = FOOTPRINT_TILES[direction] and FOOTPRINT_TILES[direction][side]
-    if not tile then return end
-
-    local footprintSquare = cell:getGridSquare(x, y, z)
-    if not footprintSquare then return end
-
-    local footprint = IsoObject.new(footprintSquare, tile)
-    if footprint then
-        footprintSquare:AddTileObject(footprint)
-        placedFootprints[key] = { 
-            footprint = footprint, 
-            square = footprintSquare, 
-            time = getCurrentGameTime() 
-        }
-        footprintQueue[#footprintQueue + 1] = key  -- Use length to insert
-        isLeftStep = not isLeftStep
-
-        if #footprintQueue > MAX_FOOTPRINTS then
-            local oldestKey = footprintQueue[1]
-            table.remove(footprintQueue, 1)  -- Remove the first element
-            removeFootprint(oldestKey)
-        end
-    end
-end
-
--- Function to add footprints for the player with timer-based approach
-local function addFootprint()
-    footprintTimer = footprintTimer + getGameTime():getTimeDelta() * 1000  -- Convert to milliseconds
-    if footprintTimer < FOOTPRINT_INTERVAL then return end
-    footprintTimer = 0
-
-    if not player then
-        player = getSpecificPlayer(0)
-        if not player then return end
-    end
-
-    if not cell then
-        cell = getCell()
-        if not cell then return end
-    end
-
-    local square = player:getSquare()
-    if not square or square == lastSquare then return end
-
-    if not lastSquare then
-        lastSquare = square
-        return
-    end
-
-    local direction = getMovementDirection(lastSquare, square)
-    if not direction then
-        lastSquare = square
-        return
-    end
-
-    -- FIX: Instead of using predefined offsets, calculate exact movement vector
-    -- Get the movement vector
-    local dx = square:getX() - lastSquare:getX()
-    local dy = square:getY() - lastSquare:getY()
-    
-    -- Calculate the position directly on player based on movement direction
-    local x = square:getX()
-    local y = square:getY()
-    local z = square:getZ()
-    
-    local squareBehind = cell:getGridSquare(x, y, z)
-    if squareBehind then
-        createFootprint(squareBehind, direction)
-    end
-
-    lastSquare = square
-end
-
--- Function to handle cleanup of expired footprints with timer-based approach
-local function incrementalCleanup()
-    cleanupTimer = cleanupTimer + getGameTime():getTimeDelta() * 1000  -- Convert to milliseconds
-    if cleanupTimer < CLEANUP_INTERVAL then return end
-    cleanupTimer = 0
-    
-    local now = getCurrentGameTime()
-
-    for key, data in pairs(placedFootprints) do
-        if data and data.square and data.square:getChunk() and data.footprint then
-            if now - data.time > footprintLifespan then
-                removeFootprint(key)
-            end
-        end
-    end
-end
-
--- Function to start the game
-local function onGameStart()
-    player = getSpecificPlayer(0)
-    cell = getCell()
-    placedFootprints = {}
-    footprintQueue = {}
-    lastSquare = nil
-    isLeftStep = true
-    footprintTimer = 0
-    cleanupTimer = 0
-end
-
--- Register events
-Events.OnGameStart.Add(onGameStart)
-Events.OnPlayerMove.Add(addFootprint)
-Events.OnTick.Add(incrementalCleanup)
-
-print("[FootprintMod] Snow Footprints Mod initialized")
+print("[SnowFootprints] Mod initialized")
