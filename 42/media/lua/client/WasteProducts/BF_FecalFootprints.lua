@@ -51,10 +51,13 @@ BF_FecalFootprints.OnPlayerMove = function()
     local square = player:getSquare()
     if square == BF_FecalFootprints.lastSquare then return end
 
-    local direction = BF_FecalFootprints.GetMovementDirection(BF_FecalFootprints.lastSquare, square)
-    if direction then
-        BF_FecalFootprints.CreateFootprint(player, direction, BF_FecalFootprints.isLeftStep)
-        BF_FecalFootprints.isLeftStep = not BF_FecalFootprints.isLeftStep
+    if BF_FecalFootprints.fecesSteps > 0 then
+        local direction = BF_FecalFootprints.GetMovementDirection(BF_FecalFootprints.lastSquare, square)
+        if direction then
+            BF_FecalFootprints.CreateFootprint(player, direction, BF_FecalFootprints.isLeftStep)
+            BF_FecalFootprints.isLeftStep = not BF_FecalFootprints.isLeftStep
+            BF_FecalFootprints.fecesSteps = BF_FecalFootprints.fecesSteps - 1
+        end
     end
 
     BF_FecalFootprints.lastSquare = square
@@ -81,9 +84,10 @@ end
 BF_FecalFootprints.OnGameStart = function()
     BF_FecalFootprints.lastSquare = nil
     BF_FecalFootprints.isLeftStep = true
+    BF_FecalFootprints.fecesSteps = 0
 end
 
 Events.OnGameStart.Add(BF_FecalFootprints.OnGameStart)
 Events.OnPlayerMove.Add(BF_FecalFootprints.OnPlayerMove)
 
-print("[SnowFootprints] Mod initialized")
+print("[FecalFootprints] Mod initialized")

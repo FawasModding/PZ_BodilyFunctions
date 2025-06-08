@@ -7,7 +7,7 @@ BF_WasteProducts.ScanNearbyForWaste = function()
     local lastFecesSquare = nil
     local insertedInTable = false
     local player = getPlayer()  -- using getPlayer()  for singleplayer
-    
+
     for x = -2, 2 do
         for y = -2, 2 do
             local sq = getCell():getGridSquare(player:getX() + x, player:getY() + y, player:getZ())
@@ -21,9 +21,15 @@ BF_WasteProducts.ScanNearbyForWaste = function()
                     if (object ~= nil and object:getObjectName() == "WorldInventoryItem" and object:getItem():getType() == "HumanFeces") then
                         fecesAmount = fecesAmount + 1
                         lastFecesSquare = sq
+                        if sq == player:getSquare() then
+                            BF_FecalFootprints.fecesSteps = 10
+                        end
                     elseif (object ~= nil and objectContainer ~= nil) then
                         fecesAmount = fecesAmount + objectContainer:getCountTypeRecurse("HumanFeces")
                         lastFecesSquare = sq
+                        if sq == player:getSquare() then
+                            BF_FecalFootprints.fecesSteps = 10
+                        end
                     end
 
                     if (fecesAmount > 0) then
@@ -40,6 +46,7 @@ BF_WasteProducts.ScanNearbyForWaste = function()
     if (not insertedInTable and (fecesAmount + playerInventory:getCountType("HumanFeces") > 0)) then
         fecesAmount = fecesAmount + playerInventory:getCountType("HumanFeces")
         lastFecesSquare = player:getSquare()
+        BF_FecalFootprints.fecesSteps = 10
         BF_WasteProducts.ApplyWasteExposureEffects(lastFecesSquare, fecesAmount)
     end
 end
@@ -107,4 +114,7 @@ BF_WasteProducts.UpdateWasteFlies = function()
         end
     end
 end
+
 Events.EveryOneMinute.Add(BF_WasteProducts.UpdateWasteFlies)
+
+print("[WasteProducts] Mod initialized")
