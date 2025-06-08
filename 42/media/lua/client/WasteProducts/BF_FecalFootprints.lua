@@ -1,8 +1,8 @@
-if not SnowFootprints then
-    SnowFootprints = {}
+if not BF_FecalFootprints then
+    BF_FecalFootprints = {}
 end
 
-SnowFootprints.FOOTPRINT_TILES = {
+BF_FecalFootprints.FOOTPRINT_TILES = {
     [0] = {left = "fecal_footsteps_8", right = "fecal_footsteps_0"},
     [1] = {left = "fecal_footsteps_1", right = "fecal_footsteps_9"},
     [2] = {left = "fecal_footsteps_24", right = "fecal_footsteps_16"},
@@ -13,14 +13,14 @@ SnowFootprints.FOOTPRINT_TILES = {
     [7] = {left = "fecal_footsteps_3", right = "fecal_footsteps_11"},
 }
 
-SnowFootprints.CreateFootprint = function(character, direction, isLeftStep)
+BF_FecalFootprints.CreateFootprint = function(character, direction, isLeftStep)
     if character:getVehicle() then return end
 
     local square = getCell():getGridSquare(character:getX(), character:getY(), character:getZ())
     if not square then return end
 
     local side = isLeftStep and "left" or "right"
-    local tile = SnowFootprints.FOOTPRINT_TILES[direction] and SnowFootprints.FOOTPRINT_TILES[direction][side]
+    local tile = BF_FecalFootprints.FOOTPRINT_TILES[direction] and BF_FecalFootprints.FOOTPRINT_TILES[direction][side]
     if not tile then return end
 
     local isAlready = false
@@ -41,26 +41,26 @@ SnowFootprints.CreateFootprint = function(character, direction, isLeftStep)
     end
 end
 
-SnowFootprints.OnPlayerMove = function()
+BF_FecalFootprints.OnPlayerMove = function()
     local player = getSpecificPlayer(0)
-    if not player or not SnowFootprints.lastSquare then
-        SnowFootprints.lastSquare = player and player:getSquare()
+    if not player or not BF_FecalFootprints.lastSquare then
+        BF_FecalFootprints.lastSquare = player and player:getSquare()
         return
     end
 
     local square = player:getSquare()
-    if square == SnowFootprints.lastSquare then return end
+    if square == BF_FecalFootprints.lastSquare then return end
 
-    local direction = SnowFootprints.GetMovementDirection(SnowFootprints.lastSquare, square)
+    local direction = BF_FecalFootprints.GetMovementDirection(BF_FecalFootprints.lastSquare, square)
     if direction then
-        SnowFootprints.CreateFootprint(player, direction, SnowFootprints.isLeftStep)
-        SnowFootprints.isLeftStep = not SnowFootprints.isLeftStep
+        BF_FecalFootprints.CreateFootprint(player, direction, BF_FecalFootprints.isLeftStep)
+        BF_FecalFootprints.isLeftStep = not BF_FecalFootprints.isLeftStep
     end
 
-    SnowFootprints.lastSquare = square
+    BF_FecalFootprints.lastSquare = square
 end
 
-SnowFootprints.GetMovementDirection = function(lastSquare, square)
+BF_FecalFootprints.GetMovementDirection = function(lastSquare, square)
     if not lastSquare or not square then return nil end
 
     local dx = square:getX() - lastSquare:getX()
@@ -78,12 +78,12 @@ SnowFootprints.GetMovementDirection = function(lastSquare, square)
     return nil
 end
 
-SnowFootprints.OnGameStart = function()
-    SnowFootprints.lastSquare = nil
-    SnowFootprints.isLeftStep = true
+BF_FecalFootprints.OnGameStart = function()
+    BF_FecalFootprints.lastSquare = nil
+    BF_FecalFootprints.isLeftStep = true
 end
 
-Events.OnGameStart.Add(SnowFootprints.OnGameStart)
-Events.OnPlayerMove.Add(SnowFootprints.OnPlayerMove)
+Events.OnGameStart.Add(BF_FecalFootprints.OnGameStart)
+Events.OnPlayerMove.Add(BF_FecalFootprints.OnPlayerMove)
 
 print("[SnowFootprints] Mod initialized")
