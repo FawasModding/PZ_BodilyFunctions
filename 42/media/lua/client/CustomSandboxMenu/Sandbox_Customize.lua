@@ -33,7 +33,7 @@ SandboxUIEnhancer.CalculateLayoutMetrics = function(panel)
 
     for name,control in pairs(controls) do
         if titles[i] then
-            y = titles[i].yShift -- it's not the one associated to control, but we don't really care here bcs we look for total y
+            y = titles[i].yShift
         end
         local label = labels[name]
         y = y + math.max(label:getHeight(), control:getHeight()) + UI_BORDER_SPACING
@@ -45,10 +45,6 @@ SandboxUIEnhancer.CalculateLayoutMetrics = function(panel)
 
         width = math.max(width, control_rightSide - label_leftSide)
         x = math.max(x, label_leftSide)
-
-        -- Visual highlight (can be removed or customized)
-        control.backgroundColor = { r = 1, g = 0.8, b = 0, a = 0.5 }
-        control.borderColor = { r = 1, g = 0.8, b = 0, a = 1 }
     end
 
     -- Account for custom UI elements (e.g., headers)

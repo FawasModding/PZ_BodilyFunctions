@@ -27,21 +27,21 @@ Sandbox_EN = {
 
     -- Defecation Settings
     Sandbox_Defecation = "Bodily Functions - Defecation",
-    Sandbox_BF_BowelsMaxValue = "Bowels Max Capacity",
+    Sandbox_BF_BowelsMaxValue = "Max Bowels Capacity",
         Sandbox_BF_BowelsMaxValue_tooltip = "Maximum bowel fullness.",
-    Sandbox_BF_BowelsIncreaseMultiplier = "Bowels Fill Rate",
+    Sandbox_BF_BowelsIncreaseMultiplier = "Bowels Fill Rate Multiplier",
         Sandbox_BF_BowelsIncreaseMultiplier_tooltip = "Bowel meter increase per 10 minutes.",
-    Sandbox_BF_DefecateSpeedMultiplier = "Defecation Speed (WIP)",
+    Sandbox_BF_DefecateSpeedMultiplier = "Time It Takes To Poop (WIP)",
         Sandbox_BF_DefecateSpeedMultiplier_tooltip = "Time taken to defecate.",
     
     -- Defecation Action Requirements
     Sandbox_BF_POOPREQUIREMENTSHeader = "Voluntary Defecation",
     	Sandbox_BF_POOPREQUIREMENTSHeader_tooltip = "Bowel fullness thresholds for actions.",
-    Sandbox_BF_PoopOnSelfRequirement = "Intentional Self-Poop Threshold",
+    Sandbox_BF_PoopOnSelfRequirement = "Percent to Intentionally Self-Poop",
     	Sandbox_BF_PoopOnSelfRequirement_tooltip = "Bowel fullness to intentionally poop self.",
-    Sandbox_BF_PoopOnGroundRequirement = "Poop on Ground Threshold",
+    Sandbox_BF_PoopOnGroundRequirement = "Percent to Poop on Ground",
     	Sandbox_BF_PoopOnGroundRequirement_tooltip = "Bowel fullness to poop on ground.",
-    Sandbox_BF_PoopInToiletRequirement = "Poop in Toilet Threshold",
+    Sandbox_BF_PoopInToiletRequirement = "Percent to Poop in Toilet",
     	Sandbox_BF_PoopInToiletRequirement_tooltip = "Bowel fullness to poop in toilet.",
 
     -- Defecation Involuntary Settings
@@ -77,23 +77,23 @@ Sandbox_EN = {
 
     -- Urination Settings
     Sandbox_Urination = "Bodily Functions - Urination",
-    Sandbox_BF_BladderMaxValue = "Bladder Max Capacity",
+    Sandbox_BF_BladderMaxValue = "Max Bladder Capacity",
     	Sandbox_BF_BladderMaxValue_tooltip = "Maximum bladder fullness.",
-    Sandbox_BF_BladderIncreaseMultiplier = "Bladder Fill Rate",
+    Sandbox_BF_BladderIncreaseMultiplier = "Bladder Fill Rate Multiplier",
     	Sandbox_BF_BladderIncreaseMultiplier_tooltip = "Bladder meter increase per 10 minutes.",
-    Sandbox_BF_UrinateSpeedMultiplier = "Urination Speed (WIP)",
+    Sandbox_BF_UrinateSpeedMultiplier = "Time It Takes To Pee (WIP)",
     	Sandbox_BF_UrinateSpeedMultiplier_tooltip = "Time taken to urinate.",
 
     -- Urination Action Requirements
     Sandbox_BF_PEEREQUIREMENTSHeader = "Voluntary Urination",
     	Sandbox_BF_PEEREQUIREMENTSHeader_tooltip = "Bladder fullness thresholds for actions.",
-    Sandbox_BF_PeeOnSelfRequirement = "Intentional Self-Pee Threshold",
+    Sandbox_BF_PeeOnSelfRequirement = "Percent to Intentionally Self-Pee",
     	Sandbox_BF_PeeOnSelfRequirement_tooltip = "Bladder fullness to intentionally pee self.",
-    Sandbox_BF_PeeOnGroundRequirement = "Pee on Ground Threshold",
+    Sandbox_BF_PeeOnGroundRequirement = "Percent to Pee on Ground",
     	Sandbox_BF_PeeOnGroundRequirement_tooltip = "Bladder fullness to pee on ground.",
-    Sandbox_BF_PeeInToiletRequirement = "Pee in Toilet Threshold",
+    Sandbox_BF_PeeInToiletRequirement = "Percent to Pee in Toilet",
     	Sandbox_BF_PeeInToiletRequirement_tooltip = "Bladder fullness to pee in toilet.",
-    Sandbox_BF_PeeInContainerRequirement = "Pee in Container Threshold",
+    Sandbox_BF_PeeInContainerRequirement = "Percent to Pee in Container",
     	Sandbox_BF_PeeInContainerRequirement_tooltip = "Bladder fullness to pee in container.",
 
     -- Urination Involuntary Settings
