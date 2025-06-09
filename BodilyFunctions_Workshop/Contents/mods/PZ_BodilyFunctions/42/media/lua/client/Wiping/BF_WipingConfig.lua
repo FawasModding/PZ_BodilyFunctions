@@ -10,6 +10,7 @@ BF_WipingConfig = {
         GraphPaper = { usesRequired = 5 },
         Paperwork = { usesRequired = 6 },
         SheetPaper2 = { usesRequired = 4 },
+        GrassTuft = { usesRequired = 8 },
         Receipt = { usesRequired = 7 }, -- Very small and barely any absorbency
         RippedSheets = { usesRequired = 1 },
         Newspaper_Old = { usesRequired = 1 },

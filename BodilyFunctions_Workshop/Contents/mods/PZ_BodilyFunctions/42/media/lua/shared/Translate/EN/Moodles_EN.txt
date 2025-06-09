@@ -34,4 +34,14 @@ Moodles_EN {
     Moodles_PeedSelf_Bad_desc_lvl3 = "Can't blame it on spilled water.",
     Moodles_PeedSelf_Bad_lvl4 = "Catastrophic Leak",
     Moodles_PeedSelf_Bad_desc_lvl4 = "Time to do laundry.",
+
+    Moodles_BodilyFumes_Bad_lvl1 = "Bodily Fumes",
+    Moodles_BodilyFumes_Bad_desc_lvl1 = "A faint, unpleasant whiff of something human lingers nearby.",
+    Moodles_BodilyFumes_Bad_lvl2 = "Noticeable Smell",
+    Moodles_BodilyFumes_Bad_desc_lvl2 = "A strong stench of gas or fluids hits your nose. Someone definitely let loose.",
+    Moodles_BodilyFumes_Bad_lvl3 = "Airborne Discharge",
+    Moodles_BodilyFumes_Bad_desc_lvl3 = "The air reeks of expelled gas or fluids. You can almost taste it.",
+    Moodles_BodilyFumes_Bad_lvl4 = "Overwhelming Human Waste",
+    Moodles_BodilyFumes_Bad_desc_lvl4 = "The air's thick with the stench of expelled bodily fluids. You might hurl.",
+
 }

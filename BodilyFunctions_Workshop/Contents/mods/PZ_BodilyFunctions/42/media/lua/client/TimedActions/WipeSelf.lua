@@ -53,7 +53,7 @@ function WipeSelf:perform()
             self.character:getInventory():RemoveOneOf(itemType)
             -- Add pooped variant for each consumed item
             local poopedItem = itemType .. "Pooped"
-            self.character:getInventory():AddItem("BathroomFunctions." .. poopedItem)
+            self.character:getInventory():AddItem("BF." .. poopedItem)
         end
         print("DEBUG: Consumed " .. itemsToConsume .. " items and added " .. itemsToConsume .. " pooped items: " .. itemType .. "Pooped")
     end
@@ -87,7 +87,7 @@ function WipeSelf:perform()
 
         -- If no underwear, soil unequipped non-underwear items
         if not applied then
-            local soilableClothing = BathroomFunctions.GetSoilableClothing()
+            local soilableClothing = BF.GetSoilableClothing()
             local nonUnderwearLocations = {}
             for _, loc in ipairs(soilableClothing) do
                 if not (loc == "UnderwearBottom" or loc == "Underwear") then
@@ -134,7 +134,7 @@ function WipeSelf:perform()
         print("DEBUG: Applied " .. soilPenalty .. "% soiling to wiping clothing " .. self.wipingWith:getType() .. " at " .. itemType)
     end
 
-    --BathroomFunctions.ResetRemovedClothing(self.character) -- reset removed clothing
+    --BF.ResetRemovedClothing(self.character) -- reset removed clothing
     --self.character:getModData().removedClothing = nil
 end
 

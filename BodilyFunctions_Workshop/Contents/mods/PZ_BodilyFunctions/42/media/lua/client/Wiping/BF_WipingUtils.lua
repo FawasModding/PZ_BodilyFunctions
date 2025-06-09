@@ -1,10 +1,10 @@
-function BathroomFunctions.CheckForWipeables(player)
+function BF.CheckForWipeables(player)
     local usingDrainable = "usingDrainable"
     local usingOneTime = "usingOneTime"
     local usingClothing = "usingClothing"
 
     -- Check for drainable items
-    local drainableItems = BathroomFunctions.GetDrainableWipeables()
+    local drainableItems = BF.GetDrainableWipeables()
     for _, itemType in ipairs(drainableItems) do
         local items = player:getInventory():getItems()
         for i = 0, items:size() - 1 do
@@ -18,7 +18,7 @@ function BathroomFunctions.CheckForWipeables(player)
     end
 
     -- Check for non-drainable wipeables
-    local nonDrainableItems = BathroomFunctions.GetOneTimeWipeables()
+    local nonDrainableItems = BF.GetOneTimeWipeables()
     for _, itemType in ipairs(nonDrainableItems) do
         local availableItems = player:getInventory():getNumberOfItem(itemType)
         if availableItems >= 1 then
@@ -30,7 +30,7 @@ function BathroomFunctions.CheckForWipeables(player)
     end
 
     -- Check for clothing wipeables
-    local clothingWipeables = BathroomFunctions.GetClothingWipeables()
+    local clothingWipeables = BF.GetClothingWipeables()
     for _, bodyLocation in ipairs(clothingWipeables) do
         local items = player:getInventory():getItems()
         for i = 0, items:size() - 1 do

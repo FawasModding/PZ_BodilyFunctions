@@ -1,4 +1,4 @@
-module BathroomFunctions
+module BF
 {
 	model Urine_Model_Large
     {

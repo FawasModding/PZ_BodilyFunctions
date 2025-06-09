@@ -1,4 +1,4 @@
-module BathroomFunctions
+module BF
 {
     craftRecipe OpenAntiDiarrhealPillBox
 	{
@@ -8,11 +8,11 @@ module BathroomFunctions
         category = Packing,
 		inputs
 		{
-			item 1 [BathroomFunctions.AntiDiarrhealPillBox] flags[AllowFavorite;InheritFavorite],
+			item 1 [BF.AntiDiarrhealPillBox] flags[AllowFavorite;InheritFavorite],
 		}
 		outputs
 		{
-			item 6 BathroomFunctions.AntiDiarrhealPill,
+			item 6 BF.AntiDiarrhealPill,
 		}
 	}
 
@@ -24,11 +24,11 @@ module BathroomFunctions
         category = Packing,
 		inputs
 		{
-			item 1 [BathroomFunctions.LaxativePillBox] flags[AllowFavorite;InheritFavorite],
+			item 1 [BF.LaxativePillBox] flags[AllowFavorite;InheritFavorite],
 		}
 		outputs
 		{
-			item 6 BathroomFunctions.LaxativePill,
+			item 6 BF.LaxativePill,
 		}
 	}
 
@@ -40,11 +40,11 @@ module BathroomFunctions
         category = Packing,
 		inputs
 		{
-			item 1 [BathroomFunctions.DiureticPillBox] flags[AllowFavorite;InheritFavorite],
+			item 1 [BF.DiureticPillBox] flags[AllowFavorite;InheritFavorite],
 		}
 		outputs
 		{
-			item 6 BathroomFunctions.DiureticPill,
+			item 6 BF.DiureticPill,
 		}
 	}
 
@@ -56,11 +56,11 @@ module BathroomFunctions
         category = Packing,
 		inputs
 		{
-			item 1 [BathroomFunctions.AnticholinergicPillBox] flags[AllowFavorite;InheritFavorite],
+			item 1 [BF.AnticholinergicPillBox] flags[AllowFavorite;InheritFavorite],
 		}
 		outputs
 		{
-			item 6 BathroomFunctions.AnticholinergicPill,
+			item 6 BF.AnticholinergicPill,
 		}
 	}
 }

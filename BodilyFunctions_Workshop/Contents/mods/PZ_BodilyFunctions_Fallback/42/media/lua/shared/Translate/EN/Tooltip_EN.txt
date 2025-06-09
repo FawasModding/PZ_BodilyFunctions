@@ -1,6 +1,6 @@
 Tooltip_EN = {
-    Tooltip_LaxativePill          = "Increases bowel activity. Risk of dehydration*.",
-    Tooltip_AntiDiarrhealPill     = "Slows bowel activity. May cause constipation if overused*.",
-    Tooltip_DiureticPill          = "Increases urination frequency. Risk of dehydration*.",
-    Tooltip_AnticholinergicPill   = "Reduces urinary frequency.",
+    Tooltip_LaxativePill          = "Increase bowel value by 20% of max per pill.",
+    Tooltip_AntiDiarrhealPill     = "Reduce bowel value by 10% of max per pill.",
+    Tooltip_DiureticPill          = "Increase bladder value by 20% of max per pill.",
+    Tooltip_AnticholinergicPill   = "Reduce bladder value by 10% of max per pill.",
 }

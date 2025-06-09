@@ -1,3 +1,4 @@
+---@diagnostic disable: duplicate-set-field
 
 local modInfoTCH = getModInfoByID("TchernoLib")
 if modInfoTCH and isModActive(modInfoTCH) then
