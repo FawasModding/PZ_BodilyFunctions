@@ -128,4 +128,15 @@ module BF
 		StaticModel = HottieZ2,
 		WorldStaticModel = HottieZGround2,
 	}
+
+	item GrassTuftPooped
+	{
+	    DisplayCategory = Junk,
+	    Weight = 0.1,
+	    Type = Normal,
+	    DisplayName = Grass Tuft (Wiped),
+	    StaticModel = GrassTuft,
+	    Icon	=	GrassTuftPooped,
+	    WorldStaticModel = GrassTuft,
+	}
 }

@@ -108,7 +108,7 @@ option BF.FliesOnPoop
 }
 option BF.EnableFecalFootprints
 {
-    type = enum, default = 3, numValues = 3,
+    type = enum, default = 1, numValues = 3,
     page = Defecation, translation = BF_EnableFecalFootprints,
 }
 option BF.EnableDefecationTraits
