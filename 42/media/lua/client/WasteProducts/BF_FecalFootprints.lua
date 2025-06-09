@@ -278,6 +278,23 @@ end
 -- Event registration with conditional checks
 BF_FecalFootprints.RegisterEvents = function()
     Events.OnGameStart.Add(BF_FecalFootprints.OnGameStart)
+
+    -- Set local config bools based on sandbox settings
+    local fecalFootprintsEnum = SandboxVars.BF.EnableFecalFootprints or 1
+    if fecalFootprintsEnum == 1 then
+        BF_FecalFootprints.Config.enablePlayerFootsteps = false
+        BF_FecalFootprints.Config.enableZombieFootsteps = false
+    end
+    if fecalFootprintsEnum == 2 then
+        BF_FecalFootprints.Config.enablePlayerFootsteps = true
+        BF_FecalFootprints.Config.enableZombieFootsteps = false
+    end
+    if fecalFootprintsEnum == 3 then
+        BF_FecalFootprints.Config.enablePlayerFootsteps = true
+        BF_FecalFootprints.Config.enableZombieFootsteps = true
+    end
+
+    -- Apply functionality based on config bools
     if BF_FecalFootprints.Config.enablePlayerFootsteps then
         Events.OnPlayerMove.Add(BF_FecalFootprints.AddPlayerFootprints)
     end
