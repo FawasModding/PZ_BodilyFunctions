@@ -4,7 +4,7 @@
 [VERSION 0.12.0]
 ==============
 
-- Reorganized Sandbox Menu.
+- Reorganized Sandbox Menu and implemented custom UI. This means headers and colored backgrounds..
 - Changed "BodilyFunctions" function prefix to "BF"
 
 - Flies now appear on human feces, whether it's on the ground or being held by the player.
