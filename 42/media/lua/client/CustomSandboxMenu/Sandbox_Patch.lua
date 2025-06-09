@@ -14,10 +14,10 @@ local OptionPanels = {
     OPTIONS = {}
 }
 
---- CACHING
+--- FOR CACHING
 local OnCreateSandboxOptions = require "CustomSandboxMenu/Sandbox_OnCreate"
 
---- RETRIEVING SandboxOptionsScreenPanel ---
+--- get SandboxOptionsScreenPanel ---
 local SandboxOptionsScreen_createPanel = SandboxOptionsScreen.createPanel
 
 --- Intercept the creation of the panel to store each option and initialize custom UI.
@@ -48,7 +48,7 @@ function SandboxOptionsScreen:createPanel(page)
     return panel
 end
 
---- Retrieves the option panel based on its name.
+--- Gets option panel based on its name.
 --- @param name string
 --- @return CustomSandboxOptionsScreenPanel|nil
 function OptionPanels.GetOptionPanel(name)
@@ -57,7 +57,7 @@ function OptionPanels.GetOptionPanel(name)
     error("Option panel not found for name: " .. tostring(name))
 end
 
---- Retrieves an option by its name.
+--- Gets option by its name.
 --- @param name string
 --- @return table|nil
 function OptionPanels.GetOption(name)

@@ -108,9 +108,25 @@ option BF.FliesOnPoop
 }
 option BF.EnableFecalFootprints
 {
-    type = enum, default = 1, numValues = 3,
+    type = enum, default = 3, numValues = 3,
     page = Defecation, translation = BF_EnableFecalFootprints,
 }
+option BF.EnableDefecationTraits
+{
+    type = boolean, default = true,
+    page = Defecation, translation = BF_EnableDefecationTraits,
+}
+
+
+
+
+
+
+
+
+
+
+
 
 /* Urination Settings */
 option BF.BladderMaxValue
@@ -178,4 +194,9 @@ option BF.CreatePeeObject
 {
     type = boolean, default = true,
     page = Urination, translation = BF_CreatePeeObject,
+}
+option BF.EnableUrinationTraits
+{
+    type = boolean, default = true,
+    page = Urination, translation = BF_EnableUrinationTraits,
 }

@@ -1,8 +1,8 @@
 -- Sandbox_Customize.lua
 
 --- DEFINITIONS
----@class CustomizeSandboxOptionPanel
-local CustomizeSandboxOptionPanel = {}
+---@class SandboxUIEnhancer
+local SandboxUIEnhancer = {}
 
 ---@class BaseColor
 ---@field r number
@@ -12,26 +12,22 @@ local CustomizeSandboxOptionPanel = {}
 
 --- REQUIREMENTS
 local OptionPanels = require "CustomSandboxMenu/Sandbox_Patch"
-CustomizeSandboxOptionPanel.GetOptionPanel = OptionPanels.GetOptionPanel
-CustomizeSandboxOptionPanel.GetOption = OptionPanels.GetOption
+SandboxUIEnhancer.GetOptionPanel = OptionPanels.GetOptionPanel
+SandboxUIEnhancer.GetOption = OptionPanels.GetOption
 
-
---- CACHING
--- ui size
+--- FOR CACHING
 local UI_BORDER_SPACING = 10
 
 
----Retrieves the total 
+---Retrieves the total layout metrics
 ---@param panel SandboxOptionsScreenPanel
-CustomizeSandboxOptionPanel.GetTotalOptionDimensions = function(panel)
-    -- get y
+SandboxUIEnhancer.CalculateLayoutMetrics = function(panel)
     local titles = panel.titles
     local controls = panel.controls
     local labels = panel.labels
     local y = 11
     local i = 1
 
-    -- intercept other coordinates
     local width = 0
     local x = 0
 
@@ -50,9 +46,9 @@ CustomizeSandboxOptionPanel.GetTotalOptionDimensions = function(panel)
         width = math.max(width, control_rightSide - label_leftSide)
         x = math.max(x, label_leftSide)
 
-        -- pimp control
-        control.backgroundColor = {r=1,g=0.80,b=0,a=0.5}
-        control.borderColor = {r=1,g=0.80,b=0,a=1}
+        -- Visual highlight (can be removed or customized)
+        control.backgroundColor = { r = 1, g = 0.8, b = 0, a = 0.5 }
+        control.borderColor = { r = 1, g = 0.8, b = 0, a = 1 }
     end
 
     -- Account for custom UI elements (e.g., headers)
@@ -65,16 +61,11 @@ CustomizeSandboxOptionPanel.GetTotalOptionDimensions = function(panel)
     return x,y,width
 end
 
-
---[[ ================================================ ]]--
---- CUSTOMIZE SandboxOptionPanel ---
---[[ ================================================ ]]--
-
----Sets the color of the panel.
+-- Sets panel color
 ---@param panel SandboxOptionsScreenPanel
 ---@param borderColor BaseColor
 ---@param backgroundColor BaseColor
-CustomizeSandboxOptionPanel.SetPanelColor = function(panel, borderColor, backgroundColor)
+SandboxUIEnhancer.SetPanelColor = function(panel, borderColor, backgroundColor)
     if not panel then
         error("Panel cannot be nil.")
     end
@@ -85,19 +76,19 @@ end
 ---Sets the height of the scroll bar. Usually based on the lowest point reached by entries in the panel.
 ---@param panel SandboxOptionsScreenPanel
 ---@param height integer
-CustomizeSandboxOptionPanel.SetScrollBarHeight = function(panel,height)
+SandboxUIEnhancer.SetScrollBarHeight = function(panel,height)
     panel:setScrollHeight(height)
 end
 
---- Inserts a custom UI element between two existing options.
+-- Inserts a custom UI element between two existing options.
 ---@param panel SandboxOptionsScreenPanel
 ---@param optionKeyTop string  -- Option key above the element
 ---@param optionKeyBottom string  -- Option key below the element
 ---@param elementHeight number
 ---@param addElementCallback fun(x:number, y:number):UIElement  -- Function that adds your element and returns it
-CustomizeSandboxOptionPanel.InsertElementBetweenOptions = function(panel, optionKeyTop, optionKeyBottom, elementHeight, addElementCallback)
-    local top = CustomizeSandboxOptionPanel.GetOption(optionKeyTop)
-    local bottom = CustomizeSandboxOptionPanel.GetOption(optionKeyBottom)
+SandboxUIEnhancer.InsertElementBetweenOptions = function(panel, optionKeyTop, optionKeyBottom, elementHeight, addElementCallback)
+    local top = SandboxUIEnhancer.GetOption(optionKeyTop)
+    local bottom = SandboxUIEnhancer.GetOption(optionKeyBottom)
 
     if not top or not bottom or not top.label or not bottom.label then
         print("Error: Missing labels or options for insertion between " .. optionKeyTop .. " and " .. optionKeyBottom)
@@ -106,7 +97,7 @@ CustomizeSandboxOptionPanel.InsertElementBetweenOptions = function(panel, option
 
     local spacing = UI_BORDER_SPACING
     local insertY = top.label:getY() + top.label:getHeight() + spacing
-    local x, _, width = CustomizeSandboxOptionPanel.GetTotalOptionDimensions(panel)
+    local x, _, width = SandboxUIEnhancer.CalculateLayoutMetrics(panel)
 
     -- Add your custom element
     local element = addElementCallback(x, insertY)
@@ -130,10 +121,10 @@ CustomizeSandboxOptionPanel.InsertElementBetweenOptions = function(panel, option
     end
 
     -- Resize scroll height
-    local _, y = CustomizeSandboxOptionPanel.GetTotalOptionDimensions(panel)
-    CustomizeSandboxOptionPanel.SetScrollBarHeight(panel, y + UI_BORDER_SPACING)
+    local _, y = SandboxUIEnhancer.CalculateLayoutMetrics(panel)
+    SandboxUIEnhancer.SetScrollBarHeight(panel, y + UI_BORDER_SPACING)
 end
 
 
 
-return CustomizeSandboxOptionPanel
+return SandboxUIEnhancer

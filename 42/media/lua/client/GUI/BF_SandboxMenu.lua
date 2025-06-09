@@ -1,7 +1,7 @@
 -- BF_SandboxMenu.lua
 
 -- Caching
-local CustomizeSandboxOptionPanel = require "CustomSandboxMenu/Sandbox_Customize"
+local SandboxUIEnhancer = require "CustomSandboxMenu/Sandbox_Customize"
 local OnCreateSandboxOptions = require "CustomSandboxMenu/Sandbox_OnCreate"
 
 -- UI constants
@@ -48,8 +48,8 @@ local panels = {
 
 -- Util function for adding buttons / headers
 local function AddButtonBetweenOptions(panel, optionKeyTop, optionKeyBottom, buttonHeight, buttonIDSuffix, buttonTextKey, buttonTooltipKey, buttonColor, borderColor, onClick)
-    local x, _, width = CustomizeSandboxOptionPanel.GetTotalOptionDimensions(panel)
-    CustomizeSandboxOptionPanel.InsertElementBetweenOptions(
+    local x, _, width = SandboxUIEnhancer.CalculateLayoutMetrics(panel)
+    SandboxUIEnhancer.InsertElementBetweenOptions(
         panel,
         optionKeyTop,
         optionKeyBottom,
@@ -91,7 +91,7 @@ end
 
 
 local function CreatePanel(panel, config)
-    CustomizeSandboxOptionPanel.SetPanelColor(panel, config.panelColor, config.borderColor)
+    SandboxUIEnhancer.SetPanelColor(panel, config.panelColor, config.borderColor)
 
     if config.name == "Sandbox_Bathroom" then
         AddMultipleButtons(panel, {
