@@ -1,4 +1,5 @@
 require "MF_ISMoodle"
+require "BodilyFunctions"
 MF.createMoodle("Defecation");
 MF.createMoodle("Urination");
 MF.createMoodle("PoopedSelf");

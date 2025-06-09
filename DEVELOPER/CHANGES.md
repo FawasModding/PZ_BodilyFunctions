@@ -13,6 +13,7 @@
 - Human Feces can now be turned into "Throwable Human Feces", which can be thrown, picked up, thrown again, and alerts zombies. Cause why the hell not.
 
 - Added "GrassTuft" aka "Grass Cutting" as a wipable item. Required 8 per wipe.
+- Wiped Rags and Grass Cuttings can now be cleaned with the "Wash Soiled Clothing" (now Wash Soiled Items) context menu.
 
 - Added custom smell moodle (Bodily Fumes), for reacting to bodily fluids / functions (farting, poop, etc.)
 - Smell Moodle Values:

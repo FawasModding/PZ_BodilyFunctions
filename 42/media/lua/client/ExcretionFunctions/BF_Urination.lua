@@ -1,3 +1,5 @@
+require "BodilyFunctions"
+
 -- Function to update urination-related values
 function BF.UpdateUrinationValues()
     local player = getPlayer()
