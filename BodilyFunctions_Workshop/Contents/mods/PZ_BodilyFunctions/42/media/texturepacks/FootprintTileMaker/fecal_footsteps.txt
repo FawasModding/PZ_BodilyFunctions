@@ -1,0 +1,16 @@
+version = 0
+settings
+{
+    packFileName = fecal_footsteps.pack
+    outputImageSize = 1024,1024
+    scale50 = false
+    inputImageDirectory
+    {
+        path = .
+        imagesAreTilesheets = true
+    }
+    tileDef
+    {
+        path = ../fecal_footprints.tiles
+    }
+}

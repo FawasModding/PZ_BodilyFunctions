@@ -1,4 +1,4 @@
-name=Bodily Functions (0.11.0)
+name=Bodily Functions (0.12.0)
 poster=poster.png
 id=bodilyfunctions
 author=Fawas Interactive
@@ -9,6 +9,8 @@ description=<BR>
 description=Features Defecation & Defecation
 modversion=0.11.0
 url=https://www.fawasinteractive.com
+pack=fecal_footsteps
+tiledef=fecal_footsteps 4294
 require=\StarlitLibrary,\MoodleFramework
 incompatible=\bodilyfunctionsfallback
 icon=icon.png

@@ -25,11 +25,11 @@ function GroundDefecate:stop()
 	ISBaseTimedAction.stop(self)
 
 	-- If ending early, don't keep the items stored
-	BathroomFunctions.ResetRemovedClothing(self.character)
+	BF.ResetRemovedClothing(self.character)
 end
 
 function GroundDefecate:perform()
-	local defecateValue = BathroomFunctions.GetDefecateValue()
+	local defecateValue = BF.GetDefecateValue()
 
 	-- Add fatigue since the player had to squat to poop
 	self.character:getStats():setFatigue(self.character:getStats():getFatigue() + 0.025)
@@ -37,8 +37,8 @@ function GroundDefecate:perform()
 	getSoundManager():PlayWorldSound("PoopSelf1", self.character:getCurrentSquare(), 0, 10, 0, false)
 
 	--Manage poop objects, poops should be different dependant on defecate value, diarrhea, and corn
-	if SandboxVars.BathroomFunctions.CreatePoopObject == true then
-		local fecesItem = instanceItem("BathroomFunctions.HumanFeces")
+	if SandboxVars.BF.CreatePoopObject == true then
+		local fecesItem = instanceItem("BF.HumanFeces")
 		self.character:getCurrentSquare():AddWorldInventoryItem(fecesItem, ZombRand(0.1, 0.5), ZombRand(0.1, 0.5), 0)
 	end
 
@@ -46,7 +46,7 @@ function GroundDefecate:perform()
 	ISBaseTimedAction.perform(self)
 
 	-- Put back on bottom clothing afterwards
-    BathroomFunctions.ReequipBottomClothing(self.character)
+    BF.ReequipBottomClothing(self.character)
 end
 
 function GroundDefecate:new(character, time, stopWalk, stopRun)

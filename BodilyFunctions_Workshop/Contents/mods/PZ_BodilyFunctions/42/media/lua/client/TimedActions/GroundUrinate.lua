@@ -27,11 +27,11 @@ function GroundUrinate:stop()
 	ISBaseTimedAction.stop(self)
 
 	-- If ending early, don't keep the items stored
-	BathroomFunctions.ResetRemovedClothing(self.character)
+	BF.ResetRemovedClothing(self.character)
 end
 
 function GroundUrinate:perform()
-	local urinateValue = BathroomFunctions.GetUrinateValue()
+	local urinateValue = BF.GetUrinateValue()
 
 	if self.character:isFemale() then --Minor detail, but squatting should give more fatigue than standing
 		self.character:getStats():setFatigue(self.character:getStats():getFatigue() + 0.025)
@@ -40,8 +40,8 @@ function GroundUrinate:perform()
 	getSoundManager():PlayWorldSound("PeeSelf", self.character:getCurrentSquare(), 0, 10, 0, false)
 	--self.character:playSound("PeeSelf")
 
-	if SandboxVars.BathroomFunctions.CreatePeeObject == true then
-		local urineItem = instanceItem("BathroomFunctions.Urine_Hydrated_0")
+	if SandboxVars.BF.CreatePeeObject == true then
+		local urineItem = instanceItem("BF.Urine_Hydrated_0")
 		self.character:getCurrentSquare():AddWorldInventoryItem(urineItem, 0, 0, 0)
 	end
 
@@ -50,7 +50,7 @@ function GroundUrinate:perform()
 
 	-- Put back on bottom clothing afterwards
     if self.character:isFemale() == true then
-        BathroomFunctions.ReequipBottomClothing(self.character)
+        BF.ReequipBottomClothing(self.character)
     end
 end
 

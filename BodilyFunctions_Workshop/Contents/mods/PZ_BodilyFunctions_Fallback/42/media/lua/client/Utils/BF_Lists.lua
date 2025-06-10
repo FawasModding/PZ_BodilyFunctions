@@ -18,7 +18,7 @@ Clothes that need to be removed before using the bathroom. Includes dresses and 
 function BathroomFunctions.GetExcreteObstructiveClothing()
     local bodyLocations = {
     "UnderwearBottom", "Underwear", "Torso1Legs1", "Legs1", "Pants", "BathRobe", "FullSuit", "FullSuitHead", "FullTop", "BodyCostume", "ShortPants", "ShortsShort",
-    "LongDress", "Dress", "LongSkirt", "Skirt"
+    "LongDress", "Dress", "LongSkirt", "Skirt", "Pants_Skinny"
     }
 
     return bodyLocations

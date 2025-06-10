@@ -48,18 +48,18 @@ function ToiletDefecate:stop()
 	ISBaseTimedAction.stop(self)
 
 	-- If ending early, don't keep the items stored
-	BathroomFunctions.ResetRemovedClothing(self.character)
+	BF.ResetRemovedClothing(self.character)
 end
 
 function ToiletDefecate:perform()
-	local defecateValue = BathroomFunctions.GetDefecateValue()
+	local defecateValue = BF.GetDefecateValue()
 
 	self.character:getModData().defecateValue = 0.0 --RESET DEFECATE VALUE
 	self.character:getModData().urinateValue = 0.0 --RESET URINE VALUE
 	ISBaseTimedAction.perform(self)
 
 	-- Put back on bottom clothing afterwards
-    BathroomFunctions.ReequipBottomClothing(self.character)
+    BF.ReequipBottomClothing(self.character)
 end
 
 function ToiletDefecate:new(character, time, stopWalk, stopRun, toiletObject)

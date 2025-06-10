@@ -59,18 +59,18 @@ function ToiletUrinate:stop()
 	ISBaseTimedAction.stop(self)
 
 	-- If ending early, don't keep the items stored
-	BathroomFunctions.ResetRemovedClothing(self.character)
+	BF.ResetRemovedClothing(self.character)
 end
 
 function ToiletUrinate:perform()
-	local urinateValue = BathroomFunctions.GetUrinateValue()
+	local urinateValue = BF.GetUrinateValue()
 
 	self.character:getModData().urinateValue = 0.0 --RESET URINE VALUE
 	ISBaseTimedAction.perform(self)
 
 	-- Put back on bottom clothing afterwards
     if self.character:isFemale() == true then
-        BathroomFunctions.ReequipBottomClothing(self.character)
+        BF.ReequipBottomClothing(self.character)
     end
 end
 

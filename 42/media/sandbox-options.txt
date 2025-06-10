@@ -60,12 +60,6 @@ option BF.EnableDiarrhea
     page = Defecation, translation = BF_EnableDiarrhea,
 }
 
-/* Defecation Action Requirements */
-option BF.POOPREQUIREMENTSHeader
-{
-    type = boolean, default = false,
-    page = Defecation, translation = BF_POOPREQUIREMENTSHeader,
-}
 option BF.PoopInToiletRequirement
 {
     type = double, min = 0, max = 100.0, default = 40.0,
@@ -85,12 +79,6 @@ option BF.PoopOnSelfRequirement
     /* Difficult to consciously poop self, even near full. */
 }
 
-/* Defecation Involuntary Settings */
-option BF.POOPSELFHeader
-{
-    type = boolean, default = false,
-    page = Defecation, translation = BF_POOPSELFHeader,
-}
 option BF.CanHavePoopAccident
 {
     type = boolean, default = true,
@@ -101,13 +89,13 @@ option BF.NightPoopAccidents
     type = boolean, default = true,
     page = Defecation, translation = BF_NightPoopAccidents,
 }
+option BF.VisiblePoopStain
+{
+    type = boolean, default = true,
+    page = Defecation, translation = BF_VisiblePoopStain,
+}
 
 /* Defecation Extras */
-option BF.POOPEXTRAHeader
-{
-    type = boolean, default = false,
-    page = Defecation, translation = BF_POOPEXTRAHeader,
-}
 option BF.CreatePoopObject
 {
     type = boolean, default = true,
@@ -118,11 +106,27 @@ option BF.FliesOnPoop
     type = boolean, default = true,
     page = Defecation, translation = BF_FliesOnPoop,
 }
-option BF.VisiblePoopStain
+option BF.EnableFecalFootprints
+{
+    type = enum, default = 1, numValues = 3,
+    page = Defecation, translation = BF_EnableFecalFootprints,
+}
+option BF.EnableDefecationTraits
 {
     type = boolean, default = true,
-    page = Defecation, translation = BF_VisiblePoopStain,
+    page = Defecation, translation = BF_EnableDefecationTraits,
 }
+
+
+
+
+
+
+
+
+
+
+
 
 /* Urination Settings */
 option BF.BladderMaxValue
@@ -143,11 +147,6 @@ option BF.UrinateSpeedMultiplier
 }
 
 /* Urination Action Requirements */
-option BF.PEEREQUIREMENTSHeader
-{
-    type = boolean, default = false,
-    page = Urination, translation = BF_PEEREQUIREMENTSHeader,
-}
 option BF.PeeInToiletRequirement
 {
     type = double, min = 0, max = 100.0, default = 40.0,
@@ -174,11 +173,6 @@ option BF.PeeOnSelfRequirement
 }
 
 /* Urination Involuntary Settings */
-option BF.PEESELFHeader
-{
-    type = boolean, default = false,
-    page = Urination, translation = BF_PEESELFHeader,
-}
 option BF.CanHavePeeAccident
 {
     type = boolean, default = true,
@@ -189,20 +183,20 @@ option BF.NightPeeAccidents
     type = boolean, default = true,
     page = Urination, translation = BF_NightPeeAccidents,
 }
+option BF.VisiblePeeStain
+{
+    type = boolean, default = true,
+    page = Urination, translation = BF_VisiblePeeStain,
+}
 
 /* Urination Extras */
-option BF.PEEEXTRAHeader
-{
-    type = boolean, default = false,
-    page = Urination, translation = BF_PEEEXTRAHeader,
-}
 option BF.CreatePeeObject
 {
     type = boolean, default = true,
     page = Urination, translation = BF_CreatePeeObject,
 }
-option BF.VisiblePeeStain
+option BF.EnableUrinationTraits
 {
     type = boolean, default = true,
-    page = Urination, translation = BF_VisiblePeeStain,
+    page = Urination, translation = BF_EnableUrinationTraits,
 }

@@ -1,3 +1,5 @@
+require "BodilyFunctions"
+
 -- Function to update defecation-related values
 function BF.UpdateDefecationValues()
     local player = getPlayer()

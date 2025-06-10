@@ -1,6 +1,31 @@
 -gotta make SelfUrinate SelfDefecate happen if using ground or toilet action ends too quickly
 
 ==============
+[VERSION 0.12.0]
+==============
+
+- Reorganized Sandbox Menu and implemented custom UI. This means headers and colored backgrounds..
+- Changed "BodilyFunctions" function prefix to "BF"
+
+- Flies now appear on human feces, whether it's on the ground or being held by the player.
+- Standing near feces now applied food sickness (nausea), unhappiness, and new "Bodily Fumes" smell moodle.
+- Human Feces can now be used as fuel for fires.
+- Human Feces can now be turned into "Throwable Human Feces", which can be thrown, picked up, thrown again, and alerts zombies. Cause why the hell not.
+
+- Added "GrassTuft" aka "Grass Cutting" as a wipable item. Required 8 per wipe.
+- Wiped Rags and Grass Cuttings can now be cleaned with the "Wash Soiled Clothing" (now Wash Soiled Items) context menu.
+
+- Added custom smell moodle (Bodily Fumes), for reacting to bodily fluids / functions (farting, poop, etc.)
+- Smell Moodle Values:
+	- Near Feces Pile: 75%
+	- Near Urine Puddle: 40%
+	- Wearing Pooped Pants: 50%
+	- Wearing Peed Pants: 30%
+
+- Lowered time it takes to consume any of the Bodily Functions medicine types
+- Groin (Bladder) starts developing muscle strain after 60% fullness, scaling proportionally.
+
+==============
 [VERSION 0.11.0]
 ==============
 

@@ -1,3 +1,5 @@
+require "BodilyFunctions"
+
 -- Function to update urination-related values
 function BF.UpdateUrinationValues()
     local player = getPlayer()
@@ -51,6 +53,23 @@ function BF.UpdateUrinationValues()
 
     -- Calculate the current percentages for debugging/triggering events.
     local urinatePercent = (urinateValue / baseBladderMax) * 100
+
+    -- Apply muscle strain based on bladder capacity thresholds
+    local muscleStrainAmount = 0
+    if urinateValue >= 0.95 * baseBladderMax then
+        muscleStrainAmount = 90 -- Level 4
+    elseif urinateValue >= 0.90 * baseBladderMax then
+        muscleStrainAmount = 75 -- Level 3
+    elseif urinateValue >= 0.75 * baseBladderMax then
+        muscleStrainAmount = 60 -- Level 2
+    elseif urinateValue >= 0.60 * baseBladderMax then
+        muscleStrainAmount = 10  -- Level 1
+    end
+    if muscleStrainAmount > 0 then
+        BF.PainInBladder(player, muscleStrainAmount)
+        print("Bladder pain applied: " .. muscleStrainAmount .. " (Urinate Value: " .. urinateValue .. "/" .. baseBladderMax .. ")")
+    end
+
 
     print("Updated Urinate Value: " .. tostring(urinatePercent) .. "% (Effective Max: " .. baseBladderMax .. ")")
 end

@@ -1,6 +1,5 @@
 BF = {}
 BF.didFirstTimer = false
-FlySquares = {}
 
 local InventoryUI = require("Starlit/client/ui/InventoryUI")
 
@@ -72,6 +71,14 @@ function BF.UpdateBathroomValues()
 
     BF.UpdateUrinationValues()
     BF.UpdateDefecationValues()
+
+    -- Decay bodily fumes (smell moodle) by 10% every 10 seconds
+    --local currentFumes = BF.GetBodilyFumesValue()
+    --local reducedFumes = currentFumes * 0.9
+    --BF.SetBodilyFumesValue(reducedFumes)
+
+    -- Instantly clear bodily fumes
+    BF.SetBodilyFumesValue(0)
 
 end
 
@@ -798,76 +805,96 @@ end
 function BF.WashingRightClick(player, context, worldObjects)
 	local player = getPlayer()
 
-	local hasSoiledItem = false
-	local soiledItemEquipped = false
-	local soiledItem = nil
+	local hasSoiledClothing = false
+	local soiledClothingEquipped = false
+	local soiledClothing = nil
 	local soapItem = nil
+
+	-- Track soiled rags and GrassTufts, items that can be cleaned after wiping
+    local soiledItems = {}
 
 	for i = 0, player:getInventory():getItems():size() - 1 do
 		local item = player:getInventory():getItems():get(i)
-		
+
 		if item:getType() == "Soap2" then
 			soapItem = item
 		end
 
-		if item:getModData().peed == true or item:getModData().pooped == true then --If peed/pooped item
-			hasSoiledItem = true
-			if (item:isEquipped()) then
-				soiledItemEquipped = true
+		if item:getModData().peed == true or item:getModData().pooped == true then
+			hasSoiledClothing = true
+			if item:isEquipped() then
+				soiledClothingEquipped = true
 			end
-			soiledItem = item
+			soiledClothing = item
 		end
+
+        -- Track soiled rags and grass tufts
+		if item:getType() == "RippedSheetsPooped" or item:getType() == "GrassTuftPooped" then
+			hasSoiledClothing = true
+			table.insert(soiledItems, item)
+		end
+
 	end
 
-	if hasSoiledItem then
+	if hasSoiledClothing then
 		local storeWater = nil
 		local firstObject = nil
-        for i = 1, #worldObjects do
-            if not firstObject then
-                firstObject = worldObjects[i]
-            end
-        end
+
+		for i = 1, #worldObjects do
+			if not firstObject then
+				firstObject = worldObjects[i]
+			end
+		end
 
 		local square = firstObject:getSquare()
 		local worldObjects = square:getObjects()
 		for i = 0, worldObjects:size() - 1 do
 			local object = worldObjects:get(i)
-			if (object:getTextureName() and object:hasWater()) then --Anything that can usually be used to wash
+			if object:getTextureName() and object:hasWater() then --Anything that can usually be used to wash
 				storeWater = object
 			end
 		end
 
-		if storeWater == nil then
-			return
-		end
-		
-		if storeWater:getSquare():DistToProper(player:getSquare()) > 10 then
-			return
-		end
+		if storeWater == nil then return end
+		if storeWater:getSquare():DistToProper(player:getSquare()) > 10 then return end
 
-            -- Check soiled item name
-        if not soiledItem:getModData().originalName then
-            soiledItem:getModData().originalName = soiledItem:getName()
-        end
-
-		local washOption = context:addOptionOnTop("Wash Soiled Clothing", nil, nil)
-        washOption.iconTexture = getTexture("media/ui/PeedSelf.png");
+		local washOption = context:addOptionOnTop("Wash Soiled Items", nil, nil)
+		washOption.iconTexture = getTexture("media/ui/PeedSelf.png")
 		local subMenu = ISContextMenu:getNew(context)
 		context:addSubMenu(washOption, subMenu)
-		local option = subMenu:addOption(soiledItem:getName(), player, BF.WashSoiled, square, soiledItem, soapItem, storeWater, soiledItemEquipped)
 
+		-- Original soiled clothing option
+		if soiledClothing then
+			if not soiledClothing:getModData().originalName then
+				soiledClothing:getModData().originalName = soiledClothing:getName()
+			end
 
-		local waterRemaining = storeWater:getFluidAmount()
-		
-		if (waterRemaining < 15) then
-			option.notAvailable = true --Not enough water
+			local option = subMenu:addOption(soiledClothing:getName(), player, BF.WashSoiled, square, soiledClothing, soapItem, storeWater, soiledClothingEquipped)
+
+			local waterRemaining = storeWater:getFluidAmount()
+			if waterRemaining < 15 then
+				option.notAvailable = true
+			end
+
+			if soiledClothing:getModData().pooped then
+				if soapItem == nil or soapItem:getCurrentUses() <= 0 then
+					option.notAvailable = true
+				end
+			end
 		end
 
-        if soiledItem:getModData().pooped then -- Only require soap if soiled clothing is pooped
+        -- Options for soiled items
+        for _, item in ipairs(soiledItems) do
+            local option = subMenu:addOption(item:getName(), player, BF.WashSoiledItem, square, item, soapItem, storeWater)
+
+            local waterRemaining = storeWater:getFluidAmount()
+            if waterRemaining < 5 then -- Less water needed for items
+                option.notAvailable = true
+            end
+
+            -- Require soap for pooped items
             if soapItem == nil or soapItem:getCurrentUses() <= 0 then
-                option.notAvailable = true -- Not enough soap / no soap
-            else
-                local soapText = "0"
+                option.notAvailable = true
             end
         end
 
@@ -879,6 +906,7 @@ function BF.WashingRightClick(player, context, worldObjects)
 		--option.toolTip = tooltip
 	end
 end
+
 
 function BF.CleaningRightClick(player, context, worldObjects)
     local playerObj = getSpecificPlayer(player)
@@ -939,6 +967,16 @@ function BF.CleaningRightClick(player, context, worldObjects)
             end
         end
     end
+end
+
+function BF.PainInBladder(player, pain)
+	local part = player:getBodyDamage():getBodyPart(BodyPartType.Groin)
+	part:setStiffness(pain)
+end
+
+function BF.PainInColon(player, pain)
+	local part = player:getBodyDamage():getBodyPart(BodyPartType.Torso_Lower)
+	part:setStiffness(pain)
 end
 
 -- =====================================================
@@ -1177,6 +1215,13 @@ function BF.WashSoiled(playerObj, square, soiledItem, bleachItem, storeWater, so
 	end
 	
 	ISTimedActionQueue.add(WashSoiled:new(playerObj, 400, square, soiledItem, bleachItem, storeWater))
+end
+function BF.WashSoiledItem(playerObj, square, soiledItem, bleachItem, storeWater)
+	if not square or not luautils.walkAdj(playerObj, square, true) then
+		return
+	end
+	
+	ISTimedActionQueue.add(WashSoiledItem:new(playerObj, 400, square, soiledItem, bleachItem, storeWater))
 end
 function BF.CleanUrine()
 

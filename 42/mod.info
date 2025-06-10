@@ -2,5 +2,7 @@ name=Bathroom Functions DEV
 poster=poster.png
 id=BFdev
 description=Realism in its harshest form.
+pack=fecal_footsteps
+tiledef=fecal_footsteps 4294
 require=\StarlitLibrary,\MoodleFramework
 icon=icon.png
