@@ -10,5 +10,5 @@ description=Features Defecation & Defecation
 modversion=0.11.1
 url=https://www.fawasinteractive.com
 require=\StarlitLibrary,\MoodleFramework
-incompatible=\bodilyfunctions
+incompatible=\bathroomfunctions
 icon=icon.png

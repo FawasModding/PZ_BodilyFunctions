@@ -1,4 +1,4 @@
-name=Bodily Functions (0.12.0)
+name=Bodily Functions (0.12.2)
 poster=poster.png
 id=bathroomfunctions
 author=Fawas Interactive
@@ -12,5 +12,5 @@ url=https://www.fawasinteractive.com
 pack=fecal_footsteps
 tiledef=fecal_footsteps 4294
 require=\StarlitLibrary,\MoodleFramework
-incompatible=\bodilyfunctionsfallback
+incompatible=\bathroomfunctionsfallback
 icon=icon.png
