@@ -156,8 +156,8 @@ function BathroomCharacterInfo_GUIHandler:render()
     self:setHeightAndParentHeight(WINDOW_HEIGHT)
 
     if SandboxVars.BF then
-        local bladderMax = SandboxVars.BF.BladderMaxValue or 100
-        local bowelsMax = SandboxVars.BF.BowelsMaxValue or 100
+        local bladderMax = SandboxVars.BathroomFunctions.BladderMaxValue or 100
+        local bowelsMax = SandboxVars.BathroomFunctions.BowelsMaxValue or 100
 
         local bladderValue = BF.GetUrinateValue() or 0
         local bladderPercent = bladderValue / bladderMax

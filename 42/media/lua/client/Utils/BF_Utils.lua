@@ -190,14 +190,14 @@ end
 -- =====================================================
 
 function BF.GetMaxBowelValue()
-    --local bowelsMaxValue = SandboxVars.BF.BowelsMaxValue or 500
-    local bowelsMaxValue = SandboxVars.BF.BowelsMaxValue or 100
+    --local bowelsMaxValue = SandboxVars.BathroomFunctions.BowelsMaxValue or 500
+    local bowelsMaxValue = SandboxVars.BathroomFunctions.BowelsMaxValue or 100
 
     return bowelsMaxValue
 end
 function BF.GetMaxBladderValue()
-    --local bladderMaxValue = SandboxVars.BF.BladderMaxValue or 800
-    local bladderMaxValue = SandboxVars.BF.BladderMaxValue or 100
+    --local bladderMaxValue = SandboxVars.BathroomFunctions.BladderMaxValue or 800
+    local bladderMaxValue = SandboxVars.BathroomFunctions.BladderMaxValue or 100
 
     return bladderMaxValue
 end

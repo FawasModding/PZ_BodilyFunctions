@@ -13,19 +13,19 @@ function BF.OverrideSandboxMax()
         local baseBowelsMax  = BF.GetMaxBowelValue()
 
         if player:HasTrait("SmallBladder") then
-            SandboxVars.BF.BladderMaxValue = baseBladderMax * 0.75
+            SandboxVars.BathroomFunctions.BladderMaxValue = baseBladderMax * 0.75
         elseif player:HasTrait("BigBladder") then
-            SandboxVars.BF.BladderMaxValue = baseBladderMax * 1.25
+            SandboxVars.BathroomFunctions.BladderMaxValue = baseBladderMax * 1.25
         end
 
         if player:HasTrait("SmallBowels") then
-            SandboxVars.BF.BowelsMaxValue = baseBowelsMax * 0.75
+            SandboxVars.BathroomFunctions.BowelsMaxValue = baseBowelsMax * 0.75
         elseif player:HasTrait("BigBowels") then
-            SandboxVars.BF.BowelsMaxValue = baseBowelsMax * 1.25
+            SandboxVars.BathroomFunctions.BowelsMaxValue = baseBowelsMax * 1.25
         end
 
-        print("Adjusted Bladder Max Value: " .. SandboxVars.BF.BladderMaxValue)
-        print("Adjusted Bowels Max Value: " .. SandboxVars.BF.BowelsMaxValue)
+        print("Adjusted Bladder Max Value: " .. SandboxVars.BathroomFunctions.BladderMaxValue)
+        print("Adjusted Bowels Max Value: " .. SandboxVars.BathroomFunctions.BowelsMaxValue)
     else
         print("Player not loaded!")
     end
@@ -91,8 +91,8 @@ function BF.HandleInstantAccidents()
     local defecateValue = BF.GetDefecateValue() -- Current bowel level
     local player = getPlayer()
 
-    local bladderMaxValue = SandboxVars.BF.BladderMaxValue or 100 -- Default to 100 if not set
-    local bowelsMaxValue = SandboxVars.BF.BowelsMaxValue or 100 -- Default to 100 if not set
+    local bladderMaxValue = SandboxVars.BathroomFunctions.BladderMaxValue or 100 -- Default to 100 if not set
+    local bowelsMaxValue = SandboxVars.BathroomFunctions.BowelsMaxValue or 100 -- Default to 100 if not set
 
     -- Calculate overflow values
     local bladderThreshold = 0.95 * bladderMaxValue -- 95% of max bladder value
@@ -173,8 +173,8 @@ function BF.HandleUrgencyHiccup()
     local player = getPlayer()
     local urinateValue = BF.GetUrinateValue()
     local defecateValue = BF.GetDefecateValue()
-    local bladderMaxValue = SandboxVars.BF.BladderMaxValue or 500
-    local bowelsMaxValue = SandboxVars.BF.BowelsMaxValue or 800
+    local bladderMaxValue = SandboxVars.BathroomFunctions.BladderMaxValue or 500
+    local bowelsMaxValue = SandboxVars.BathroomFunctions.BowelsMaxValue or 800
 
     local modOptions = PZAPI.ModOptions:getOptions("BF")
 
@@ -442,8 +442,8 @@ function BF.BathroomRightClick(player, context, worldObjects)
     local defecateValue = BF.GetDefecateValue()
 
     -- Retrieve maximum values from SandboxVars
-    local bladderMaxValue = SandboxVars.BF.BladderMaxValue or 100 -- Default to 100 if not set
-    local bowelsMaxValue = SandboxVars.BF.BowelsMaxValue or 100 -- Default to 100 if not set
+    local bladderMaxValue = SandboxVars.BathroomFunctions.BladderMaxValue or 100 -- Default to 100 if not set
+    local bowelsMaxValue = SandboxVars.BathroomFunctions.BowelsMaxValue or 100 -- Default to 100 if not set
 
     local peeOnSelfRequirement = SandboxVars.BF.PeeOnSelfRequirement or 85 -- Default to 85 if not set
     local peeOnGroundRequirement = SandboxVars.BF.PeeOnGroundRequirement or 50 -- Default to 50 if not set
@@ -1030,7 +1030,7 @@ function BF.TriggerToiletUrinate(object, player)
     local player = getPlayer()
     local urinateValue = BF.GetUrinateValue()
     local requirement = SandboxVars.BF.PeeInToiletRequirement or 40
-    local bladderMaxValue = SandboxVars.BF.BladderMaxValue or 100
+    local bladderMaxValue = SandboxVars.BathroomFunctions.BladderMaxValue or 100
     local hasShyBladder = player:HasTrait("ShyBladder")
     local isBeingWatched = BF.IsBeingWatched(player)
 
@@ -1054,7 +1054,7 @@ function BF.TriggerToiletDefecate(object, player, isWiping, wipeType, wipeItem, 
     local player = getPlayer()
     local defecateValue = BF.GetDefecateValue()
     local requirement = SandboxVars.BF.PoopInToiletRequirement or 40
-    local bowelsMaxValue = SandboxVars.BF.BowelsMaxValue or 100
+    local bowelsMaxValue = SandboxVars.BathroomFunctions.BowelsMaxValue or 100
     local hasShyBowels = player:HasTrait("ShyBowels")
     local isBeingWatched = BF.IsBeingWatched(player)
 
@@ -1132,7 +1132,7 @@ function BF.TriggerSelfDefecate(isLeak)
     local player = getPlayer() -- Fetch the current player object
     local defecateValue = BF.GetDefecateValue() -- Current bowel level
     local poopTime = defecateValue / 4 -- Use a quarter of the defecate value so the player isn't locked for long
-    local bowelsMaxValue = SandboxVars.BF.BowelsMaxValue or 100
+    local bowelsMaxValue = SandboxVars.BathroomFunctions.BowelsMaxValue or 100
 
     -- Check if the player has relevant clothing on and apply the "pooped bottoms" effects.
     if BF.HasClothingOn(player, unpack(BF.GetSoilableClothing())) then
@@ -1163,8 +1163,8 @@ function BF.TriggerSelfUrinate(isLeak)
     local peeTime = urinateValue / 4 -- Determine the time based on the bladder level
 
     -- Optionally, you can adjust the bladderMaxValue based on mode.
-    local bladderMaxValue = isLeak and (SandboxVars.BF.BladderMaxValue or 500)
-                                     or (SandboxVars.BF.BladderMaxValue or 100)
+    local bladderMaxValue = isLeak and (SandboxVars.BathroomFunctions.BladderMaxValue or 500)
+                                     or (SandboxVars.BathroomFunctions.BladderMaxValue or 100)
 
     -- Check if player is wearing clothing that can be soiled.
     if BF.HasClothingOn(player, unpack(BF.GetSoilableClothing())) then
