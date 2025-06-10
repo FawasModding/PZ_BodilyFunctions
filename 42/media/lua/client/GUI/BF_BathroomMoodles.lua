@@ -14,8 +14,8 @@ local function CheckBathroomMeters(player)
 		local moodle4 = MF.getMoodle("PeedSelf",playerNum)
 		local moodle5 = MF.getMoodle("BodilyFumes",playerNum)
 
-		local bowelsMaxValue = SandboxVars.BF.BowelsMaxValue or 100 -- Get the max bowel value, default to 100 if not set
-		local bladderMaxValue = SandboxVars.BF.BladderMaxValue or 100 -- Get the max bladder value, default to 100 if not set
+		local bowelsMaxValue = SandboxVars.BathroomFunctions.BowelsMaxValue or 100 -- Get the max bowel value, default to 100 if not set
+		local bladderMaxValue = SandboxVars.BathroomFunctions.BladderMaxValue or 100 -- Get the max bladder value, default to 100 if not set
 
 		local modOptions = PZAPI.ModOptions:getOptions("BF")
 
