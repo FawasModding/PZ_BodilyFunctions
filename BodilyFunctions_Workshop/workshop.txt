@@ -1,6 +1,6 @@
 version=1
 id=3396456841
-title=[B42] Bodily Functions [EA v0.10.1]
+title=[B42] Bodily Functions [EA v0.12.0]
 description=[h1]Bodily Functions[/h1]
 description=[h3]Welcome to a level of realism a surprising amount of people desire. The whole zombie thing isn't tame enough, why not make it worse?[/h3]
 description=
