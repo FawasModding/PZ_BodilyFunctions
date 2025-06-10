@@ -38,7 +38,7 @@ option BF.EnableCoughing
 }
 
 /* Defecation Settings */
-option BF.BowelsMaxValue
+option BathroomFunctions.BowelsMaxValue
 {
     type = double, min = 200.0, max = 1000.0, default = 500.0,
     page = Defecation, translation = BF_BowelsMaxValue,
@@ -129,7 +129,7 @@ option BF.EnableDefecationTraits
 
 
 /* Urination Settings */
-option BF.BladderMaxValue
+option BathroomFunctions.BladderMaxValue
 {
     type = double, min = 400.0, max = 1000.0, default = 800.0,
     page = Urination, translation = BF_BladderMaxValue,
