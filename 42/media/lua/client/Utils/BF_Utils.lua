@@ -1,5 +1,5 @@
 BF_Utils = {}
-BathroomFunctions = {}
+BathroomFunctions = {} -- ! Deprecated
 
 -- Tooltips helper function
 function BF.AddTooltip(option, description)
@@ -48,7 +48,7 @@ function BF.GetUrinateValue()
 
     return urinateValue -- Return the urination value
 end
-function BathroomFunctions.GetUrinateValue() -- ! TEMPORARY FUNCTION FOR MOD COMPATIBILITY, DEPRECATED
+function BathroomFunctions.GetUrinateValue() -- ! TEMPORARY FUNCTION FOR MOD COMPATIBILITY, DEPRECATEDAdd commentMore actions
     return BF.GetUrinateValue()
 end
 --[[
@@ -68,6 +68,7 @@ end
 function BathroomFunctions.GetDefecateValue() -- ! TEMPORARY FUNCTION FOR MOD COMPATIBILITY, DEPRECATED
     return BF.GetDefecateValue()
 end
+
 --[[
 Function to set the player's current urination value
 Ensures the value is a valid number and updates the player's modData.
