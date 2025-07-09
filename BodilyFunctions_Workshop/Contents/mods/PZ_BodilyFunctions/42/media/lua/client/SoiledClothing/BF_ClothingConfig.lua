@@ -1,7 +1,7 @@
 BF_ClothingConfig = {}
 
 BF_ClothingConfig = {
-    soilableLocations = {"UnderwearBottom", "Underwear", "Torso1Legs1", "Legs1", "Pants", "BathRobe", "FullSuit", "FullSuitHead", "FullTop", "BodyCostume", "ShortPants", "ShortsShort", "Pants_Skinny"},
+    soilableLocations = {"UnderwearBottom", "Underwear", "Torso1Legs1", "Legs1", "Pants", "BathRobe", "FullSuit", "FullSuitHead", "FullTop", "BodyCostume", "ShortPants", "ShortsShort"},
     clothingModels = {
         Trousers = {
             types = {"Trousers_Black","Trousers_CamoDesert","Trousers_CamoDesertNew","Trousers_CamoGreen","Trousers_CamoMilius","Trousers_CamoTigerStripe","Trousers_CamoUrban","Trousers_Chef","Trousers_DeerHide","Trousers_Denim_Punk","Trousers_Denim","Trousers_FaunHide","Trousers_Fireman","Trousers_Hide","Trousers_HuntingCamo","Trousers_JeanBaggy_Punk","Trousers_JeanBaggy","Trousers_LeatherBlack","Trousers_LeatherCrafted","Trousers_NavyBlue","Trousers_OliveDrab","Trousers_Padded_HuntingCamo","Trousers_Padded","Trousers_Police","Trousers_PoliceGrey","Trousers_PrisonGuard","Trousers_Ranger","Trousers_Scrubs","Trousers_Shellsuit_Black", "Trousers_Shellsuit_Blue", "Trousers_Shellsuit_Green", "Trousers_Shellsuit_Pink", "Trousers_Shellsuit_Teal", "Trousers_Shellsuit_White", "Trousers_Sheriff", "Trousers_Sport", "Trousers_WhiteTINT", "Trousers", "TrousersMesh_DenimLight"},
