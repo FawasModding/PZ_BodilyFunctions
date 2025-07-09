@@ -4,8 +4,8 @@ end
 
 -- Configuration
 BF_FecalFootprints.Config = {
-    enablePlayerFootsteps = true,  -- Toggle for player footprints
-    enableZombieFootsteps = true,  -- Toggle for zombie footprints
+    enablePlayerFootsteps = false,  -- Toggle for player footprints
+    enableZombieFootsteps = false,  -- Toggle for zombie footprints
     maxFootprints = 200,          -- Max footprints displayed
     footprintLifespan = 4500,     -- Footprint duration (seconds)
     zombieMaxDistance = 25,       -- Max distance for zombie footprints
@@ -279,20 +279,21 @@ end
 BF_FecalFootprints.RegisterEvents = function()
     Events.OnGameStart.Add(BF_FecalFootprints.OnGameStart)
 
+    -- temp disabled till i figure out the black square issue in bloody footprints mod
     -- Set local config bools based on sandbox settings
-    local fecalFootprintsEnum = SandboxVars.BF.EnableFecalFootprints or 1
-    if fecalFootprintsEnum == 1 then
-        BF_FecalFootprints.Config.enablePlayerFootsteps = false
-        BF_FecalFootprints.Config.enableZombieFootsteps = false
-    end
-    if fecalFootprintsEnum == 2 then
-        BF_FecalFootprints.Config.enablePlayerFootsteps = true
-        BF_FecalFootprints.Config.enableZombieFootsteps = false
-    end
-    if fecalFootprintsEnum == 3 then
-        BF_FecalFootprints.Config.enablePlayerFootsteps = true
-        BF_FecalFootprints.Config.enableZombieFootsteps = true
-    end
+    --local fecalFootprintsEnum = SandboxVars.BF.EnableFecalFootprints or 1
+    --if fecalFootprintsEnum == 1 then
+    --    BF_FecalFootprints.Config.enablePlayerFootsteps = false
+    --    BF_FecalFootprints.Config.enableZombieFootsteps = false
+    --end
+    --if fecalFootprintsEnum == 2 then
+    --    BF_FecalFootprints.Config.enablePlayerFootsteps = true
+    --    BF_FecalFootprints.Config.enableZombieFootsteps = false
+    --end
+    --if fecalFootprintsEnum == 3 then
+    --    BF_FecalFootprints.Config.enablePlayerFootsteps = true
+    --    BF_FecalFootprints.Config.enableZombieFootsteps = true
+    --end
 
     -- Apply functionality based on config bools
     if BF_FecalFootprints.Config.enablePlayerFootsteps then

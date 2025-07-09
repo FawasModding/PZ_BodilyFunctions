@@ -34,7 +34,7 @@ function BF.UpdateUrinationValues()
     print("Final bladder multiplier: " .. tostring(finalBladderMultiplier))
 
     -- Retrieve the base maximum capacities (from SandboxVars or defaults).
-    local baseBladderMax = SandboxVars.BF.BladderMaxValue or 600
+    local baseBladderMax = SandboxVars.BathroomFunctions.BladderMaxValue or 600
 
     -- Retrieve the current fill values.
     local urinateValue = BF.GetUrinateValue()

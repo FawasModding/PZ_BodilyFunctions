@@ -1,4 +1,5 @@
 BF_Utils = {}
+BathroomFunctions = {} -- ! Deprecated
 
 -- Tooltips helper function
 function BF.AddTooltip(option, description)
@@ -47,6 +48,9 @@ function BF.GetUrinateValue()
 
     return urinateValue -- Return the urination value
 end
+function BathroomFunctions.GetUrinateValue() -- ! TEMPORARY FUNCTION FOR MOD COMPATIBILITY, DEPRECATEDAdd commentMore actions
+    return BF.GetUrinateValue()
+end
 --[[
 Function to retrieve the player's current defecation value
 If the value isn't set or isn't a valid number, it defaults to 0.0.
@@ -60,6 +64,9 @@ function BF.GetDefecateValue()
     end
 
     return defecateValue -- Return the defecation value
+end
+function BathroomFunctions.GetDefecateValue() -- ! TEMPORARY FUNCTION FOR MOD COMPATIBILITY, DEPRECATED
+    return BF.GetDefecateValue()
 end
 
 --[[
@@ -190,14 +197,14 @@ end
 -- =====================================================
 
 function BF.GetMaxBowelValue()
-    --local bowelsMaxValue = SandboxVars.BF.BowelsMaxValue or 500
-    local bowelsMaxValue = SandboxVars.BF.BowelsMaxValue or 100
+    --local bowelsMaxValue = SandboxVars.BathroomFunctions.BowelsMaxValue or 500
+    local bowelsMaxValue = SandboxVars.BathroomFunctions.BowelsMaxValue or 100
 
     return bowelsMaxValue
 end
 function BF.GetMaxBladderValue()
-    --local bladderMaxValue = SandboxVars.BF.BladderMaxValue or 800
-    local bladderMaxValue = SandboxVars.BF.BladderMaxValue or 100
+    --local bladderMaxValue = SandboxVars.BathroomFunctions.BladderMaxValue or 800
+    local bladderMaxValue = SandboxVars.BathroomFunctions.BladderMaxValue or 100
 
     return bladderMaxValue
 end
