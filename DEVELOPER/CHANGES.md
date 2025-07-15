@@ -15,6 +15,8 @@
 	- Sinks (includes kitchen sinks now)
 - Moved context menu functions to ContextMenu folder in isolated scripts
 
+- Added potentially buggy ShyBladder and ShyBowel trait functionality. With them, you'll be unable to use anything besides a toilet.
+
 ==============
 [VERSION 0.12.0]
 ==============

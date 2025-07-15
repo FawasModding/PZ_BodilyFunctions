@@ -86,4 +86,10 @@ function BF_ReliefPoints.GetWaterTiles()
     return waterTiles
 end
 
+-- Open Windows
+function BF_ReliefPoints.GetOpenWindowTiles()
+    local openWindowTiles = {}
+    return openWindowTiles
+end
+
 return BF_ReliefPoints
