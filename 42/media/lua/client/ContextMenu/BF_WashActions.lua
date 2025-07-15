@@ -1,6 +1,7 @@
 
 function BF.WashingRightClick(player, context, worldObjects)
-	local player = getPlayer()
+	--local player = getPlayer()
+    player = getSpecificPlayer(player)
 
 	local hasSoiledClothing = false
 	local soiledClothingEquipped = false

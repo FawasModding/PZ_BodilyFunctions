@@ -13,6 +13,7 @@
 	- Tree
 	- Water Bodies (river, pond, etc.)
 	- Sinks (includes kitchen sinks now)
+- Moved context menu functions to ContextMenu folder in isolated scripts
 
 ==============
 [VERSION 0.12.0]
