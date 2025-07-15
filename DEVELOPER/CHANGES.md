@@ -1,6 +1,20 @@
 -gotta make SelfUrinate SelfDefecate happen if using ground or toilet action ends too quickly
 
 ==============
+[VERSION 0.13.0]
+==============
+
+- Moved relief points from BF_Lists.lua to BF_ReliefPoints.lua
+- Added / Altered the following relief points:
+	- Bathtub (previously merged with Shower)
+	- Bush
+	- Dumpster
+	- Trash Can
+	- Tree
+	- Water Bodies (river, pond, etc.)
+	- Sinks (includes kitchen sinks now)
+
+==============
 [VERSION 0.12.0]
 ==============
 

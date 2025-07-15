@@ -3,14 +3,14 @@
     "",
     "\\42",
     "\\42\\media",
-    "\\42\\media\\clothing",
-    "\\42\\media\\clothing\\clothingItems",
     "\\42\\media\\lua",
+    "\\42\\media\\lua\\client",
+    "\\42\\media\\lua\\client\\Utils",
     "\\42\\media\\lua\\shared",
     "\\42\\media\\lua\\shared\\Translate",
     "\\42\\media\\lua\\shared\\Translate\\EN",
-    "\\42\\media\\scripts"
+    "\\DEVELOPER"
   ],
-  "SelectedNode": "\\42\\media\\clothing\\clothingItems\\Female_Underpants_Peed.xml",
+  "SelectedNode": "\\42\\media\\lua\\client\\Utils\\BF_ReliefPoints.lua",
   "PreviewInSolutionExplorer": false
 }

@@ -1,4 +1,4 @@
-BF = {}
+BF = BF or {}
 BF.didFirstTimer = false
 
 local InventoryUI = require("Starlit/client/ui/InventoryUI")
@@ -433,10 +433,17 @@ function BF.BathroomRightClick(player, context, worldObjects)
     local worldObjects = square:getObjects()
     local toiletOptionAdded = false
 
-    local toiletTiles = BF.GetToiletTiles()
-    local urinalTiles = BF.GetUrinalTiles()
-    local outhouseTiles = BF.GetOuthouseTiles()
-    local showerTiles = BF.GetShowerTiles()
+    local toiletTiles = BF_ReliefPoints.GetToiletTiles()
+    local urinalTiles = BF_ReliefPoints.GetUrinalTiles()
+    local outhouseTiles = BF_ReliefPoints.GetOuthouseTiles()
+    local showerTiles = BF_ReliefPoints.GetShowerTiles()
+    local bathtubTiles = BF_ReliefPoints.GetBathtubTiles()
+    local bushTiles = BF_ReliefPoints.GetBushTiles()
+    local dumpsterTiles = BF_ReliefPoints.GetDumpsterTiles()
+    local sinkTiles = BF_ReliefPoints.GetSinkTiles()
+    local treeTiles = BF_ReliefPoints.GetTreeTiles()
+    local trashCanTiles = BF_ReliefPoints.GetTrashCanTiles()
+    local waterTiles = BF_ReliefPoints.GetWaterTiles()
 
     local urinateValue = BF.GetUrinateValue()
     local defecateValue = BF.GetDefecateValue()
