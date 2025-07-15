@@ -194,3 +194,96 @@ function BF.UrinateBottoms(leakTriggered)
         end
     end
 end
+
+-- =====================================================
+--
+-- EVENT REGISTRATION
+--
+-- =====================================================
+
+function BF.TriggerToiletUrinate(object, player)
+    local player = getPlayer()
+    local urinateValue = BF.GetUrinateValue()
+    local requirement = SandboxVars.BF.PeeInToiletRequirement or 40
+    local bladderMaxValue = SandboxVars.BathroomFunctions.BladderMaxValue or 100
+    local hasShyBladder = player:HasTrait("ShyBladder")
+    local isBeingWatched = BF.IsBeingWatched(player)
+
+    -- Only allow action if requirements are met
+    if urinateValue < (requirement / 100) * bladderMaxValue then
+        return
+    end
+    if hasShyBladder and isBeingWatched then
+        return
+    end
+
+    -- Proceed with the action
+    ISTimedActionQueue.add(ISWalkToTimedAction:new(player, object))
+    if player:isFemale() == true then
+        BF.RemoveBottomClothing(player)
+    end
+    ISTimedActionQueue.add(ToiletUrinate:new(player, urinateValue, true, true, object))
+end
+
+function BF.TriggerGroundUrinate()
+    local player = getPlayer()
+    local urinateValue = BF.GetUrinateValue()
+    local peeTime = urinateValue
+
+    -- If female, must take off clothing. Males would just unzip their pants.
+    if player:isFemale() == true then
+        -- Remove bottom clothing first
+        BF.RemoveBottomClothing(player)
+    end
+
+    -- Urinate on the ground
+    ISTimedActionQueue.add(GroundUrinate:new(player, peeTime, true, true))
+end
+
+function BF.TriggerSelfUrinate(isLeak)
+    local isLeak = isLeak or false
+    local player = getPlayer() -- Fetch the current player object
+    local urinateValue = BF.GetUrinateValue() -- Current bladder level
+    local peeTime = urinateValue / 4 -- Determine the time based on the bladder level
+
+    -- Optionally, you can adjust the bladderMaxValue based on mode.
+    local bladderMaxValue = isLeak and (SandboxVars.BathroomFunctions.BladderMaxValue or 500)
+                                     or (SandboxVars.BathroomFunctions.BladderMaxValue or 100)
+
+    -- Check if player is wearing clothing that can be soiled.
+    if BF.HasClothingOn(player, unpack(BF.GetSoilableClothing())) then
+        BF.UrinateBottoms(isLeak)  -- Pass in the leak flag.
+    else
+        -- If the player isn't wearing clothing, create the pee object if that option is enabled.
+        if SandboxVars.BF.CreatePeeObject == true then
+            local urineItem = instanceItem("BF.Urine_Hydrated_0")
+            player:getCurrentSquare():AddWorldInventoryItem(urineItem, 0, 0, 0)
+        end
+    end
+
+    -- Enqueue the self-urinate action.
+    -- The last parameter, `isLeak`, tells the timed action to use the leak behavior.
+    ISTimedActionQueue.add(SelfUrinate:new(player, peeTime, false, false, true, false, nil, isLeak))
+
+    if isLeak then
+        print("Leak triggered: Updated Peed Self Value: " .. BF.GetPeedSelfValue())
+    else
+        print("Updated Peed Self Value: " .. BF.GetPeedSelfValue())
+    end
+end
+
+function BF.PeeInContainer(item)
+    local fluidContainer = item:getFluidContainer() -- Access the container
+    local containerCapacity = fluidContainer:getCapacity() * 1000 -- Convert from L to mL (if it's in L)
+    local bladderUrine = BF.GetUrinateValue() -- Get bladder urine amount
+
+    -- Calculate the amount to transfer
+    local amountToFill = math.min(containerCapacity, bladderUrine)
+
+    -- Fill the bottle with the calculated amount
+    fluidContainer:addFluid("Urine", amountToFill)
+
+    -- Update the bladder to reflect the remaining urine
+    local remainingBladderUrine = bladderUrine - amountToFill
+    BF.SetUrinateValue(remainingBladderUrine)
+end

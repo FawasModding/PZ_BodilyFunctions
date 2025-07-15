@@ -171,3 +171,102 @@ function BF.DefecateBottoms(leakTriggered)
         end
     end
 end
+
+-- =====================================================
+--
+-- EVENT REGISTRATION
+--
+-- =====================================================
+
+function BF.TriggerToiletDefecate(object, player, isWiping, wipeType, wipeItem, wipeEfficiency)
+    local player = getPlayer()
+    local defecateValue = BF.GetDefecateValue()
+    local requirement = SandboxVars.BF.PoopInToiletRequirement or 40
+    local bowelsMaxValue = SandboxVars.BathroomFunctions.BowelsMaxValue or 100
+    local hasShyBowels = player:HasTrait("ShyBowels")
+    local isBeingWatched = BF.IsBeingWatched(player)
+
+    if defecateValue < (requirement / 100) * bowelsMaxValue or (hasShyBowels and isBeingWatched) then
+        return
+    end
+
+    ISTimedActionQueue.add(ISWalkToTimedAction:new(player, object))
+    BF.RemoveBottomClothing(player)
+    ISTimedActionQueue.add(ToiletDefecate:new(player, defecateValue * 2, true, true, object))
+    
+    if isWiping then
+        ISTimedActionQueue.add(WipeSelf:new(player, 20, wipeType, wipeItem, "poop"))
+    else
+        -- Apply 5% soiling penalty to worn clothing if not wiping
+        local soilableClothing = BF.GetSoilableClothing()
+        for _, bodyLocation in ipairs(soilableClothing) do
+            local clothingItem = player:getWornItem(bodyLocation)
+            if clothingItem then
+                local modData = clothingItem:getModData()
+                modData.pooped = true
+                modData.poopedSeverity = (modData.poopedSeverity or 0) + 5
+                modData.poopedSeverity = math.min(modData.poopedSeverity, 100)
+            end
+        end
+
+        BF.ResetRemovedClothing(player) -- reset removed clothing
+    end
+end
+
+function BF.TriggerGroundDefecate(isWiping, wipeType, wipeItem, wipeEfficiency)
+    local player = getPlayer()
+    local defecateValue = BF.GetDefecateValue()
+    local poopTime = defecateValue * 2
+
+    BF.RemoveBottomClothing(player)
+    ISTimedActionQueue.add(GroundDefecate:new(player, poopTime, true, true))
+
+    if isWiping then
+        ISTimedActionQueue.add(WipeSelf:new(player, 20, wipeType, wipeItem, "poop"))
+    else
+        -- Apply 5% soiling penalty to worn clothing if not wiping
+        local soilableClothing = BF.GetSoilableClothing()
+        for _, bodyLocation in ipairs(soilableClothing) do
+            local clothingItem = player:getWornItem(bodyLocation)
+            if clothingItem then
+                local modData = clothingItem:getModData()
+                modData.pooped = true
+                modData.poopedSeverity = (modData.poopedSeverity or 0) + 5
+                modData.poopedSeverity = math.min(modData.poopedSeverity, 100)
+            end
+        end
+
+        BF.ResetRemovedClothing(player) -- reset removed clothing
+    end
+end
+
+function BF.TriggerSelfDefecate(isLeak)
+    local isLeak = isLeak or false
+    local player = getPlayer() -- Fetch the current player object
+    local defecateValue = BF.GetDefecateValue() -- Current bowel level
+    local poopTime = defecateValue / 4 -- Use a quarter of the defecate value so the player isn't locked for long
+    local bowelsMaxValue = SandboxVars.BathroomFunctions.BowelsMaxValue or 100
+
+    -- Check if the player has relevant clothing on and apply the "pooped bottoms" effects.
+    if BF.HasClothingOn(player, unpack(BF.GetSoilableClothing())) then
+        BF.DefecateBottoms(isLeak)
+    else
+        -- Optionally, you could create a world object or simply do nothing when no clothing is worn.
+        -- For defecation there may be no object spawned.
+    end
+
+    -- Enqueue the self-defecation timed action.
+    -- The last parameter 'isLeak' determines whether it applies leak behavior.
+    ISTimedActionQueue.add(SelfDefecate:new(player, poopTime, false, false, true, false, nil, isLeak))
+
+    print("Updated Pooped Self Value: " .. BF.GetPoopedSelfValue()) -- Debug print statement
+    if isLeak then
+        print("Leak triggered: Updated Pooped Self Value: " .. BF.GetPoopedSelfValue())
+    else
+        print("Updated Pooped Self Value: " .. BF.GetPoopedSelfValue())
+    end
+
+end
+
+function BF.PoopInContainer(item)
+end
