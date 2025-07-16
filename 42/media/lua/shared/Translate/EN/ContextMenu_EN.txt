@@ -10,6 +10,7 @@ ContextMenu_EN = {
 	ContextMenu_UseGround = "On Ground"
 	ContextMenu_UseSelf = "On Self"
 	ContextMenu_UseToilet = "In Toilet"
+	ContextMenu_UsePodiumToilet = "In Podium Toilet"
 	ContextMenu_UseUrinal = "In Urinal"
 	ContextMenu_UseOuthouse = "In Outhouse"
 	ContextMenu_UseShower = "In Shower"
