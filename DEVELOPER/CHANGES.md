@@ -17,6 +17,8 @@
 
 - Added potentially buggy ShyBladder and ShyBowel trait functionality. With them, you'll be unable to use anything besides a toilet.
 
+- Added "Feces" fluid. This will be used as the primary solution for defecating in containers.
+
 ==============
 [VERSION 0.12.0]
 ==============

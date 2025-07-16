@@ -27,6 +27,33 @@ module BF
         }
     }
 
+    fluid Feces
+    {
+        ColorReference  = Cola,
+        DisplayName     = Fluid_Name_Feces,
+
+        Categories
+        {
+            Hazardous,
+        }
+
+        BlendWhiteList
+        {
+            whitelist = true,
+            categories
+            {
+                Beverage,
+            }
+        }
+
+        Poison
+        {
+            maxEffect         = Medium,
+            minAmount         = 0.2,
+            diluteRatio       = 0.1,
+        }
+    }
+
     fluid FilteredUrine
     {
         ColorReference  = Khaki,
