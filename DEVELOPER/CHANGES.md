@@ -17,7 +17,7 @@
 
 - Added potentially buggy ShyBladder and ShyBowel trait functionality. With them, you'll be unable to use anything besides a toilet.
 
-- Added "Feces" fluid. This will be used as the primary solution for defecating in containers.
+- Added "Feces", "Vomit", "Snot", and "Sweat" fluids. All of these will tie into the mod eventually.
 
 ==============
 [VERSION 0.12.0]
