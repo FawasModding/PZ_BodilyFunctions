@@ -61,4 +61,16 @@ module BF
 		StressChange = 35,
 		UnhappyChange = 90,
 	}
+
+	item Vomit_Green_0
+	{
+		Weight = 1,
+		Type = Food,
+		Icon = HumanVomit,
+		DaysFresh = 0,
+		DisplayName = Vomit Pile,
+		DisplayCategory = Junk,
+		WorldStaticModel = BF.Vomit_Model_Small,
+		Tags = isCompostable;BFHumanVomit,
+	}
 }
