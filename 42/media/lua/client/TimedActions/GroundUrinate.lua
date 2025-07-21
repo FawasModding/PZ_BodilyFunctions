@@ -21,6 +21,9 @@ function GroundUrinate:start()
 		self:setActionAnim("bathroomStandPee")
 	end
 
+	-- Play medium ground pee sound
+	self.sound = self.character:getEmitter():playSound("BF_Pee_Ground_Medium")
+
 end
 
 function GroundUrinate:stop()
@@ -31,14 +34,16 @@ function GroundUrinate:stop()
 end
 
 function GroundUrinate:perform()
+	self:stopSound() -- Stop peeing sound
+
 	local urinateValue = BF.GetUrinateValue()
 
 	if self.character:isFemale() then --Minor detail, but squatting should give more fatigue than standing
 		self.character:getStats():setFatigue(self.character:getStats():getFatigue() + 0.025)
 	end
 
-	getSoundManager():PlayWorldSound("PeeSelf", self.character:getCurrentSquare(), 0, 10, 0, false)
-	--self.character:playSound("PeeSelf")
+	--getSoundManager():PlayWorldSound("BF_Pee_Ground_Medium", self.character:getCurrentSquare(), 0, 10, 0, false)
+	--self.character:playSound("BF_Pee_Ground_Medium")
 
 	if SandboxVars.BF.CreatePeeObject == true then
 		local urineItem = instanceItem("BF.Urine_Hydrated_0")
@@ -52,6 +57,12 @@ function GroundUrinate:perform()
     if self.character:isFemale() == true then
         BF.ReequipBottomClothing(self.character)
     end
+end
+
+function GroundUrinate:stopSound()
+	if self.sound and self.character:getEmitter():isPlaying(self.sound) then
+		self.character:stopOrTriggerSound(self.sound);
+	end
 end
 
 function GroundUrinate:new(character, time, stopWalk, stopRun)

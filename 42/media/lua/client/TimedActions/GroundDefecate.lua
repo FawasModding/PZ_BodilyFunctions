@@ -19,6 +19,8 @@ function GroundDefecate:start()
     self.removedClothing = {}
 
 	self:setActionAnim("bathroomSquat")
+
+	self.sound = self.character:getEmitter():playSound("BF_Poop_Self_Light")
 end
 
 function GroundDefecate:stop()
@@ -34,7 +36,7 @@ function GroundDefecate:perform()
 	-- Add fatigue since the player had to squat to poop
 	self.character:getStats():setFatigue(self.character:getStats():getFatigue() + 0.025)
 
-	getSoundManager():PlayWorldSound("PoopSelf1", self.character:getCurrentSquare(), 0, 10, 0, false)
+	--getSoundManager():PlayWorldSound("BF_Poop_Self_Light", self.character:getCurrentSquare(), 0, 10, 0, false)
 
 	--Manage poop objects, poops should be different dependant on defecate value, diarrhea, and corn
 	if SandboxVars.BF.CreatePoopObject == true then

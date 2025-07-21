@@ -1,0 +1,15 @@
+Most of the sounds are loops.
+
+Have:
+- Medium pee ground sound when peeing on ground.
+- Light pee ground sound when peeing self.
+- Single fart sound when pooping, either self, toilet, or on ground.
+
+Want:
+- Light pee ground sound when peeing with clothes on.
+- Medium pee ground sound when peeing without clothes on (using ground or peeing self without clothes).
+- Light, Medium, Hard based on bladder fullness when using toilet.
+
+- Might be impossible, but dynamically changing from hard, medium, to light when using the bathroom would be good.
+
+- Pooping loops for ground, toilet, and possibly self.

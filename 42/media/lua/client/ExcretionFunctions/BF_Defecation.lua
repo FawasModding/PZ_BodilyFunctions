@@ -164,7 +164,7 @@ function BF.DefecateBottoms(leakTriggered)
     if leakTriggered then
         player:Say(getText("IGUI_announce_SilentOops"))
     else
-        getSoundManager():PlayWorldSound("BF_PoopSelf1", player:getCurrentSquare(), 0, 10, 0.05, false)
+        getSoundManager():PlayWorldSound("BF_Poop_Self_Light", player:getCurrentSquare(), 0, 10, 0.05, false)
         local playerSayStatus = modOptions:getOption("6")
         if playerSayStatus:getValue(1) then
             player:Say(getText("IGUI_announce_IPoopedMyself"))

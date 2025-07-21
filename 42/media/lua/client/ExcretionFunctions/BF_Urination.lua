@@ -187,7 +187,7 @@ function BF.UrinateBottoms(leakTriggered)
     if leakTriggered then
         player:Say(getText("IGUI_announce_SilentOops"))
     else
-        getSoundManager():PlayWorldSound("BF_PeeSelf", player:getCurrentSquare(), 0, 10, 0.2, false)
+        getSoundManager():PlayWorldSound("BF_Pee_Self", player:getCurrentSquare(), 0, 10, 0.2, false)
         local playerSayStatus = modOptions:getOption("6")
         if playerSayStatus:getValue(1) then
             player:Say(getText("IGUI_announce_IPeedMyself"))

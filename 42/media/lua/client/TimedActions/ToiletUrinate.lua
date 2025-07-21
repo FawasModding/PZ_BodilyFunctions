@@ -53,6 +53,9 @@ function ToiletUrinate:start()
 		self:setActionAnim("bathroomStandToilet")
 	end
 
+    -- Play toilet pee loop
+    self.sound = self.character:getEmitter():playSound("BF_Pee_Toilet_Light")
+
 end
 
 function ToiletUrinate:stop()
@@ -60,6 +63,8 @@ function ToiletUrinate:stop()
 
 	-- If ending early, don't keep the items stored
 	BF.ResetRemovedClothing(self.character)
+
+    self:stopSound() -- Stop peeing sound
 end
 
 function ToiletUrinate:perform()
@@ -72,6 +77,12 @@ function ToiletUrinate:perform()
     if self.character:isFemale() == true then
         BF.ReequipBottomClothing(self.character)
     end
+end
+
+function ToiletUrinate:stopSound()
+	if self.sound and self.character:getEmitter():isPlaying(self.sound) then
+		self.character:stopOrTriggerSound(self.sound);
+	end
 end
 
 function ToiletUrinate:new(character, time, stopWalk, stopRun, toiletObject)

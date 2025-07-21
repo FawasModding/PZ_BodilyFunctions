@@ -42,6 +42,9 @@ function ToiletDefecate:start()
 	--Character poops in toilet
 	self:setActionAnim("bathroomSitToilet")
 
+	-- Play poop toilet sound
+    self.sound = self.character:getEmitter():playSound("BF_Poop_Self_Light")
+
 end
 
 function ToiletDefecate:stop()
@@ -49,6 +52,8 @@ function ToiletDefecate:stop()
 
 	-- If ending early, don't keep the items stored
 	BF.ResetRemovedClothing(self.character)
+
+	self:stopSound() -- Stop pooping sound
 end
 
 function ToiletDefecate:perform()
@@ -60,6 +65,12 @@ function ToiletDefecate:perform()
 
 	-- Put back on bottom clothing afterwards
     BF.ReequipBottomClothing(self.character)
+end
+
+function ToiletDefecate:stopSound()
+	if self.sound and self.character:getEmitter():isPlaying(self.sound) then
+		self.character:stopOrTriggerSound(self.sound);
+	end
 end
 
 function ToiletDefecate:new(character, time, stopWalk, stopRun, toiletObject)

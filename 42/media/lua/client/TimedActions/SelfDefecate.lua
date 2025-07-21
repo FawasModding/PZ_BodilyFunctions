@@ -31,10 +31,14 @@ end
 function SelfDefecate:start()
     -- Save the initial defecate value when the action begins.
     self.initialDefecateValue = self.character:getModData().defecateValue or 0
+
+    -- Play poop self sound
+    self.sound = self.character:getEmitter():playSound("BF_Poop_Self_Light")
 end
 
 -- If the action is cancelled or stops early.
 function SelfDefecate:stop()
+    self:stopSound() -- Stop pooping sound
     self:finishDefecation()
     ISBaseTimedAction.stop(self)
 end
@@ -49,6 +53,12 @@ end
 function SelfDefecate:cancel()
     self:finishDefecation()
     return ISBaseTimedAction.cancel(self)
+end
+
+function SelfDefecate:stopSound()
+	if self.sound and self.character:getEmitter():isPlaying(self.sound) then
+		self.character:stopOrTriggerSound(self.sound);
+	end
 end
 
 -- Modified constructor: now includes an extra parameter "isLeak".
