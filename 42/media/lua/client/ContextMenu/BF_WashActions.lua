@@ -3,10 +3,10 @@ function BF.WashingRightClick(player, context, worldObjects)
 	--local player = getPlayer()
     player = getSpecificPlayer(player)
 
-	local hasSoiledClothing = false
+	local hasSoiledItem = false
 	local soiledClothingEquipped = false
 	local soiledClothing = nil
-	local soapItem = nil
+	local cleaningItem = nil
 
 	-- Track soiled rags and GrassTufts, items that can be cleaned after wiping
     local soiledItems = {}
@@ -14,12 +14,12 @@ function BF.WashingRightClick(player, context, worldObjects)
 	for i = 0, player:getInventory():getItems():size() - 1 do
 		local item = player:getInventory():getItems():get(i)
 
-		if item:getType() == "Soap2" then
-			soapItem = item
+		if item:getType() == "Soap2" or item:getType() == "Bleach" or item:getType() == "CleaningLiquid2" then
+			cleaningItem = item
 		end
 
 		if item:getModData().peed == true or item:getModData().pooped == true then
-			hasSoiledClothing = true
+			hasSoiledItem = true
 			if item:isEquipped() then
 				soiledClothingEquipped = true
 			end
@@ -28,13 +28,13 @@ function BF.WashingRightClick(player, context, worldObjects)
 
         -- Track soiled rags and grass tufts
 		if item:getType() == "RippedSheetsPooped" or item:getType() == "GrassTuftPooped" then
-			hasSoiledClothing = true
+			hasSoiledItem = true
 			table.insert(soiledItems, item)
 		end
 
 	end
 
-	if hasSoiledClothing then
+	if hasSoiledItem then
 		local storeWater = nil
 		local firstObject = nil
 
@@ -61,47 +61,60 @@ function BF.WashingRightClick(player, context, worldObjects)
 		local subMenu = ISContextMenu:getNew(context)
 		context:addSubMenu(washOption, subMenu)
 
-		-- Original soiled clothing option
+		-- Soiled CLOTHING Option
 		if soiledClothing then
 			if not soiledClothing:getModData().originalName then
 				soiledClothing:getModData().originalName = soiledClothing:getName()
 			end
 
-			local option = subMenu:addOption(soiledClothing:getName(), player, BF.WashSoiled, square, soiledClothing, soapItem, storeWater, soiledClothingEquipped)
+			local option = subMenu:addOption(soiledClothing:getName(), player, BF.WashSoiled, square, soiledClothing, cleaningItem, storeWater, soiledClothingEquipped)
 
 			local waterRemaining = storeWater:getFluidAmount()
 			if waterRemaining < 15 then
 				option.notAvailable = true
 			end
 
-			if soiledClothing:getModData().pooped then
-				if soapItem == nil or soapItem:getCurrentUses() <= 0 then
-					option.notAvailable = true
-				end
+			-- Estimate post-wash poopedSeverity
+			local currentSeverity = soiledClothing:getModData().poopedSeverity or 0
+			local estimatedSeverity
+
+			if cleaningItem and cleaningItem:getCurrentUses() > 0 then
+				estimatedSeverity = 0
+			elseif currentSeverity > 50 then
+				estimatedSeverity = ZombRand(5, 11)
+			elseif currentSeverity <= 10 then
+				estimatedSeverity = 0
+			else
+				estimatedSeverity = currentSeverity
 			end
+
+			-- Build tooltip with correct markup
+			local toolTip = ISWorldObjectContextMenu.addToolTip()
+			toolTip:setName(soiledClothing:getName())
+
+			local cleaningName = (cleaningItem and (cleaningItem:getDisplayName() or cleaningItem:getName())) or "Water"
+
+			local severityFormatted = string.format("%5.1f%%", estimatedSeverity) -- e.g. 5.0%, 12.3%, 99.9%
+
+			toolTip.description = "Cleaning With: " .. cleaningName .. " | New Severity: " .. severityFormatted
+			option.toolTip = toolTip
+
 		end
 
-        -- Options for soiled items
+        -- Soiled ITEM Option
         for _, item in ipairs(soiledItems) do
-            local option = subMenu:addOption(item:getName(), player, BF.WashSoiledItem, square, item, soapItem, storeWater)
+            local option = subMenu:addOption(item:getName(), player, BF.WashSoiledItem, square, item, cleaningItem, storeWater)
 
             local waterRemaining = storeWater:getFluidAmount()
             if waterRemaining < 5 then -- Less water needed for items
                 option.notAvailable = true
             end
 
-            -- Require soap for pooped items
-            if soapItem == nil or soapItem:getCurrentUses() <= 0 then
-                option.notAvailable = true
-            end
+            -- Require a cleaning item for pooped items
+            --if cleaningItem == nil or cleaningItem:getCurrentUses() <= 0 then
+            --    option.notAvailable = true
+            --end
         end
-
-		--local tooltip = ISWorldObjectContextMenu.BF.AddTooltip()
-		--tooltip.description = getText("ContextMenu_WaterSource") .. ": " .. source
-		--tooltip.description = tooltip.description .. " <LINE> Water: " .. tostring(math.min(waterRemaining, 15)) .. " / " .. tostring(15)
-		--tooltip.description = tooltip.description .. " <LINE> Bleach: " .. bleachText .. " / 0.3"
-		--tooltip.description = tooltip.description .. " <LINE> Dirty: " .. math.ceil(defecatedItem:getDirtyness()) .. " / 100"
-		--option.toolTip = tooltip
 	end
 end
 

@@ -8,7 +8,7 @@
 Function defining all of the soilable clothing.
 ]]--
 function BF.GetSoilableClothing()
-    local bodyLocations = {"UnderwearBottom", "Underwear", "Torso1Legs1", "Legs1", "Pants", "BathRobe", "FullSuit", "FullSuitHead", "FullTop", "BodyCostume", "ShortPants", "ShortsShort"}
+    local bodyLocations = {"UnderwearBottom", "Underwear", "Torso1Legs1", "Legs1", "Pants", "BathRobe", "FullSuit", "FullSuitHead", "FullTop", "BodyCostume", "ShortPants", "ShortsShort", "Pants_Skinny"}
     return bodyLocations
 end
 
@@ -18,7 +18,7 @@ Clothes that need to be removed before using the bathroom. Includes dresses and 
 function BF.GetExcreteObstructiveClothing()
     local bodyLocations = {
     "UnderwearBottom", "Underwear", "Torso1Legs1", "Legs1", "Pants", "BathRobe", "FullSuit", "FullSuitHead", "FullTop", "BodyCostume", "ShortPants", "ShortsShort",
-    "LongDress", "Dress", "LongSkirt", "Skirt"
+    "LongDress", "Dress", "LongSkirt", "Skirt", "Pants_Skinny"
     }
 
     return bodyLocations

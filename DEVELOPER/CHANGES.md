@@ -19,8 +19,14 @@
 
 - Added "Feces", "Vomit", "Snot", and "Sweat" fluids. All of these will tie into the mod eventually.
 
-* Pee loop while peeing
-* Poop loop while pooping
+- Sound Overhaul
+	- Medium pee ground sound when peeing on ground.
+	- Light pee ground sound when peeing self.
+	- Single fart sound when pooping, either self, toilet, or on ground.
+
+- Re-added "Pants_Skinny" body location for soilable clothing (may be buggy)
+
+- 
 
 ==============
 [VERSION 0.12.0]
