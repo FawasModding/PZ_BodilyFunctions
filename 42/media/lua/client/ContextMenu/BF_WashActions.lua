@@ -64,7 +64,7 @@ function BF.WashingRightClick(player, context, worldObjects)
 		-- Soiled CLOTHING Option
 		if soiledClothing then
 			if not soiledClothing:getModData().originalName then
-				soiledClothing:getModData().originalName = soiledClothing:getName()
+				soiledClothing:getModData().originalName = soiledClothing:getScriptItem():getDisplayName()
 			end
 
 			local option = subMenu:addOption(soiledClothing:getName(), player, BF.WashSoiled, square, soiledClothing, cleaningItem, storeWater, soiledClothingEquipped)
