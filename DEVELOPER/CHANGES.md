@@ -19,6 +19,9 @@
 
 - Added "Feces", "Vomit", "Snot", and "Sweat" fluids. All of these will tie into the mod eventually.
 
+* Pee loop while peeing
+* Poop loop while pooping
+
 ==============
 [VERSION 0.12.0]
 ==============
