@@ -65,6 +65,8 @@ function ToiletDefecate:perform()
 
 	-- Put back on bottom clothing afterwards
     BF.ReequipBottomClothing(self.character)
+
+	self:stopSound() -- Stop peeing sound
 end
 
 function ToiletDefecate:stopSound()

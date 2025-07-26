@@ -31,6 +31,8 @@ function GroundUrinate:stop()
 
 	-- If ending early, don't keep the items stored
 	BF.ResetRemovedClothing(self.character)
+
+	self:stopSound() -- Stop peeing sound
 end
 
 function GroundUrinate:perform()

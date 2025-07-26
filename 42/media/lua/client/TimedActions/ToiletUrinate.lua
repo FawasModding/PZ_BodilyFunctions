@@ -77,6 +77,8 @@ function ToiletUrinate:perform()
     if self.character:isFemale() == true then
         BF.ReequipBottomClothing(self.character)
     end
+
+    self:stopSound() -- Stop peeing sound
 end
 
 function ToiletUrinate:stopSound()

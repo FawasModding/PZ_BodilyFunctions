@@ -45,6 +45,7 @@ end
 
 -- At the end of the action.
 function SelfDefecate:perform()
+    self:stopSound() -- Stop pooping sound
     self:finishDefecation()
     ISBaseTimedAction.perform(self)
 end

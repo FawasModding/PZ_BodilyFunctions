@@ -45,6 +45,7 @@ end
 
 -- At the end of the action.
 function SelfUrinate:perform()
+    self:stopSound() -- Stop peeing sound
     self:finishUrination()
     ISBaseTimedAction.perform(self)
 end
