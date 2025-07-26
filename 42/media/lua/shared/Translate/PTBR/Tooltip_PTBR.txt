@@ -1,0 +1,6 @@
+Tooltip_PTBR = {
+    Tooltip_LaxativePill          = "Aumenta o valor intestinal em 20% da capacidade máxima por comprimido.",
+    Tooltip_AntiDiarrhealPill     = "Reduz o valor intestinal em 10% da capacidade máxima por comprimido.",
+    Tooltip_DiureticPill          = "Aumenta o valor da bexiga em 20% da capacidade máxima por comprimido.",
+    Tooltip_AnticholinergicPill   = "Reduz o valor da bexiga em 10% da capacidade máxima por comprimido.",
+}

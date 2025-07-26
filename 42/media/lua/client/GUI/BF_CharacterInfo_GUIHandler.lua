@@ -51,19 +51,19 @@ function BathroomCharacterInfo_GUIHandler:createChildren()
     end
 
     -- Bladder Section
-    local str = getText("Bladder Fullness")
+    local str = getText("IGUI_BladderFullness")
     self.labelBladder = ISLabel:new(barStartPosition + barLength / 2 - textManager:MeasureStringX(font, str) / 2, y, FONT_HGT_SMALL, str, self.TextColor.r, self.TextColor.g, self.TextColor.b, self.TextColor.a, font, true)
     self:addChild(self.labelBladder)
     y = y + FONT_HGT_SMALL + 5
 
     -- Add "Empty" and "Full" labels for bladder bar
-    local bladderEmptyStr = "Empty"
+    local bladderEmptyStr = getText("IGUI_Empty")
     local bladderEmptyWidth = textManager:MeasureStringX(font, bladderEmptyStr)
     local bladderEmptyX = math.max(minLabelX, barStartPosition) -- Ensure not off-screen
     self.labelBladderEmpty = ISLabel:new(bladderEmptyX, y - FONT_HGT_SMALL, FONT_HGT_SMALL, bladderEmptyStr, self.DimmedTextColor.r, self.DimmedTextColor.g, self.DimmedTextColor.b, self.DimmedTextColor.a, font, false)
     self:addChild(self.labelBladderEmpty)
 
-    local bladderFullStr = "Full"
+    local bladderFullStr = getText("IGUI_Full")
     local bladderFullX = barEndPosition - textManager:MeasureStringX(font, bladderFullStr)
     self.labelBladderFull = ISLabel:new(bladderFullX, y - FONT_HGT_SMALL, FONT_HGT_SMALL, bladderFullStr, self.DimmedTextColor.r, self.DimmedTextColor.g, self.DimmedTextColor.b, self.DimmedTextColor.a, font, false)
     self:addChild(self.labelBladderFull)
@@ -81,19 +81,19 @@ function BathroomCharacterInfo_GUIHandler:createChildren()
     y = y + FONT_HGT_SMALL + UI_BORDER_SPACING
 
     -- Bowel Section
-    str = getText("Bowels Fullness")
+    str = getText("IGUI_BowelsFullness")
     self.labelBowel = ISLabel:new(barStartPosition + barLength / 2 - textManager:MeasureStringX(font, str) / 2, y, FONT_HGT_SMALL, str, self.TextColor.r, self.TextColor.g, self.TextColor.b, self.TextColor.a, font, true)
     self:addChild(self.labelBowel)
     y = y + FONT_HGT_SMALL + 5
 
     -- Add "Empty" and "Full" labels for bowel bar
-    local bowelEmptyStr = "Empty"
+    local bowelEmptyStr = getText("IGUI_Empty")
     local bowelEmptyWidth = textManager:MeasureStringX(font, bowelEmptyStr)
     local bowelEmptyX = math.max(minLabelX, barStartPosition)
     self.labelBowelEmpty = ISLabel:new(bowelEmptyX, y - FONT_HGT_SMALL, FONT_HGT_SMALL, bowelEmptyStr, self.DimmedTextColor.r, self.DimmedTextColor.g, self.DimmedTextColor.b, self.DimmedTextColor.a, font, false)
     self:addChild(self.labelBowelEmpty)
 
-    local bowelFullStr = "Full"
+    local bowelFullStr = getText("IGUI_Full")
     local bowelFullX = barEndPosition - textManager:MeasureStringX(font, bowelFullStr)
     self.labelBowelFull = ISLabel:new(bowelFullX, y - FONT_HGT_SMALL, FONT_HGT_SMALL, bowelFullStr, self.DimmedTextColor.r, self.DimmedTextColor.g, self.DimmedTextColor.b, self.DimmedTextColor.a, font, false)
     self:addChild(self.labelBowelFull)

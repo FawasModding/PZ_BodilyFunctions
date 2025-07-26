@@ -1,0 +1,29 @@
+ItemName_PTBR = {
+
+    -- Itens do mod BF (medicamentos e outros)
+    ItemName_BF.AnticholinergicPill = "Pílula Anticolinérgica",
+    ItemName_BF.AntiDiarrhealPillBox = "Caixa de Antidiarreicos",
+    ItemName_BF.AnticholinergicPillBox = "Caixa de Anticolinérgicos",
+    ItemName_BF.DiureticPillBox = "Caixa de Diuréticos",
+    ItemName_BF.LaxativePillBox = "Caixa de Laxantes",
+    ItemName_BF.DiureticPill = "Pílula Diurética",
+    ItemName_BF.LaxativePill = "Pílula Laxante",
+
+    -- Itens relacionados a papel e fezes
+    ItemName_BF.GraphPaperPooped = "Papel Milimetrado (Usado)",
+    ItemName_BF.GrassTuftPooped = "Tufo de Grama (Usado)",
+    ItemName_BF.HumanFeces = "Fezes Humanas",
+    ItemName_BF.HottieZPooped = "Revista: HottieZ (Usada)",
+    ItemName_BF.HunkZPooped = "Revista: Hunkz (Usada)",
+    ItemName_BF.MagazinePooped = "Revista (Usada)",
+    ItemName_BF.NewspaperPooped = "Jornal (Usado)",
+    ItemName_BF.PaperNapkins2Pooped = "Guardanapos (Usados)",
+    ItemName_BF.PaperworkPooped = "Documentos (Usados)",
+    ItemName_BF.PulledDown_Trousers = "Calças Arriadas",
+    ItemName_BF.RippedSheetsPooped = "Pano Rasgado (Usado)",
+    ItemName_BF.ReceiptPooped = "Recibo (Usado)",
+    ItemName_BF.SheetPaper2Pooped = "Folha de Papel (Usada)",
+    ItemName_BF.HumanFeces_Throwable = "Fezes Humanas Lançáveis",
+    ItemName_BF.TissuePooped = "Lenço de Papel (Usado)",
+
+}

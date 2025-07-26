@@ -1,34 +1,101 @@
 ContextMenu_ES = {
+	-- 🧻 Menú principal
 	ContextMenu_BodilyFunctions = "Funciones Corporales",
 	ContextMenu_Urinate = "Orinar",
 	ContextMenu_Defecate = "Defecar",
 
-	ContextMenu_FlushToilet = "Descargar Inodoro",
-	ContextMenu_WipeSelf = "Limpiarse",
-	ContextMenu_WashSoiled = "Lavar Ropa Sucia",
-	ContextMenu_UseGround = "En el Suelo",
-	ContextMenu_UseSelf = "En Uno Mismo",
-	ContextMenu_UseToilet = "En el Inodoro",
-	ContextMenu_UseOuthouse = "En la Letrina",
-	ContextMenu_UseUrinal = "En el Urinario",
-	ContextMenu_UseShower = "En la Ducha / Tina",
-	ContextMenu_UseSink = "En el Lavamanos",
-	ContextMenu_UseContainer = "En un Recipiente",
-
+	-- 💩 Acciones
 	ContextMenu_Pee = "Hacer Pis",
 	ContextMenu_Poop = "Hacer Popó",
 	ContextMenu_Peed = "Hizo Pis",
 	ContextMenu_Pooped = "Hizo Popó",
 
+	-- 🚻 Lugares de uso
+	ContextMenu_UseGround = "En el Suelo",
+	ContextMenu_UseSelf = "En Uno Mismo",
+	ContextMenu_UseToilet = "En el Inodoro",
+	ContextMenu_UsePodiumToilet = "En el Inodoro de Podio",
+	ContextMenu_UseUrinal = "En el Urinario",
+	ContextMenu_UseOuthouse = "En la Letrina",
+	ContextMenu_UseShower = "En la Ducha",
+	ContextMenu_UseBathtub = "En la Tina",
+	ContextMenu_UseBush = "En el Arbusto",
+	ContextMenu_UseDumpster = "En el Contenedor de Basura",
+	ContextMenu_UseSink = "En el Lavamanos",
+	ContextMenu_UseTree = "Contra el Árbol",
+	ContextMenu_UseTrashCan = "En el Bote de Basura",
+	ContextMenu_UseWater = "En el Agua",
+	ContextMenu_UseContainer = "En un Recipiente",
+
+	-- 💬 Descripciones (con requisitos)
+	ContextMenu_tooltip_PeeGround = "Orinar en el suelo. (Requiere %d%%)",
+	ContextMenu_tooltip_PoopGround = "Defecar en el suelo. (Requiere %d%%)",
+	ContextMenu_tooltip_PeeSelf = "Orinarse encima. Pocas situaciones lo justifican. (Requiere %d%%)",
+	ContextMenu_tooltip_PoopSelf = "Defecarse encima. Pocas situaciones lo justifican. (Requiere %d%%)",
+	ContextMenu_tooltip_PeeToilet = "Orinar en el inodoro. (Requiere %d%%)",
+	ContextMenu_tooltip_PoopToilet = "Defecar en el inodoro. (Requiere %d%%)",
+	ContextMenu_tooltip_PeeUrinal = "Orinar en el urinario. (Requiere %d%%)",
+	ContextMenu_tooltip_PoopUrinal = "Ni se te ocurra.",
+	ContextMenu_tooltip_PeeOuthouse = "Orinar en la letrina. (Requiere %d%%)",
+	ContextMenu_tooltip_PoopOuthouse = "Defecar en la letrina. (Requiere %d%%)",
+	ContextMenu_tooltip_PeeSink = "Orinar en el lavamanos. (Requiere %d%%)",
+	ContextMenu_tooltip_PeeShower = "Orinar en la ducha. (Requiere %d%%)",
+	ContextMenu_tooltip_PeeBathtub = "Orinar en la tina. (Requiere %d%%)",
+	ContextMenu_tooltip_PeeBush = "Orinar en el arbusto. (Requiere %d%%)",
+	ContextMenu_tooltip_PoopBush = "Defecar en el arbusto. (Requiere %d%%)",
+	ContextMenu_tooltip_PeeTree = "Orinar contra el árbol. (Requiere %d%%)",
+	ContextMenu_tooltip_PeeWater = "Orinar en el agua. (Requiere %d%%)",
+	ContextMenu_tooltip_PoopWater = "Defecar en el agua. (Requiere %d%%)",
+	ContextMenu_tooltip_PeeTrashCan = "Orinar en el bote de basura. (Requiere %d%%)",
+	ContextMenu_tooltip_PoopTrashCan = "Defecar en el bote de basura. (Requiere %d%%)",
+	ContextMenu_tooltip_PeeDumpster = "Orinar en el contenedor. (Requiere %d%%)",
+	ContextMenu_tooltip_PoopDumpster = "Defecar en el contenedor. (Requiere %d%%)",
+	ContextMenu_tooltip_PeeOpenWindow = "Orinar por la ventana abierta. (Requiere %d%%)",
+	ContextMenu_tooltip_PeeContainer = "Orinar en un recipiente. (Requiere %d%%)",
+
+	-- 🫣 Timidez
+	ContextMenu_tooltip_ShyPee = "Eres demasiado tímido para orinar en público.",
+	ContextMenu_tooltip_ShyPoop = "Eres demasiado tímido para defecar en público.",
+	ContextMenu_tooltip_ShyPeeSelf = "Eres demasiado tímido para orinarte, incluso estando solo.",
+	ContextMenu_tooltip_ShyPoopSelf = "Eres demasiado tímido para defecarte, incluso estando solo.",
+	ContextMenu_tooltip_ShyPeeUrinal = "Eres demasiado tímido para usar el urinario.",
+	ContextMenu_tooltip_ShyPeeSink = "Eres demasiado tímido para orinar en el lavamanos.",
+	ContextMenu_tooltip_ShyPeeShower = "Eres demasiado tímido para orinar en la ducha.",
+	ContextMenu_tooltip_ShyPeeBathtub = "Eres demasiado tímido para orinar en la tina.",
+	ContextMenu_tooltip_ShyPeeBush = "Eres demasiado tímido para orinar en el arbusto.",
+	ContextMenu_tooltip_ShyPoopBush = "Eres demasiado tímido para defecar en el arbusto.",
+	ContextMenu_tooltip_ShyPeeTree = "Eres demasiado tímido para orinar contra el árbol.",
+	ContextMenu_tooltip_ShyPeeWater = "Eres demasiado tímido para orinar en el agua.",
+	ContextMenu_tooltip_ShyPoopWater = "Eres demasiado tímido para defecar en el agua.",
+	ContextMenu_tooltip_ShyPeeTrashCan = "Eres demasiado tímido para orinar en el bote de basura.",
+	ContextMenu_tooltip_ShyPoopTrashCan = "Eres demasiado tímido para defecar en el bote de basura.",
+	ContextMenu_tooltip_ShyPeeDumpster = "Eres demasiado tímido para orinar en el contenedor.",
+	ContextMenu_tooltip_ShyPoopDumpster = "Eres demasiado tímido para defecar en el contenedor.",
+	ContextMenu_tooltip_ShyPeeOpenWindow = "Eres demasiado tímido para orinar por la ventana.",
+	ContextMenu_tooltip_ShyPeeContainer = "Eres demasiado tímido para orinar en un recipiente.",
+
+	-- 🧼 Higiene
 	ContextMenu_DontWipe = "No Limpiarse",
 	ContextMenu_WipeWith = "Limpiar con: ",
+	ContextMenu_WipeSelf = "Limpiarse",
+	ContextMenu_WashSoiled = "Lavar Ropa Sucia",
+	ContextMenu_WashSoiledItems = "Lavar Objetos Sucios",
 
+	-- 🧽 Consejos de limpieza
 	ContextMenu_tooltip_WipeDrainable = "Usar un objeto drenable reducirá sus usos en 1.",
 	ContextMenu_tooltip_WipeOther = "Usar un papel aleatorio te dará un equivalente basura.",
 	ContextMenu_tooltip_WipeClothing = "Usar una prenda la ensuciará.",
 
+	-- 🚽 Extra
+	ContextMenu_FlushToilet = "Descargar Inodoro",
+
+	-- 💊 Medicina
 	ContextMenu_Take_AntiDiarrhealPill = "Tomar Antidiarreico",
 	ContextMenu_Take_LaxativePill = "Tomar Laxante",
 	ContextMenu_Take_DiureticPill = "Tomar Diurético",
 	ContextMenu_Take_AnticholinergicPill = "Tomar Anticolinérgico",
+
+	-- 📊 Indicadores en ropa
+	ContextMenu_Tooltip_Urinated = "Orinado:",
+	ContextMenu_Tooltip_Defecated = "Defecado:",
 }

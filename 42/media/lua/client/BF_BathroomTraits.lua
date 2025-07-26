@@ -2,34 +2,28 @@ require('NPCs/MainCreationMethods');
 local function initBathroomTraits()	
 
 	-- Bladder Traits
-	local smallBladder = TraitFactory.addTrait("SmallBladder", "Small Bladder", -1, "Bladder fills quicker and more urgently.", false)
-	local bedwetter = TraitFactory.addTrait("Bedwetter", "Bedwetter", -3, "Involuntary urination while asleep", false)
-	local urinaryIncontinence = TraitFactory.addTrait("UrinaryIncontinence", "Urinary Incontinence", -5, "Poor bladder control in general.", false)
-	local paruresis = TraitFactory.addTrait("Paruresis", "Paruresis", -4, "Urination is difficult when near zombies or players.", false)
-	local shyBladder = TraitFactory.addTrait("ShyBladder", "Shy Bladder", -6, "Urination is difficult without using the toilet.", false)
+    TraitFactory.addTrait("SmallBladder", getText("UI_trait_SmallBladder"), -1, getText("UI_trait_SmallBladderDesc"), false)
+    TraitFactory.addTrait("Bedwetter", getText("UI_trait_Bedwetter"), -3, getText("UI_trait_BedwetterDesc"), false)
+    TraitFactory.addTrait("UrinaryIncontinence", getText("UI_trait_UrinaryIncontinence"), -5, getText("UI_trait_UrinaryIncontinenceDesc"), false)
+    TraitFactory.addTrait("Paruresis", getText("UI_trait_Paruresis"), -4, getText("UI_trait_ParuresisDesc"), false)
+    TraitFactory.addTrait("ShyBladder", getText("UI_trait_ShyBladder"), -6, getText("UI_trait_ShyBladderDesc"), false)
+    TraitFactory.addTrait("BigBladder", getText("UI_trait_BigBladder"), 1, getText("UI_trait_BigBladderDesc"), false)
+    TraitFactory.addTrait("BladderControl", getText("UI_trait_BladderControl"), 3, getText("UI_trait_BladderControlDesc"), false)
 
-	local bigBladder = TraitFactory.addTrait("BigBladder", "Large Bladder", 1, "Bladder takes longer to fill.", false, false)
-	local bladderControl = TraitFactory.addTrait("BladderControl", "Bladder Control", 3, "75% chance to stop urination 5% of the way through peeing self.", false)
+    -- Bowel Traits
+    TraitFactory.addTrait("SmallBowels", getText("UI_trait_SmallBowels"), -1, getText("UI_trait_SmallBowelsDesc"), false)
+    TraitFactory.addTrait("Bedsoiler", getText("UI_trait_Bedsoiler"), -3, getText("UI_trait_BedsoilerDesc"), false)
+    TraitFactory.addTrait("FecalIncontinence", getText("UI_trait_FecalIncontinence"), -6, getText("UI_trait_FecalIncontinenceDesc"), false)
+    TraitFactory.addTrait("Parcopresis", getText("UI_trait_Parcopresis"), -4, getText("UI_trait_ParcopresisDesc"), false)
+    TraitFactory.addTrait("ShyBowels", getText("UI_trait_ShyBowels"), -5, getText("UI_trait_ShyBowelsDesc"), false)
+    TraitFactory.addTrait("BigBowels", getText("UI_trait_BigBowels"), 1, getText("UI_trait_BigBowelsDesc"), false)
+    TraitFactory.addTrait("BowelControl", getText("UI_trait_BowelControl"), 3, getText("UI_trait_BowelControlDesc"), false)
 
-	-- Bowel Traits
-	local smallBowels = TraitFactory.addTrait("SmallBowels", "Small Bowels", -1, "Bowels fill quicker and more urgently.", false)
-	local bedsoiler = TraitFactory.addTrait("Bedsoiler", "Bedpooper", -3, "Involuntary defecation while asleep", false)
-	local fecalIncontinence = TraitFactory.addTrait("FecalIncontinence", "Fecal Incontinence", -6, "Poor bowel control in general.", false)
-	local parcopresis = TraitFactory.addTrait("Parcopresis", "Parcopresis", -4, "Defecation is difficult when near zombies or players.", false)
-	local shyBowels = TraitFactory.addTrait("ShyBowels", "Shy Bowels", -5, "Defecation is difficult without using the toilet.", false)
-
-	local bigBowels = TraitFactory.addTrait("BigBowels", "Large Bowels", 1, "Bowels take longer to fill.", false)
-	local bowelControl = TraitFactory.addTrait("BowelControl", "Bowel Control", 3, "75% chance to stop defecation 5% of the way through pooping self.", false)
-
-	-- Mutual Exclusives
-
-	-- Bladder-related
-	TraitFactory.setMutualExclusive("SmallBladder", "BigBladder") -- Can't have a small and big bladder at once 
-	TraitFactory.setMutualExclusive("UrinaryIncontinence", "BladderControl")  -- Can't be incontinent and have control
-
-	-- Bowel-related
-	TraitFactory.setMutualExclusive("SmallBowels", "BigBowels") -- Can't have a small and big bowels at once 
-	TraitFactory.setMutualExclusive("FecalIncontinence", "BowelControl")  -- Can't be incontinent and have control
+    -- Mutual Exclusives
+    TraitFactory.setMutualExclusive("SmallBladder", "BigBladder")
+    TraitFactory.setMutualExclusive("UrinaryIncontinence", "BladderControl")
+    TraitFactory.setMutualExclusive("SmallBowels", "BigBowels")
+    TraitFactory.setMutualExclusive("FecalIncontinence", "BowelControl")
 
 
 	--local strongBladder = TraitFactory.addTrait("StrongBladder", getText("Traits_StrongBladder"), 4, getText("Traits_StrongBladder_description"), false, false);

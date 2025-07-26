@@ -24,9 +24,13 @@
 	- Light pee ground sound when peeing self.
 	- Single fart sound when pooping, either self, toilet, or on ground.
 
-- Re-added "Pants_Skinny" body location for soilable clothing (may be buggy)
+- Re-added "Pants_Skinny" body location for soilable clothing (may be buggy) -- Disabled in PREVIEW for now
 
-- 
+- Added support for Bleach and CleaningLiquid2 as cleaning items in addition to Soap2.
+- Washing logic now estimates and displays post-wash severity if no cleaning item is available, and partially cleans items based on severity.
+
+- Moved most direct language instances in code to translation keys in scripts. This is partly based on the mod by Não é o Gui.
+- Added [Brazilian Portuguese] translation from "Bodily Functions (Brazilian Portuguese)" by Não é o Gui.
 
 ==============
 [VERSION 0.12.0]
