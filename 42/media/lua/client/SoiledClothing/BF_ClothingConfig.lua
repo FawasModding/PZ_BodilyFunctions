@@ -40,3 +40,84 @@ BF_ClothingConfig = {
         }
     }
 }
+
+-- ================================================================================== --
+-- ========================= FOR ADDON MODDERS ====================================== --
+-- ================================================================================== --
+
+-- Registers a new clothing category with soil overlays (pee/poop) in the BF_ClothingConfig table.
+-- @param name: The name/key of the clothing category (ex "Trousers", "UtilitySuitSTF").
+-- @param data: A table containing 'types', 'peeOverlay', and 'poopOverlay'.
+function BF_RegisterClothingCategory(name, data)
+    if not BF_ClothingConfig then return end
+    if not BF_ClothingConfig.clothingModels then
+        BF_ClothingConfig.clothingModels = {}
+    end
+
+    -- Avoid overwriting existing category
+    if BF_ClothingConfig.clothingModels[name] then
+        print("BF_RegisterClothingCategory: '" .. name .. "' already exists. Skipping.")
+        return
+    end
+
+    BF_ClothingConfig.clothingModels[name] = data
+    print("BF_RegisterClothingCategory: Registered category '" .. name .. "'")
+end
+
+-- EXAMPLE
+-- Events.OnInitGlobalModData.Add(function()
+--     if BF_RegisterClothingCategory then
+--         BF_RegisterClothingCategory("UtilitySuitSTF", {
+--             types = { "Utility_Suit_STF" },
+--             peeOverlay = "STF.Utility_Suit_STF_Peed",
+--             poopOverlay = "STF.Utility_Suit_STF_Pooped"
+--         })
+--     end
+-- end)
+
+
+-- Adds a new body location string to the list of soilable clothing locations.
+-- This is used to determine which body location slots can receive pee/poop overlays.
+-- @param location: A string body location name (ex. "Pants", "UnderwearBottom").
+function BF_AddSoilableLocation(location)
+    if not BF_ClothingConfig then return end
+    if not BF_ClothingConfig.soilableLocations then
+        BF_ClothingConfig.soilableLocations = {}
+    end
+
+    -- Prevent duplicates
+    for _, loc in ipairs(BF_ClothingConfig.soilableLocations) do
+        if loc == location then return end
+    end
+
+    table.insert(BF_ClothingConfig.soilableLocations, location)
+    print("BF_AddSoilableLocation: Added '" .. location .. "'")
+end
+
+-- Adds one or more clothing item type strings to an existing category.
+-- Prevents duplicates and ensures the category exists before adding.
+-- @param category: The clothing category name to modify.
+-- @param newTypes: A list of string item type names to add (ex. "Trousers_Chef").
+function BF_AddClothingTypesToCategory(category, newTypes)
+    if not BF_ClothingConfig or not BF_ClothingConfig.clothingModels then return end
+    local model = BF_ClothingConfig.clothingModels[category]
+    if not model or not model.types then return end
+
+    for _, newType in ipairs(newTypes) do
+
+        -- Check if this type already exists in the category
+        local exists = false
+        for _, existingType in ipairs(model.types) do
+            if existingType == newType then
+                exists = true
+                break
+            end
+        end
+
+        -- Only add if not already present
+        if not exists then
+            table.insert(model.types, newType)
+            print("BF_AddClothingTypesToCategory: Added type '" .. newType .. "' to '" .. category .. "'")
+        end
+    end
+end
