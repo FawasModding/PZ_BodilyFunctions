@@ -1,0 +1,88 @@
+version=1
+id=3529109383
+title=Bodily Functions [PREVIEW v0.13.0]
+description=[h1][b]? Bodily Functions ?[/b][/h1]
+description=
+description=[h3][i]Welcome to a level of realism a surprising amount of people desire.[/i][/h3]
+description=[h3][i]The whole zombie thing isn't tame enough, why not make it worse?[/i][/h3]
+description=
+description==============================================================
+description=[url=https://github.com/FawasInteractive/PZ_BodilyFunctions/issues]? Report Bugs / Give Feedback (GitHub)[/url]
+description==============================================================
+description=
+description=[h3]?? Disclaimers[/h3]
+description=[list]
+description=[*][b]Early Access[/b]: Actively in development. Expect and please report occasional bugs.
+description=[*][b]New Save Recommended[/b]: SHOULD work fine with existing saves, but issues might still arise.
+description=[*][b]No B41 Support[/b]: For Build 42+ only. For B41, try [url=https://steamcommunity.com/sharedfiles/filedetails/?id=1436878551]Defecation Mod[/url] or [url=https://steamcommunity.com/sharedfiles/filedetails/?id=2708312917]Urination Mod[/url].
+description=[*][b]Some Features WIP[/b]: Options marked with * aren't implemented yet.
+description=[*][b]Modular Mechanics[/b]: Individual bodily function mechanics can be toggled on/off in sandbox settings. Eventually, these may be split into separate mods (e.g., Bathroom Functions - Urination, Bathroom Functions - Defecation).
+description=[/list]
+description=
+description=[hr][/hr]
+description=[h2]? Current Features[/h2]
+description=[list]
+description=[*][b]? Urination System[/b] � [i]Bladder mechanics with pee needs and puddles[/i]
+description=[*][b]? Defecation System[/b] � [i]Bowel mechanics with poop needs and feces[/i]
+description=
+description=[*][b]? Excretion Health GUI[/b] � [i]Track bladder and bowel urgency[/i]
+description=[*][b]? Moodles[/b] � [i]Urge indicators and soiled clothing effects[/i]
+description=[*][b]? Surface Support[/b] � [i]Use toilets, urinals, outhouses, or the ground[/i]
+description=[*][b]? Containers[/b] � [i]Pee in bottles or jars[/i]
+description=[*][b]? Clothing Effects[/b] � [i]Textures, moodles, and penalties for soiling[/i]
+description=[*][b]? Urine Puddles & ? Feces[/b] � [i]Physical impacts of your bodily functions[/i]
+description=[*][b]?? Urgency Hiccups[/b] � [i]Random animations, sounds, and accident chance when urge is high[/i]
+description=[*][b]? New Traits[/b] � [i]Traits that affect bladder and bowel capacity[/i]
+description=[*][b]? Wiping System[/b] � [i]Optional, skipping causes problems[/i]
+description=[/list]
+description=
+description=[h2]? Planned Features (Highlights)[/h2]
+description=[list]
+description=[*][b]? Pull-down Pants / Clothing[/b]
+description=[*][b]? Vomiting System[/b] � [i]Emesis Mechanic[/i]
+description=[*][b]? Farting System[/b] � [i]Flatulation Mechanic[/i]
+description=[*][b]? Burping System[/b] � [i]Eructation Mechanic[/i]
+description=[*][b]? Sneezing System[/b] � [i]Sternutation Mechanic[/i]
+description=[*][b]? Coughing System[/b] � [i]Tussis Mechanic[/i]
+description=[/list]
+description=
+description=[hr][/hr]
+description=[h2]? Known Issues[/h2]
+description=[list]
+description=[*][b]Moodle Conflict[/b] with Lifestyle mod UI.
+description=[/list]
+description=
+description=[hr][/hr]
+description=[h2]?? How to Use[/h2]
+description=[list]
+description=[*][b]Check Needs[/b]: Open player menu > [b]Excretion[/b] tab.
+description=[*][b]Relieve Yourself[/b]: Right-click near valid surfaces.
+description=[*][b]Watch for Urges[/b]: Moodles and animations give warnings. Jog to cancel.
+description=[*][b]Cleaning Up[/b]:
+description=[list]
+description=[*][b]Pee[/b]: Water only.
+description=[*][b]Poop[/b]: Soap + water.
+description=[/list]
+description=[/list]
+description=
+description=[hr][/hr]
+description=[h3]? Thanks & Credits[/h3]
+description=[list]
+description=[*][b]NICETRY[/b]: Major contributions and inspiration.
+description=[*][b]RSilience[/b]: Creator of "Bodily Functions Remixed", provided tons of code and improvements.
+description=[*][b]nigel[/b]: Helped with toilet interaction code.
+description=[/list]
+description=
+description=[h3]?Discord & Donations[/h3]
+description=
+description=[quote=MonkeyShark]Feel free to join this Discord server for my game, software, and mod development, as well as a community with similar interests.[/quote]
+description=[url=https://discord.gg/2ZdPVnZAxu][img]https://www.fawasinteractive.com/images/Blogs/Thumbnails/FawasInteractiveNewLogo.jpg[/img][/url]
+description=
+description=[quote=MonkeyShark] Any donations would be greatly appreciated. Not much of the work I do gets any monetary gain, and I usually feel like I'm being extremely unproductive, so even $1 would make me feel a lot better about it :)[/quote]
+description=
+description=[url=https://ko-fi.com/fawasinteractive][img]https://cdn.prod.website-files.com/5c14e387dab576fe667689cf/670f5a02fcf48af59c591185_support_me_on_kofi_dark.png[/img][/url]
+description=
+description=[b]Workshop ID:[/b] 3396456841
+description=[b]Mod ID:[/b] bathroomfunctions
+tags=Build 42;Hardmode;Realistic;Silly/Fun;WIP
+visibility=public
