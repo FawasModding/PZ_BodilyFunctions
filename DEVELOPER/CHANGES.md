@@ -32,6 +32,11 @@
 - Moved most direct language instances in code to translation keys in scripts. This is partly based on the mod by Não é o Gui.
 - Added [Brazilian Portuguese] translation from "Bodily Functions (Brazilian Portuguese)" by Não é o Gui.
 
+- Added functions to BF_ClothingConfig to make adding compatibility with clothing mods (using the overlays) easier:
+[  BF_RegisterClothingCategory(name, data)  ]
+[  BF_AddSoilableLocation(location)]
+[  BF_AddClothingTypesToCategory(category, newTypes)  ]
+
 ==============
 [VERSION 0.12.0]
 ==============
@@ -56,11 +61,6 @@
 
 - Lowered time it takes to consume any of the Bodily Functions medicine types
 - Groin (Bladder) starts developing muscle strain after 60% fullness, scaling proportionally.
-
-- Added functions to BF_ClothingConfig to make adding compatibility with clothing mods (using the overlays) easier:
-[  BF_RegisterClothingCategory(name, data)  ]
-[  BF_AddSoilableLocation(location)]
-[  BF_AddClothingTypesToCategory(category, newTypes)  ]
 
 ==============
 [VERSION 0.11.0]
