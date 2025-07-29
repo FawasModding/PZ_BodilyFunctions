@@ -121,12 +121,12 @@ function BF.DefecateBottoms(leakTriggered)
 
         -- Apply overlay if severity meets threshold
         if SandboxVars.BF.VisiblePoopStain and (not leakTriggered or modData.poopedSeverity >= 25) then
-            BF_ClothingOverlays.equipOverlay(player, underwear, "pooped", "PoopedOverlay_Underwear")
+            BF_Overlays.ApplyOverlayToSlot(player, underwear, "pooped", "PoopedOverlay_Underwear")
         end
 
         -- Update clothing properties
-        BF.SetClothing(underwear, leakTriggered)
-        BF.UpdateSoiledSeverity(underwear)
+        BF.ApplySoilingEffects(underwear, leakTriggered)
+        BF.RefreshSoiledSeverityFromModData(underwear)
 
         if modData.poopedSeverity >= 90 then showPoopObject = true end
     end
@@ -149,12 +149,12 @@ function BF.DefecateBottoms(leakTriggered)
 
         -- Apply overlay if severity meets threshold
         if SandboxVars.BF.VisiblePoopStain and (not leakTriggered or modData.poopedSeverity >= 25) then
-            BF_ClothingOverlays.equipOverlay(player, pants, "pooped", "PoopedOverlay_Pants")
+            BF_Overlays.ApplyOverlayToSlot(player, pants, "pooped", "PoopedOverlay_Pants")
         end
 
         -- Update clothing properties
-        BF.SetClothing(pants, leakTriggered)
-        BF.UpdateSoiledSeverity(pants)
+        BF.ApplySoilingEffects(pants, leakTriggered)
+        BF.RefreshSoiledSeverityFromModData(pants)
 
         if modData.poopedSeverity >= 90 then showPoopObject = true end
     end

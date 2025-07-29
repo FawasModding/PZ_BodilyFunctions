@@ -25,10 +25,10 @@ function BF.DirtyBottomsEffects()
     for i = 0, player:getWornItems():size() - 1 do
         local item = player:getWornItems():getItemByIndex(i)
 
-        -- Ensure the item is not nil before calling UpdateSoiledSeverity
+        -- Ensure the item is not nil before calling RefreshSoiledSeverityFromModData
         if item ~= nil then
             -- Update values for pooped and peed states based on item mod data
-            local itemUpdatedPooped, itemUpdatedPeed = BF.UpdateSoiledSeverity(item)
+            local itemUpdatedPooped, itemUpdatedPeed = BF.RefreshSoiledSeverityFromModData(item)
 
             -- Accumulate the total pooped and peed severity
             if itemUpdatedPooped and item:getModData().poopedSeverity then
@@ -62,7 +62,7 @@ function BF.DirtyBottomsEffects()
 end
 
 -- FOR ITEMS IN GENERAL
-function BF.SetClothing(item, isLeak)
+function BF.ApplySoilingEffects(item, isLeak)
     -- Get the player object
     local player = getSpecificPlayer(0)
     local bodyDamage = player:getBodyDamage()
@@ -89,7 +89,7 @@ function BF.SetClothing(item, isLeak)
 end
 
 -- FOR CLOTHING SPECIFICALLY
-function BF.UpdateSoiledSeverity(clothing)
+function BF.RefreshSoiledSeverityFromModData(clothing)
     local updatedPooped = false
     local updatedPeed = false
 
@@ -113,7 +113,7 @@ function BF.UpdateSoiledSeverity(clothing)
             BF.SetPeedSelfValue(0)
         end
     else
-        print("Error: Clothing or mod data is nil in UpdateSoiledSeverity.")
+        print("Error: Clothing or mod data is nil in RefreshSoiledSeverityFromModData.")
     end
 
     -- Debugging output
