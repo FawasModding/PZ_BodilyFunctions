@@ -4,7 +4,7 @@
 [VERSION 0.13.0]
 ==============
 
-- Moved relief points from BF_Lists.lua to BF_ReliefPoints.lua
+- Moved relief points from BF_Lists.lua to BF_ReliefTiles.lua
 - Added / Altered the following relief points:
 	- Bathtub (previously merged with Shower)
 	- Bush
@@ -32,10 +32,14 @@
 - Moved most direct language instances in code to translation keys in scripts. This is partly based on the mod by Não é o Gui.
 - Added [Brazilian Portuguese] translation from "Bodily Functions (Brazilian Portuguese)" by Não é o Gui.
 
-- Added functions to BF_ClothingConfig to make adding compatibility with clothing mods (using the overlays) easier:
+- Added functions to BF_Overlays to make adding compatibility with clothing mods (using the overlays) easier:
 [  BF_RegisterClothingCategory(name, data)  ]
 [  BF_AddSoilableLocation(location)]
 [  BF_AddClothingTypesToCategory(category, newTypes)  ]
+
+
+- Renamed "BF_ReliefPoints" to "BF_ReliefTiles"
+- Separated code into folders for specific systems
 
 ==============
 [VERSION 0.12.0]
@@ -89,7 +93,7 @@
 - Added crafting recipes for opening pill boxes.
 - Medicine's tooltips are more accurate, showing that it just adds / removes from the value.
 
-- Created "BF_ClothingConfig.lua" for new mapping of overlays to clothing items
+- Created "BF_Overlays.lua" for new mapping of overlays to clothing items
 - Renamed "BF_ClothingStains" to "BF_ClothingOverlays" and merged most of the functionality for simplicity (and better organization)
 - Ensured no dirt on the body when player pees or poops themselves
 

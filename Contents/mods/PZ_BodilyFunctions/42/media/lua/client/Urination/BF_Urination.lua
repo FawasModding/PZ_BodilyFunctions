@@ -88,7 +88,7 @@ function BF.UrinateBottoms(leakTriggered)
 
     -- Get soilable clothing locations
     local underwearLocations = {"UnderwearBottom", "Underwear"}
-    local outerwearLocations = BF_ClothingConfig.soilableLocations
+    local outerwearLocations = BF_Overlays.soilableLocations
     for i = #outerwearLocations, 1, -1 do
         if outerwearLocations[i] == "UnderwearBottom" or outerwearLocations[i] == "Underwear" then
             table.remove(outerwearLocations, i)
@@ -99,8 +99,8 @@ function BF.UrinateBottoms(leakTriggered)
     local underwear = nil
     for _, loc in ipairs(underwearLocations) do
         local item = player:getWornItem(loc)
-        if item and (BF_Utils.tableContains(BF_ClothingConfig.clothingModels.MaleUnderwear.types, item:getType()) or
-                     BF_Utils.tableContains(BF_ClothingConfig.clothingModels.FemaleUnderwear.types, item:getType())) then
+        if item and (BF_Utils.tableContains(BF_Overlays.clothingModels.MaleUnderwear.types, item:getType()) or
+                     BF_Utils.tableContains(BF_Overlays.clothingModels.FemaleUnderwear.types, item:getType())) then
             underwear = item
             break
         end

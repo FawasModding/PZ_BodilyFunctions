@@ -7,17 +7,17 @@ function BF.ReliefRightClick(player, context, worldObjects)
     local toiletOptionAdded = false
 
     -- Retrieve tile sets
-    local toiletTiles = BF_ReliefPoints.GetToiletTiles()
-    local urinalTiles = BF_ReliefPoints.GetUrinalTiles()
-    local outhouseTiles = BF_ReliefPoints.GetOuthouseTiles()
-    local showerTiles = BF_ReliefPoints.GetShowerTiles()
-    local bathtubTiles = BF_ReliefPoints.GetBathtubTiles()
-    local bushTiles = BF_ReliefPoints.GetBushTiles()
-    local dumpsterTiles = BF_ReliefPoints.GetDumpsterTiles()
-    local sinkTiles = BF_ReliefPoints.GetSinkTiles()
-    local treeTiles = BF_ReliefPoints.GetTreeTiles()
-    local trashCanTiles = BF_ReliefPoints.GetTrashCanTiles()
-    local waterTiles = BF_ReliefPoints.GetWaterTiles()
+    local toiletTiles = BF_ReliefTiles.GetToiletTiles()
+    local urinalTiles = BF_ReliefTiles.GetUrinalTiles()
+    local outhouseTiles = BF_ReliefTiles.GetOuthouseTiles()
+    local showerTiles = BF_ReliefTiles.GetShowerTiles()
+    local bathtubTiles = BF_ReliefTiles.GetBathtubTiles()
+    local bushTiles = BF_ReliefTiles.GetBushTiles()
+    local dumpsterTiles = BF_ReliefTiles.GetDumpsterTiles()
+    local sinkTiles = BF_ReliefTiles.GetSinkTiles()
+    local treeTiles = BF_ReliefTiles.GetTreeTiles()
+    local trashCanTiles = BF_ReliefTiles.GetTrashCanTiles()
+    local waterTiles = BF_ReliefTiles.GetWaterTiles()
 
     -- Retrieve values
     local urinateValue = BF.GetUrinateValue()

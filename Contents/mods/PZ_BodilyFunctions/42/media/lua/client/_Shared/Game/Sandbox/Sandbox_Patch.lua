@@ -15,7 +15,7 @@ local OptionPanels = {
 }
 
 --- FOR CACHING
-local OnCreateSandboxOptions = require "_Shared/CustomSandboxMenu/Sandbox_OnCreate"
+local OnCreateSandboxOptions = require "_Shared/Game/Sandbox/Sandbox_OnCreate"
 
 --- get SandboxOptionsScreenPanel ---
 local SandboxOptionsScreen_createPanel = SandboxOptionsScreen.createPanel

@@ -1,4 +1,4 @@
-BF_ReliefPoints = {}
+BF_ReliefTiles = {}
 
 -- =====================================================
 -- 
@@ -9,7 +9,7 @@ BF_ReliefPoints = {}
 -- =====================================================
 
 -- Standard Toilets
-function BF_ReliefPoints.GetToiletTiles()
+function BF_ReliefTiles.GetToiletTiles()
     local toiletTiles = {
         "fixtures_bathroom_01_0", "fixtures_bathroom_01_1", "fixtures_bathroom_01_2", "fixtures_bathroom_01_3", 
         "fixtures_bathroom_01_4", "fixtures_bathroom_01_5", "fixtures_bathroom_01_6", "fixtures_bathroom_01_7",
@@ -19,7 +19,7 @@ function BF_ReliefPoints.GetToiletTiles()
 end
 
 -- Urinals
-function BF_ReliefPoints.GetUrinalTiles()
+function BF_ReliefTiles.GetUrinalTiles()
     local urinalTiles = {
         "fixtures_bathroom_01_8", "fixtures_bathroom_01_9", "fixtures_bathroom_01_10", "fixtures_bathroom_01_11"
     }
@@ -27,7 +27,7 @@ function BF_ReliefPoints.GetUrinalTiles()
 end
 
 -- Outhouses
-function BF_ReliefPoints.GetOuthouseTiles()
+function BF_ReliefTiles.GetOuthouseTiles()
     local outhouseTiles = {
         "fixtures_bathroom_02_24", "fixtures_bathroom_02_25", "fixtures_bathroom_02_26", "fixtures_bathroom_02_27",
         "fixtures_bathroom_02_4", "fixtures_bathroom_02_5", "fixtures_bathroom_02_14", "fixtures_bathroom_02_15"
@@ -36,7 +36,7 @@ function BF_ReliefPoints.GetOuthouseTiles()
 end
 
 -- Showers
-function BF_ReliefPoints.GetShowerTiles()
+function BF_ReliefTiles.GetShowerTiles()
     local showerTiles = {
         "fixtures_bathroom_01_32", "fixtures_bathroom_01_33"
     }
@@ -44,7 +44,7 @@ function BF_ReliefPoints.GetShowerTiles()
 end
 
 -- Bathtubs
-function BF_ReliefPoints.GetBathtubTiles()
+function BF_ReliefTiles.GetBathtubTiles()
     local bathtubTiles = {
         "fixtures_bathroom_01_24", "fixtures_bathroom_01_25", "fixtures_bathroom_01_26", "fixtures_bathroom_01_27",
         "fixtures_bathroom_01_55", "fixtures_bathroom_01_54", "fixtures_bathroom_01_53", "fixtures_bathroom_01_52"
@@ -53,7 +53,7 @@ function BF_ReliefPoints.GetBathtubTiles()
 end
 
 -- Bushes
-function BF_ReliefPoints.GetBushTiles()
+function BF_ReliefTiles.GetBushTiles()
     local bushTiles = {
         "vegetation_ornamental_01_7", "vegetation_ornamental_01_6", "vegetation_ornamental_01_3", "vegetation_ornamental_01_2",
         "vegetation_ornamental_01_5", "vegetation_ornamental_01_4", "vegetation_ornamental_01_1", "vegetation_ornamental_01_0",
@@ -80,7 +80,7 @@ function BF_ReliefPoints.GetBushTiles()
 end
 
 -- Dumpsters
-function BF_ReliefPoints.GetDumpsterTiles()
+function BF_ReliefTiles.GetDumpsterTiles()
     local dumpsterTiles = {
         "trashcontainers_01_10", "trashcontainers_01_11", "trashcontainers_01_8", "trashcontainers_01_9", "trashcontainers_01_12",
         "trashcontainers_01_13", "trashcontainers_01_14", "trashcontainers_01_15"
@@ -89,7 +89,7 @@ function BF_ReliefPoints.GetDumpsterTiles()
 end
 
 -- Sinks
-function BF_ReliefPoints.GetSinkTiles()
+function BF_ReliefTiles.GetSinkTiles()
     local sinkTiles = {
         "fixtures_sinks_01_30", "fixtures_sinks_01_31", "fixtures_sinks_01_29", "fixtures_sinks_01_28",
         "fixtures_sinks_01_12", "fixtures_sinks_01_13", "fixtures_sinks_01_10", "fixtures_sinks_01_11",
@@ -100,7 +100,7 @@ function BF_ReliefPoints.GetSinkTiles()
 end
 
 -- Trees
-function BF_ReliefPoints.GetTreeTiles()
+function BF_ReliefTiles.GetTreeTiles()
     local treeTiles = {
         "e_americanlinden_1_7", "e_americanlinden_1_7", "e_americanlinden_1_6", "e_americanlinden_1_3", "e_americanlinden_1_2",
         "e_yellowwood_1_7", "e_yellowwood_1_6", "e_yellowwood_1_3", "e_yellowwood_1_2", "e_easternredbud_1_3", "e_easternredbud_1_2",
@@ -116,7 +116,7 @@ function BF_ReliefPoints.GetTreeTiles()
 end
 
 -- Trash Cans
-function BF_ReliefPoints.GetTrashCanTiles()
+function BF_ReliefTiles.GetTrashCanTiles()
     local trashCanTiles = {
         "trashcontainers_01_0", "trashcontainers_01_1", "trashcontainers_01_2", "trashcontainers_01_3",
         "trashcontainers_01_17", "trashcontainers_01_16", "trashcontainers_01_18", "trashcontainers_01_19",
@@ -127,7 +127,7 @@ function BF_ReliefPoints.GetTrashCanTiles()
 end
 
 -- Water Sources
-function BF_ReliefPoints.GetWaterTiles()
+function BF_ReliefTiles.GetWaterTiles()
     local waterTiles = {
         "blends_natural_02_7", "blends_natural_02_6", "blends_natural_02_5", "blends_natural_02_0"
     }
@@ -135,7 +135,7 @@ function BF_ReliefPoints.GetWaterTiles()
 end
 
 -- Open Windows
-function BF_ReliefPoints.GetOpenWindowTiles()
+function BF_ReliefTiles.GetOpenWindowTiles()
     local openWindowTiles = {
         "fixtures_windows_01_34", "fixtures_windows_01_35", "fixtures_windows_01_26", "fixtures_windows_01_27",
         "fixtures_windows_01_11", "fixtures_windows_01_10", "fixtures_windows_01_18", "fixtures_windows_01_19",
@@ -144,7 +144,7 @@ function BF_ReliefPoints.GetOpenWindowTiles()
 end
 
 -- Holes (like graves)
-function BF_ReliefPoints.GetHoleTiles()
+function BF_ReliefTiles.GetHoleTiles()
     local holeTiles = {
         "location_community_cemetary_01_19", "location_community_cemetary_01_21", "location_community_cemetary_01_18", "location_community_cemetary_01_17",
         "location_community_cemetary_01_16", "location_community_cemetary_01_32", "location_community_cemetary_01_33", "location_community_cemetary_01_35",
@@ -153,4 +153,4 @@ function BF_ReliefPoints.GetHoleTiles()
     return holeTiles
 end
 
-return BF_ReliefPoints
+return BF_ReliefTiles

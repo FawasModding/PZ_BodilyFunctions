@@ -8,7 +8,7 @@ end)
 
 function BF_Overlays.GetOverlayBySeverity(item, stainType)
     local itemType = item:getType()
-    for _, category in pairs(BF_ClothingConfig.clothingModels) do
+    for _, category in pairs(BF_Overlays.clothingModels) do
         if BF_Utils.tableContains(category.types, itemType) then
             local overlayKey = stainType == "peed" and "peeOverlay" or "poopOverlay"
             local overlay = category[overlayKey]
@@ -93,13 +93,13 @@ end
 
 function BF_Overlays.RefreshOverlaysForPlayer(player, stainType)
     BF_Overlays.ClearAllOverlaysByType(player, stainType)
-    local locations = BF_ClothingConfig.soilableLocations
+    local locations = BF_Overlays.soilableLocations
     for _, location in ipairs(locations) do
         local wornItem = player:getWornItem(location)
         if wornItem and wornItem:getModData()[stainType] then
             local bodyLocation
-            if BF_Utils.tableContains(BF_ClothingConfig.clothingModels.MaleUnderwear.types, wornItem:getType()) or
-            BF_Utils.tableContains(BF_ClothingConfig.clothingModels.FemaleUnderwear.types, wornItem:getType()) then
+            if BF_Utils.tableContains(BF_Overlays.clothingModels.MaleUnderwear.types, wornItem:getType()) or
+            BF_Utils.tableContains(BF_Overlays.clothingModels.FemaleUnderwear.types, wornItem:getType()) then
                 -- Apply to underwear-specific overlay slot
                 if stainType == "peed" then
                     bodyLocation = "PeedOverlay_Underwear"
