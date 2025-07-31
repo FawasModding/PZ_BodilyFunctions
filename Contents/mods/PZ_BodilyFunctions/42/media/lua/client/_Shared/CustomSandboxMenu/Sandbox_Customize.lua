@@ -11,7 +11,7 @@ local SandboxUIEnhancer = {}
 ---@field a number
 
 --- REQUIREMENTS
-local OptionPanels = require "CustomSandboxMenu/Sandbox_Patch"
+local OptionPanels = require "_Shared/CustomSandboxMenu/Sandbox_Patch"
 SandboxUIEnhancer.GetOptionPanel = OptionPanels.GetOptionPanel
 SandboxUIEnhancer.GetOption = OptionPanels.GetOption
 

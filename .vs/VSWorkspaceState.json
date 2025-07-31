@@ -1,16 +1,16 @@
 {
   "ExpandedNodes": [
     "",
-    "\\42",
-    "\\42\\media",
-    "\\42\\media\\lua",
-    "\\42\\media\\lua\\client",
-    "\\42\\media\\lua\\client\\Utils",
-    "\\42\\media\\lua\\shared",
-    "\\42\\media\\lua\\shared\\Translate",
-    "\\42\\media\\lua\\shared\\Translate\\EN",
-    "\\DEVELOPER"
+    "\\Contents",
+    "\\Contents\\mods",
+    "\\Contents\\mods\\PZ_BodilyFunctions",
+    "\\Contents\\mods\\PZ_BodilyFunctions\\42",
+    "\\Contents\\mods\\PZ_BodilyFunctions\\42\\media",
+    "\\Contents\\mods\\PZ_BodilyFunctions\\42\\media\\lua",
+    "\\Contents\\mods\\PZ_BodilyFunctions\\42\\media\\lua\\client",
+    "\\Contents\\mods\\PZ_BodilyFunctions\\42\\media\\lua\\client\\_Shared",
+    "\\Contents\\mods\\PZ_BodilyFunctions\\42\\media\\lua\\client\\_Shared\\GUI"
   ],
-  "SelectedNode": "\\42\\media\\lua\\client\\Utils\\BF_ReliefPoints.lua",
+  "SelectedNode": "\\Contents\\mods\\PZ_BodilyFunctions\\42\\media\\lua\\client\\_Shared\\CustomSandboxMenu\\BF_SandboxMenu.lua",
   "PreviewInSolutionExplorer": false
 }

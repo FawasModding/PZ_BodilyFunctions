@@ -1,8 +1,8 @@
 -- BF_SandboxMenu.lua
 
 -- Caching
-local SandboxUIEnhancer = require "CustomSandboxMenu/Sandbox_Customize"
-local OnCreateSandboxOptions = require "CustomSandboxMenu/Sandbox_OnCreate"
+local SandboxUIEnhancer = require "_Shared/CustomSandboxMenu/Sandbox_Customize"
+local OnCreateSandboxOptions = require "_Shared/CustomSandboxMenu/Sandbox_OnCreate"
 
 -- UI constants
 local UI_BORDER_SPACING = 10
