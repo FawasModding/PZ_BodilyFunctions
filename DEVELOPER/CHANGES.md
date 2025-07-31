@@ -39,6 +39,7 @@
 
 
 - Renamed "BF_ReliefPoints" to "BF_ReliefTiles"
+- Renamed "BF_ClothingConfig" to "BF_Overlays"
 - Separated code into folders for specific systems
 
 ==============
