@@ -8,9 +8,10 @@
     "\\Contents\\mods\\PZ_BodilyFunctions\\42\\media",
     "\\Contents\\mods\\PZ_BodilyFunctions\\42\\media\\lua",
     "\\Contents\\mods\\PZ_BodilyFunctions\\42\\media\\lua\\client",
+    "\\Contents\\mods\\PZ_BodilyFunctions\\42\\media\\lua\\client\\Defecation",
     "\\Contents\\mods\\PZ_BodilyFunctions\\42\\media\\lua\\client\\_Shared",
-    "\\Contents\\mods\\PZ_BodilyFunctions\\42\\media\\lua\\client\\_Shared\\GUI"
+    "\\Contents\\mods\\PZ_BodilyFunctions\\42\\media\\lua\\client\\_Shared\\Player"
   ],
-  "SelectedNode": "\\Contents\\mods\\PZ_BodilyFunctions\\42\\media\\lua\\client\\_Shared\\CustomSandboxMenu\\BF_SandboxMenu.lua",
+  "SelectedNode": "\\Contents\\mods\\PZ_BodilyFunctions\\42\\media\\lua\\client\\Defecation\\BF_Defecation.lua",
   "PreviewInSolutionExplorer": false
 }

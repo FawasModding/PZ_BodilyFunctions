@@ -37,10 +37,10 @@
 [  BF_AddSoilableLocation(location)]
 [  BF_AddClothingTypesToCategory(category, newTypes)  ]
 
-
 - Renamed "BF_ReliefPoints" to "BF_ReliefTiles"
 - Renamed "BF_ClothingConfig" to "BF_Overlays"
 - Separated code into folders for specific systems
+- Deleted deprecated BF_WipingItems script, since the same data (and more) is already in what's now called BF_Wipes
 
 ==============
 [VERSION 0.12.0]

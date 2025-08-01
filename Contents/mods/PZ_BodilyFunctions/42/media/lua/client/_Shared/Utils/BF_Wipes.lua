@@ -1,9 +1,11 @@
 BF_WipingConfig = {}
 
 BF_WipingConfig = {
+    -- Have multiple per. e.g. toilet paper
     drainableWipeables = {
         ToiletPaper = { usesRequired = 4 }
     },
+    -- Can only be used once. So paper, to poop you'll need 4 individual Paper items
     oneTimeWipeables = {
         Tissue = { usesRequired = 2 },
         PaperNapkins2 = { usesRequired = 2 },
@@ -49,8 +51,10 @@ BF_WipingConfig = {
         HottieZ = { usesRequired = 1 },
         HunkZ = { usesRequired = 1 }
     },
+    -- Sets the peed and pooped values to the ones that happen when you actually pee / poop, only soft / realistic materials can be included here.
     clothingWipeables = {
-        UnderwearBottom = { usesRequired = 1, soilPenalty = 5 }, -- Added soilPenalty for clothing
+        -- Bras and underwear bottoms are soft, therefore they'd be useable.
+        UnderwearBottom = { usesRequired = 1, soilPenalty = 5 },
         UnderwearTop = { usesRequired = 1, soilPenalty = 5 }
     }
 }
