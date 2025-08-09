@@ -42,6 +42,8 @@
 - Separated code into folders for specific systems
 - Deleted deprecated BF_WipingItems script, since the same data (and more) is already in what's now called BF_Wipes
 
+- Renamed IGUI lang files to IG_UI to fix translation bug. ex. "IGUI_EN" -> "IG_UI_EN"
+
 ==============
 [VERSION 0.12.0]
 ==============
