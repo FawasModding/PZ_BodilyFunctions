@@ -1,3 +1,4 @@
+---@diagnostic disable: undefined-field, undefined-doc-name, inject-field
 -- Sandbox_Customize.lua
 
 --- DEFINITIONS
@@ -20,6 +21,7 @@ local UI_BORDER_SPACING = 10
 
 
 ---Retrieves the total layout metrics
+---@diagnostic disable-next-line: undefined-doc-name
 ---@param panel SandboxOptionsScreenPanel
 SandboxUIEnhancer.CalculateLayoutMetrics = function(panel)
     local titles = panel.titles

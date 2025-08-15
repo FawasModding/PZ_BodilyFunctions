@@ -1,6 +1,6 @@
 -- Generates the full nested overlay table for pee or poop overlays
 -- baseName example: "BF.Trousers_Peed"
-function generateOverlayStates(baseName, includeSat)
+local function generateOverlayStates(baseName, includeSat)
     local overlays = {
         fresh = {
             ["25"]  = baseName .. "_25",

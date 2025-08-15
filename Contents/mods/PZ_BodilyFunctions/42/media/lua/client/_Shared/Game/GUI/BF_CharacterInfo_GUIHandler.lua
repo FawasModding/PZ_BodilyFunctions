@@ -200,4 +200,4 @@ function BathroomCharacterInfo_GUIHandler:new(x, y, width, height, playerNum)
     return o
 end
 
-addCharacterPageTab("BodilyFunctions", BathroomCharacterInfo_GUIHandler)
+AddCharacterPageTab("BodilyFunctions", BathroomCharacterInfo_GUIHandler)

@@ -1,3 +1,4 @@
+---@diagnostic disable: undefined-global
 require "MF_ISMoodle"
 require "BodilyFunctions"
 MF.createMoodle("Defecation");

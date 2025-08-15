@@ -1,3 +1,4 @@
+---@diagnostic disable: undefined-doc-class, duplicate-set-field
 -- Sandbox_Patch.lua
 
 --- DEFINITIONS

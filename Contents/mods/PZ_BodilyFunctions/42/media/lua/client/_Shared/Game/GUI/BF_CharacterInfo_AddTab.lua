@@ -7,7 +7,7 @@ if modInfoTCH and isModActive(modInfoTCH) then
     return
 end
 
-function addCharacterPageTab(tabName,pageType)
+function AddCharacterPageTab(tabName,pageType)
 
     local viewName = tabName.."View"
 
