@@ -31,7 +31,6 @@ BF_Overlays = {
                 pee = generateOverlayStates("BF.Trousers_Peed", true),
                 poop = generateOverlayStates("BF.Trousers_Pooped", false),
             }
-        }
         },
         SuitTrousersMesh = {
             types = {"Trousers_Suit", "Trousers_SuitTEXTURE", "Trousers_SuitWhite", "Trousers_Jeans", "Trousers_Camo", "Trousers_Army", "Trousers_Crafted_Cotton", "Trousers_Crafted_Burlap"},
@@ -58,7 +57,7 @@ BF_Overlays = {
             }
         },
         LongShorts = {
-            types = {"Shorts_LongDenim", "Shorts_LongDenim_Punk", "Shorts_LongSport", "Shorts_LongSport_Red", "Shorts_CamoGreenLong", "Shorts_CamoUrbanLong", "Shorts_OliveDrabLong", "Shorts_CamoDesertNewLong", "Shorts_CamoMiliusLong", "item Shorts_CamoTigerStripeLong"},
+            types = {"Shorts_LongDenim", "Shorts_LongDenim_Punk", "Shorts_LongSport", "Shorts_LongSport_Red", "Shorts_CamoGreenLong", "Shorts_CamoUrbanLong", "Shorts_OliveDrabLong", "Shorts_CamoDesertNewLong", "Shorts_CamoMiliusLong", "Shorts_CamoTigerStripeLong"},
 
             overlays = {
                 pee = generateOverlayStates("BF.LongShorts_Peed", true),
@@ -103,9 +102,16 @@ function BF_RegisterClothingCategory(name, data)
         return
     end
 
-    BF_Overlays.clothingModels[name] = data
+    BF_Overlays.clothingModels[name] = {
+        types = data.types or {},
+        overlays = {
+            pee = generateOverlayStates(data.peeOverlay, true),
+            poop = generateOverlayStates(data.poopOverlay, false)
+        }
+    }
     print("BF_RegisterClothingCategory: Registered category '" .. name .. "'")
 end
+
 
 -- EXAMPLE
 -- Events.OnInitGlobalModData.Add(function()
