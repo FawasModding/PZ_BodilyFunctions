@@ -1,0 +1,15 @@
+module BF {
+
+item ShortShorts_Pooped {
+        Type = Clothing,
+        ClothingItem = ShortShorts_Pooped,
+        BodyLocation = PoopedOverlay_Pants,
+        IconsForTexture = PeedPants,
+        Tags = BathroomOverlay,
+        WorldStaticModel = Trousers_Ground,
+
+        RunSpeedModifier = 0.8,
+        DiscomfortModifier = 0.6,
+    }
+
+}

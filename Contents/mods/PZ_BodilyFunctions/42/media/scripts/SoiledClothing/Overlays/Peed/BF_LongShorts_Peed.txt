@@ -1,0 +1,15 @@
+module BF {
+
+    item LongShorts_Peed {
+        Type = Clothing,
+        ClothingItem = LongShorts_Peed,
+        BodyLocation = PeedOverlay_Pants,
+        IconsForTexture = PeedPants,
+        Tags = BathroomOverlay,
+        WorldStaticModel = Trousers_Ground,
+
+        RunSpeedModifier = 0.9,
+        DiscomfortModifier = 0.15,
+    }
+
+}
