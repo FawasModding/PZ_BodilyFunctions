@@ -25,43 +25,14 @@ function BF_Overlays.ApplyOverlayToSlot(player, wornItem, stainType, bodyLocatio
     local modData = wornItem:getModData()
     local severityKey = stainType == "peed" and "peedSeverity" or "poopedSeverity"
 
-    -- Define minimum severity threshold (25% for both pee and poop)
-    -- previously 10 for pooped, 25 for peed (maybe go back?)
-    local minSeverity = 25
+    -- Define minimum severity thresholds. 10% if peed, 25% if pooped
+    local minSeverity = stainType == "peed" and 10 or 25
 
     -- Only apply overlay if severity is high enough
-    if not modData[severityKey] or modData[severityKey] < minSeverity then
-        return
-    end
+    if modData[severityKey] and modData[severityKey] < minSeverity then return end
 
     if modData[stainType] then
-        local overlayTable = BF_Overlays.GetOverlayBySeverity(wornItem, stainType)
-        local severity = modData[severityKey]
-
-        -- Select overlay based on severity thresholds
-        local overlayItemType
-        if stainType == "peed" then
-            if severity >= 100 then
-                overlayItemType = overlayTable.fresh["100"]
-            elseif severity >= 75 then
-                overlayItemType = overlayTable.fresh["75"]
-            elseif severity >= 50 then
-                overlayItemType = overlayTable.fresh["50"]
-            elseif severity >= 25 then
-                overlayItemType = overlayTable.fresh["25"]
-            end
-        elseif stainType == "pooped" then
-            if severity >= 100 then
-                overlayItemType = overlayTable.fresh["100"]
-            elseif severity >= 75 then
-                overlayItemType = overlayTable.fresh["75"]
-            elseif severity >= 50 then
-                overlayItemType = overlayTable.fresh["50"]
-            elseif severity >= 25 then
-                overlayItemType = overlayTable.fresh["25"]
-            end
-        end
-
+        local overlayItemType = BF_Overlays.GetOverlayBySeverity(wornItem, stainType)
         if overlayItemType then
             local existing = player:getWornItem(bodyLocation)
             if not existing or existing:getType() ~= overlayItemType then
@@ -69,14 +40,11 @@ function BF_Overlays.ApplyOverlayToSlot(player, wornItem, stainType, bodyLocatio
                 if itemToWear then
                     player:setWornItem(bodyLocation, itemToWear)
                     modData[stainType .. "OverlayItemType"] = overlayItemType
-                else
-                    print("[WARNING] Overlay item type '" .. overlayItemType .. "' not found. Skipping.")
                 end
             end
         end
     end
 end
-
 
 function BF_Overlays.RemoveOverlayFromSlot(player, wornItem, stainType)
     if not wornItem then

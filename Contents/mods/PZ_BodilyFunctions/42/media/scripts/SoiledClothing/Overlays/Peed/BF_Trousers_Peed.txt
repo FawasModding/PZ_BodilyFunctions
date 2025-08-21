@@ -2,6 +2,7 @@ module BF {
 
     item Trousers_Peed {
         Type = Clothing,
+        DisplayName = Trousers_Peed,
         ClothingItem = Trousers_Peed,
         BodyLocation = PeedOverlay_Pants,
         IconsForTexture = PeedPants,
