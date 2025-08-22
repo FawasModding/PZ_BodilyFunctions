@@ -10,8 +10,8 @@
 	<m_AllowRandomTint>false</m_AllowRandomTint>
 	<m_AttachBone></m_AttachBone>
 
-	<textureChoices>clothing\Overlays\Peed\BoxingShorts_Peed_25</textureChoices>
-	<textureChoices>clothing\Overlays\Peed\BoxingShorts_Peed_50</textureChoices>
-	<textureChoices>clothing\Overlays\Peed\BoxingShorts_Peed_75</textureChoices>
-	<textureChoices>clothing\Overlays\Peed\BoxingShorts_Peed_100</textureChoices>
+	<textureChoices>clothing\Overlays\Peed\BoxingShorts\BoxingShorts_Peed_25</textureChoices>
+	<textureChoices>clothing\Overlays\Peed\BoxingShorts\BoxingShorts_Peed_50</textureChoices>
+	<textureChoices>clothing\Overlays\Peed\BoxingShorts\BoxingShorts_Peed_75</textureChoices>
+	<textureChoices>clothing\Overlays\Peed\BoxingShorts\BoxingShorts_Peed_100</textureChoices>
 </clothingItem>

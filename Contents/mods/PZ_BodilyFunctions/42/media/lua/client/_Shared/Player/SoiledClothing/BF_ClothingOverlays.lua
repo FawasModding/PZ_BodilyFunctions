@@ -18,38 +18,70 @@ function BF_Overlays.GetOverlayBySeverity(item, stainType)
         end
     end
     local fallback = stainType == "peed" and "BF.Female_Underpants_Peed" or "BF.BoxingShorts_Pooped"
+    print("[WARN] Missing overlay config for " .. tostring(itemType) .. " using fallback: " .. fallback)
     return fallback
 end
 
+function BF_Overlays.GetOverlayBase(item, stainType)
+    local itemType = item:getType()
+    for _, category in pairs(BF_Overlays.clothingModels) do
+        if BF_Utils.tableContains(category.types, itemType) then
+            local overlayKey = stainType == "peed" and "peeOverlay" or "poopOverlay"
+            return category[overlayKey]
+        end
+    end
+    local fallback = stainType == "peed" and "BF.Female_Underpants_Peed" or "BF.BoxingShorts_Pooped"
+    print("[WARN] Missing overlay config for " .. tostring(itemType) .. " using fallback: " .. fallback)
+    return fallback
+end
+
+local function getTextureChoiceIndex(severity)
+    if severity >= 100 then return 3
+    elseif severity >= 75 then return 2
+    elseif severity >= 50 then return 1
+    elseif severity >= 25 then return 0 end
+    return nil
+end
+
 function BF_Overlays.ApplyOverlayToSlot(player, wornItem, stainType, bodyLocation)
+    if not wornItem then return end
+
     local modData = wornItem:getModData()
     local severityKey = stainType == "peed" and "peedSeverity" or "poopedSeverity"
-
-    -- Define minimum severity thresholds. 10% if peed, 25% if pooped
     local minSeverity = stainType == "peed" and 10 or 25
 
-    -- Only apply overlay if severity is high enough
-    if modData[severityKey] and modData[severityKey] < minSeverity then return end
+    if not modData[severityKey] or modData[severityKey] < minSeverity then return end
+    if not modData[stainType] then return end
 
-    if modData[stainType] then
-        local overlayItemType = BF_Overlays.GetOverlayBySeverity(wornItem, stainType)
-        if overlayItemType then
-            local existing = player:getWornItem(bodyLocation)
-            if not existing or existing:getType() ~= overlayItemType then
-                local itemToWear = player:getInventory():AddItem(overlayItemType)
-                if itemToWear then
-                    player:setWornItem(bodyLocation, itemToWear)
-                    modData[stainType .. "OverlayItemType"] = overlayItemType
-                end
-            end
+    local overlayItemType = BF_Overlays.GetOverlayBase(wornItem, stainType)
+    if not overlayItemType then return end
+
+    local existing = player:getWornItem(bodyLocation)
+    if not existing or existing:getType() ~= overlayItemType then
+        local itemToWear = player:getInventory():AddItem(overlayItemType)
+        if itemToWear then
+            player:setWornItem(bodyLocation, itemToWear)
+            existing = itemToWear
+            modData[stainType .. "OverlayItemType"] = overlayItemType
+        else
+            print("[ERROR] Could not add overlay item " .. overlayItemType)
+            return
         end
+    end
+
+    -- apply severity texture OR restore saved choice
+    local savedChoice = modData[stainType .. "TextureChoice"]
+    local choiceIndex = getTextureChoiceIndex(modData[severityKey]) or savedChoice
+    if choiceIndex and existing:getTextureChoice() ~= choiceIndex then
+        existing:setTextureChoice(choiceIndex)
+        existing:resetModel()
+        modData[stainType .. "TextureChoice"] = choiceIndex
+        print("Set " .. overlayItemType .. " " .. stainType .. " textureChoice = " .. choiceIndex)
     end
 end
 
 function BF_Overlays.RemoveOverlayFromSlot(player, wornItem, stainType)
-    if not wornItem then
-        return
-    end
+    if not wornItem then return end
     local modData = wornItem:getModData()
     local overlayKey = stainType .. "OverlayItemType"
     if modData[overlayKey] then
@@ -59,8 +91,6 @@ function BF_Overlays.RemoveOverlayFromSlot(player, wornItem, stainType)
             inventory:Remove(overlayItem)
             player:removeWornItem(overlayItem)
         end
-        -- DO NOT clear modData[overlayKey] here!
-        -- Only clear it when the stain is removed entirely
     end
 end
 
@@ -99,34 +129,29 @@ function BF_Overlays.RefreshOverlaysForPlayer(player, stainType)
         if wornItem and wornItem:getModData()[stainType] then
             local bodyLocation
             if BF_Utils.tableContains(BF_Overlays.clothingModels.MaleUnderwear.types, wornItem:getType()) or
-            BF_Utils.tableContains(BF_Overlays.clothingModels.FemaleUnderwear.types, wornItem:getType()) then
-                -- Apply to underwear-specific overlay slot
-                if stainType == "peed" then
-                    bodyLocation = "PeedOverlay_Underwear"
-                else
-                    bodyLocation = "PoopedOverlay_Underwear"
-                end
+               BF_Utils.tableContains(BF_Overlays.clothingModels.FemaleUnderwear.types, wornItem:getType()) then
+                bodyLocation = stainType == "peed" and "PeedOverlay_Underwear" or "PoopedOverlay_Underwear"
             else
-                -- Apply to pants/outer lower body overlay slot
-                if stainType == "peed" then
-                    bodyLocation = "PeedOverlay_Pants"
-                else
-                    bodyLocation = "PoopedOverlay_Pants"
-                end
+                bodyLocation = stainType == "peed" and "PeedOverlay_Pants" or "PoopedOverlay_Pants"
             end
+            -- always re-apply (handles severity decreasing)
             BF_Overlays.ApplyOverlayToSlot(player, wornItem, stainType, bodyLocation)
         end
     end
 end
 
--- Separate event handlers
+-- Patch ISWearClothing.perform
 if ISWearClothing and ISWearClothing.perform then
     ISWearClothing.o_perform = ISWearClothing.perform
     function ISWearClothing:perform()
-        local success, result = pcall(self.o_perform, self)
-        if not success then
-            print("[ERROR] ISWearClothing perform failed: " .. tostring(result))
+        local ok, err
+        if self.o_perform then
+            ok, err = pcall(self.o_perform, self)
+            if not ok then
+                print("[ERROR] ISWearClothing perform failed: " .. tostring(err))
+            end
         end
+        -- overlays logic...
         BF_Overlays.ClearAllOverlaysByType(getPlayer(), "peed")
         BF_Overlays.ClearAllOverlaysByType(getPlayer(), "pooped")
         local delayTicks, tickCount = 10, 0
@@ -141,38 +166,31 @@ if ISWearClothing and ISWearClothing.perform then
         Events.OnTick.Add(delayedEquip)
     end
 else
-    print("[ERROR] ISWearClothing or perform not found")
+    print("[WARN] ISWearClothing.perform not found, skipping patch")
 end
 
+-- Patch ISUnequipAction.perform
 if ISUnequipAction and ISUnequipAction.perform then
     ISUnequipAction.o_perform = ISUnequipAction.perform
     function ISUnequipAction:perform()
-        --print("[DEBUG] ISUnequipAction perform called")
-        local success, result = pcall(self.o_perform, self)
-        if not success then
-            print("[ERROR] ISUnequipAction perform failed: " .. tostring(result))
+        local ok, err
+        if self.o_perform then
+            ok, err = pcall(self.o_perform, self)
+            if not ok then
+                print("[ERROR] ISUnequipAction perform failed: " .. tostring(err))
+            end
         end
         local player = getPlayer()
         if player then
-            local success, result = pcall(function()
-                BF_Overlays.ClearAllOverlaysByType(player, "peed")
-                BF_Overlays.ClearAllOverlaysByType(player, "pooped")
-            end)
-            if not success then
-                print("[ERROR] ClearAllOverlaysByType failed: " .. tostring(result))
-            end
+            BF_Overlays.ClearAllOverlaysByType(player, "peed")
+            BF_Overlays.ClearAllOverlaysByType(player, "pooped")
             local delayTicks, tickCount = 10, 0
             local function delayedEquip()
                 tickCount = tickCount + 1
                 if tickCount >= delayTicks then
                     Events.OnTick.Remove(delayedEquip)
-                    local success, result = pcall(function()
-                        BF_Overlays.RefreshOverlaysForPlayer(player, "peed")
-                        BF_Overlays.RefreshOverlaysForPlayer(player, "pooped")
-                    end)
-                    if not success then
-                        print("[ERROR] RefreshOverlaysForPlayer failed: " .. tostring(result))
-                    end
+                    BF_Overlays.RefreshOverlaysForPlayer(player, "peed")
+                    BF_Overlays.RefreshOverlaysForPlayer(player, "pooped")
                 end
             end
             Events.OnTick.Add(delayedEquip)
@@ -180,4 +198,7 @@ if ISUnequipAction and ISUnequipAction.perform then
             print("[ERROR] ISUnequipAction: Player is nil")
         end
     end
+else
+    print("[WARN] ISUnequipAction.perform not found, skipping patch")
 end
+

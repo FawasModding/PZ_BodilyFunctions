@@ -10,8 +10,8 @@
 	<m_AllowRandomTint>false</m_AllowRandomTint>
 	<m_AttachBone></m_AttachBone>
 
-	<textureChoices>clothing\Overlays\Pooped\ShortShorts_Pooped_25</textureChoices>
-	<textureChoices>clothing\Overlays\Pooped\ShortShorts_Pooped_50</textureChoices>
-	<textureChoices>clothing\Overlays\Pooped\ShortShorts_Pooped_75</textureChoices>
-	<textureChoices>clothing\Overlays\Pooped\ShortShorts_Pooped_100</textureChoices>
+	<textureChoices>clothing\Overlays\Pooped\ShortShorts\ShortShorts_Pooped_25</textureChoices>
+	<textureChoices>clothing\Overlays\Pooped\ShortShorts\ShortShorts_Pooped_50</textureChoices>
+	<textureChoices>clothing\Overlays\Pooped\ShortShorts\ShortShorts_Pooped_75</textureChoices>
+	<textureChoices>clothing\Overlays\Pooped\ShortShorts\ShortShorts_Pooped_100</textureChoices>
 </clothingItem>
