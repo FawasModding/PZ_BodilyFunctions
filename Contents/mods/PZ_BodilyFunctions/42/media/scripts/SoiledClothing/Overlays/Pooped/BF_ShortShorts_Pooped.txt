@@ -5,7 +5,7 @@ item ShortShorts_Pooped {
         ClothingItem = ShortShorts_Pooped,
         BodyLocation = PoopedOverlay_Pants,
         IconsForTexture = PeedPants,
-        Tags = BathroomOverlay,
+        Tags = PoopedOverlay,
         WorldStaticModel = Trousers_Ground,
 
         RunSpeedModifier = 0.8,

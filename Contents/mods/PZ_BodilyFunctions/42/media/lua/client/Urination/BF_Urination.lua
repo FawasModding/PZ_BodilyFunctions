@@ -88,10 +88,10 @@ function BF.UrinateBottoms(leakTriggered)
 
     -- Get soilable clothing locations
     local underwearLocations = {"UnderwearBottom", "Underwear"}
-    local outerwearLocations = BF_Overlays.soilableLocations
-    for i = #outerwearLocations, 1, -1 do
-        if outerwearLocations[i] == "UnderwearBottom" or outerwearLocations[i] == "Underwear" then
-            table.remove(outerwearLocations, i)
+    local outerwearLocations = {}
+    for _, loc in ipairs(BF_Overlays.soilableLocations) do
+        if loc ~= "UnderwearBottom" and loc ~= "Underwear" then
+            table.insert(outerwearLocations, loc)
         end
     end
 

@@ -5,7 +5,7 @@ module BF {
         ClothingItem = Male_Boxers_Peed,
         BodyLocation = PeedOverlay_Underwear,
         IconsForTexture = PeedPants,
-        Tags = BathroomOverlay,
+        Tags = PeedOverlay,
         WorldStaticModel = Trousers_Ground,
 
         RunSpeedModifier = 0.9,
