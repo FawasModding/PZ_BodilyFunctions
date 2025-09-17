@@ -49,7 +49,6 @@ function BF.BathroomFunctionTimers()
         BF.UpdateBathroomValues() -- If the initial setup is done, update the player's bathroom values
         BF.HandleInstantAccidents() -- Check whether or not the player has urinated or defecated themselves.
         BF.HandleUrgencyHiccup() -- Do the hiccup system, aka player grabbing crotch and possibly pissing themselves or so on. Too tired to censor my shit lol
-        BF.DirtyBottomsEffects()
     else
         BF.didFirstTimer = true -- If this is the first call, set the flag to true and skip updating values
     end

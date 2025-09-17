@@ -87,7 +87,7 @@ function WipeSelf:perform()
 
         -- If no underwear, soil unequipped non-underwear items
         if not applied then
-            local soilableClothing = BF.GetSoilableClothing()
+            local soilableClothing = BF_Overlays.GetSoilableClothing()
             local nonUnderwearLocations = {}
             for _, loc in ipairs(soilableClothing) do
                 if not (loc == "UnderwearBottom" or loc == "Underwear") then
