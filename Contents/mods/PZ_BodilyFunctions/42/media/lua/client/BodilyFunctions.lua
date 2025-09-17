@@ -291,7 +291,6 @@ function BF.PainInBladder(player, pain)
 	local part = player:getBodyDamage():getBodyPart(BodyPartType.Groin)
 	part:setStiffness(pain)
 end
-
 function BF.PainInColon(player, pain)
 	local part = player:getBodyDamage():getBodyPart(BodyPartType.Torso_Lower)
 	part:setStiffness(pain)
@@ -340,7 +339,6 @@ local onFillItemTooltip = function(tooltip, layout, item)
         InventoryUI.addTooltipBar(layout, "Defecated:", poopedSeverity / 100, poopBarColor, poopLabelColor)
     end
 end
-
 function BF.onGameBoot()
     local humanGroup = BodyLocations.getGroup("Human"); -- Get the BodyLocations group for humans
     local peedUndiesLocation = humanGroup:getOrCreateLocation("PeedOverlay_Underwear"); -- Create or fetch the PeedOverlay location
@@ -376,7 +374,6 @@ function BF.onGameBoot()
     -- Add PoopedOverlay2 just after PoopedOverlay if needed
     list:add(pantsIndex + 4, poopedPantsLocation);
 end
-
 
 --[[
 Register the BathroomFunctionTimers function to run every 10 in-game minutes
