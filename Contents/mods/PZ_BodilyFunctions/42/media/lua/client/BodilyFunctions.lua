@@ -44,9 +44,14 @@ Events.OnGameStart.Add(BF.OverrideSandboxMax)
 Function to handle timed updates for bathroom needs
 This function is called periodically (e.g., every 10 in-game minutes).
 ]]--
-function BF.BathroomFunctionTimers()
+function BF.GlobalFunctionTimers()
     if BF.didFirstTimer then
-        BF.UpdateBathroomValues() -- If the initial setup is done, update the player's bathroom values
+        BF_Defecation.GlobalFunctionTimers()
+        BF_Urination.GlobalFunctionTimers()
+        
+        -- Instantly clear bodily fumes
+        BF.SetBodilyFumesValue(0)
+        
         BF.HandleInstantAccidents() -- Check whether or not the player has urinated or defecated themselves.
         BF.HandleUrgencyHiccup() -- Do the hiccup system, aka player grabbing crotch and possibly pissing themselves or so on. Too tired to censor my shit lol
     else
@@ -63,22 +68,6 @@ Carbohydrates:  -500    >     1000
 
 Burn rate: 10 Calories per 10 min
 ]]
-
--- Function to update the player's bathroom-related values (urination and defecation)
-function BF.UpdateBathroomValues()
-
-    BF.UpdateUrinationValues()
-    BF.UpdateDefecationValues()
-
-    -- Decay bodily fumes (smell moodle) by 10% every 10 seconds
-    --local currentFumes = BF.GetBodilyFumesValue()
-    --local reducedFumes = currentFumes * 0.9
-    --BF.SetBodilyFumesValue(reducedFumes)
-
-    -- Instantly clear bodily fumes
-    BF.SetBodilyFumesValue(0)
-
-end
 
 -- Make the player urinate / defecate in very "sudden" situations.
 -- Like, getting injured (car crash, shot). Overflowing (bladder max capacity).
@@ -138,7 +127,7 @@ function BF.HandleInstantAccidents()
 
             -- If the player has the "Bedwetter" trait, trigger the urination accident
             if player:HasTrait("Bedwetter") then
-                BF.UrinateBottoms()  -- Simulate urinating in bed
+                BF_Urination.UrinateBottoms()  -- Simulate urinating in bed
                 BF.SetUrinateValue(0)  -- Reset urinate value after accident
             end
 
@@ -393,7 +382,7 @@ end
 Register the BathroomFunctionTimers function to run every 10 in-game minutes
 This ensures bathroom values are periodically updated.
 ]]--
-Events.EveryTenMinutes.Add(BF.BathroomFunctionTimers)
+Events.EveryTenMinutes.Add(BF.GlobalFunctionTimers)
 
 Events.OnGameBoot.Add(BF.onGameBoot)
 

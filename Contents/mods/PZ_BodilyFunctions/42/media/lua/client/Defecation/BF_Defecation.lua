@@ -1,7 +1,13 @@
 require "BodilyFunctions"
 
+BF_Defecation = BF_Defecation or {}
+
+function BF_Defecation.GlobalFunctionTimers()
+    BF_Defecation.UpdateDefecationValues()
+end
+
 -- Function to update defecation-related values
-function BF.UpdateDefecationValues()
+function BF_Defecation.UpdateDefecationValues()
     local player = getPlayer()
 
     -- Get player stats
@@ -77,7 +83,6 @@ function BF.TriggerToiletDefecate(object, player, isWiping, wipeType, wipeItem, 
         ISTimedActionQueue.add(WipeSelf:new(player, 20, wipeType, wipeItem, "poop"))
     end
 end
-
 function BF.TriggerGroundDefecate(isWiping, wipeType, wipeItem, wipeEfficiency)
     local player = getPlayer()
     local defecateValue = BF.GetDefecateValue()
@@ -89,7 +94,6 @@ function BF.TriggerGroundDefecate(isWiping, wipeType, wipeItem, wipeEfficiency)
         ISTimedActionQueue.add(WipeSelf:new(player, 20, wipeType, wipeItem, "poop"))
     end
 end
-
 function BF.TriggerSelfDefecate(isLeak)
     local isLeak = isLeak or false
     local player = getPlayer()
@@ -107,6 +111,5 @@ function BF.TriggerSelfDefecate(isLeak)
         print("Leak triggered: Updated Pooped Self Value: " .. BF.GetPoopedSelfValue())
     end
 end
-
 function BF.PoopInContainer(item)
 end

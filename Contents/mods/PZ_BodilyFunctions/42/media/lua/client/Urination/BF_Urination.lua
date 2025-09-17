@@ -1,7 +1,13 @@
 require "BodilyFunctions"
 
+BF_Urination = BF_Urination or {}
+
+function BF_Urination.GlobalFunctionTimers()
+    BF_Urination.UpdateUrinationValues()
+end
+
 -- Function to update urination-related values
-function BF.UpdateUrinationValues()
+function BF_Urination.UpdateUrinationValues()
     local player = getPlayer()
 
     -- Get player stats
@@ -53,7 +59,7 @@ function BF.UpdateUrinationValues()
 end
 
 -- Function to apply effects when the player has urinated (no clothing logic)
-function BF.UrinateBottoms(leakTriggered)
+function BF_Urination.UrinateBottoms(leakTriggered)
     local player = getPlayer()
 
     -- Optionally create a pee object
@@ -94,7 +100,6 @@ function BF.TriggerToiletUrinate(object, player)
     ISTimedActionQueue.add(ISWalkToTimedAction:new(player, object))
     ISTimedActionQueue.add(ToiletUrinate:new(player, urinateValue, true, true, object))
 end
-
 function BF.TriggerGroundUrinate()
     local player = getPlayer()
     local urinateValue = BF.GetUrinateValue()
@@ -103,7 +108,6 @@ function BF.TriggerGroundUrinate()
     -- Urinate on the ground
     ISTimedActionQueue.add(GroundUrinate:new(player, peeTime, true, true))
 end
-
 function BF.TriggerSelfUrinate(isLeak)
     local isLeak = isLeak or false
     local player = getPlayer()
@@ -111,7 +115,7 @@ function BF.TriggerSelfUrinate(isLeak)
     local peeTime = urinateValue / 4
 
     -- Just apply bottoms effect (no clothing checks)
-    BF.UrinateBottoms(isLeak)
+    BF_Urination.UrinateBottoms(isLeak)
 
     -- Timed action
     ISTimedActionQueue.add(SelfUrinate:new(player, peeTime, false, false, true, false, nil, isLeak))
@@ -122,7 +126,6 @@ function BF.TriggerSelfUrinate(isLeak)
         print("Updated Peed Self Value: " .. BF.GetPeedSelfValue())
     end
 end
-
 function BF.PeeInContainer(item)
     local fluidContainer = item:getFluidContainer()
     local containerCapacity = fluidContainer:getCapacity() * 1000
