@@ -43,7 +43,7 @@ function BF_Defecation.UpdateDefecationValues()
 end
 
 -- Function to apply effects when the player has defecated (no clothing logic)
-function BF.DefecateBottoms(leakTriggered)
+function BF_Defecation.DefecateBottoms(leakTriggered)
     local player = getPlayer()
     local modOptions = PZAPI.ModOptions:getOptions("BF")
 
@@ -64,7 +64,7 @@ end
 -- EVENT REGISTRATION
 -- =====================================================
 
-function BF.TriggerToiletDefecate(object, player, isWiping, wipeType, wipeItem, wipeEfficiency)
+function BF_Defecation.TriggerToiletDefecate(object, player, isWiping, wipeType, wipeItem, wipeEfficiency)
     local player = getPlayer()
     local defecateValue = BF.GetDefecateValue()
     local requirement = SandboxVars.BF.PoopInToiletRequirement or 40
@@ -83,7 +83,7 @@ function BF.TriggerToiletDefecate(object, player, isWiping, wipeType, wipeItem, 
         ISTimedActionQueue.add(WipeSelf:new(player, 20, wipeType, wipeItem, "poop"))
     end
 end
-function BF.TriggerGroundDefecate(isWiping, wipeType, wipeItem, wipeEfficiency)
+function BF_Defecation.TriggerGroundDefecate(isWiping, wipeType, wipeItem, wipeEfficiency)
     local player = getPlayer()
     local defecateValue = BF.GetDefecateValue()
     local poopTime = defecateValue * 2
@@ -94,14 +94,14 @@ function BF.TriggerGroundDefecate(isWiping, wipeType, wipeItem, wipeEfficiency)
         ISTimedActionQueue.add(WipeSelf:new(player, 20, wipeType, wipeItem, "poop"))
     end
 end
-function BF.TriggerSelfDefecate(isLeak)
+function BF_Defecation.TriggerSelfDefecate(isLeak)
     local isLeak = isLeak or false
     local player = getPlayer()
     local defecateValue = BF.GetDefecateValue()
     local poopTime = defecateValue / 4
 
     -- Just trigger bottoms effect (no clothing checks)
-    BF.DefecateBottoms(isLeak)
+    BF_Defecation.DefecateBottoms(isLeak)
 
     -- Timed action
     ISTimedActionQueue.add(SelfDefecate:new(player, poopTime, false, false, true, false, nil, isLeak))
@@ -111,5 +111,5 @@ function BF.TriggerSelfDefecate(isLeak)
         print("Leak triggered: Updated Pooped Self Value: " .. BF.GetPoopedSelfValue())
     end
 end
-function BF.PoopInContainer(item)
+function BF_Defecation.PoopInContainer(item)
 end

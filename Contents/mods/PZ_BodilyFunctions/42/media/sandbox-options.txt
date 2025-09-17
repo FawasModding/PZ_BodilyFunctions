@@ -159,7 +159,7 @@ option BF.PeeOnGroundRequirement
     page = Urination, translation = BF_PeeOnGroundRequirement,
     /* Requires more desperation to pee on ground. */
 }
-option BF.PeeInContainerRequirement
+option BF_Urination.PeeInContainerRequirement
 {
     type = double, min = 0, max = 100.0, default = 60.0,
     page = Urination, translation = BF_PeeInContainerRequirement,

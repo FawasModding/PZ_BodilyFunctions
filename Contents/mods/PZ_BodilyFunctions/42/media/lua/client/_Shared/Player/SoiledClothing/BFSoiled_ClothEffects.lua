@@ -1,25 +1,25 @@
 ---@diagnostic disable: duplicate-set-field
-BF_Soiled = BF_Soiled or {}
+BF_Soiling = BF_Soiling or {}
 
 -- Decide which overlay to use
-function BF_Soiled.GetBySeverity(item, stainType)
+function BF_Soiling.GetBySeverity(item, stainType)
     
 end
 
 -- Apply Overlay
-function BF_Soiled.ApplyToSlot(player, wornItem, stainType, bodyLocation)
+function BF_Soiling.ApplyToSlot(player, wornItem, stainType, bodyLocation)
     
 end
 
 -- Remove Overlay
-function BF_Soiled.RemoveFromSlot(player, wornItem, stainType)
+function BF_Soiling.RemoveFromSlot(player, wornItem, stainType)
     
 end
 
-function BF_Soiled.ClearAllByType(player, stainType)
+function BF_Soiling.ClearAllByType(player, stainType)
     
 end
 
-function BF_Soiled.RefreshForPlayer(player, stainType)
+function BF_Soiling.RefreshForPlayer(player, stainType)
     
 end

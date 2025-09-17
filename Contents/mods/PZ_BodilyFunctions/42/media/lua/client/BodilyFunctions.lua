@@ -102,7 +102,7 @@ function BF.HandleInstantAccidents()
     -- Leaking feature for urination
     if player:HasTrait("UrinaryIncontinence") and (urinateValue >= 0.2 * bladderMaxValue) then
         if ZombRand(100) < leakChance then
-            BF.TriggerSelfUrinate(true)  -- Trigger self urination leak action
+            BF_Urination.TriggerSelfUrinate(true)  -- Trigger self urination leak action
             print("Leaked Pee" .. tostring(leakChance))
         end
     end
@@ -110,7 +110,7 @@ function BF.HandleInstantAccidents()
     -- Leaking feature for defecation
     if player:HasTrait("FecalIncontinence") and (defecateValue >= 0.2 * bowelsMaxValue) then
         if ZombRand(100) < leakChance then
-            BF.TriggerSelfDefecate(true)  -- Trigger self defecation leak action
+            BF_Defecation.TriggerSelfDefecate(true)  -- Trigger self defecation leak action
             print("Leaked Poo" .. tostring(leakChance))
         end
     end
@@ -137,7 +137,7 @@ function BF.HandleInstantAccidents()
 
             -- If the player has the "Bedsoiler" trait, trigger the defecation accident
             if player:HasTrait("Bedsoiler") then
-                BF.DefecateBottoms()  -- Simulate defecating in bed
+                BF_Defecation.DefecateBottoms()  -- Simulate defecating in bed
                 BF.SetDefecateValue(0)  -- Reset defecate value after accident
             end
 
@@ -145,9 +145,9 @@ function BF.HandleInstantAccidents()
     else
         -- If the player is awake, start the urination or defecation process based on their bladder/bowel status
         if urinateValue >= bladderThreshold then
-            BF.TriggerSelfUrinate()  -- Trigger self urination action
+            BF_Urination.TriggerSelfUrinate()  -- Trigger self urination action
         elseif defecateValue >= bowelsThreshold then
-            BF.TriggerSelfDefecate()  -- Trigger self defecation action
+            BF_Defecation.TriggerSelfDefecate()  -- Trigger self defecation action
         end
     end
 end
@@ -225,18 +225,18 @@ function BF.HandleUrgencyHiccup()
             -- Urination logic
             if player:HasTrait("UrinaryIncontinence") then
                 -- Incontinent players always leak fully
-                BF.TriggerSelfUrinate()
+                BF_Urination.TriggerSelfUrinate()
             elseif ZombRand(100) < accidentChance then
                 if urinateValue >= 0.4 * bladderMaxValue then
                     if player:HasTrait("BladderControl") then
                         -- With BladderControl, 75% chance for a small leak vs 25% full leak
                         if ZombRand(100) < 75 then
-                                BF.TriggerSelfUrinate(true)  -- small leak version
+                                BF_Urination.TriggerSelfUrinate(true)  -- small leak version
                         else
-                                BF.TriggerSelfUrinate()        -- full leak
+                                BF_Urination.TriggerSelfUrinate()        -- full leak
                         end
                     else
-                        BF.TriggerSelfUrinate()            -- no control trait → full leak
+                        BF_Urination.TriggerSelfUrinate()            -- no control trait → full leak
                         print("Triggered full leak (no trait)")
                     end
                 end
@@ -245,17 +245,17 @@ function BF.HandleUrgencyHiccup()
             -- Defecation logic
             if player:HasTrait("FecalIncontinence") then
                 -- Incontinent players always defecate fully
-                BF.TriggerSelfDefecate()
+                BF_Defecation.TriggerSelfDefecate()
             elseif ZombRand(100) < accidentChance then
                 if defecateValue >= 0.4 * bowelsMaxValue then
                     if player:HasTrait("BowelControl") then
                         if ZombRand(100) < 75 then
-                                BF.TriggerSelfDefecate(true)
+                                BF_Defecation.TriggerSelfDefecate(true)
                         else
-                                BF.TriggerSelfDefecate()
+                                BF_Defecation.TriggerSelfDefecate()
                         end
                     else
-                        BF.TriggerSelfDefecate()
+                        BF_Defecation.TriggerSelfDefecate()
                     end
                 end
             end

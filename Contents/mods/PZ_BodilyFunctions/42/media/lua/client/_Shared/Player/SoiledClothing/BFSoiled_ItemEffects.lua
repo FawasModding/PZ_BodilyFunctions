@@ -1,22 +1,22 @@
 ---@diagnostic disable: duplicate-set-field
-BF_Soiled = BF_Soiled or {}
+BF_Soiling = BF_Soiling or {}
 
 -- Affect mood over time
-function BF_Soiled.MoodConsequences()
+function BF_Soiling.MoodConsequences()
     
 end
 
 -- Show urinated and defecated garments moodles
-function BF_Soiled.ShowSoiledMoodles()
+function BF_Soiling.ShowSoiledMoodles()
     
 end
 
 -- For Items <----
-function BF_Soiled.ApplySoilingEffects(item, isLeak)
+function BF_Soiling.ApplySoilingEffects(item, isLeak)
     
 end
 
 -- For Clothing <----
-function BF_Soiled.RefreshSoiledSeverityFromModData(clothing)
+function BF_Soiling.RefreshSoiledSeverityFromModData(clothing)
     
 end

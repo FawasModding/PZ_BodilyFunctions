@@ -86,7 +86,7 @@ end
 -- EVENT REGISTRATION
 -- =====================================================
 
-function BF.TriggerToiletUrinate(object, player)
+function BF_Urination.TriggerToiletUrinate(object, player)
     local player = getPlayer()
     local urinateValue = BF.GetUrinateValue()
     local requirement = SandboxVars.BF.PeeInToiletRequirement or 40
@@ -100,7 +100,7 @@ function BF.TriggerToiletUrinate(object, player)
     ISTimedActionQueue.add(ISWalkToTimedAction:new(player, object))
     ISTimedActionQueue.add(ToiletUrinate:new(player, urinateValue, true, true, object))
 end
-function BF.TriggerGroundUrinate()
+function BF_Urination.TriggerGroundUrinate()
     local player = getPlayer()
     local urinateValue = BF.GetUrinateValue()
     local peeTime = urinateValue
@@ -108,7 +108,7 @@ function BF.TriggerGroundUrinate()
     -- Urinate on the ground
     ISTimedActionQueue.add(GroundUrinate:new(player, peeTime, true, true))
 end
-function BF.TriggerSelfUrinate(isLeak)
+function BF_Urination.TriggerSelfUrinate(isLeak)
     local isLeak = isLeak or false
     local player = getPlayer()
     local urinateValue = BF.GetUrinateValue()
@@ -126,7 +126,7 @@ function BF.TriggerSelfUrinate(isLeak)
         print("Updated Peed Self Value: " .. BF.GetPeedSelfValue())
     end
 end
-function BF.PeeInContainer(item)
+function BF_Urination.PeeInContainer(item)
     local fluidContainer = item:getFluidContainer()
     local containerCapacity = fluidContainer:getCapacity() * 1000
     local bladderUrine = BF.GetUrinateValue()
