@@ -83,7 +83,7 @@ function BF.HandleInstantAccidents()
     local bladderThreshold = 0.95 * bladderMaxValue -- 95% of max bladder value
     local bowelsThreshold = 0.98 * bowelsMaxValue -- 98% of max bowel value
 
-    -- Leaking feature for Incontinent traits --------------------------------------------------------------------------
+    -- Leaking feature for Incontinent traits ---------------------------------
 
     -- Base leak chance
     local leakChance = 2
