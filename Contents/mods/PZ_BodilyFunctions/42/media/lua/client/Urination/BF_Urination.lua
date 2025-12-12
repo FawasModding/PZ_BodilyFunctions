@@ -206,7 +206,7 @@ function BF.TriggerToiletUrinate(object, player)
     local urinateValue = BF.GetUrinateValue()
     local requirement = SandboxVars.BF.PeeInToiletRequirement or 40
     local bladderMaxValue = SandboxVars.BathroomFunctions.BladderMaxValue or 100
-    local hasShyBladder = player:HasTrait("ShyBladder")
+    local hasShyBladder = player:hasTrait(BFTraits.ShyBladder)
     local isBeingWatched = BF.IsBeingWatched(player)
 
     -- Only allow action if requirements are met

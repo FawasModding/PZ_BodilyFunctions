@@ -3,7 +3,7 @@ module BF {
     item SuitTrousersMesh_Peed {
         Type = Clothing,
         ClothingItem = SuitTrousersMesh_Peed,
-        BodyLocation = PeedOverlay_Pants,
+        BodyLocation = BF:PeedOverlay_Pants,
         IconsForTexture = PeedPants,
         Tags = BathroomOverlay,
         WorldStaticModel = Trousers_Ground,

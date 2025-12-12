@@ -3,7 +3,7 @@ module BF {
     item Female_Underpants_Peed {
     Type = Clothing,
     ClothingItem = Female_Underpants_Peed,
-    BodyLocation = PeedOverlay_Underwear,
+    BodyLocation = BF:PeedOverlay_Underwear,
     IconsForTexture = PeedPants,
     Tags = BathroomOverlay,
     WorldStaticModel = Trousers_Ground,

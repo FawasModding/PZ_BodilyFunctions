@@ -3,7 +3,7 @@ module BF {
     item Male_Boxers_Peed {
         Type = Clothing,
         ClothingItem = Male_Boxers_Peed,
-        BodyLocation = PeedOverlay_Underwear,
+        BodyLocation = BF:PeedOverlay_Underwear,
         IconsForTexture = PeedPants,
         Tags = BathroomOverlay,
         WorldStaticModel = Trousers_Ground,

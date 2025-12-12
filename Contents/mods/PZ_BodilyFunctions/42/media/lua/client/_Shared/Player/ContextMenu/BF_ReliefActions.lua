@@ -38,10 +38,10 @@ function BF.ReliefRightClick(player, context, worldObjects)
     local modOptions = PZAPI.ModOptions:getOptions("BF")
 
     -- Check traits and conditions
-    local hasParuresis = player:HasTrait("Paruresis")
-    local hasParcopresis = player:HasTrait("Parcopresis")
-    local hasShyBladder = player:HasTrait("ShyBladder")
-    local hasShyBowels = player:HasTrait("ShyBowels")
+    local hasParuresis = player:hasTrait(BFTraits.Paruresis)
+    local hasParcopresis = player:hasTrait(BFTraits.Parcopresis)
+    local hasShyBladder = player:hasTrait(BFTraits.ShyBladder)
+    local hasShyBowels = player:hasTrait(BFTraits.ShyBowels)
 
     -- Use common function to check if being watched
     local isBeingWatched = BF.IsBeingWatched(player)
@@ -533,8 +533,8 @@ end
 function BF.IsBeingWatched(player)
     local isBeingWatched = false
     
-    if player:HasTrait("Paruresis") or player:HasTrait("Parcopresis") or 
-       player:HasTrait("ShyBladder") or player:HasTrait("ShyBowels") then
+    if player:hasTrait(BFTraits.Paruresis) or player:hasTrait(BFTraits.Paruresis) or 
+       player:hasTrait(BFTraits.ShyBladder) or player:hasTrait(BFTraits.ShyBladder) then
         
         local checkRange = 10
         local playerX = player:getX()
@@ -586,8 +586,8 @@ function BF.AddWipingOptions(parentMenu, worldObjects, player, defecateValue, re
         return nil
     end
 
-    local hasParcopresis = player:HasTrait("Parcopresis")
-    local hasShyBowels = player:HasTrait("ShyBowels")
+    local hasParcopresis = player:hasTrait(BFTraits.Parcopresis)
+    local hasShyBowels = player:hasTrait(BFTraits.ShyBowels)
     local isBeingWatched = BF.IsBeingWatched(player)
 
     if (hasParcopresis or hasShyBowels) and isBeingWatched then

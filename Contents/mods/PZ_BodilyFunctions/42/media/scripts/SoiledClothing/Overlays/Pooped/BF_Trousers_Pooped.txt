@@ -3,7 +3,7 @@ module BF {
     item Trousers_Pooped {
         Type = Clothing,
         ClothingItem = Trousers_Pooped,
-        BodyLocation = PoopedOverlay_Pants,
+        BodyLocation = BF:PoopedOverlay_Pants,
         IconsForTexture = PeedPants,
         Tags = BathroomOverlay,
         WorldStaticModel = Trousers_Ground,

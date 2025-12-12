@@ -183,7 +183,7 @@ function BF.TriggerToiletDefecate(object, player, isWiping, wipeType, wipeItem, 
     local defecateValue = BF.GetDefecateValue()
     local requirement = SandboxVars.BF.PoopInToiletRequirement or 40
     local bowelsMaxValue = SandboxVars.BathroomFunctions.BowelsMaxValue or 100
-    local hasShyBowels = player:HasTrait("ShyBowels")
+    local hasShyBowels = player:hasTrait(BFTraits.ShyBowels)
     local isBeingWatched = BF.IsBeingWatched(player)
 
     if defecateValue < (requirement / 100) * bowelsMaxValue or (hasShyBowels and isBeingWatched) then

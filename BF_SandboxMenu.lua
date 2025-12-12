@@ -151,7 +151,7 @@ end
 
 -- Register listeners
 for _, config in ipairs(panels) do
-    OnCreateSandboxOptions.addListener(getText(config.name), function(panel)
+    OnCreateSandboxOptions.addListener(config.name, function(panel)
         CreatePanel(panel, config)
     end)
 end

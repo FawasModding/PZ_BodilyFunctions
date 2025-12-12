@@ -3,37 +3,6 @@ BF.didFirstTimer = false
 
 local InventoryUI = require("Starlit/client/ui/InventoryUI")
 
--- Set BowelsMaxValue and BladderMaxValue
--- Make sure the player is loaded.
--- Define your override function first.
-function BF.OverrideSandboxMax()
-    local player = getSpecificPlayer(0)  -- using getSpecificPlayer(0) for singleplayer
-    if player then
-        local baseBladderMax = BF.GetMaxBladderValue()
-        local baseBowelsMax  = BF.GetMaxBowelValue()
-
-        if player:HasTrait("SmallBladder") then
-            SandboxVars.BathroomFunctions.BladderMaxValue = baseBladderMax * 0.75
-        elseif player:HasTrait("BigBladder") then
-            SandboxVars.BathroomFunctions.BladderMaxValue = baseBladderMax * 1.25
-        end
-
-        if player:HasTrait("SmallBowels") then
-            SandboxVars.BathroomFunctions.BowelsMaxValue = baseBowelsMax * 0.75
-        elseif player:HasTrait("BigBowels") then
-            SandboxVars.BathroomFunctions.BowelsMaxValue = baseBowelsMax * 1.25
-        end
-
-        print("Adjusted Bladder Max Value: " .. SandboxVars.BathroomFunctions.BladderMaxValue)
-        print("Adjusted Bowels Max Value: " .. SandboxVars.BathroomFunctions.BowelsMaxValue)
-    else
-        print("Player not loaded!")
-    end
-end
-
--- Then register the function to run once the game starts.
-Events.OnGameStart.Add(BF.OverrideSandboxMax)
-
 -- =====================================================
 --
 -- BATHROOM FUNCTIONALITY AND TIMERS
@@ -112,7 +81,7 @@ function BF.HandleInstantAccidents()
 
 
     -- Leaking feature for urination
-    if player:HasTrait("UrinaryIncontinence") and (urinateValue >= 0.2 * bladderMaxValue) then
+    if player:hasTrait(BFTraits.UrinaryIncontinence) and (urinateValue >= 0.2 * bladderMaxValue) then
         if ZombRand(100) < leakChance then
             BF.TriggerSelfUrinate(true)  -- Trigger self urination leak action
             print("Leaked Pee" .. tostring(leakChance))
@@ -120,7 +89,7 @@ function BF.HandleInstantAccidents()
     end
 
     -- Leaking feature for defecation
-    if player:HasTrait("FecalIncontinence") and (defecateValue >= 0.2 * bowelsMaxValue) then
+    if player:hasTrait(BFTraits.FecalIncontinence) and (defecateValue >= 0.2 * bowelsMaxValue) then
         if ZombRand(100) < leakChance then
             BF.TriggerSelfDefecate(true)  -- Trigger self defecation leak action
             print("Leaked Poo" .. tostring(leakChance))
@@ -138,7 +107,7 @@ function BF.HandleInstantAccidents()
             player:forceAwake()  -- Wake the player up if they need to urinate
 
             -- If the player has the "Bedwetter" trait, trigger the urination accident
-            if player:HasTrait("Bedwetter") then
+            if player:hasTrait(BFTraits.Bedwetter) then
                 BF.UrinateBottoms()  -- Simulate urinating in bed
                 BF.SetUrinateValue(0)  -- Reset urinate value after accident
             end
@@ -148,7 +117,7 @@ function BF.HandleInstantAccidents()
             player:forceAwake()  -- Wake the player up if they need to defecate
 
             -- If the player has the "Bedsoiler" trait, trigger the defecation accident
-            if player:HasTrait("Bedsoiler") then
+            if player:hasTrait(BFTraits.Bedsoiler) then
                 BF.DefecateBottoms()  -- Simulate defecating in bed
                 BF.SetDefecateValue(0)  -- Reset defecate value after accident
             end
@@ -235,12 +204,12 @@ function BF.HandleUrgencyHiccup()
             end
 
             -- Urination logic
-            if player:HasTrait("UrinaryIncontinence") then
+            if player:hasTrait(BFTraits.UrinaryIncontinence) then
                 -- Incontinent players always leak fully
                 BF.TriggerSelfUrinate()
             elseif ZombRand(100) < accidentChance then
                 if urinateValue >= 0.4 * bladderMaxValue then
-                    if player:HasTrait("BladderControl") then
+                    if player:hasTrait(BFTraits.BladderControl) then
                         -- With BladderControl, 75% chance for a small leak vs 25% full leak
                         if ZombRand(100) < 75 then
                                 BF.TriggerSelfUrinate(true)  -- small leak version
@@ -255,12 +224,12 @@ function BF.HandleUrgencyHiccup()
             end
 
             -- Defecation logic
-            if player:HasTrait("FecalIncontinence") then
+            if player:hasTrait(BFTraits.FecalIncontinence) then
                 -- Incontinent players always defecate fully
                 BF.TriggerSelfDefecate()
             elseif ZombRand(100) < accidentChance then
                 if defecateValue >= 0.4 * bowelsMaxValue then
-                    if player:HasTrait("BowelControl") then
+                    if player:hasTrait(BFTraits.BowelControl) then
                         if ZombRand(100) < 75 then
                                 BF.TriggerSelfDefecate(true)
                         else
@@ -355,40 +324,13 @@ end
 
 function BF.onGameBoot()
     local humanGroup = BodyLocations.getGroup("Human"); -- Get the BodyLocations group for humans
-    local peedUndiesLocation = humanGroup:getOrCreateLocation("PeedOverlay_Underwear"); -- Create or fetch the PeedOverlay location
-    local peedPantsLocation = humanGroup:getOrCreateLocation("PeedOverlay_Pants"); -- Create or fetch the PeedOverlay2 location
-    local poopedUndiesLocation = humanGroup:getOrCreateLocation("PoopedOverlay_Underwear"); -- Create or fetch the PoopedOverlay location
-    local poopedPantsLocation = humanGroup:getOrCreateLocation("PoopedOverlay_Pants"); -- Create or fetch the PoopedOverlay2 location if needed
 
-    -- Remove PeedOverlay if it already exists to avoid duplication
-    local list = getClassFieldVal(humanGroup, getClassField(humanGroup, 1));
-    list:remove(peedUndiesLocation);
-
-    -- Remove PeedOverlay2 if it already exists to avoid duplication
-    list:remove(peedPantsLocation);
-
-    -- Remove PoopedOverlay if it already exists to avoid duplication
-    list:remove(poopedUndiesLocation);
-
-    -- Remove PoopedOverlay2 if it already exists to avoid duplication
-    list:remove(poopedPantsLocation);
-
-    -- Find the index of Pants to ensure overlays render above it
-    local pantsIndex = humanGroup:indexOf("Pants");
-
-    -- Add PeedOverlay just after Pants
-    list:add(pantsIndex + 1, peedUndiesLocation);
-
-    -- Add PeedOverlay2 just after PeedOverlay
-    list:add(pantsIndex + 2, peedPantsLocation);
-
-    -- Add PoopedOverlay just after PeedOverlay2
-    list:add(pantsIndex + 3, poopedUndiesLocation);
-
-    -- Add PoopedOverlay2 just after PoopedOverlay if needed
-    list:add(pantsIndex + 4, poopedPantsLocation);
+    -- Call getOrCreateLocation() with the registry objects
+    local peedUndiesLocation   = humanGroup:getOrCreateLocation(BFBodyLocations.PeedOverlay_Underwear)
+    local peedPantsLocation    = humanGroup:getOrCreateLocation(BFBodyLocations.PeedOverlay_Pants)
+    local poopedUndiesLocation = humanGroup:getOrCreateLocation(BFBodyLocations.PoopedOverlay_Underwear)
+    local poopedPantsLocation  = humanGroup:getOrCreateLocation(BFBodyLocations.PoopedOverlay_Pants)
 end
-
 
 --[[
 Register the BathroomFunctionTimers function to run every 10 in-game minutes
