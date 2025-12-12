@@ -16,5 +16,8 @@
         "debug": "disable",
         "io": "disable",
         "package": "disable"
-    }
+    },
+    "Lua.diagnostics.globals": [
+        "PZAPI"
+    ]
 }
