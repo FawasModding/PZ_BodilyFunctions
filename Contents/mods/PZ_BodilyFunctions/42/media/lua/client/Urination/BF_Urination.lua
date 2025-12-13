@@ -5,10 +5,10 @@ function BF.UpdateUrinationValues()
     local player = getPlayer()
     
     -- Get player stats
-    local thirst = player:getStats():getThirst()
-    local hunger = player:getStats():getHunger()
-    local stress = player:getStats():getStress()
-    local endurance = player:getStats():getEndurance()
+    local thirst = player:getStats():get(CharacterStat.THIRST)
+    local hunger = player:getStats():get(CharacterStat.HUNGER)
+    local stress = player:getStats():get(CharacterStat.STRESS)
+    local endurance = player:getStats():get(CharacterStat.ENDURANCE)
 
     -- Calculate bladder multiplier where:
     -- - At thirst 0 (fully hydrated): multiplier = 1.0 (standard rate)

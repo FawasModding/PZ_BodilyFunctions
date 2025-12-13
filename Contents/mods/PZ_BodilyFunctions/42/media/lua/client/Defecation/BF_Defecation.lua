@@ -5,10 +5,10 @@ function BF.UpdateDefecationValues()
     local player = getPlayer()
 
     -- Get player stats
-    local thirst = player:getStats():getThirst()
-    local hunger = player:getStats():getHunger()
-    local stress = player:getStats():getStress()
-    local endurance = player:getStats():getEndurance()
+    local thirst = player:getStats():get(CharacterStat.THIRST)
+    local hunger = player:getStats():get(CharacterStat.HUNGER)
+    local stress = player:getStats():get(CharacterStat.STRESS)
+    local endurance = player:getStats():get(CharacterStat.ENDURANCE)
 
     -- Calculate bowel multiplier where:
     -- - At hunger 0 (fully sationed): multiplier = 1.0 (standard rate)

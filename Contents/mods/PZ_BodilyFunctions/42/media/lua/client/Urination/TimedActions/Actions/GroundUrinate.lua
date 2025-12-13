@@ -41,7 +41,8 @@ function GroundUrinate:perform()
 	local urinateValue = BF.GetUrinateValue()
 
 	if self.character:isFemale() then --Minor detail, but squatting should give more fatigue than standing
-		self.character:getStats():setFatigue(self.character:getStats():getFatigue() + 0.025)
+		local fatigueToGive = self.character:getStats():get(CharacterStat.FATIGUE) + 0.025
+		self.character:getStats():set(CharacterStat.FATIGUE, fatigueToGive)
 	end
 
 	--getSoundManager():PlayWorldSound("BF_Pee_Ground_Medium", self.character:getCurrentSquare(), 0, 10, 0, false)

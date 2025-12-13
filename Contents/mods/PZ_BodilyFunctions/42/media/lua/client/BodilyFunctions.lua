@@ -70,13 +70,13 @@ function BF.HandleInstantAccidents()
     local leakChance = 2
 
     -- Leak Chance drunkiness
-    if player:getStats():getDrunkenness() > 0 then
+    if player:getStats():get(CharacterStat.INTOXICATION) > 0 then
         leakChance = leakChance + 5 -- Drunk modifier
     end
 
     -- Panic modifier: increase leak chance if the player is panicked
-    if player:getMoodles():getMoodleLevel(MoodleType.Panic) > 0 then
-        leakChance = leakChance + (player:getMoodles():getMoodleLevel(MoodleType.Panic)*2)  -- Increase by Panic level
+    if player:getMoodles():getMoodleLevel(MoodleType.PANIC) > 0 then
+        leakChance = leakChance + (player:getMoodles():getMoodleLevel(MoodleType.PANIC)*2)  -- Increase by Panic level
     end
 
 
@@ -157,11 +157,11 @@ function BF.HandleUrgencyHiccup()
         end
 
         -- Panic modifier: increase hiccup chance if the player is panicked
-        if player:getMoodles():getMoodleLevel(MoodleType.Panic) > 0 then
-            hiccupChance = hiccupChance + (player:getMoodles():getMoodleLevel(MoodleType.Panic) * 2)  -- Increase by Panic level
+        if player:getMoodles():getMoodleLevel(MoodleType.PANIC) > 0 then
+            hiccupChance = hiccupChance + (player:getMoodles():getMoodleLevel(MoodleType.PANIC) * 2)  -- Increase by Panic level
         end
 
-        local panicLevel = player:getMoodles():getMoodleLevel(MoodleType.Panic)
+        local panicLevel = player:getMoodles():getMoodleLevel(MoodleType.PANIC)
         print("Panic Level:", panicLevel, "Calculated Value:", panicLevel * 2)
 
     end
@@ -199,7 +199,7 @@ function BF.HandleUrgencyHiccup()
 
             -- Accident Chance (trigger accident if player is too full)
             local accidentChance = 5 -- Base 5% chance
-            if player:getStats():getDrunkenness() > 0 then
+            if player:getStats():get(CharacterStat.INTOXICATION) > 0 then
                 accidentChance = accidentChance + 10 -- Drunk modifier
             end
 

@@ -34,7 +34,9 @@ function GroundDefecate:perform()
 	local defecateValue = BF.GetDefecateValue()
 
 	-- Add fatigue since the player had to squat to poop
-	self.character:getStats():setFatigue(self.character:getStats():getFatigue() + 0.025)
+
+	local fatigueToGive = self.character:getStats():get(CharacterStat.FATIGUE) + 0.025
+	self.character:getStats():set(CharacterStat.FATIGUE, fatigueToGive)
 
 	--getSoundManager():PlayWorldSound("BF_Poop_Self_Light", self.character:getCurrentSquare(), 0, 10, 0, false)
 
