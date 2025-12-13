@@ -1,11 +1,11 @@
 module BF {
 
     item SuitTrousersMesh_Peed {
-        Type = Clothing,
+        ItemType = base:clothing,
         ClothingItem = SuitTrousersMesh_Peed,
         BodyLocation = BF:PeedOverlay_Pants,
         IconsForTexture = PeedPants,
-        Tags = BathroomOverlay,
+        Tags = BF:PeedOverlay,
         WorldStaticModel = Trousers_Ground,
 
         RunSpeedModifier = 0.9,

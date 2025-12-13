@@ -20,18 +20,18 @@ BF_WasteProducts.ScanNearbyForWaste = function()
 
                     if object ~= nil and object:getObjectName() == "WorldInventoryItem" then
                         local item = object:getItem()
-                        if item:hasTag("BFHumanFeces") or item:hasTag("BFHumanUrine") then
+                        if item:hasTag(BFTags.HumanFeces) or item:hasTag(BFTags.HumanUrine) then
                             wasteAmount = wasteAmount + 1
                             lastWasteSquare = sq
-                            if item:hasTag("BFHumanFeces") and sq == player:getSquare() then
+                            if item:hasTag(BFTags.HumanFeces) and sq == player:getSquare() then
                                 --BF_FecalFootprints.fecesSteps = 5
                             end
                         end
                     elseif object ~= nil and objectContainer ~= nil then
-                        wasteAmount = wasteAmount + objectContainer:getCountTagRecurse("BFHumanFeces")
-                        wasteAmount = wasteAmount + objectContainer:getCountTagRecurse("BFHumanUrine")
+                        wasteAmount = wasteAmount + objectContainer:getCountTagRecurse(BFTags.HumanFeces)
+                        wasteAmount = wasteAmount + objectContainer:getCountTagRecurse(BFTags.HumanUrine)
                         lastWasteSquare = sq
-                        if objectContainer:getCountTagRecurse("BFHumanFeces") > 0 and sq == player:getSquare() then
+                        if objectContainer:getCountTagRecurse(BFTags.HumanFeces) > 0 and sq == player:getSquare() then
                             --BF_FecalFootprints.fecesSteps = 5
                         end
                     end
@@ -47,8 +47,8 @@ BF_WasteProducts.ScanNearbyForWaste = function()
     end
 
     local playerInventory = player:getInventory()
-    if not insertedInTable and (playerInventory:getCountTag("BFHumanFeces") > 0 or playerInventory:getCountTag("BFHumanUrine") > 0) then
-        wasteAmount = wasteAmount + playerInventory:getCountTag("BFHumanFeces") + playerInventory:getCountTag("BFHumanUrine")
+    if not insertedInTable and (playerInventory:getCountTag(BFTags.HumanFeces) > 0 or playerInventory:getCountTag(BFTags.HumanUrine) > 0) then
+        wasteAmount = wasteAmount + playerInventory:getCountTag(BFTags.HumanFeces) + playerInventory:getCountTag(BFTags.HumanUrine)
         BF_WasteProducts.ApplyWasteExposureEffects(player:getSquare(), wasteAmount)
     end
 end
@@ -73,16 +73,16 @@ BF_WasteProducts.ApplyWasteExposureEffects = function(lastWasteSquare, wasteAmou
             local objectContainer = object:getContainer()
             if object ~= nil and object:getObjectName() == "WorldInventoryItem" then
                 local item = object:getItem()
-                if item:hasTag("BFHumanFeces") then
+                if item:hasTag(BFTags.HumanFeces) then
                     hasFeces = true
-                elseif item:hasTag("BFHumanUrine") then
+                elseif item:hasTag(BFTags.HumanUrine) then
                     hasUrine = true
                 end
             elseif object ~= nil and objectContainer ~= nil then
-                if objectContainer:getCountTagRecurse("BFHumanFeces") > 0 then
+                if objectContainer:getCountTagRecurse(BFTags.HumanFeces) > 0 then
                     hasFeces = true
                 end
-                if objectContainer:getCountTagRecurse("BFHumanUrine") > 0 then
+                if objectContainer:getCountTagRecurse(BFTags.HumanUrine) > 0 then
                     hasUrine = true
                 end
             end
@@ -92,10 +92,10 @@ BF_WasteProducts.ApplyWasteExposureEffects = function(lastWasteSquare, wasteAmou
     -- Check player inventory if no waste was found in the square
     if lastWasteSquare == player:getSquare() then
         local playerInventory = player:getInventory()
-        if playerInventory:getCountTag("BFHumanFeces") > 0 then
+        if playerInventory:getCountTag(BFTags.HumanFeces) > 0 then
             hasFeces = true
         end
-        if playerInventory:getCountTag("BFHumanUrine") > 0 then
+        if playerInventory:getCountTag(BFTags.HumanUrine) > 0 then
             hasUrine = true
         end
     end
@@ -131,16 +131,16 @@ BF_WasteProducts.UpdateWasteFlies = function()
         for j = 0, worldObjects:size() - 1 do
             local object = worldObjects:get(j)
             local objectContainer = object:getContainer()
-            if object ~= nil and object:getObjectName() == "WorldInventoryItem" and object:getItem():hasTag("BFHumanFeces") then
+            if object ~= nil and object:getObjectName() == "WorldInventoryItem" and object:getItem():hasTag(BFTags.HumanFeces) then
                 fecesFound = true
                 break
-            elseif object ~= nil and objectContainer ~= nil and objectContainer:getCountTagRecurse("BFHumanFeces") > 0 then
+            elseif object ~= nil and objectContainer ~= nil and objectContainer:getCountTagRecurse(BFTags.HumanFeces) > 0 then
                 fecesFound = true
                 break
             end
         end
 
-        if not fecesFound and player:getInventory():getCountTag("BFHumanFeces") > 0 and fecesSquare:DistToProper(player:getSquare()) < 1 then
+        if not fecesFound and player:getInventory():getCountTag(BFTags.HumanFeces) > 0 and fecesSquare:DistToProper(player:getSquare()) < 1 then
             fecesFound = true
         end
 

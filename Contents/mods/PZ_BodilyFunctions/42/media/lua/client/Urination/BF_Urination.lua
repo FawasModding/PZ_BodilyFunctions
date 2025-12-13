@@ -138,7 +138,7 @@ function BF.UrinateBottoms(leakTriggered)
 
         -- Apply overlay if severity meets threshold
         if SandboxVars.BF.VisiblePeeStain and (not leakTriggered or modData.peedSeverity >= 25) then
-            BF_Overlays.ApplyOverlayToSlot(player, underwear, "peed", "PeedOverlay_Underwear")
+            BF_Overlays.ApplyOverlayToSlot(player, underwear, "peed", BFBodyLocations.PeedOverlay_Underwear)
         end
 
         -- Update clothing properties
@@ -166,7 +166,7 @@ function BF.UrinateBottoms(leakTriggered)
 
         -- Apply overlay if severity meets threshold
         if SandboxVars.BF.VisiblePeeStain and (not leakTriggered or modData.peedSeverity >= 25) then
-            BF_Overlays.ApplyOverlayToSlot(player, pants, "peed", "PeedOverlay_Pants")
+            BF_Overlays.ApplyOverlayToSlot(player, pants, "peed", BodyLocation.PeedOverlay_Pants)
         end
 
         -- Update clothing properties

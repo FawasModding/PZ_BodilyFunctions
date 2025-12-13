@@ -1,6 +1,7 @@
 -- required for build 42.13+
 BFTraits = BFTraits or {}
 BFBodyLocations = BFBodyLocations or {}
+BFTags = BFTags or {}
 
 BFTraits.SmallBowels = CharacterTrait.register("BF:SmallBowels")
 BFTraits.Bedsoiler = CharacterTrait.register("BF:Bedsoiler")
@@ -22,3 +23,10 @@ BFBodyLocations.PeedOverlay_Underwear = ItemBodyLocation.register("BF:PeedOverla
 BFBodyLocations.PeedOverlay_Pants = ItemBodyLocation.register("BF:PeedOverlay_Pants")
 BFBodyLocations.PoopedOverlay_Underwear = ItemBodyLocation.register("BF:PoopedOverlay_Underwear")
 BFBodyLocations.PoopedOverlay_Pants = ItemBodyLocation.register("BF:PoopedOverlay_Pants")
+
+BFTags.PeedOverlay = ItemTag.register("BF:PeedOverlay")
+BFTags.PoopedOverlay = ItemTag.register("BF:PoopedOverlay")
+
+BFTags.HumanUrine = ItemTag.register("BF:HumanUrine")
+BFTags.HumanFeces = ItemTag.register("BF:HumanFeces")
+BFTags.HumanVomit = ItemTag.register("BF:HumanVomit")

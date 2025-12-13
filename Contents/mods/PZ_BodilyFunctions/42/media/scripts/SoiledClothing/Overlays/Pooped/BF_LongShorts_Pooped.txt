@@ -1,11 +1,11 @@
 module BF {
 
     item LongShorts_Pooped {
-        Type = Clothing,
+        ItemType = base:clothing,
         ClothingItem = LongShorts_Pooped,
         BodyLocation = BF:PoopedOverlay_Pants,
         IconsForTexture = PeedPants,
-        Tags = BathroomOverlay,
+        Tags = BF:PoopedOverlay,
         WorldStaticModel = Trousers_Ground,
 
         RunSpeedModifier = 0.8,

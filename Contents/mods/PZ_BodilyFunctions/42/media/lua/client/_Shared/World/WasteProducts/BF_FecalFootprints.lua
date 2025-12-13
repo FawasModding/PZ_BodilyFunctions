@@ -75,8 +75,8 @@ BF_FecalFootprints.HasFecesOnSquare = function(square)
         local objectContainer = object:getContainer()
         if object and object:getObjectName() == "WorldInventoryItem" then
             local item = object:getItem()
-            if item and item:hasTag("BFHumanFeces") then return true end
-        elseif objectContainer and objectContainer:getCountTagRecurse("BFHumanFeces") > 0 then
+            if item and item:hasTag("BF:HumanFeces") then return true end
+        elseif objectContainer and objectContainer:getCountTagRecurse("BF:HumanFeces") > 0 then
             return true
         end
     end

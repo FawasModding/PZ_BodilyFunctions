@@ -2,8 +2,8 @@
 BF_Overlays = {}
 
 Events.OnLoad.Add(function()
-    BF_Overlays.RefreshOverlaysForPlayer(getPlayer(), "peed")
-    BF_Overlays.RefreshOverlaysForPlayer(getPlayer(), "pooped")
+    --BF_Overlays.RefreshOverlaysForPlayer(getPlayer(), "peed")
+    --BF_Overlays.RefreshOverlaysForPlayer(getPlayer(), "pooped")
 end)
 
 function BF_Overlays.GetOverlayBySeverity(item, stainType)
@@ -77,7 +77,6 @@ function BF_Overlays.ApplyOverlayToSlot(player, wornItem, stainType, bodyLocatio
     end
 end
 
-
 function BF_Overlays.RemoveOverlayFromSlot(player, wornItem, stainType)
     if not wornItem then
         return
@@ -96,27 +95,54 @@ function BF_Overlays.RemoveOverlayFromSlot(player, wornItem, stainType)
     end
 end
 
+-- Removes all overlay items of a specific stain type from the player's inventory
+-- stainType is expected to be either "peed" or anything else (treated as "pooped")
+-- TODO: stainType checking will be changed when vomit overlays are added
 function BF_Overlays.ClearAllOverlaysByType(player, stainType)
+
+    -- Ensure we have a valid player and inventory
     if not player or not player:getInventory() then
         print("[ERROR] ClearAllOverlaysByType: Invalid player or inventory")
         return
     end
+
     local inventory = player:getInventory()
-    local tag = stainType == "peed" and "BathroomOverlay" or "PoopedOverlay"
+
+    -- Decide which item tag we are looking for
+    --   If stainType is NOT "peed",
+    --   it will default to the pooped overlay tag.
+    local tag = (stainType == "peed")
+        and BFTags.PeedOverlay
+        or  BFTags.PoopedOverlay
+
+    -- Get all items in the inventory
     local items = inventory:getItems()
     if not items then return end
+
+    -- It collects items first instead of removing them immediately
+    -- to avoid modifying the inventory while iterating over it
     local itemsToRemove = {}
+
+    -- Scan every inventory item
     for i = 0, items:size() - 1 do
         local item = items:get(i)
+
+        -- Only mark items that HAVE the overlay tag
         if item and item:hasTag(tag) then
             table.insert(itemsToRemove, item)
         end
     end
+
+    -- Remove all matched overlay items
     for _, item in ipairs(itemsToRemove) do
         local success, result = pcall(function()
+            -- Remove from inventory
             inventory:Remove(item)
+            -- Remove from worn
             player:removeWornItem(item)
         end)
+
+        -- If it fails give an error
         if not success then
             print("[ERROR] Failed to remove overlay item: " .. tostring(result))
         end
@@ -134,16 +160,16 @@ function BF_Overlays.RefreshOverlaysForPlayer(player, stainType)
             BF_Utils.tableContains(BF_Overlays.clothingModels.FemaleUnderwear.types, wornItem:getType()) then
                 -- Apply to underwear-specific overlay slot
                 if stainType == "peed" then
-                    bodyLocation = "PeedOverlay_Underwear"
+                    bodyLocation = BFBodyLocations.PeedOverlay_Underwear
                 else
-                    bodyLocation = "PoopedOverlay_Underwear"
+                    bodyLocation = BFBodyLocations.PoopedOverlay_Underwear
                 end
             else
                 -- Apply to pants/outer lower body overlay slot
                 if stainType == "peed" then
-                    bodyLocation = "PeedOverlay_Pants"
+                    bodyLocation = BFBodyLocations.PeedOverlay_Pants
                 else
-                    bodyLocation = "PoopedOverlay_Pants"
+                    bodyLocation = BFBodyLocations.PoopedOverlay_Pants
                 end
             end
             BF_Overlays.ApplyOverlayToSlot(player, wornItem, stainType, bodyLocation)
