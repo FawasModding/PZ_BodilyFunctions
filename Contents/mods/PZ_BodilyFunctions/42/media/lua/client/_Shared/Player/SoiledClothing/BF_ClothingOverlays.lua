@@ -12,7 +12,7 @@
 --   • Keeps overlays in sync when clothing is worn or removed
 --   • Tries to prevent inventory messiness during overlay refreshes
 -- ============================================================================
-BF_Overlays = {}
+BF_Overlays = BF_Overlays or {}
 
 -- ============================================================================
 -- Initialization
@@ -32,22 +32,19 @@ end)
 -- @param stainType  "peed" or "pooped"
 -- @return           [Overlay definition table] or fallback overlay type
 function BF_Overlays.GetOverlayBySeverity(item, stainType)
-    local itemType = item:getType() -- needs the type of item, not the specific item
+    local itemType = item:getType()
 
     for _, category in pairs(BF_Overlays.clothingModels) do
         if BF_Utils.tableContains(category.types, itemType) then
-            local overlayKey = stainType == "peed" and "peedOverlay" or "poopOverlay"
-            local overlay = category[overlayKey]
-            if overlay then
-                return overlay
+            if stainType == "peed" then
+                return category.overlays.pee
+            else
+                return category.overlays.poop
             end
         end
-    
     end
 
-    local fallback = stainType == "peed" and "BF.Female_Underpants_Peed" or "BF.BoxingShorts_Pooped"
-
-    return fallback
+    return nil
 end
 
 -- ============================================================================
@@ -75,44 +72,48 @@ function BF_Overlays.ApplyOverlayToSlot(player, wornItem, stainType, bodyLocatio
         return
     end
 
-    if modData[stainType] then
-        local overlayTable = BF_Overlays.GetOverlayBySeverity(wornItem, stainType)
-        local severity = modData[severityKey]
+    local overlayTable = BF_Overlays.GetOverlayBySeverity(wornItem, stainType)
+    if not overlayTable or not overlayTable.single then
+        return
+    end
 
-        -- Select overlay based on severity thresholds
-        local overlayItemType
-        if stainType == "peed" then
-            if severity >= 100 then
-                overlayItemType = overlayTable.fresh["100"]
-            elseif severity >= 75 then
-                overlayItemType = overlayTable.fresh["75"]
-            elseif severity >= 50 then
-                overlayItemType = overlayTable.fresh["50"]
-            elseif severity >= 25 then
-                overlayItemType = overlayTable.fresh["25"]
-            end
-        elseif stainType == "pooped" then
-            if severity >= 100 then
-                overlayItemType = overlayTable.fresh["100"]
-            elseif severity >= 75 then
-                overlayItemType = overlayTable.fresh["75"]
-            elseif severity >= 50 then
-                overlayItemType = overlayTable.fresh["50"]
-            elseif severity >= 25 then
-                overlayItemType = overlayTable.fresh["25"]
-            end
-        end
+    -- TODO: For now, we are using single overlay items only.
+    -- TODO: This will be expanded later to support severity-based overlays.
+    local overlayItemType = overlayTable.single
 
-        if overlayItemType then
-            local existing = player:getWornItem(bodyLocation)
-            if not existing or existing:getType() ~= overlayItemType then
-                local itemToWear = player:getInventory():AddItem(overlayItemType)
-                if itemToWear then
-                    player:setWornItem(bodyLocation, itemToWear)
-                    modData[stainType .. "OverlayItemType"] = overlayItemType
-                else
-                    print("[WARNING] Overlay item type '" .. overlayItemType .. "' not found. Skipping.")
-                end
+    -- Select overlay based on severity thresholds
+    --local overlayItemType
+    --if stainType == "peed" then
+    --    if severity >= 100 then
+    --        overlayItemType = overlayTable.fresh["100"]
+    --    elseif severity >= 75 then
+    --        overlayItemType = overlayTable.fresh["75"]
+    --    elseif severity >= 50 then
+    --        overlayItemType = overlayTable.fresh["50"]
+    --    elseif severity >= 25 then
+    --        overlayItemType = overlayTable.fresh["25"]
+    --    end
+    --elseif stainType == "pooped" then
+    --    if severity >= 100 then
+    --        overlayItemType = overlayTable.fresh["100"]
+    --    elseif severity >= 75 then
+    --        overlayItemType = overlayTable.fresh["75"]
+    --    elseif severity >= 50 then
+    --        overlayItemType = overlayTable.fresh["50"]
+    --    elseif severity >= 25 then
+    --        overlayItemType = overlayTable.fresh["25"]
+    --    end
+    --end
+
+    if overlayItemType then
+        local existing = player:getWornItem(bodyLocation)
+        if not existing or existing:getType() ~= overlayItemType then
+            local itemToWear = player:getInventory():AddItem(overlayItemType)
+            if itemToWear then
+                player:setWornItem(bodyLocation, itemToWear)
+                modData[stainType .. "OverlayItemType"] = overlayItemType
+            else
+                print("[WARNING] Overlay item type '" .. overlayItemType .. "' not found. Skipping.")
             end
         end
     end
@@ -217,7 +218,7 @@ end
 function BF_Overlays.RefreshOverlaysForPlayer(player, stainType)
     BF_Overlays.ClearAllOverlaysByType(player, stainType)
 
-    local locations = BF_Overlays.soilableLocations
+    local locations = BF_Overlays.soilableBodyLocations
 
     for _, location in ipairs(locations) do
         local wornItem = player:getWornItem(location)
