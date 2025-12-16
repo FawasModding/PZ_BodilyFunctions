@@ -89,7 +89,7 @@ BF_Overlays = {
 
 -- Registers a new clothing category with soil overlays (pee/poop) in the BF_Overlays table.
 -- @param name: The name/key of the clothing category (ex "Trousers", "UtilitySuitSTF").
--- @param data: A table containing 'types', 'peeOverlay', and 'poopOverlay'.
+-- @param data: A table containing 'types', 'peedOverlay', and 'poopOverlay'.
 function BF_RegisterClothingCategory(name, data)
     if not BF_Overlays then return end
     if not BF_Overlays.clothingModels then
@@ -105,7 +105,7 @@ function BF_RegisterClothingCategory(name, data)
     BF_Overlays.clothingModels[name] = {
         types = data.types or {},
         overlays = {
-            pee = generateOverlayStates(data.peeOverlay, true),
+            pee = generateOverlayStates(data.peedOverlay, true),
             poop = generateOverlayStates(data.poopOverlay, false)
         }
     }
@@ -118,7 +118,7 @@ end
 --     if BF_RegisterClothingCategory then
 --         BF_RegisterClothingCategory("UtilitySuitSTF", {
 --             types = { "Utility_Suit_STF" },
---             peeOverlay = "STF.Utility_Suit_STF_Peed",
+--             peedOverlay = "STF.Utility_Suit_STF_Peed",
 --             poopOverlay = "STF.Utility_Suit_STF_Pooped"
 --         })
 --     end
