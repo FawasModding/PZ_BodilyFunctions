@@ -65,7 +65,6 @@ end
 function BF.ApplySoilingEffects(item, isLeak)
     -- Get the player object
     local player = getSpecificPlayer(0)
-    local bodyDamage = player:getBodyDamage()
     
     -- If the item is marked as "peed" (wet), modify the item's properties
     if item:getModData().peed == true then

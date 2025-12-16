@@ -56,13 +56,14 @@ end
 BF_WasteProducts.ApplyWasteExposureEffects = function(lastWasteSquare, wasteAmount)
     local player = getPlayer()   -- using getPlayer() for singleplayer
 
-    local foodSicknessLevel = player:getBodyDamage():getFoodSicknessLevel()
+    local foodSicknessLevel = player:getStats():get(CharacterStat.FOOD_SICKNESS)
     if foodSicknessLevel < 50 then -- cap at 50 (Nauseous)
         local foodSicknessToAdd = foodSicknessLevel + (0.1 * wasteAmount)
-        player:getBodyDamage():setFoodSicknessLevel(foodSicknessToAdd)
+        player:getStats():set(CharacterStat.FOOD_SICKNESS, foodSicknessToAdd)
     end
 
-    player:getBodyDamage():setUnhappynessLevel(player:getBodyDamage():getUnhappynessLevel() + (0.05 * wasteAmount))
+    local unhappinessLevel = player:getStats():get(CharacterStat.UNHAPPINESS)
+    player:getStats():set(CharacterStat.UNHAPPINESS, unhappinessLevel + (0.05 * wasteAmount))
 
     -- Determine bodily fumes value based on waste types present
     local hasFeces = false
