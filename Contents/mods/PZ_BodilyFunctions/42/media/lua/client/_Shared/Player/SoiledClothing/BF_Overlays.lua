@@ -112,7 +112,6 @@ function BF_RegisterClothingCategory(name, data)
     print("BF_RegisterClothingCategory: Registered category '" .. name .. "'")
 end
 
-
 -- EXAMPLE
 -- Events.OnInitGlobalModData.Add(function()
 --     if BF_RegisterClothingCategory then
