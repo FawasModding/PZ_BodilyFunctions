@@ -218,35 +218,26 @@ end
 function BF_Overlays.RefreshOverlaysForPlayer(player, stainType)
     BF_Overlays.ClearAllOverlaysByType(player, stainType)
 
-    local locations = BF_Overlays.soilableBodyLocations
-
-    for _, location in ipairs(locations) do
-        local wornItem = player:getWornItem(location)
+    for _, bodyLocation in ipairs(BF_Overlays.soilableBodyLocations) do
+        local wornItem = player:getWornItem(bodyLocation)
 
         if wornItem and wornItem:getModData()[stainType] then
-            local bodyLocation
+            local overlaySlot
 
             if BF_Utils.tableContains(BF_Overlays.clothingModels.MaleUnderwear.types, wornItem:getType()) or
-            BF_Utils.tableContains(BF_Overlays.clothingModels.FemaleUnderwear.types, wornItem:getType()) then
+               BF_Utils.tableContains(BF_Overlays.clothingModels.FemaleUnderwear.types, wornItem:getType()) then
+
                 -- Underwear uses dedicated overlay slot
-
-                if stainType == "peed" then
-                    bodyLocation = BFBodyLocations.PeedOverlay_Underwear
-                else
-                    bodyLocation = BFBodyLocations.PoopedOverlay_Underwear
-                end
-
-            else
-
-                -- Pants / outerwear use lower body overlay slots
-                if stainType == "peed" then
-                    bodyLocation = BFBodyLocations.PeedOverlay_Pants
-                else
-                    bodyLocation = BFBodyLocations.PoopedOverlay_Pants
-                end
-
+                overlaySlot = (stainType == "peed")
+                    and BFBodyLocations.PeedOverlay_Underwear
+                    or  BFBodyLocations.PoopedOverlay_Underwear
+            else -- Pants / outerwear use lower body overlay slots
+                overlaySlot = (stainType == "peed")
+                    and BFBodyLocations.PeedOverlay_Pants
+                    or  BFBodyLocations.PoopedOverlay_Pants
             end
-            BF_Overlays.ApplyOverlayToSlot(player, wornItem, stainType, bodyLocation)
+
+            BF_Overlays.ApplyOverlayToSlot(player, wornItem, stainType, overlaySlot)
         end
     end
 end

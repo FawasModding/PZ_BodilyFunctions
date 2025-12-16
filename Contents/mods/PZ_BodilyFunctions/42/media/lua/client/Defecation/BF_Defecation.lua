@@ -70,10 +70,13 @@ function BF.DefecateBottoms(leakTriggered)
     local maxPoopedSeverity = 0
 
     -- Get soilable clothing locations
-    local underwearLocations = {"UnderwearBottom", "Underwear"}
+    local underwearLocations = {
+        ItemBodyLocation.UNDERWEAR_BOTTOM,
+        ItemBodyLocation.UNDERWEAR
+    }
     local outerwearLocations = BF_Overlays.soilableBodyLocations
     for i = #outerwearLocations, 1, -1 do
-        if outerwearLocations[i] == "UnderwearBottom" or outerwearLocations[i] == "Underwear" then
+        if outerwearLocations[i] == ItemBodyLocation.UNDERWEAR_BOTTOM or outerwearLocations[i] == ItemBodyLocation.UNDERWEAR then
             table.remove(outerwearLocations, i)
         end
     end

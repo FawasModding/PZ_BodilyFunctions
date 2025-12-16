@@ -62,7 +62,10 @@ function WipeSelf:perform()
     if (self.wipeType == "usingOneTime" or self.wipeType == "usingDrainable") and wipeEfficiency < 1.0 and self.bodilyFunction == "poop" then
         local soilPenalty = 5 * (1 - wipeEfficiency) -- e.g., 2.5 for 50% efficiency
         local applied = false
-        local underwearLocations = {"UnderwearBottom", "Underwear"} -- Potential underwear locations
+        local underwearLocations = {
+            ItemBodyLocation.UNDERWEAR_BOTTOM,
+            ItemBodyLocation.UNDERWEAR
+        }
 
         -- Get unequipped clothing from modData
         local removedClothing = self.character:getModData().removedClothing or {}
@@ -90,7 +93,8 @@ function WipeSelf:perform()
             local soilableClothing = BF.GetSoilableClothing()
             local nonUnderwearLocations = {}
             for _, loc in ipairs(soilableClothing) do
-                if not (loc == "UnderwearBottom" or loc == "Underwear") then
+                if loc ~= ItemBodyLocation.UNDERWEAR
+                and loc ~= ItemBodyLocation.UNDERWEAR_BOTTOM then
                     table.insert(nonUnderwearLocations, loc)
                 end
             end
