@@ -90,6 +90,7 @@ ShortShorts = {
 -- Registers a new clothing category with soil overlays (pee/poop) in the BF_Overlays table.
 -- @param name: The name/key of the clothing category (ex "Trousers", "UtilitySuitSTF").
 -- @param data: A table containing 'types', 'peedOverlay', and 'poopOverlay'.
+-- TODO: Verify this works in 42.13
 function BF_RegisterClothingCategory(name, data)
     if not BF_Overlays then return end
     if not BF_Overlays.clothingModels then
@@ -127,6 +128,7 @@ end
 -- Adds a new body location string to the list of soilable clothing locations.
 -- This is used to determine which body location slots can receive pee/poop overlays.
 -- @param location: A string body location name (ex. "Pants", "UnderwearBottom").
+-- TODO: Verify this works in 42.13
 function BF_AddSoilableLocation(location)
     if not BF_Overlays then return end
     if not BF_Overlays.soilableBodyLocations then
