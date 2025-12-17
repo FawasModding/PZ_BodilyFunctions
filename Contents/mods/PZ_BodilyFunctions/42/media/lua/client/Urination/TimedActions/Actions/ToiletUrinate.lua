@@ -10,37 +10,16 @@ function ToiletUrinate:update()
     local newValue = self.initialUrinateValue - (delta * self.initialUrinateValue)
     self.character:getModData().urinateValue = math.max(newValue, 0) -- Ensure it doesn't go below 0
 
-	local props = self.toiletObject:getProperties()
+    local facing = self.toiletObject:getFacing()
 
-    local facing = props:Val("Facing")
-
-    if facing == "N" then
-        if self.character:isFemale() == true then
-            self.character:setDir(IsoDirections.N)
-        else
-            self.character:setDir(IsoDirections.S)
-        end
-    elseif facing == "E" then
-        if self.character:isFemale() == true then
-            self.character:setDir(IsoDirections.E)
-        else
-            self.character:setDir(IsoDirections.W)
-        end
-    elseif facing == "S" then
-        if self.character:isFemale() == true then
-            self.character:setDir(IsoDirections.S)
-        else
-            self.character:setDir(IsoDirections.N)
-        end
-    elseif facing == "W" then
-        if self.character:isFemale() == true then
-            self.character:setDir(IsoDirections.W)
-        else
-            self.character:setDir(IsoDirections.E)
-        end
+    -- Males face opposite direction, females face toilet direction
+    if not self.character:isFemale() then
+        facing = IsoDirections.reverse(facing)
     end
 
+    self.character:setDir(facing)
 end
+
 
 function ToiletUrinate:start()
 	-- Save the initial urination value at the start of the action
