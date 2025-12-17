@@ -212,6 +212,7 @@ function BF.TriggerToiletDefecate(object, player, isWiping, wipeType, wipeItem, 
             end
         end
 
+        BF.ReequipBottomClothing(player) -- put back on bottom clothing
         BF.ResetRemovedClothing(player) -- reset removed clothing
     end
 end
@@ -239,6 +240,7 @@ function BF.TriggerGroundDefecate(isWiping, wipeType, wipeItem, wipeEfficiency)
             end
         end
 
+        BF.ReequipBottomClothing(player) -- put back on bottom clothing
         BF.ResetRemovedClothing(player) -- reset removed clothing
     end
 end
