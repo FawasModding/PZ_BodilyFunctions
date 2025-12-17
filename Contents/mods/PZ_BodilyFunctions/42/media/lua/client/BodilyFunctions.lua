@@ -57,8 +57,8 @@ function BF.HandleInstantAccidents()
     local defecateValue = BF.GetDefecateValue() -- Current bowel level
     local player = getPlayer()
 
-    local bladderMaxValue = SandboxVars.BathroomFunctions.BladderMaxValue or 100 -- Default to 100 if not set
-    local bowelsMaxValue = SandboxVars.BathroomFunctions.BowelsMaxValue or 100 -- Default to 100 if not set
+    local bladderMaxValue = (SandboxVars.BathroomFunctions and SandboxVars.BathroomFunctions.BladderMaxValue) or 100 -- Default to 100 if not set
+    local bowelsMaxValue = (SandboxVars.BathroomFunctions and SandboxVars.BathroomFunctions.BowelsMaxValue) or 100 -- Default to 100 if not set
 
     -- Calculate overflow values
     local bladderThreshold = 0.95 * bladderMaxValue -- 95% of max bladder value
