@@ -10,6 +10,8 @@ item Female_Underpants_Pooped {
 
 	    RunSpeedModifier = 0.8,
 	    DiscomfortModifier = 0.6,
+
+        Hidden = true,
     }
 
 }

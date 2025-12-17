@@ -10,6 +10,8 @@ module BF {
 
         RunSpeedModifier = 0.8,
         DiscomfortModifier = 0.6,
+
+        Hidden = true,
     }
 
 }

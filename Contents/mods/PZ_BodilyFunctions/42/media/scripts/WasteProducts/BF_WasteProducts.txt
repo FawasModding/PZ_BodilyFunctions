@@ -5,7 +5,7 @@ module BF
 		Weight = 1,
 		ItemType = base:food,
 		Icon = HumanUrine,
-		Hidden = true;
+		Hidden = true,
 		DaysFresh = 0,
 		DisplayCategory = Junk,
 		WorldStaticModel = BF.Urine_Model_Large,
@@ -18,7 +18,7 @@ module BF
 		Weight = 1,
 		ItemType = base:food,
 		Icon = HumanUrine,
-		Hidden = true;
+		Hidden = true,
 		DaysFresh = 0,
 		DisplayCategory = Junk,
 		WorldStaticModel = BF.Urine_Model_Small,
@@ -68,7 +68,7 @@ module BF
 		Weight = 1,
 		ItemType = base:food,
 		Icon = HumanVomit,
-		Hidden = true;
+		Hidden = true,
 		DaysFresh = 0,
 		DisplayName = Vomit Pile,
 		DisplayCategory = Junk,
