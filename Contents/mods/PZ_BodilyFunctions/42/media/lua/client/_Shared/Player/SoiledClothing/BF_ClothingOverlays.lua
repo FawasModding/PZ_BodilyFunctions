@@ -107,22 +107,28 @@ function BF_Overlays.ApplyOverlayToSlot(player, wornItem, stainType, bodyLocatio
 
     -- There seems to be an error after this occasionally when the return is commented out.
     -- TODO: Investigate further at some point. Figure out exactly what's going wrong and its consequences.
+    -- TODO: Might've been fixed?
     if not bodyLocation then
         print("[ERROR] ApplyOverlayToSlot called with nil bodyLocation for item: " .. wornItem:getType())
         return
     end
 
     if overlayItemType then
-        local existing = player:getWornItem(bodyLocation)
-        if not existing or existing:getType() ~= overlayItemType then
-            local itemToWear = player:getInventory():AddItem(overlayItemType)
-            if itemToWear then
-                player:setWornItem(bodyLocation, itemToWear) -- error to investigate sometimes occurs here
-                -- Cannot invoke "zombie.characters.WornItems.BodyLocation.isMultiItem()" because "location" is null
-                modData[stainType .. "OverlayItemType"] = overlayItemType
-            else
-                print("[WARNING] Overlay item type '" .. overlayItemType .. "' not found. Skipping.")
-            end
+        local existingInSlot = player:getWornItem(bodyLocation)
+
+        -- Only skip if the *exact overlay type* is already in this slot
+        if existingInSlot and existingInSlot:getType() == overlayItemType then
+            return
+        end
+
+        -- Apply overlay
+        local itemToWear = player:getInventory():AddItem(overlayItemType)
+
+        if itemToWear then
+            player:setWornItem(bodyLocation, itemToWear)
+            modData[stainType .. "OverlayItemType"] = overlayItemType
+        else
+            print("[WARNING] Overlay item type '" .. overlayItemType .. "' wasn't found. Gonna skip.")
         end
     end
 end
