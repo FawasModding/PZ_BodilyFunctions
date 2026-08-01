@@ -65,24 +65,32 @@ end
 function BF.ApplySoilingEffects(item, isLeak)
     -- Get the player object
     local player = getSpecificPlayer(0)
-    
+    if not item then return end
+
+    local modData = item:getModData()
+
     -- If the item is marked as "peed" (wet), modify the item's properties
-    if item:getModData().peed == true then
+    if modData.peed == true then
         if item:IsClothing() then
-            local severity = item:getModData().peedSeverity / 100
-            -- Scale wetness and dirtyness based on severity
-            item:setWetness(math.min(500 * severity, 500))
-            item:setDirtyness(math.min(100 * severity, 100))
+            local peedSeverity = modData.peedSeverity or 100
+            local severity = peedSeverity / 100
+            
+            if item.setWetness then item:setWetness(math.min(500 * severity, 500)) end
+            if item.setDirtyness then item:setDirtyness(math.min(100 * severity, 100)) end
         end
     end
 
     -- If the item is marked as "pooped" (dirty), modify the item's properties
-    if item:getModData().pooped == true then
+    if modData.pooped == true then
         if item:IsClothing() then
-            -- Calculate severity for the fecal leak
-            local severity = item:getModData().poopedSeverity / 100
-            -- Scale dirtyness based on severity
-            item:setDirtyness(math.min(100 * severity, 100))
+            -- Calculate severity safely (defaults to 100 if nil)
+            local poopedSeverity = modData.poopedSeverity or 100
+            local severity = poopedSeverity / 100
+            
+            -- Check method existence before calling to prevent crash
+            if item.setDirtyness then
+                item:setDirtyness(math.min(100 * severity, 100))
+            end
         end
     end
 end
