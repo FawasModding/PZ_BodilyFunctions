@@ -1,3 +1,5 @@
+---@class GroundUrinate : ISBaseTimedAction
+---@field character IsoPlayer
 GroundUrinate = ISBaseTimedAction:derive("GroundUrinate")
 function GroundUrinate:isValid()
 	return true

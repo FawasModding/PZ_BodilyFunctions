@@ -1,3 +1,5 @@
+---@class ToiletUrinate : ISBaseTimedAction
+---@field character IsoPlayer
 ToiletUrinate = ISBaseTimedAction:derive("ToiletUrinate")
 function ToiletUrinate:isValid()
 	return true

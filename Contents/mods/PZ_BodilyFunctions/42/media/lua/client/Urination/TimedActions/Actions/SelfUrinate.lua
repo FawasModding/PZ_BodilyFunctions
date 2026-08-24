@@ -1,3 +1,5 @@
+---@class SelfUrinate : ISBaseTimedAction
+---@field character IsoPlayer
 SelfUrinate = ISBaseTimedAction:derive("SelfUrinate")
 
 -- Emptying the bladder (or leaving 95% if it's a leak)
@@ -29,14 +31,14 @@ function SelfUrinate:update()
 end
 
 function SelfUrinate:start()
-    -- Save the initial urinate value when the action begins.
+    -- Save initial urinate value when the action begins.
     self.initialUrinateValue = self.character:getModData().urinateValue or 0
 
     -- Play pee self loop
     self.sound = self.character:getEmitter():playSound("BF_Pee_Self")
 end
 
--- If the action is cancelled or stops early.
+-- If action is cancelled or stops early.
 function SelfUrinate:stop()
     self:stopSound() -- Stop peeing sound
     self:finishUrination()
@@ -62,7 +64,6 @@ function SelfUrinate:stopSound()
 	end
 end
 
--- Now includes an extra parameter "isLeak".
 function SelfUrinate:new(character, time, stopWalk, stopRun, peedSelf, usingToilet, toiletObject, isLeak)
     local o = {}
     setmetatable(o, self)

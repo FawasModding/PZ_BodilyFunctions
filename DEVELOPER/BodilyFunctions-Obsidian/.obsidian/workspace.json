@@ -100,7 +100,7 @@
             }
           }
         ],
-        "currentTab": 2
+        "currentTab": 1
       }
     ],
     "direction": "horizontal",
@@ -215,9 +215,10 @@
   },
   "active": "09efa89abecc8580",
   "lastOpenFiles": [
+    "Changelog 0.13.0 and below.md",
+    "Changelog v0.14.0.md",
     "code-languages.json",
     "Untitled.md",
-    "Changelog v0.14.0.md",
     "Steam Description.md",
     "Untitled",
     "UI.md",
@@ -250,7 +251,6 @@
     "Items/Food",
     "Locations.canvas",
     "Items/Tools",
-    "Items/Natural",
-    "!Development/Versions/Complete"
+    "Items/Natural"
   ]
 }

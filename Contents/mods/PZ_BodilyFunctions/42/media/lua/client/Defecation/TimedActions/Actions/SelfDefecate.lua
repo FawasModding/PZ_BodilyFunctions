@@ -1,3 +1,5 @@
+---@class SelfDefecate : ISBaseTimedAction
+---@field character IsoPlayer
 SelfDefecate = ISBaseTimedAction:derive("SelfDefecate")
 
 -- Common clean-up: emptying the bowels (or leaving 95% if it's a leak)

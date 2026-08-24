@@ -1,5 +1,4 @@
 BF_Utils = {}
-BathroomFunctions = {} -- ! Deprecated
 
 -- Tooltips helper function
 function BF.AddTooltip(option, description)
@@ -35,8 +34,8 @@ end
 -- =====================================================
 
 --[[
-Function to retrieve the player's current urination value
-If the value isn't set or isn't a valid number, it defaults to 0.0.
+Get player's current urination value
+If value isn't set or isn't a valid number, default to 0.0.
 ]]--
 function BF.GetUrinateValue()
     local player = getPlayer() -- Fetch the current player object
@@ -48,25 +47,19 @@ function BF.GetUrinateValue()
 
     return urinateValue -- Return the urination value
 end
-function BathroomFunctions.GetUrinateValue() -- ! TEMPORARY FUNCTION FOR MOD COMPATIBILITY, DEPRECATEDAdd commentMore actions
-    return BF.GetUrinateValue()
-end
 --[[
-Function to retrieve the player's current defecation value
-If the value isn't set or isn't a valid number, it defaults to 0.0.
+Get player's current defecation value
+If value isn't set or isn't a valid number, default to 0.0.
 ]]--
 function BF.GetDefecateValue()
-    local player = getPlayer() -- Fetch the current player object
-    local defecateValue = player:getModData().defecateValue -- Retrieve the defecation value from the player's modData
+    local player = getPlayer()
+    local defecateValue = player:getModData().defecateValue -- Defecation value from player's modData
 
     if type(defecateValue) ~= "number" then -- Ensure the retrieved value is a valid number
         defecateValue = 0.0 -- Default to 0.0 if the value is invalid or undefined
     end
 
     return defecateValue -- Return the defecation value
-end
-function BathroomFunctions.GetDefecateValue() -- ! TEMPORARY FUNCTION FOR MOD COMPATIBILITY, DEPRECATED
-    return BF.GetDefecateValue()
 end
 
 --[[
@@ -105,7 +98,7 @@ end
 -- =====================================================
 
 --[[
-Function to retrieve the player's current peed self value
+Get player's current peed self value
 If the value isn't set or isn't a valid number, it defaults to 0.0.
 ]]--
 function BF.GetPeedSelfValue()
@@ -119,7 +112,7 @@ function BF.GetPeedSelfValue()
     return peedSelfValue -- Return the peed self value
 end
 --[[
-Function to retrieve the player's current pooped self value
+Get player's current pooped self value
 If the value isn't set or isn't a valid number, it defaults to 0.0.
 ]]--
 function BF.GetPoopedSelfValue()
@@ -155,14 +148,12 @@ function BF.SetPoopedSelfValue(newPoopedSelfValue)
 end
 
 -- =====================================================
---
 -- BODILY FUMES GETTER / SETTER
---
 -- =====================================================
 
 --[[
-Function to retrieve the player's current bodily fumes value (smell moodle)
-If the value isn't set or isn't a valid number, it defaults to 0.0.
+Get player's current bodily fumes value (smell moodle)
+If value isn't set or isn't a valid number, default to 0.0.
 ]]--
 function BF.GetBodilyFumesValue()
     local player = getPlayer() -- Fetch the current player object
@@ -176,8 +167,8 @@ function BF.GetBodilyFumesValue()
 end
 
 --[[
-Function to set the player's current bodily fumes value (smell moodle)
-Ensures the value is a valid number and updates the player's modData.
+Set player's current bodily fumes value (smell moodle)
+Ensures value is a valid number and updates player's modData.
 ]]
 function BF.SetBodilyFumesValue(newBodilyFumesValue)
     local player = getPlayer() -- Fetch the current player object
@@ -191,9 +182,7 @@ function BF.SetBodilyFumesValue(newBodilyFumesValue)
 end
 
 -- =====================================================
---
 -- OTHER GETTERS
---
 -- =====================================================
 
 function BF.GetMaxBowelValue()

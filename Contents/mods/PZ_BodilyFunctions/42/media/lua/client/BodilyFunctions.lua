@@ -10,17 +10,17 @@ local InventoryUI = require("Starlit/client/ui/InventoryUI")
 -- =====================================================
 
 --[[
-Function to handle timed updates for bathroom needs
-This function is called periodically (e.g., every 10 in-game minutes).
+Handle timed updates for bathroom needs
+Called every 10 in-game minutes.
 ]]--
 function BF.BathroomFunctionTimers()
     if BF.didFirstTimer then
-        BF.UpdateBathroomValues() -- If the initial setup is done, update the player's bathroom values
+        BF.UpdateBathroomValues() -- If the initial setup is done, update the player's bathroom values.
         BF.HandleInstantAccidents() -- Check whether or not the player has urinated or defecated themselves.
-        BF.HandleUrgencyHiccup() -- Do the hiccup system, aka player grabbing crotch and possibly pissing themselves or so on. Too tired to censor my shit lol
+        BF.HandleUrgencyHiccup() -- Do the hiccup system, aka player grabbing themselves with chance of accident.
         BF.DirtyBottomsEffects()
     else
-        BF.didFirstTimer = true -- If this is the first call, set the flag to true and skip updating values
+        BF.didFirstTimer = true -- If this is the first call, set the flag to true and skip updating values.
     end
 end
 
@@ -34,7 +34,7 @@ Carbohydrates:  -500    >     1000
 Burn rate: 10 Calories per 10 min
 ]]
 
--- Function to update the player's bathroom-related values (urination and defecation)
+-- Update player's bathroom-related values (urination and defecation)
 function BF.UpdateBathroomValues()
 
     BF.UpdateUrinationValues()
@@ -52,6 +52,7 @@ end
 
 -- Make the player urinate / defecate in very "sudden" situations.
 -- Like, getting injured (car crash, shot). Overflowing (bladder max capacity).
+-- todo: injuries and car crashes don't do anything yet
 function BF.HandleInstantAccidents()
     local urinateValue = BF.GetUrinateValue() -- Current bladder level
     local defecateValue = BF.GetDefecateValue() -- Current bowel level
@@ -69,12 +70,12 @@ function BF.HandleInstantAccidents()
     -- Base leak chance
     local leakChance = 2
 
-    -- Leak Chance drunkiness
+    -- Drunk modifier: increase chance of leakage if player is drunk
     if player:getStats():get(CharacterStat.INTOXICATION) > 0 then
         leakChance = leakChance + 5 -- Drunk modifier
     end
 
-    -- Panic modifier: increase leak chance if the player is panicked
+    -- Panic modifier: increase chance of leakage if player is panicked
     if player:getMoodles():getMoodleLevel(MoodleType.PANIC) > 0 then
         leakChance = leakChance + (player:getMoodles():getMoodleLevel(MoodleType.PANIC)*2)  -- Increase by Panic level
     end
@@ -97,34 +98,34 @@ function BF.HandleInstantAccidents()
     end
 
 
-    -- Handle urination and defecation when the player is asleep or awake.
-    -- If the player is asleep and their bladder/bowels are full, it happens automatically and wakes them up.
-    -- If the player is awake and their bladder/bowels are full, the appropriate self-action (urinate/defecate) begins.
+    -- Handle pee/poop when player is asleep or awake.
+    -- If player is asleep and their bladder/bowels are full, it happens automatically and wakes them up.
+    -- If player is awake and their bladder/bowels are full, the appropriate self-action (pee/poop) begins.
     if player:isAsleep() then
 
         -- Check if the player needs to urinate while asleep
         if urinateValue >= bladderThreshold then
-            player:forceAwake()  -- Wake the player up if they need to urinate
+            player:forceAwake() -- Wake the player up if they need to pee
 
-            -- If the player has the "Bedwetter" trait, trigger the urination accident
+            -- If the player has the "Bedwetter" trait, trigger urination accident
             if player:hasTrait(BFTraits.Bedwetter) then
-                BF.UrinateBottoms()  -- Simulate urinating in bed
-                BF.SetUrinateValue(0)  -- Reset urinate value after accident
+                BF.UrinateBottoms() -- Simulate peeing in bed
+                BF.SetUrinateValue(0) -- Reset pee value after accident
             end
 
         -- Check if the player needs to defecate while asleep
         elseif defecateValue >= bowelsThreshold then
             player:forceAwake()  -- Wake the player up if they need to defecate
 
-            -- If the player has the "Bedsoiler" trait, trigger the defecation accident
+            -- If the player has the "Bedsoiler" trait, trigger defecation accident
             if player:hasTrait(BFTraits.Bedsoiler) then
-                BF.DefecateBottoms()  -- Simulate defecating in bed
+                BF.DefecateBottoms() -- Simulate pooping in bed
                 BF.SetDefecateValue(0)  -- Reset defecate value after accident
             end
 
         end
     else
-        -- If the player is awake, start the urination or defecation process based on their bladder/bowel status
+        -- If the player is awake, start the pee or poop process based on their bladder/bowel status
         if urinateValue >= bladderThreshold then
             BF.TriggerSelfUrinate()  -- Trigger self urination action
         elseif defecateValue >= bowelsThreshold then
@@ -133,7 +134,7 @@ function BF.HandleInstantAccidents()
     end
 end
 
--- Function to handle the hiccup system. Every 10 minutes, this checks if the player should have a ""hiccup".
+-- Handle the hiccup system. Every 10 minutes, this checks if the player should have a ""hiccup".
 -- Hiccup in this context is the slang definition, like a pause. Not a "hic" hiccup lol
 function BF.HandleUrgencyHiccup()
     local player = getPlayer()

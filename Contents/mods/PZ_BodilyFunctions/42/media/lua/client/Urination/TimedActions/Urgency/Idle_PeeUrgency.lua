@@ -1,3 +1,5 @@
+---@class Idle_PeeUrgency : ISBaseTimedAction
+---@field character IsoPlayer
 Idle_PeeUrgency = ISBaseTimedAction:derive("Idle_PeeUrgency")
 function Idle_PeeUrgency:isValid()
 	return true

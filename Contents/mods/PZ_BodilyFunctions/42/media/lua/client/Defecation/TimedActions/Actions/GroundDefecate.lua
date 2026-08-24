@@ -1,3 +1,5 @@
+---@class GroundDefecate : ISBaseTimedAction
+---@field character IsoPlayer
 GroundDefecate = ISBaseTimedAction:derive("GroundDefecate")
 function GroundDefecate:isValid()
 	return true
