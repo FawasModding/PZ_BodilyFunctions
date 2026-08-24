@@ -1,0 +1,115 @@
+{
+  "biggerIcons": "on",
+  "clickableIcons": "desktop",
+  "showAllFileIcons": false,
+  "showAllFolderIcons": false,
+  "minimalFolderIcons": true,
+  "showMarkdownTabIcons": true,
+  "showTitleIcons": true,
+  "showTagPillIcons": false,
+  "showMenuActions": true,
+  "showSuggestionIcons": false,
+  "showQuickSwitcherIcons": true,
+  "showMoveFileIcons": true,
+  "showItemName": "desktop",
+  "useSearchKeywords": "on",
+  "maxSearchResults": 100,
+  "colorPicker1": "list",
+  "colorPicker2": "rgb",
+  "uncolorHover": false,
+  "uncolorDrag": false,
+  "uncolorSelect": false,
+  "uncolorQuick": false,
+  "maxBackups": 2,
+  "dialogState": {
+    "iconMode": false,
+    "emojiMode": true,
+    "rulePage": "file"
+  },
+  "appIcons": {},
+  "tabIcons": {},
+  "fileIcons": {
+    "!Development": {
+      "icon": "lucide-bug",
+      "color": "green"
+    },
+    "!Development/Development Log": {
+      "icon": "lucide-scroll-text"
+    },
+    "!Development/Document Progress.md": {
+      "icon": "lucide-book-open-text"
+    },
+    "!Development/Versions": {
+      "icon": "lucide-cable"
+    },
+    "Characters": {
+      "icon": "lucide-square-user"
+    },
+    "Characters/NPCs/Bartholomew": {
+      "icon": "🎸"
+    },
+    "Characters/NPCs/Beluga": {
+      "icon": "🤗"
+    },
+    "Characters/NPCs/Boggs": {
+      "icon": "🐸"
+    },
+    "Characters/NPCs/Dream-Weaver": {
+      "icon": "🕸️"
+    },
+    "Characters/NPCs/Glover": {
+      "icon": "🐠"
+    },
+    "Characters/NPCs/Manatee": {
+      "icon": "🏝️"
+    },
+    "Characters/NPCs/Matilda": {
+      "icon": "🪢"
+    },
+    "Characters/NPCs/Oatmeal": {
+      "icon": "🐶"
+    },
+    "Characters/NPCs/Penelope": {
+      "icon": "🐦‍⬛"
+    },
+    "Characters/NPCs/Tender Tuft": {
+      "icon": "🪦"
+    },
+    "Characters/NPCs/Thornberry": {
+      "icon": "🐻"
+    },
+    "Characters/NPCs/Uncle Steam": {
+      "icon": "🚅"
+    },
+    "Characters/NPCs/Woodchip": {
+      "icon": "⛵"
+    },
+    "Effects": {
+      "icon": "lucide-telescope"
+    },
+    "Items": {
+      "icon": "lucide-shopping-basket"
+    },
+    "Locations": {
+      "icon": "lucide-map-pin"
+    },
+    "Objectives": {
+      "icon": "lucide-flag"
+    },
+    "Props": {
+      "icon": "lucide-armchair"
+    },
+    "Story": {
+      "icon": "lucide-book-image"
+    },
+    "World": {
+      "icon": "lucide-earth"
+    }
+  },
+  "bookmarkIcons": {},
+  "tagIcons": {},
+  "propertyIcons": {},
+  "ribbonIcons": {},
+  "fileRules": [],
+  "folderRules": []
+}

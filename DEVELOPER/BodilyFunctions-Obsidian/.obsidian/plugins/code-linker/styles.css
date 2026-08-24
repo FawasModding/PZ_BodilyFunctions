@@ -1,0 +1,744 @@
+/* Code Linker 1.6.0 — assembled from the shared styles and src/styles.css by "npm run build". Do not edit directly. */
+
+/* Styles every linker plugin uses. The token below stands for the plugin class prefix;
+   build.mjs substitutes it when it assembles styles.css. See CONTRIBUTING.md. */
+
+.code-linker-preview-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--font-ui-small);
+}
+
+.code-linker-preview-buttons {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+  margin-top: 16px;
+}
+
+.code-linker-folder-row .setting-item-name {
+  font-family: var(--font-monospace);
+  font-size: var(--font-ui-smaller);
+  overflow-wrap: anywhere;
+}
+
+.code-linker-folder-add {
+  display: flex;
+  gap: 8px;
+  margin: 6px 0 18px 1.5em;
+}
+
+.code-linker-folder-input {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.code-linker-folder-addbtn {
+  display: flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.code-linker-folder-addbtn svg {
+  width: 16px;
+  height: 16px;
+}
+
+/* Priority order among the installed linker plugins. Our own row is the movable one, so
+   it is the one that reads as active; the others are context. */
+.code-linker-precedence-list {
+  margin: 0 0 18px 1.5em;
+}
+
+.code-linker-precedence-list .setting-item {
+  border-top: none;
+  /* Padding matches the folder-list rows, so this nested list lines up with the other one in the same pane: text off the left edge, arrows level with the remove buttons. */ padding: 4px 6px 4px 0.75em;
+}
+
+.code-linker-precedence-list .setting-item-name {
+  color: var(--text-muted);
+}
+
+.code-linker-precedence-self .setting-item-name {
+  color: var(--text-normal);
+  font-weight: var(--font-semibold);
+}
+
+/* Styles both sigil linkers use. The plugin class prefix is substituted by build.mjs. */
+
+.code-linker-suggestion {
+  display: flex;
+  gap: 0.5em;
+  align-items: baseline;
+}
+
+.code-linker-name {
+  font-weight: var(--font-semibold);
+}
+
+.code-linker-kind {
+  color: var(--text-muted);
+  font-size: var(--font-ui-smaller);
+}
+
+.code-linker-path {
+  margin-left: auto;
+  color: var(--text-faint);
+  font-size: var(--font-ui-smaller);
+}
+
+.code-linker-input {
+  width: 100%;
+}
+
+/* Muted helper / status line under a control or section — one class for every such
+   note in the pane. .is-error tints it for a missing folder or other problem. */
+.code-linker-note {
+  color: var(--text-muted);
+  font-size: var(--font-ui-small);
+  margin: 4px 0 14px;
+}
+
+.code-linker-note.is-error {
+  color: var(--text-error);
+}
+
+/* User editor preset rows: name + template + remove on one line, wrapping to
+   two lines on a narrow pane so nothing collides. The full control area is used
+   (the empty name label is hidden) and the theme styles the row like any other. */
+.code-linker-editor-row .setting-item-info {
+  display: none;
+}
+
+.code-linker-editor-row .setting-item-control {
+  width: 100%;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  gap: 8px;
+}
+
+.code-linker-editor-name {
+  flex: 1 1 140px;
+  min-width: 0;
+}
+
+.code-linker-editor-tpl {
+  flex: 3 1 240px;
+  min-width: 0;
+}
+
+.code-linker-hover {
+  position: fixed;
+  z-index: var(--layer-popover);
+  max-width: min(720px, 90vw);
+  box-shadow: var(--shadow-s);
+  user-select: text;
+  -webkit-user-select: text;
+}
+
+.code-linker-hover.code-linker-hidden {
+  display: none;
+}
+
+.code-linker-embed {
+  margin: var(--p-spacing, 1em) 0;
+}
+
+/* The embed's header is a row: the title takes what is left, the toolbar sits at the end.
+   It wraps because a narrow block cannot hold both, and the embed clips what overflows. */
+.code-linker-embed-header {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+/* The title yields its width to the toolbar, but not all of it: shrinking to nothing is how
+   it kept the row on one line and pushed the last controls out of the box. */
+.code-linker-embed-title {
+  cursor: pointer;
+  flex: 1 1 6em;
+  min-width: 4em;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Obsidian floats its own edit-block button over the top right of a rendered block, so the
+   last control keeps clear of it. */
+.code-linker-embed-tools {
+  padding-right: 22px;
+  display: flex;
+  align-items: center;
+  flex: 0 1 auto;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 2px;
+  opacity: var(--code-linker-embed-tools-idle, 1);
+  transition: opacity 100ms ease-out;
+}
+
+.code-linker-embed:hover .code-linker-embed-tools,
+.code-linker-embed:focus-within .code-linker-embed-tools {
+  opacity: 1;
+}
+
+.code-linker-embed-group {
+  display: flex;
+  align-items: center;
+  gap: 1px;
+}
+
+.code-linker-embed-group:empty {
+  display: none;
+}
+
+.code-linker-embed-group + .code-linker-embed-group {
+  margin-left: 4px;
+  padding-left: 5px;
+  border-left: 1px solid var(--background-modifier-border);
+}
+
+.code-linker-embed-button {
+  height: auto;
+  padding: 2px 4px;
+  color: var(--text-muted);
+  font-family: var(--font-interface);
+}
+
+.code-linker-embed-button:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+.code-linker-embed-button.is-active {
+  color: var(--text-accent);
+}
+
+.code-linker-embed-button.is-hidden,
+.code-linker-embed-group.is-hidden {
+  display: none;
+}
+
+.code-linker-embed-error,
+.code-linker-embed-note {
+  padding: 6px 10px;
+  color: var(--text-muted);
+  font-size: var(--font-ui-smaller);
+}
+
+.code-linker-embed-error {
+  color: var(--text-error);
+}
+
+/* Drifted line (stale) and renamed/removed symbol (broken), in both render modes.
+   A border-bottom rather than text-decoration: wavy/offset underlines render
+   inconsistently across platforms, so a plain border is the reliable choice. */
+.code-linker-stale,
+.code-linker-broken {
+  border-bottom-width: 1px;
+  border-bottom-style: var(--code-linker-mark-underline-style, dotted);
+}
+
+.code-linker-stale {
+  border-bottom-color: var(--code-linker-stale-color, var(--text-warning));
+}
+
+.code-linker-broken {
+  border-bottom-color: var(--code-linker-broken-color, var(--text-error));
+}
+
+/* Nested sub-rows — searchable kinds under a language, and chosen folders under a
+   folder list — share one indent and compact height so the pane reads as one list
+   style. The kind rule is unqualified so it also indents the plain rebuild hint. */
+.code-linker-kind-row,
+.code-linker-folder-row {
+  margin-left: 1.5em;
+  padding-left: 0.75em;
+  border-left: 2px solid var(--background-modifier-border);
+}
+
+.code-linker-kind-row.setting-item,
+.code-linker-folder-row.setting-item {
+  border-top: 0;
+  padding: 4px 6px 4px 0.75em;
+}
+
+.code-linker-kind-row .setting-item-name {
+  font-size: 0.9em;
+  opacity: 0.85;
+}
+
+/* Folder-set editor: a full-width input with autocomplete and an add button below
+   the chosen-folder rows. */
+.code-linker-folder-rows:not(:empty) {
+  margin: 6px 0;
+}
+
+.code-linker-preview-file {
+  font-weight: var(--font-semibold);
+  margin: 12px 0 4px;
+  overflow-wrap: anywhere;
+}
+
+.code-linker-preview-table td {
+  border-bottom: 1px solid var(--background-modifier-border);
+  padding: 3px 8px;
+  text-align: left;
+  vertical-align: top;
+}
+
+.code-linker-preview-pick {
+  width: 1%;
+  padding-right: 0;
+  vertical-align: middle;
+}
+
+.code-linker-preview-move {
+  font-family: var(--font-monospace);
+  white-space: nowrap;
+  width: 1%;
+  color: var(--text-muted);
+}
+
+/* A guessed move (file matched by symbol or basename), not a plain line drift — tinted so
+   it stands out for a closer look before applying. */
+.code-linker-preview-moved .code-linker-preview-move {
+  color: var(--code-linker-stale-color, var(--text-warning));
+  white-space: normal;
+}
+
+.code-linker-preview-more,
+.code-linker-preview-empty {
+  color: var(--text-muted);
+  padding: 8px 0;
+}
+
+.code-linker-preview-attention {
+  color: var(--code-linker-broken-color, var(--text-error));
+}
+
+.code-linker-preview-broken {
+  font-size: var(--font-ui-small);
+  color: var(--code-linker-broken-color, var(--text-error));
+  padding: 2px 8px;
+  overflow-wrap: anywhere;
+}
+
+/* @settings
+
+name: Code Linker
+id: code-linker
+settings:
+  -
+    id: code-linker-highlight-color
+    title: Preview line highlight
+    description: Background of the target line in hover previews and embeds. Default follows the theme's selection colour.
+    type: variable-themed-color
+    format: hex
+    opacity: true
+    default-light: '#c8dcff80'
+    default-dark: '#3a4a6b80'
+  -
+    id: code-linker-stale-color
+    title: Stale-link underline colour
+    description: Pinned links and embeds whose code has moved — the update commands can fix them. Default follows the theme's warning colour.
+    type: variable-themed-color
+    format: hex
+    opacity: false
+    default-light: '#c1810b'
+    default-dark: '#e0a526'
+  -
+    id: code-linker-broken-color
+    title: Broken-link underline colour
+    description: Pinned links and embeds whose pin no longer matches anything — renamed, removed, or the line rewritten. Default follows the theme's error colour.
+    type: variable-themed-color
+    format: hex
+    opacity: false
+    default-light: '#c4302b'
+    default-dark: '#e35555'
+  -
+    id: code-linker-mark-underline-style
+    title: Stale / broken underline style
+    type: variable-select
+    default: dotted
+    options:
+      - dotted
+      - dashed
+      - solid
+      - double
+  -
+    id: code-linker-snippet-line-height
+    title: Snippet line height
+    description: How tightly the lines of a preview or an embed are set. The target line's highlight follows it.
+    type: variable-number-slider
+    default: 1.5
+    min: 1
+    max: 2.5
+    step: 0.05
+  -
+    id: code-linker-embed-height
+    title: Inline embed height
+    description: How tall an inline embed grows before it scrolls, in percent of the window.
+    type: variable-number-slider
+    default: 60
+    min: 20
+    max: 100
+    step: 5
+  -
+    id: code-linker-hover-height
+    title: Hover preview height
+    description: How tall a hover preview grows before it scrolls, in percent of the window.
+    type: variable-number-slider
+    default: 40
+    min: 20
+    max: 100
+    step: 5
+  -
+    id: code-linker-embed-tools-idle
+    title: Inline embed toolbar when idle
+    description: How visible the embed's toolbar is while the pointer is elsewhere. 0 keeps it out of the way until you hover the embed or focus it.
+    type: variable-number-slider
+    default: 1
+    min: 0
+    max: 1
+    step: 0.25
+
+*/
+
+/* Snippet chrome shared by the hover popover and the inline embed. Both containers carry
+   .code-linker-code (see the token colours below). The popover is a fixed overlay; the
+   embed flows inline — otherwise the parts match. The band and the code read --cl-lh alike, so
+   the band can be placed by row index whatever it is set to, and body/pre carry no vertical
+   padding so row 0 sits at top 0. user-select on the popover lets the snippet be copied. */
+.code-linker-hover,
+.code-linker-embed {
+  overflow: hidden;
+  background: var(--background-primary);
+  border: 1px solid var(--background-modifier-border);
+  border-radius: var(--radius-m);
+}
+
+.code-linker-hover-header,
+.code-linker-embed-header {
+  padding: 4px 10px;
+  border-bottom: 1px solid var(--background-modifier-border);
+  color: var(--text-muted);
+  font-size: var(--font-ui-smaller);
+  font-family: var(--font-monospace);
+  white-space: nowrap;
+}
+
+.code-linker-embed-header {
+  overflow: hidden;
+}
+
+.code-linker-hover-body,
+.code-linker-embed-body {
+  position: relative;
+  overflow: auto;
+  padding: 0;
+  font-family: var(--font-monospace);
+  font-size: var(--font-ui-smaller);
+  --cl-lh: calc(var(--code-linker-snippet-line-height, 1.5) * 1em);
+}
+
+.code-linker-hover-body {
+  max-height: calc(var(--code-linker-hover-height, 40) * 1vh);
+}
+
+.code-linker-embed-body {
+  max-height: calc(var(--code-linker-embed-height, 60) * 1vh);
+}
+
+/* The .code-linker-code prefix raises specificity above the theme's / editor's own
+   `pre` rules — in Live Preview an embed is rendered where those would otherwise add a
+   top margin, border or a different line-height and push the code off the fixed band. */
+.code-linker-code .code-linker-hover-body pre,
+.code-linker-code .code-linker-embed-body pre {
+  position: relative;
+  z-index: 1;
+  margin: 0;
+  padding: 0 10px;
+  border: 0;
+  background: transparent;
+  font-size: inherit;
+  /* keep it equal to the band's, so their em line heights match */ line-height: var(--cl-lh);
+  white-space: pre;
+}
+
+.code-linker-code .code-linker-hover-body code,
+.code-linker-code .code-linker-embed-body code {
+  margin: 0;
+  padding: 0;
+  font-family: inherit;
+  font-size: inherit;
+  background: transparent;
+  color: var(--code-normal, var(--text-normal));
+}
+
+.code-linker-code .code-linker-embed-body.is-wrapped pre {
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+/* Placed by row index, so it only lines up while every line is one row tall. */
+.code-linker-embed-code.has-wrapped-lines .code-linker-embed-band {
+  display: none;
+}
+
+.code-linker-embed-code {
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+}
+
+/* Sticky, so a long line scrolled sideways does not take the numbers with it; unselectable, so
+   copying the snippet copies code only. */
+.code-linker-embed-numbers {
+  position: sticky;
+  left: 0;
+  z-index: 2;
+  flex: 0 0 auto;
+  padding: 0 8px 0 10px;
+  background: var(--background-primary);
+  color: var(--text-faint);
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.code-linker-embed-numbers > div {
+  line-height: var(--cl-lh);
+}
+
+.code-linker-embed-numbers > .code-linker-embed-marked {
+  background: var(--code-linker-highlight-color, var(--text-selection));
+}
+
+.code-linker-code .code-linker-embed-code pre {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.code-linker-embed-code.has-wrapped-lines .code-linker-embed-numbers {
+  display: none;
+}
+
+/* Reading further up or down, the way a diff opens up its context. */
+.code-linker-embed-more {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 4px;
+  width: 100%;
+  height: auto;
+  padding: 1px 10px;
+  border-radius: 0;
+  background: var(--background-secondary);
+  color: var(--text-muted);
+  font-family: var(--font-interface);
+  font-size: var(--font-ui-smaller);
+  text-align: left;
+  cursor: pointer;
+}
+
+.code-linker-embed-more:hover {
+  background: var(--background-modifier-hover);
+  color: var(--text-normal);
+}
+
+.code-linker-hover-band,
+.code-linker-embed-band {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  /* actual row offset (row-index * line-height) is set inline */ height: var(--cl-lh);
+  background: var(--code-linker-highlight-color, var(--text-selection));
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* Prism token colours, shared by the hover popover and the inline embed (both carry
+   .code-linker-code). The popover sits outside Obsidian's markdown containers where the
+   theme's token CSS doesn't reach, so map the tokens to Obsidian's --code-* variables. */
+.code-linker-code .token.comment,
+.code-linker-code .token.prolog,
+.code-linker-code .token.doctype,
+.code-linker-code .token.cdata {
+  color: var(--code-comment, var(--text-faint));
+}
+
+.code-linker-code .token.punctuation {
+  color: var(--code-punctuation, var(--text-muted));
+}
+
+.code-linker-code .token.property,
+.code-linker-code .token.tag,
+.code-linker-code .token.constant,
+.code-linker-code .token.symbol,
+.code-linker-code .token.deleted {
+  color: var(--code-tag, var(--text-normal));
+}
+
+.code-linker-code .token.boolean,
+.code-linker-code .token.number {
+  color: var(--code-value, var(--text-normal));
+}
+
+.code-linker-code .token.selector,
+.code-linker-code .token.attr-name,
+.code-linker-code .token.string,
+.code-linker-code .token.char,
+.code-linker-code .token.builtin,
+.code-linker-code .token.inserted {
+  color: var(--code-string, var(--text-normal));
+}
+
+.code-linker-code .token.operator,
+.code-linker-code .token.entity,
+.code-linker-code .token.url {
+  color: var(--code-operator, var(--text-normal));
+}
+
+.code-linker-code .token.atrule,
+.code-linker-code .token.attr-value,
+.code-linker-code .token.keyword {
+  color: var(--code-keyword, var(--text-accent));
+}
+
+.code-linker-code .token.function,
+.code-linker-code .token.class-name {
+  color: var(--code-function, var(--text-normal));
+}
+
+.code-linker-code .token.regex,
+.code-linker-code .token.important,
+.code-linker-code .token.variable {
+  color: var(--code-property, var(--text-normal));
+}
+
+/* A pinned embed whose code moved is showing the wrong lines, so it says so: the header
+   is tinted and a note under the snippet explains. Same colours as the link marks, but
+   their own classes — an embed is a block, and the links' underline doesn't suit it. */
+.code-linker-embed-stale {
+  color: var(--code-linker-stale-color, var(--text-warning));
+}
+
+.code-linker-embed-broken {
+  color: var(--code-linker-broken-color, var(--text-error));
+}
+
+/* Update preview: each note is a checkable group, its link changes a compact table, and
+   the code that's gone is listed apart in the warning colour — so an update is something
+   you look over and confirm, not a blind sweep. */
+.code-linker-preview-check {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* --- index panel ------------------------------------------------------- */
+
+.code-linker-index-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.code-linker-index-bar input[type='search'] {
+  flex: 1;
+  min-width: 0;
+}
+
+.code-linker-index-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  font-weight: var(--font-semibold);
+  margin: 12px 0 4px;
+}
+
+.code-linker-index-summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin: 2px 0 6px;
+  color: var(--text-muted);
+  font-size: var(--font-ui-small);
+}
+
+.code-linker-index-row {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  padding: 2px 0;
+  border-bottom: 1px solid var(--background-modifier-border);
+}
+
+.code-linker-index-row.is-toggle {
+  cursor: pointer;
+}
+
+.code-linker-index-row.is-sub {
+  padding-left: 1.6em;
+  border-bottom: none;
+}
+
+.code-linker-index-caret {
+  color: var(--text-muted);
+  width: 1em;
+}
+
+.code-linker-index-name {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.code-linker-index-name.is-link,
+.code-linker-index-act.is-link {
+  cursor: pointer;
+  color: var(--text-accent);
+}
+
+.code-linker-index-kind,
+.code-linker-index-count {
+  color: var(--text-muted);
+  font-size: var(--font-ui-small);
+  white-space: nowrap;
+}
+
+.code-linker-index-count.is-broken {
+  color: var(--text-error);
+}
+
+.code-linker-index-path {
+  flex: 2;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  direction: rtl;
+  text-align: left;
+  color: var(--text-faint);
+  font-size: var(--font-ui-smaller);
+}
+
+.code-linker-index-empty.is-error {
+  color: var(--text-error);
+}
+
+.code-linker-index-empty {
+  color: var(--text-muted);
+  font-size: var(--font-ui-small);
+  padding: 4px 0;
+}
+
+/* Code Linker 1.6.0 */

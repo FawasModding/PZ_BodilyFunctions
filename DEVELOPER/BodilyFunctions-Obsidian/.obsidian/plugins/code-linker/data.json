@@ -1,0 +1,43 @@
+{
+  "trigger": "@@",
+  "uriTemplate": "jetbrains://{jetbrainsProduct}/navigate/reference?project={project}&path={path}:{line}",
+  "jetbrainsProduct": "rider",
+  "codeRoot": "C:\\Users\\ethan\\Zomboid\\Workshop\\Packing-Fireflies\\Godot\\Manatee\\Code",
+  "scanRoots": "",
+  "skipDirs": "obj\nbin\n.git\nLibrary\nTemp\nnode_modules",
+  "useGitignore": true,
+  "editors": [],
+  "hiddenPresets": [
+    "gitlab"
+  ],
+  "presetsInitialized": true,
+  "recentPresets": [
+    "jetbrains"
+  ],
+  "askOnInsert": false,
+  "showStatusBar": true,
+  "showRibbonIcon": true,
+  "enabledLanguages": [
+    "csharp",
+    "typescript",
+    "javascript",
+    "python",
+    "java",
+    "cpp",
+    "php",
+    "go",
+    "rust"
+  ],
+  "languagesFile": "code-languages.json",
+  "disabledKinds": [],
+  "autoRefresh": true,
+  "hoverPreview": true,
+  "hoverBefore": 3,
+  "hoverAfter": 20,
+  "markStaleLinks": true,
+  "minChars": 1,
+  "maxResults": 12,
+  "maxFileSizeKb": 2048,
+  "contextMenu": true,
+  "linkPrecedence": 20
+}

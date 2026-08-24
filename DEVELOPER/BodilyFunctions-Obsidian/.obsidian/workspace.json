@@ -1,0 +1,254 @@
+{
+  "main": {
+    "id": "5324373015726ba8",
+    "type": "split",
+    "children": [
+      {
+        "id": "5f8f002911981045",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "0d0ba3c793ca8208",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "Steam Description.md",
+                "mode": "preview",
+                "source": true
+              },
+              "icon": "lucide-file",
+              "title": "Steam Description"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "a1867c1f5591c54e",
+    "type": "split",
+    "children": [
+      {
+        "id": "7b402264614df0fb",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "ba7c22a92a7c1217",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "byModifiedTime"
+              },
+              "icon": "lucide-search",
+              "title": "Search"
+            }
+          },
+          {
+            "id": "78dbe4fe29e63245",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {
+                "sortOrder": "byModifiedTime",
+                "autoReveal": false
+              },
+              "icon": "lucide-folder-closed",
+              "title": "Files"
+            }
+          },
+          {
+            "id": "2623a929f05fdc6b",
+            "type": "leaf",
+            "state": {
+              "type": "file-tree-view",
+              "state": {},
+              "icon": "sheets-in-box",
+              "title": "File Tree"
+            }
+          },
+          {
+            "id": "e827c10c209a0b1b",
+            "type": "leaf",
+            "state": {
+              "type": "bookmarks",
+              "state": {
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-bookmark",
+              "title": "Bookmarks"
+            }
+          },
+          {
+            "id": "0b5e5110bbd89b58",
+            "type": "leaf",
+            "state": {
+              "type": "file-tree-view",
+              "state": {},
+              "icon": "sheets-in-box",
+              "title": "File Tree"
+            }
+          }
+        ],
+        "currentTab": 1
+      }
+    ],
+    "direction": "horizontal",
+    "width": 215.66665649414062
+  },
+  "right": {
+    "id": "c0ed8cf42c2bcc02",
+    "type": "split",
+    "children": [
+      {
+        "id": "780e9156c65255d5",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "d34278ae22c3ec82",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "file": "Items/Clothing/Undies.md",
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": true,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": false
+              },
+              "icon": "links-coming-in",
+              "title": "Backlinks"
+            }
+          },
+          {
+            "id": "977977ee640eb430",
+            "type": "leaf",
+            "state": {
+              "type": "outgoing-link",
+              "state": {
+                "linksCollapsed": false,
+                "unlinkedCollapsed": false
+              },
+              "icon": "links-going-out",
+              "title": "Outgoing links"
+            }
+          },
+          {
+            "id": "656639f4a114a71d",
+            "type": "leaf",
+            "state": {
+              "type": "tag",
+              "state": {
+                "sortOrder": "frequency",
+                "useHierarchy": true,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-tags",
+              "title": "Tags"
+            }
+          },
+          {
+            "id": "51cdd90d2ef5ef6b",
+            "type": "leaf",
+            "state": {
+              "type": "all-properties",
+              "state": {
+                "sortOrder": "frequency",
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-archive",
+              "title": "All properties"
+            }
+          },
+          {
+            "id": "d7b5719ff0093e08",
+            "type": "leaf",
+            "state": {
+              "type": "outline",
+              "state": {
+                "file": "World/Field Trips.md",
+                "followCursor": false,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-list",
+              "title": "Outline"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 202.16650390625,
+    "collapsed": true
+  },
+  "left-ribbon": {
+    "hiddenItems": {
+      "switcher:Open quick switcher": false,
+      "graph:Open graph view": false,
+      "canvas:Create new canvas": true,
+      "daily-notes:Open today's daily note": false,
+      "templates:Insert template": true,
+      "command-palette:Open command palette": true,
+      "bases:Create new base": true,
+      "workspaces:Manage workspace layouts": true,
+      "iconic:Open rulebook": false,
+      "obsidian-kanban:Create new board": false,
+      "file-tree-alternative:File Tree Alternative Plugin": false,
+      "code-linker:Code index": false
+    }
+  },
+  "active": "78dbe4fe29e63245",
+  "lastOpenFiles": [
+    "Steam Description.md",
+    "Untitled",
+    "UI.md",
+    "Cool Experiences I get to have!.md",
+    "!Development/Development Log/August 2026.md",
+    "!Development/Versions/Incomplete/Pre-Build 1.2.md",
+    "Characters/NPCs/Clown.md",
+    "Characters/NPCs/Wilson Willow.md",
+    "Characters/NPCs/Boggs/Boggs.md",
+    "Characters/NPCs/Dream-Weaver/Dream-Weaver.md",
+    "Characters/NPCs/Beluga/Beluga.md",
+    "Characters/NPCs/Bartholomew/Bartholomew.md",
+    "Characters/Camper/Camper.md",
+    "Animation & Rig.md",
+    "!Development/Credits.md",
+    "!Development/Versions/Complete",
+    "!Development/Versions/Incomplete",
+    "Items/Fluids/Milk.md",
+    "Items/Fluids/Wine.md",
+    "Items/Fluids/Tea.md",
+    "Items/Fluids/Juice.md",
+    "Items/Fluids/Coffee.md",
+    "Items/Fluids/Beer.md",
+    "Items/Fluids",
+    "Items/Fish/Tuna.md",
+    "Items/Fish/Squid.md",
+    "Items/Fish/Snail.md",
+    "Items/Fish/Seaweed.md",
+    "Items/Fish/Shrimp.md",
+    "Items/Fish/Sardine.md",
+    "Items/Fish",
+    "Items/Minerals",
+    "Items/Food",
+    "Locations.canvas",
+    "Items/Tools",
+    "Items/Natural",
+    "!Development/Versions/Complete"
+  ]
+}

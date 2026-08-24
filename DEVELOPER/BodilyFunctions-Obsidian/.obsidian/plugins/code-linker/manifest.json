@@ -1,0 +1,10 @@
+{
+  "id": "code-linker",
+  "name": "Code Linker",
+  "version": "1.6.0",
+  "minAppVersion": "1.4.0",
+  "description": "Autocomplete references to source-code files and types, inserting a deep-link that opens the file at its line in your editor, or embedding the snippet inline with its own line numbers.",
+  "author": "max-fluff",
+  "authorUrl": "https://github.com/max-fluff",
+  "isDesktopOnly": true
+}
