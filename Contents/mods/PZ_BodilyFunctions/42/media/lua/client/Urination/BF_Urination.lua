@@ -1,6 +1,6 @@
 require "BodilyFunctions"
 
--- Function to update urination-related values
+-- Update urination values
 function BF.UpdateUrinationValues()
     local player = getPlayer()
     
@@ -12,10 +12,10 @@ function BF.UpdateUrinationValues()
 
     -- Calculate bladder multiplier where:
     -- - At thirst 0 (fully hydrated): multiplier = 1.0 (standard rate)
-    -- - At thirst 1 (dehydrated): multiplier = 0.3 (30% of standard rate)
+    -- - At thirst 1 (dehydrated): multiplier = 0.3 (need to pee 30% less when dehydrated)
     local bladderMultiplier = 1.0 - (thirst * 0.7)
 
-    -- Add stress effect: increased urgency when stressed
+    -- Increased urgency when stressed
     local stressEffect = stress * 0.3  -- Up to 30% increase when fully stressed
 
     -- Simulate body needing nutrients to recover
@@ -24,29 +24,29 @@ function BF.UpdateUrinationValues()
     -- Add random variation for a more realistic feel
     local randomBladderFactor = 0.9 + (ZombRand(21) / 100) -- Range: 0.9 to 1.1
 
-    -- Calculate your base multiplier from player stats
+    -- Calculate base multiplier from player stats
     local finalBladderMultiplier = bladderMultiplier + stressEffect + urgencyFactor
-    -- Then apply the random variation as a multiplier
+
+    -- Multiply random variation with final multiplier
     finalBladderMultiplier = finalBladderMultiplier * randomBladderFactor
 
     print("Thirst level: " .. tostring(thirst))
     print("Bladder multiplier: " .. tostring(bladderMultiplier))
     print("Final bladder multiplier: " .. tostring(finalBladderMultiplier))
 
-    -- Retrieve the base maximum capacities (from SandboxVars or defaults).
+    -- Get base max capacities (from SandboxVars or defaults).
     local baseBladderMax = SandboxVars.BathroomFunctions.BladderMaxValue or 600
 
-    -- Retrieve the current fill values.
+    -- Get the current fill values.
     local urinateValue = BF.GetUrinateValue()
 
-    -- Base Increase Rates:
-    local urinateBaseRate = 10    -- Base bladder fill per 10-minute tick
+    -- Base Increase Rate:
+    local urinateBaseRate = 10 -- Base bladder fill per 10-minute tick
 
-    -- Apply the appropriate multipliers for the next tick.
-    -- (These multipliers get applied for the whole 10-minute interval.)
+    -- New bladder value = old bladder value + (3.5 * sandbox multiplier * thirst/stress/endurance/random multiplier)
     local urinateIncrease = urinateBaseRate * SandboxVars.BF.BladderIncreaseMultiplier * finalBladderMultiplier
 
-    -- Update the fill values.
+    -- Update the fill values!
     urinateValue = urinateValue + urinateIncrease
 
     player:getModData().urinateValue = tonumber(urinateValue)
@@ -54,7 +54,8 @@ function BF.UpdateUrinationValues()
     -- Calculate the current percentages for debugging/triggering events.
     local urinatePercent = (urinateValue / baseBladderMax) * 100
 
-    -- Apply muscle strain based on bladder capacity thresholds
+    -- Bladder specific:
+    -- Muscle strain in pelvis based on bladder capacity thresholds
     local muscleStrainAmount = 0
     if urinateValue >= 0.95 * baseBladderMax then
         muscleStrainAmount = 90 -- Level 4
@@ -71,7 +72,7 @@ function BF.UpdateUrinationValues()
     end
 
 
-    print("Updated Urinate Value: " .. tostring(urinatePercent) .. "% (Effective Max: " .. baseBladderMax .. ")")
+    --print("Updated Urinate Value: " .. tostring(urinatePercent) .. "% (Effective Max: " .. baseBladderMax .. ")")
 end
 
 -- Function to apply effects when the player has urinated in their clothing

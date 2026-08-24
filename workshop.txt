@@ -1,6 +1,6 @@
 version=1
 id=3396456841
-title=Bodily Functions [PREVIEW v0.13.0]
+title=Bodily Functions [v1.0]
 description=[h1][b]? Bodily Functions ?[/b][/h1]
 tags=Build 42;Hardmode;Realistic;Silly/Fun;WIP
 visibility=public

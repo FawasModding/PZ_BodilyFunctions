@@ -19,5 +19,46 @@
     },
     "Lua.diagnostics.globals": [
         "PZAPI"
+    ],
+    "folder-color.pathColors": [
+        {
+            "folderPath": "BodilyFunctions\\42\\media\\lua\\",
+            "color": "foldercolorizer.color_d7d700"
+        },
+        {
+            "folderPath": "BodilyFunctions\\42\\media\\scripts\\",
+            "color": "foldercolorizer.color_8787ff",
+            "badge": "PZ"
+        },
+        {
+            "folderPath": "BodilyFunctions\\42\\media\\lua\\client\\_Shared\\",
+            "color": "foldercolorizer.color_afffd7",
+            "badge": "🚽"
+        },
+        {
+            "folderPath": "BodilyFunctions\\42\\media\\lua\\server\\",
+            "color": "foldercolorizer.color_8787ff",
+            "badge": "PZ"
+        },
+        {
+            "folderPath": "BodilyFunctions\\42\\media\\lua\\shared\\",
+            "color": "foldercolorizer.color_8787ff",
+            "badge": "PZ"
+        },
+        {
+            "folderPath": "BodilyFunctions\\42\\media\\lua\\client\\Defecation\\",
+            "color": "foldercolorizer.color_af875f",
+            "badge": "💩"
+        },
+        {
+            "folderPath": "BodilyFunctions\\42\\media\\lua\\client\\Urination\\",
+            "color": "foldercolorizer.color_ffd787",
+            "badge": "💦"
+        },
+        {
+            "folderPath": "BodilyFunctions\\42\\media\\lua\\client\\Emesis\\",
+            "color": "foldercolorizer.color_87d7af",
+            "badge": "🤮"
+        }
     ]
 }
