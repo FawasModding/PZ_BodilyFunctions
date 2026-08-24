@@ -60,5 +60,6 @@
             "color": "foldercolorizer.color_87d7af",
             "badge": "🤮"
         }
-    ]
+    ],
+    "stylua.targetReleaseVersion": "latest"
 }

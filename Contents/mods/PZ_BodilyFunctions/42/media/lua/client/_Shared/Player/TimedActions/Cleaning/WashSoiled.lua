@@ -29,8 +29,8 @@ function WashSoiled:perform()
 	self:stopSound()
 
 	-- Debug logging
-    print("WashSoiled: Attempting to restore name")
-    print("soiledItem type: " .. tostring(self.soiledItem))
+    --print("WashSoiled: Attempting to restore name")
+    --print("soiledItem type: " .. tostring(self.soiledItem))
 
     if self.soiledItem then
         local modData = self.soiledItem:getModData()
@@ -53,7 +53,8 @@ function WashSoiled:perform()
     end
 
 	self.soiledItem:setWetness(100)
-	self.soiledItem:setDirtyness(0)
+	-- TODO: setDirtyness is problematic in Build 42.20
+	--self.soiledItem:setDirtyness(0)
 
 	if self.soiledItem:getModData().peed == true then --Do stuff if clothing peed
 		self.soiledItem:getModData().peed = false

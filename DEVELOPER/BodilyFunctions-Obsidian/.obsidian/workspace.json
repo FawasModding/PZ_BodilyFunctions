@@ -11,10 +11,14 @@
             "id": "d7de1bb4cccd3062",
             "type": "leaf",
             "state": {
-              "type": "empty",
-              "state": {},
+              "type": "markdown",
+              "state": {
+                "file": "Untitled.md",
+                "mode": "source",
+                "source": true
+              },
               "icon": "lucide-file",
-              "title": "New tab"
+              "title": "Untitled"
             }
           }
         ]
@@ -79,29 +83,9 @@
               "icon": "lucide-bookmark",
               "title": "Bookmarks"
             }
-          },
-          {
-            "id": "0b5e5110bbd89b58",
-            "type": "leaf",
-            "state": {
-              "type": "file-tree-view",
-              "state": {},
-              "icon": "sheets-in-box",
-              "title": "File Tree"
-            }
-          },
-          {
-            "id": "3de5f3508e276e3e",
-            "type": "leaf",
-            "state": {
-              "type": "file-tree-view",
-              "state": {},
-              "icon": "sheets-in-box",
-              "title": "File Tree"
-            }
           }
         ],
-        "currentTab": 2
+        "currentTab": 1
       }
     ],
     "direction": "horizontal",
@@ -214,8 +198,9 @@
       "code-linker:Code index": false
     }
   },
-  "active": "2623a929f05fdc6b",
+  "active": "d7de1bb4cccd3062",
   "lastOpenFiles": [
+    "Untitled.md",
     "Steam Description.md",
     "Untitled",
     "UI.md",
@@ -245,7 +230,6 @@
     "Items/Fish/Snail.md",
     "Items/Fish/Seaweed.md",
     "Items/Fish/Shrimp.md",
-    "Items/Fish/Sardine.md",
     "Items/Fish",
     "Items/Minerals",
     "Items/Food",
