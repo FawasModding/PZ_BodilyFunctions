@@ -1,23 +1,23 @@
-module BF 
+module BF
 {
+    item PulledDown_Trousers
+    {
+        ItemType = base:clothing,
+        Icon = TrousersDenimLightBlue,
+        BodyLocation = Pants,
+        ClothingItem = PulledDown_Trousers,
+        FabricType = Denim,
 
-	item PulledDown_Trousers
-	{
-		DisplayName = PulledDown_Trousers,
-		DisplayCategory = Clothing,
-		Type = Clothing,
-		Icon = TrousersDenimLightBlue,
-		BiteDefense = 10,
-		BloodLocation = Trousers,
-		BodyLocation = Pants,
-		ClothingItem = PulledDown_Trousers,
-		FabricType = Denim,
-		Insulation = 0.65,
-		RunSpeedModifier = 0.98,
-		ScratchDefense = 20,
-		WindResistance = 0.60,
-		WorldStaticModel = Trousers_Ground,
-		Tags = RipClothingDenim,
-	}
+        BiteDefense = 10,
+        ScratchDefense = 20,
+        BloodLocation = Trousers,
 
+        Insulation = 0.65,
+        RunSpeedModifier = 0.98,
+        WindResistance = 0.60,
+
+        WorldStaticModel = Trousers_Ground,
+
+        Tags = base:RipClothingDenim,
+    }
 }
