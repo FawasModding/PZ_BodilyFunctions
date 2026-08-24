@@ -8,6 +8,7 @@ module BodilyFunctions
         Cost = -1,
         UIName = UI_trait_SmallBowels,
         UIDescription = UI_trait_SmallBowelsDesc,
+        MutuallyExclusiveTraits = BF:BigBowels,
     }
 
     character_trait_definition BF:Bedsoiler
@@ -28,6 +29,7 @@ module BodilyFunctions
         Cost = -6,
         UIName = UI_trait_FecalIncontinence,
         UIDescription = UI_trait_FecalIncontinenceDesc,
+        MutuallyExclusiveTraits = BF:BowelControl,
     }
 
     character_trait_definition BF:Parcopresis
@@ -58,6 +60,7 @@ module BodilyFunctions
         Cost = 1,
         UIName = UI_trait_BigBowels,
         UIDescription = UI_trait_BigBowelsDesc,
+        MutuallyExclusiveTraits = BF:SmallBowels,
     }
 
     character_trait_definition BF:BowelControl
@@ -68,6 +71,7 @@ module BodilyFunctions
         Cost = 3,
         UIName = UI_trait_BowelControl,
         UIDescription = UI_trait_BowelControlDesc,
+        MutuallyExclusiveTraits = BF:FecalIncontinence,
     }
 
     character_trait_definition BF:SmallBladder
@@ -78,6 +82,7 @@ module BodilyFunctions
         Cost = -1,
         UIName = UI_trait_SmallBladder,
         UIDescription = UI_trait_SmallBladderDesc,
+        MutuallyExclusiveTraits = BF:BigBladder,
     }
 
     character_trait_definition BF:Bedwetter
@@ -85,7 +90,7 @@ module BodilyFunctions
         IsProfessionTrait = false,
         DisabledInMultiplayer = true,
         CharacterTrait = BF:Bedwetter,
-        Cost = -3,
+        Cost = -2,
         UIName = UI_trait_Bedwetter,
         UIDescription = UI_trait_BedwetterDesc,
     }
@@ -95,9 +100,10 @@ module BodilyFunctions
         IsProfessionTrait = false,
         DisabledInMultiplayer = false,
         CharacterTrait = BF:UrinaryIncontinence,
-        Cost = -5,
+        Cost = -4,
         UIName = UI_trait_UrinaryIncontinence,
         UIDescription = UI_trait_UrinaryIncontinenceDesc,
+        MutuallyExclusiveTraits = BF:BladderControl,
     }
 
     character_trait_definition BF:Paruresis
@@ -128,6 +134,7 @@ module BodilyFunctions
         Cost = 1,
         UIName = UI_trait_BigBladder,
         UIDescription = UI_trait_BigBladderDesc,
+        MutuallyExclusiveTraits = BF:SmallBladder,
     }
 
     character_trait_definition BF:BladderControl
@@ -138,5 +145,6 @@ module BodilyFunctions
         Cost = 3,
         UIName = UI_trait_BladderControl,
         UIDescription = UI_trait_BladderControlDesc,
+        MutuallyExclusiveTraits = BF:UrinaryIncontinence,
     }
 }

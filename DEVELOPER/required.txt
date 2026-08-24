@@ -19,7 +19,6 @@ EVENTUAL:
 - Make filtered urine liquid give nausea but safe to drink
 - All underwear defined in BathroomClothOverlays
 - Realistic stomach volume w/ liquid and food contents that convert into bladder and bowels meters
-- Pee when pooping on the toilet
 - Require wiping with paper, tissues, tp, etc. otherwise putting pants / underwear back on causes 5% pooped
 - Require females wiping with paper, tissues, tp, etc. otherwise putting pants / underwear back on causes 2% peed
 - Replace bathroom moodles to use urge rather than bladder / bowels capacity. So it can be dynamically changed to show how close you are to going.
