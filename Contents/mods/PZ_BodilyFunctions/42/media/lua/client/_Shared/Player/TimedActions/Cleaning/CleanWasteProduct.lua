@@ -1,3 +1,7 @@
+---@class CleanWasteProduct : ISBaseTimedAction
+---@field character IsoPlayer
+---@field puddleToRemove Item
+---@field cleaningItem InventoryItem
 CleanWasteProduct = ISBaseTimedAction:derive("CleanWasteProduct")
 function CleanWasteProduct:isValid()
 	return true

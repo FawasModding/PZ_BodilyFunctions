@@ -1,14 +1,17 @@
 {
   "trigger": "@@",
-  "uriTemplate": "jetbrains://{jetbrainsProduct}/navigate/reference?project={project}&path={path}:{line}",
+  "uriTemplate": "vscode://file/{code-root}/{path}:{line}",
   "jetbrainsProduct": "rider",
-  "codeRoot": "C:\\Users\\ethan\\Zomboid\\Workshop\\Packing-Fireflies\\Godot\\Manatee\\Code",
-  "scanRoots": "",
+  "codeRoot": "C:\\Users\\ethan\\Zomboid\\Workshop\\BodilyFunctions\\Contents\\mods\\PZ_BodilyFunctions\\",
+  "scanRoots": "42",
   "skipDirs": "obj\nbin\n.git\nLibrary\nTemp\nnode_modules",
   "useGitignore": true,
   "editors": [],
   "hiddenPresets": [
-    "gitlab"
+    "gitlab",
+    "file",
+    "jetbrains",
+    "github"
   ],
   "presetsInitialized": true,
   "recentPresets": [
@@ -18,15 +21,7 @@
   "showStatusBar": true,
   "showRibbonIcon": true,
   "enabledLanguages": [
-    "csharp",
-    "typescript",
-    "javascript",
-    "python",
-    "java",
-    "cpp",
-    "php",
-    "go",
-    "rust"
+    "lua"
   ],
   "languagesFile": "code-languages.json",
   "disabledKinds": [],

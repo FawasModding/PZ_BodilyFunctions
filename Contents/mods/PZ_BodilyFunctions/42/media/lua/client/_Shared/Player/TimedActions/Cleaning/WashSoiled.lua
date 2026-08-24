@@ -1,3 +1,7 @@
+---@class WashSoiled : ISBaseTimedAction
+---@field character IsoPlayer
+---@field soiledItem Clothing
+---@field cleaningItem InventoryItem
 WashSoiled = ISBaseTimedAction:derive("WashSoiled")
 function WashSoiled:isValid()
 	return true
@@ -53,8 +57,8 @@ function WashSoiled:perform()
     end
 
 	self.soiledItem:setWetness(100)
-	-- TODO: setDirtyness is problematic in Build 42.20
-	--self.soiledItem:setDirtyness(0)
+	-- Info: Build 42.14 changed "setDirtyness" to "setDirtiness"
+	self.soiledItem:setDirtiness(0)
 
 	if self.soiledItem:getModData().peed == true then --Do stuff if clothing peed
 		self.soiledItem:getModData().peed = false
@@ -88,6 +92,7 @@ function WashSoiled:perform()
 			end
 		end
 	end
+
 
 
 	self.character:resetModelNextFrame()

@@ -1,4 +1,4 @@
-/* Code Linker 1.6.0 — bundled from src/ by esbuild. Do not edit directly; edit src/ and run "npm run build". */
+/* Code Linker 1.6.1 — bundled from src/ by esbuild. Do not edit directly; edit src/ and run "npm run build". */
 "use strict";
 var __getOwnPropNames = Object.getOwnPropertyNames;
 var __commonJS = (cb, mod) => function __require() {
@@ -766,6 +766,16 @@ var require_discover = __commonJS({
         return matches;
       return matches.filter((m) => !overlaps(foreign, m.start, m.end));
     }
+    function spanMeanings(m) {
+      const out = [{ label: m.label || m.target || "", target: m.target }];
+      if (!Array.isArray(m.alts))
+        return out;
+      for (const a of m.alts) {
+        if (a && a.target !== void 0 && a.target !== null)
+          out.push({ label: a.label || a.target, target: a.target });
+      }
+      return out;
+    }
     function yieldedCandidates(app, self, text, where) {
       const out = [];
       for (const peer of discoverLinkers(app)) {
@@ -782,35 +792,38 @@ var require_discover = __commonJS({
         for (const m of matches) {
           if (!m || typeof m.start !== "number" || typeof m.end !== "number")
             continue;
-          out.push({
-            start: m.start,
-            end: m.end,
-            label: m.label || m.target || "",
-            target: m.target,
-            // The id survives a round trip through a DOM attribute; the opener is looked up
-            // again at click time.
-            id: peer.id,
-            source: peer.displayName || peer.id,
-            // How this row reads in an ambiguity list, asked of its owner and only when a list is
-            // actually drawn — every span on screen produces candidates, few are ever looked at.
-            describe: (display) => {
-              if (typeof peer.describe !== "function")
-                return null;
-              try {
-                return peer.describe(m.target, display);
-              } catch (e) {
-                return null;
+          for (const meta of spanMeanings(m)) {
+            out.push({
+              start: m.start,
+              end: m.end,
+              label: meta.label,
+              target: meta.target,
+              // The id survives a round trip through a DOM attribute; the opener is looked up
+              // again at click time.
+              id: peer.id,
+              source: peer.displayName || peer.id,
+              // How this row reads in an ambiguity list, asked of its owner and only when a list
+              // is actually drawn — every span on screen produces candidates, few are ever
+              // looked at.
+              describe: (display) => {
+                if (typeof peer.describe !== "function")
+                  return null;
+                try {
+                  return peer.describe(meta.target, display);
+                } catch (e) {
+                  return null;
+                }
+              },
+              open: (sourcePath, newTab) => {
+                if (typeof peer.open === "function")
+                  peer.open(meta.target, sourcePath, newTab);
+              },
+              hover: (event, targetEl, sourcePath, hoverParent) => {
+                if (typeof peer.hover === "function")
+                  peer.hover(meta.target, event, targetEl, sourcePath, hoverParent);
               }
-            },
-            open: (sourcePath, newTab) => {
-              if (typeof peer.open === "function")
-                peer.open(m.target, sourcePath, newTab);
-            },
-            hover: (event, targetEl, sourcePath, hoverParent) => {
-              if (typeof peer.hover === "function")
-                peer.hover(m.target, event, targetEl, sourcePath, hoverParent);
-            }
-          });
+            });
+          }
         }
       }
       return out;
@@ -986,8 +999,10 @@ var require_prose = __commonJS({
       // The shared submenu the exclusion items collect into, and their wording inside it, where
       // the parent already names the word.
       "exclude.group": "Exclude \u201C{value}\u201D",
-      "exclude.addShort": "Add to {noun}",
-      "exclude.removeShort": "Remove from {noun}",
+      "silence.group": "Stop linking \u201C{value}\u201D",
+      // The group already carries the verb, so an item only says how far it reaches.
+      "exclude.shortForm": "this spelling",
+      "exclude.shortStem": "every form of it",
       "label.selection": "Selection",
       "modal.leftAsText": "(left as text)",
       "modal.skipOption": "skip",
@@ -1017,6 +1032,11 @@ var require_prose = __commonJS({
       "set.statusBarIncludeLinks.name": "Count existing links too",
       "set.folderList.add": "Add path\u2026",
       "set.folderList.addAria": "Add",
+      "set.exclusionList.add": "Add\u2026",
+      "set.exclusionList.addAria": "Add",
+      "set.exclusionList.remove": "Remove",
+      "set.exclusionList.show": "Show the list",
+      "set.exclusionList.hide": "Hide the list",
       "plural.alias": { one: "{n} alias", other: "{n} aliases" }
     };
     var ru = {
@@ -1051,8 +1071,9 @@ var require_prose = __commonJS({
       "set.suggestPlainText.desc": "\u041F\u043E\u0434\u0441\u043A\u0430\u0437\u043A\u0430 \u0434\u043E\u043F\u0438\u0441\u044B\u0432\u0430\u0435\u0442 \u0441\u043B\u043E\u0432\u043E, \u043D\u0435 \u043F\u0440\u0435\u0432\u0440\u0430\u0449\u0430\u044F \u0435\u0433\u043E \u0432 \u0441\u0441\u044B\u043B\u043A\u0443.",
       "set.heading.contextMenu": "\u041A\u043E\u043D\u0442\u0435\u043A\u0441\u0442\u043D\u043E\u0435 \u043C\u0435\u043D\u044E",
       "exclude.group": "\u0418\u0441\u043A\u043B\u044E\u0447\u0438\u0442\u044C \xAB{value}\xBB",
-      "exclude.addShort": "\u0414\u043E\u0431\u0430\u0432\u0438\u0442\u044C \u0432 {noun}",
-      "exclude.removeShort": "\u0423\u0431\u0440\u0430\u0442\u044C \u0438\u0437 {noun}",
+      "silence.group": "\u041D\u0435 \u0441\u0432\u044F\u0437\u044B\u0432\u0430\u0442\u044C \xAB{value}\xBB",
+      "exclude.shortForm": "\u044D\u0442\u043E \u043D\u0430\u043F\u0438\u0441\u0430\u043D\u0438\u0435",
+      "exclude.shortStem": "\u043B\u044E\u0431\u0443\u044E \u0435\u0433\u043E \u0444\u043E\u0440\u043C\u0443",
       "label.selection": "\u0412\u044B\u0434\u0435\u043B\u0435\u043D\u0438\u0435",
       "modal.leftAsText": "(\u043E\u0441\u0442\u0430\u0432\u043B\u0435\u043D\u043E \u0442\u0435\u043A\u0441\u0442\u043E\u043C)",
       "modal.skipOption": "\u043F\u0440\u043E\u043F\u0443\u0441\u0442\u0438\u0442\u044C",
@@ -1082,6 +1103,11 @@ var require_prose = __commonJS({
       "set.statusBarIncludeLinks.name": "\u0421\u0447\u0438\u0442\u0430\u0442\u044C \u0438 \u0443\u0436\u0435 \u0441\u0432\u044F\u0437\u0430\u043D\u043D\u044B\u0435",
       "set.folderList.add": "\u0414\u043E\u0431\u0430\u0432\u0438\u0442\u044C \u043F\u0443\u0442\u044C\u2026",
       "set.folderList.addAria": "\u0414\u043E\u0431\u0430\u0432\u0438\u0442\u044C",
+      "set.exclusionList.add": "\u0414\u043E\u0431\u0430\u0432\u0438\u0442\u044C\u2026",
+      "set.exclusionList.addAria": "\u0414\u043E\u0431\u0430\u0432\u0438\u0442\u044C",
+      "set.exclusionList.remove": "\u0423\u0431\u0440\u0430\u0442\u044C",
+      "set.exclusionList.show": "\u041F\u043E\u043A\u0430\u0437\u0430\u0442\u044C \u0441\u043F\u0438\u0441\u043E\u043A",
+      "set.exclusionList.hide": "\u0421\u043A\u0440\u044B\u0442\u044C \u0441\u043F\u0438\u0441\u043E\u043A",
       "plural.alias": { one: "{n} \u043F\u0441\u0435\u0432\u0434\u043E\u043D\u0438\u043C", few: "{n} \u043F\u0441\u0435\u0432\u0434\u043E\u043D\u0438\u043C\u0430", many: "{n} \u043F\u0441\u0435\u0432\u0434\u043E\u043D\u0438\u043C\u043E\u0432", other: "{n} \u043F\u0441\u0435\u0432\u0434\u043E\u043D\u0438\u043C\u043E\u0432" }
     };
     var de = {
@@ -1478,8 +1504,12 @@ var require_menu_verbs = __commonJS({
     var VERBS = {
       convert: { label: "menu.convert.group", icon: "link" },
       open: { label: "menu.open.group", icon: "file-search" },
-      exclude: { label: "exclude.group", icon: "ban" }
+      // Two verbs, because stopping a word and dropping the term it reached are different acts:
+      // one leaves the term in the index, the other takes it out.
+      silence: { label: "silence.group", icon: "ban" },
+      exclude: { label: "exclude.group", icon: "trash-2" }
     };
+    var verbKey = (verb, value) => verb + " " + (value == null ? "" : String(value));
     var MenuBuilder = class {
       constructor(plugin, menu) {
         this.plugin = plugin;
@@ -1521,23 +1551,25 @@ var require_menu_verbs = __commonJS({
         };
         return child;
       }
-      // Verb -> the object it acts on, for those that earned a submenu. All items of one verb in
-      // one menu act on the same object, so the first one's value names the group.
+      // Which (verb, object) pairs earned a submenu. Counted per object, not per verb: a group
+      // is named after the object it acts on, so items reaching for different ones — excluding
+      // this spelling, dropping that heading — stay apart and keep their full wording.
       groupedVerbs() {
         const counts = /* @__PURE__ */ new Map();
         for (const e of this.entries) {
           if (!e.verb)
             continue;
-          const seen = counts.get(e.verb) || { count: 0, value: e.value };
+          const key = verbKey(e.verb, e.value);
+          const seen = counts.get(key) || { count: 0, verb: e.verb, value: e.value };
           seen.count++;
-          counts.set(e.verb, seen);
+          counts.set(key, seen);
         }
         const provider = this.plugin.api && this.plugin.api.linker;
-        const grouped = /* @__PURE__ */ new Map();
-        for (const [verb, { count, value }] of counts) {
+        const grouped = /* @__PURE__ */ new Set();
+        for (const [key, { count, verb, value }] of counts) {
           const peers = provider ? peersOffering(this.plugin.app, provider, verb, value).length : 0;
           if (count + peers > 1)
-            grouped.set(verb, value);
+            grouped.add(key);
         }
         return grouped;
       }
@@ -1554,10 +1586,12 @@ var require_menu_verbs = __commonJS({
             sub.addItem((item) => child.cb(item, true));
         }
       }
+      // The key carries the object too, so two plugins excluding the same word still land in one
+      // submenu while two acting on different ones do not.
       sectionFor(verb, value) {
         const spec = VERBS[verb];
         const label = t2(spec.label, value == null ? void 0 : { value });
-        return sharedSection(this.menu, "linker:" + verb, label, spec.icon);
+        return sharedSection(this.menu, "linker:" + verbKey(verb, value), label, spec.icon);
       }
       // Replayed in declaration order, so a verb's submenu appears where its first item would
       // have. Anything else keeps its place.
@@ -1573,13 +1607,14 @@ var require_menu_verbs = __commonJS({
             this.writeSection(e);
             continue;
           }
-          if (!e.verb || !grouped.has(e.verb)) {
+          const key = e.verb ? verbKey(e.verb, e.value) : null;
+          if (!key || !grouped.has(key)) {
             this.menu.addItem((item) => e.cb(item, false));
             continue;
           }
-          if (!sections.has(e.verb))
-            sections.set(e.verb, this.sectionFor(e.verb, grouped.get(e.verb)));
-          sections.get(e.verb).addItem((item) => e.cb(item, true));
+          if (!sections.has(key))
+            sections.set(key, this.sectionFor(e.verb, e.value));
+          sections.get(key).addItem((item) => e.cb(item, true));
         }
       }
     };
@@ -1589,6 +1624,137 @@ var require_menu_verbs = __commonJS({
       builder.flush();
     }
     module2.exports = { VERBS, MenuBuilder, buildMenu: buildMenu2 };
+  }
+});
+
+// src/shared/actions.js
+var require_actions = __commonJS({
+  "src/shared/actions.js"(exports2, module2) {
+    "use strict";
+    var { t: t2 } = require_i18n();
+    var drawn = (plugin, a) => typeof a.inMenu !== "function" || !!a.inMenu(plugin);
+    function check(a) {
+      if (!a.id || !a.name || !a.title || !a.run || !a.resolve) {
+        throw new Error("menu action needs id, name, title, resolve and run: " + (a.id || "(no id)"));
+      }
+      return a;
+    }
+    function registerActions2(plugin, actions) {
+      for (const a of actions.map(check)) {
+        const act = (checking, target) => {
+          if (!target)
+            return false;
+          const ctx = a.resolve(plugin, target);
+          if (!ctx)
+            return false;
+          if (!checking)
+            a.run(plugin, ctx);
+          return true;
+        };
+        if (a.surface === "editor") {
+          plugin.addCommand({ id: a.id, name: t2(a.name), editorCheckCallback: (checking, editor) => act(checking, editor) });
+        } else {
+          plugin.addCommand({ id: a.id, name: t2(a.name), checkCallback: (checking) => act(checking, plugin.app.workspace.getActiveFile()) });
+        }
+      }
+    }
+    function menuActions2(plugin, menu, actions, surface, target) {
+      const sections = /* @__PURE__ */ new Map();
+      for (const a of actions.map(check)) {
+        if (a.surface !== surface || !drawn(plugin, a))
+          continue;
+        const ctx = a.resolve(plugin, target);
+        if (!ctx)
+          continue;
+        const write = (i, grouped) => i.setTitle(a.title(ctx, grouped)).setIcon(grouped && a.verb ? null : a.icon || null).onClick(() => a.run(plugin, ctx));
+        if (a.section && menu.section) {
+          const label = typeof a.section === "function" ? a.section(ctx) : t2(a.section);
+          if (!sections.has(label))
+            sections.set(label, menu.section(label, a.icon));
+          sections.get(label).addItem((i) => write(i, true));
+        } else if (a.verb) {
+          menu.tagged(a.verb, { value: a.value ? a.value(ctx) : void 0 }, write);
+        } else {
+          menu.addItem((i) => write(i, false));
+        }
+      }
+    }
+    function cursorReader(compute, stamp = (plugin) => plugin.indexVersion) {
+      let last = { editor: null, key: null, value: null };
+      return (plugin, editor) => {
+        if (!editor)
+          return null;
+        const head = editor.getCursor("head");
+        const sel = editor.getSelection ? editor.getSelection() : "";
+        const key = `${head.line}:${head.ch}:${editor.getLine(head.line)}:${sel}:${stamp(plugin)}`;
+        if (last.editor !== editor || last.key !== key)
+          last = { editor, key, value: compute(plugin, editor) };
+        return last.value;
+      };
+    }
+    module2.exports = { registerActions: registerActions2, menuActions: menuActions2, cursorReader };
+  }
+});
+
+// src/link-actions.js
+var require_link_actions = __commonJS({
+  "src/link-actions.js"(exports2, module2) {
+    "use strict";
+    var { t: t2 } = require_i18n();
+    var linkAt = (plugin, editor) => {
+      const link = editor && plugin.codeLinkAtCursor(editor);
+      return link && plugin.ownsLinkAtCursor(link) ? { editor, link } : null;
+    };
+    var linkAction = ({ id, name, can, run, icon }) => ({
+      id,
+      name,
+      surface: "editor",
+      icon,
+      title: () => t2(name),
+      resolve: (plugin, editor) => {
+        const ctx = linkAt(plugin, editor);
+        return ctx && (!can || can(plugin, ctx.link)) ? ctx : null;
+      },
+      run
+    });
+    var pinAction = (anchor) => ({
+      id: "pin-code-link-" + anchor,
+      name: "cmd.pin." + anchor,
+      surface: "editor",
+      icon: "pin",
+      section: "menu.pin",
+      title: (ctx) => t2("menu.pin." + anchor, { value: ctx.option.value }),
+      resolve: (plugin, editor) => {
+        const ctx = linkAt(plugin, editor);
+        const option = ctx && plugin.linkPinOption(ctx.link, anchor);
+        return option ? Object.assign(ctx, { option }) : null;
+      },
+      run: (plugin, ctx) => plugin.pinLink(ctx.editor, ctx.link, anchor)
+    });
+    var LINK_ACTIONS2 = [
+      linkAction({
+        id: "copy-code-link-at-cursor",
+        name: "menu.copyLink",
+        icon: "copy",
+        run: (plugin, ctx) => plugin.copyLinkAtCursor(ctx.link)
+      }),
+      linkAction({
+        id: "fix-code-link",
+        name: "menu.fixLink",
+        icon: "wrench",
+        can: (plugin, link) => plugin.isLinkStale(link.target),
+        run: (plugin, ctx) => plugin.fixLinkAtCursor(ctx.editor, ctx.link)
+      }),
+      ...["sym", "kind", "line"].map(pinAction),
+      linkAction({
+        id: "unpin-code-link",
+        name: "menu.unpin",
+        icon: "pin-off",
+        can: (plugin, link) => plugin.linkAtCursorBound(link),
+        run: (plugin, ctx) => plugin.unbindLink(ctx.editor, ctx.link)
+      })
+    ];
+    module2.exports = { LINK_ACTIONS: LINK_ACTIONS2 };
   }
 });
 
@@ -3778,14 +3944,25 @@ var require_disk_suggest = __commonJS({
 var require_folder_list = __commonJS({
   "src/shared/folder-list.js"(exports2, module2) {
     "use strict";
-    var { Setting, setIcon } = require("obsidian");
+    var openLists = /* @__PURE__ */ new WeakMap();
     function renderFolderList(containerEl, opts) {
+      const { Setting, setIcon } = require("obsidian");
       const cls = opts.cls;
       const norm = opts.normalize || ((x) => x.trim());
       const read = () => (opts.get() || "").split("\n").map((x) => x.trim()).filter(Boolean);
-      new Setting(containerEl).setName(opts.name).setDesc(opts.desc);
-      const rowsEl = containerEl.createDiv({ cls: `${cls}-folder-rows` });
-      const addEl = containerEl.createDiv({ cls: `${cls}-folder-add` });
+      const fold = opts.fold;
+      const maxRows = opts.maxRows || 10;
+      const opened = () => {
+        let set = openLists.get(fold.owner);
+        if (!set) {
+          set = /* @__PURE__ */ new Set();
+          openLists.set(fold.owner, set);
+        }
+        return set;
+      };
+      const isOpen = () => !fold || opened().has(fold.key);
+      const host = containerEl.createDiv({ cls: `${cls}-list` });
+      let refocus = false;
       const commit = async (next) => {
         const seen = /* @__PURE__ */ new Set();
         const clean = [];
@@ -3799,36 +3976,81 @@ var require_folder_list = __commonJS({
         await opts.set(clean.join("\n"));
         draw();
       };
-      const draw = () => {
-        rowsEl.empty();
-        read().forEach((path, i) => {
-          const row = new Setting(rowsEl).setName(path);
-          row.settingEl.addClass(`${cls}-folder-row`);
-          row.addExtraButton((b) => b.setIcon("x").setTooltip(opts.removeLabel || "").onClick(() => {
+      const drawRow = (rowsEl, entry, i) => {
+        if (!opts.editable) {
+          const row2 = new Setting(rowsEl).setName(entry);
+          row2.settingEl.addClass(`${cls}-folder-row`);
+          row2.addExtraButton((b) => b.setIcon("x").setTooltip(opts.removeLabel || "").onClick(() => {
             const next = read();
             next.splice(i, 1);
             commit(next);
           }));
+          return;
+        }
+        const row = rowsEl.createDiv({ cls: `${cls}-folder-row ${cls}-list-row` });
+        const box = row.createEl("input", { type: "text", cls: `${cls}-list-input` });
+        box.value = entry;
+        box.addEventListener("change", () => {
+          const next = read();
+          next[i] = box.value;
+          commit(next);
+        });
+        const del = row.createEl("button", { cls: `${cls}-list-del`, attr: { "aria-label": opts.removeLabel || "" } });
+        setIcon(del, "x");
+        del.addEventListener("click", () => {
+          const next = read();
+          next.splice(i, 1);
+          commit(next);
         });
       };
-      const input = addEl.createEl("input", { type: "text", cls: `${cls}-folder-input`, attr: { placeholder: opts.placeholder || "" } });
-      const addBtn = addEl.createEl("button", { cls: `${cls}-folder-addbtn`, attr: { "aria-label": opts.addLabel || "" } });
-      setIcon(addBtn, "plus");
-      const add = (raw) => {
-        if (norm(raw))
-          commit([...read(), raw]);
-        input.value = "";
-        input.focus();
-      };
-      if (opts.attachSuggest)
-        opts.attachSuggest(input, add);
-      addBtn.addEventListener("click", () => add(input.value));
-      input.addEventListener("keydown", (e) => {
-        if (e.key === "Enter") {
-          e.preventDefault();
-          add(input.value);
+      const draw = () => {
+        host.empty();
+        const entries = read();
+        const open = isOpen();
+        const head = new Setting(host).setName(entries.length ? `${opts.name} (${entries.length})` : opts.name).setDesc(opts.desc);
+        if (fold) {
+          head.addExtraButton((b) => b.setIcon(open ? "chevron-up" : "chevron-down").setTooltip((open ? opts.hideLabel : opts.showLabel) || "").onClick(() => {
+            const s = opened();
+            if (open)
+              s.delete(fold.key);
+            else
+              s.add(fold.key);
+            draw();
+          }));
+          if (!open)
+            return;
         }
-      });
+        const rowsEl = host.createDiv({ cls: `${cls}-folder-rows` });
+        if (entries.length > maxRows)
+          rowsEl.addClass(`${cls}-list-scroll`);
+        entries.forEach((entry, i) => drawRow(rowsEl, entry, i));
+        const addEl = host.createDiv({ cls: `${cls}-folder-add` });
+        const input = addEl.createEl("input", { type: "text", cls: `${cls}-folder-input`, attr: { placeholder: opts.placeholder || "" } });
+        const addBtn = addEl.createEl("button", { cls: `${cls}-folder-addbtn`, attr: { "aria-label": opts.addLabel || "" } });
+        setIcon(addBtn, "plus");
+        const add = (raw) => {
+          input.value = "";
+          if (!norm(raw)) {
+            input.focus();
+            return;
+          }
+          refocus = true;
+          commit([...read(), raw]);
+        };
+        if (opts.attachSuggest)
+          opts.attachSuggest(input, add);
+        addBtn.addEventListener("click", () => add(input.value));
+        input.addEventListener("keydown", (e) => {
+          if (e.key === "Enter") {
+            e.preventDefault();
+            add(input.value);
+          }
+        });
+        if (refocus) {
+          refocus = false;
+          input.focus();
+        }
+      };
       draw();
     }
     module2.exports = { renderFolderList };
@@ -4354,6 +4576,17 @@ var require_settings_tab = __commonJS({
   }
 });
 
+// src/shared/style-settings.js
+var require_style_settings = __commonJS({
+  "src/shared/style-settings.js"(exports2, module2) {
+    "use strict";
+    function announceStyleSettings2(plugin) {
+      plugin.app.workspace.onLayoutReady(() => plugin.app.workspace.trigger("parse-style-settings"));
+    }
+    module2.exports = { announceStyleSettings: announceStyleSettings2 };
+  }
+});
+
 // src/api.js
 var require_api = __commonJS({
   "src/api.js"(exports2, module2) {
@@ -4847,6 +5080,8 @@ var { LINE_RE, ANCHORS, hashLine, parseBinding, formatBinding, bindStateFrom, bi
 var { fillRoot: fillRootToken, ownsRootToken, namespaceRoot } = require_root_token();
 var { menuSection } = require_menu();
 var { buildMenu } = require_menu_verbs();
+var { registerActions, menuActions } = require_actions();
+var { LINK_ACTIONS } = require_link_actions();
 var { ownsLink } = require_link_owner();
 var { resolveGit, resolveGitDir } = require_git();
 var OWNER = "code";
@@ -4866,6 +5101,7 @@ var { CodeLinkModal, PresetPickerModal, LinePromptModal, PinAnchorModal } = requ
 var { CodeIndexView, INDEX_VIEW_TYPE } = require_index_view();
 var { CodeLinkerSettingTab } = require_settings_tab();
 var { initI18n, withFamily, t, plural } = require_i18n();
+var { announceStyleSettings } = require_style_settings();
 var api = require_api();
 var indexEvents = require_index_events();
 var CodeLinkerPlugin = class extends Plugin {
@@ -4917,6 +5153,7 @@ var CodeLinkerPlugin = class extends Plugin {
         this.hover.hide();
     });
     this.addSettingTab(new CodeLinkerSettingTab(this.app, this));
+    announceStyleSettings(this);
     this.statusEl = this.addStatusBarItem();
     this.editorStatusEl = this.addStatusBarItem();
     this.editorStatusEl.addClass("mod-clickable");
@@ -4935,17 +5172,7 @@ var CodeLinkerPlugin = class extends Plugin {
     this.addCommand({ id: "convert-selection-to-link", name: t("cmd.convertSelection"), editorCallback: (editor) => this.convertSelection(editor) });
     this.addCommand({ id: "open-selected-code", name: t("cmd.openSelection"), editorCallback: (editor) => this.openSelection(editor) });
     this.addCommand({ id: "insert-code-link-line", name: t("cmd.insertLineLink"), editorCallback: (editor) => this.withFormat(this.settings.askOnInsert, (tpl) => this.insertLineLink(editor, tpl)) });
-    this.addLinkCommand("copy-code-link-at-cursor", t("menu.copyLink"), () => true, (editor, link) => this.copyLinkAtCursor(link));
-    this.addLinkCommand("fix-code-link", t("menu.fixLink"), (link) => this.isLinkStale(link.target), (editor, link) => this.fixLinkAtCursor(editor, link));
-    for (const anchor of ["sym", "kind", "line"]) {
-      this.addLinkCommand(
-        "pin-code-link-" + anchor,
-        t("cmd.pin." + anchor),
-        (link) => !!this.linkPinOption(link, anchor),
-        (editor, link) => this.pinLink(editor, link, anchor)
-      );
-    }
-    this.addLinkCommand("unpin-code-link", t("menu.unpin"), (link) => this.linkAtCursorBound(link), (editor, link) => this.unbindLink(editor, link));
+    registerActions(this, LINK_ACTIONS);
     this.addCommand({ id: "pin-links-note", name: t("cmd.pinLinksNote"), callback: () => this.pickPinAnchors((a) => this.pinLinksInActiveNote(a)) });
     this.addCommand({ id: "pin-links-vault", name: t("cmd.pinLinksVault"), callback: () => this.pickPinAnchors((a) => this.pinLinksInVault(a)) });
     this.addCommand({ id: "insert-code-embed", name: t("cmd.insertEmbed"), editorCallback: (editor) => this.pickEntry((e) => this.insertEmbed(editor, e)) });
@@ -4961,17 +5188,7 @@ var CodeLinkerPlugin = class extends Plugin {
         if (this.selectionTarget(editor, false)) {
           this.selectionItem(menu, "open", "file-search", () => this.openSelection(editor));
         }
-        const link = this.codeLinkAtCursor(editor);
-        if (link && this.ownsLinkAtCursor(link)) {
-          menu.addItem((item) => item.setTitle(t("menu.copyLink")).setIcon("copy").onClick(() => this.copyLinkAtCursor(link)));
-          if (this.isLinkStale(link.target)) {
-            menu.addItem((item) => item.setTitle(t("menu.fixLink")).setIcon("wrench").onClick(() => this.fixLinkAtCursor(editor, link)));
-          }
-          this.addPinItems(menu, (a) => this.linkPinOption(link, a), (a) => this.pinLink(editor, link, a));
-          if (this.linkAtCursorBound(link)) {
-            menu.addItem((item) => item.setTitle(t("menu.unpin")).setIcon("pin-off").onClick(() => this.unbindLink(editor, link)));
-          }
-        }
+        menuActions(this, menu, LINK_ACTIONS, "editor", editor);
       }))
     );
     this.registerEvent(
@@ -6336,22 +6553,6 @@ var CodeLinkerPlugin = class extends Plugin {
     for (const [a, o] of opts) {
       group.addItem((i) => i.setTitle(t("menu.pin." + a, { value: o.value })).setIcon("pin").onClick(() => run(a)));
     }
-  }
-  // A right-click item on the code link under the cursor, mirrored into the palette so
-  // every one of them is reachable without the mouse. `can` gates both.
-  addLinkCommand(id, name, can, run) {
-    this.addCommand({
-      id,
-      name,
-      editorCheckCallback: (checking, editor) => {
-        const link = this.codeLinkAtCursor(editor);
-        if (!link || !this.ownsLinkAtCursor(link) || !can(link))
-          return false;
-        if (!checking)
-          run(editor, link);
-        return true;
-      }
-    });
   }
   // Insert a link to a chosen line of a chosen file — for pointing at something the index
   // has no name for. Like any insert it leaves the link unbound; pin it to track it.

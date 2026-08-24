@@ -1,3 +1,7 @@
+---@class WashSoiledItem : ISBaseTimedAction
+---@field character IsoPlayer
+---@field soiledItem InventoryItem
+---@field soapItem InventoryItem
 WashSoiledItem = ISBaseTimedAction:derive("WashSoiledItem")
 function WashSoiledItem:isValid()
 	return true
