@@ -31,9 +31,6 @@ function ToiletDefecate:start()
 	-- Remove clothing items before starting the defecation
     self.removedClothing = {}
 
-	--Character poops in toilet
-	self:setActionAnim("bathroomSitToilet")
-
 	-- Play poop toilet sound
     self.sound = self.character:getEmitter():playSound("BF_Poop_Self_Light")
 

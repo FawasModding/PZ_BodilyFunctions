@@ -144,7 +144,7 @@ Clothes that need to be removed before using the bathroom. Includes dresses and 
 function BF.GetExcreteObstructiveClothing()
     local bodyLocations = {
     ItemBodyLocation.UNDERWEAR_BOTTOM, ItemBodyLocation.UNDERWEAR, ItemBodyLocation.TORSO1LEGS1, ItemBodyLocation.LEGS1,
-    ItemBodyLocation.PANTS, ItemBodyLocation.BATH_ROBE, ItemBodyLocation.FULL_SUIT, ItemBodyLocation.FULL_SUIT_HEAD, ItemBodyLocation.FULL_TOP,
+    ItemBodyLocation.PANTS, ItemBodyLocation.PANTS_SKINNY, ItemBodyLocation.PANTS_EXTRA, ItemBodyLocation.BATH_ROBE, ItemBodyLocation.FULL_SUIT, ItemBodyLocation.FULL_SUIT_HEAD, ItemBodyLocation.FULL_TOP,
     ItemBodyLocation.BODY_COSTUME, ItemBodyLocation.SHORT_PANTS, ItemBodyLocation.SHORTS_SHORT,
     ItemBodyLocation.LONG_DRESS, ItemBodyLocation.DRESS, ItemBodyLocation.LONG_SKIRT, ItemBodyLocation.SKIRT
     }

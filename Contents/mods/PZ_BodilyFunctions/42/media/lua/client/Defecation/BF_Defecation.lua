@@ -193,10 +193,22 @@ function BF.TriggerToiletDefecate(object, player, isWiping, wipeType, wipeItem, 
         return
     end
 
-    ISTimedActionQueue.add(ISWalkToTimedAction:new(player, object))
-    BF.RemoveBottomClothing(player)
-    ISTimedActionQueue.add(ToiletDefecate:new(player, defecateValue * 2, true, true, object))
-    
+    ISTimedActionQueue.add(ISPathFindAction:pathToSitOnFurniture(player, object, false))
+
+    local excreteObstructive = BF.GetExcreteObstructiveClothing()
+    local removedClothing = {}
+    for _, location in ipairs(excreteObstructive) do
+        local clothingItem = player:getWornItem(location)
+        if clothingItem then
+            table.insert(removedClothing, clothingItem)
+            ISTimedActionQueue.add(ISUnequipAction:new(player, clothingItem, 50))
+        end
+    end
+    player:getModData().removedClothing = removedClothing
+
+    ISTimedActionQueue.add(ISRestAction:new(player, object, true))
+    ISTimedActionQueue.add(ToiletDefecate:new(player, defecateValue * 2, false, false, object))
+
     if isWiping then
         ISTimedActionQueue.add(WipeSelf:new(player, 20, wipeType, wipeItem, "poop"))
     else
@@ -211,10 +223,12 @@ function BF.TriggerToiletDefecate(object, player, isWiping, wipeType, wipeItem, 
                 modData.poopedSeverity = math.min(modData.poopedSeverity, 100)
             end
         end
-
-        BF.ReequipBottomClothing(player) -- put back on bottom clothing
-        BF.ResetRemovedClothing(player) -- reset removed clothing
     end
+
+    ISWorldObjectContextMenu.getUpAndThen(player, function()
+        BF.ReequipBottomClothing(player)
+        BF.ResetRemovedClothing(player)
+    end)
 end
 
 function BF.TriggerGroundDefecate(isWiping, wipeType, wipeItem, wipeEfficiency)

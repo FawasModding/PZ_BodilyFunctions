@@ -12,6 +12,9 @@
 > - Readded mutual exclusivity to traits.
 > - Changed points for "Bedwetter" from +3 to +2.
 > - Changed points for "Urinary Incontience" from -5 to -4.
+> ---
+> - Added "ItemBodyLocation.PANTS_SKINNY" and "ItemBodyLocation.PANTS_EXTRA" to the list of clothing items that get taken off when you're about to use the bathroom.
+> - Replaced my previous janky custom code for sitting down on toilets, with the built-in sitting mechanic introduced in Build 42. Toilets no longer clip with the player.
 
 > [!SUCCESS] 8/23/26
 > - Deleted Fecal Footprints system almost entirely.

@@ -214,19 +214,40 @@ function BF.TriggerToiletUrinate(object, player)
     local isBeingWatched = BF.IsBeingWatched(player)
 
     -- Only allow action if requirements are met
-    if urinateValue < (requirement / 100) * bladderMaxValue then
-        return
-    end
-    if hasShyBladder and isBeingWatched then
+    if urinateValue < (requirement / 100) * bladderMaxValue or (hasShyBladder and isBeingWatched) then
         return
     end
 
-    -- Proceed with the action
-    ISTimedActionQueue.add(ISWalkToTimedAction:new(player, object))
-    if player:isFemale() == true then
-        BF.RemoveBottomClothing(player)
+    if player:isFemale() then
+        -- Female: sit down and remove obstructive clothing
+        ISTimedActionQueue.add(ISPathFindAction:pathToSitOnFurniture(player, object, false))
+
+        local excreteObstructive = BF.GetExcreteObstructiveClothing()
+        local removedClothing = {}
+
+        for _, location in ipairs(excreteObstructive) do
+            local clothingItem = player:getWornItem(location)
+
+            if clothingItem then
+                table.insert(removedClothing, clothingItem)
+                ISTimedActionQueue.add(ISUnequipAction:new(player, clothingItem, 50))
+            end
+        end
+
+        player:getModData().removedClothing = removedClothing
+
+        ISTimedActionQueue.add(ISRestAction:new(player, object, true))
+        ISTimedActionQueue.add(ToiletUrinate:new(player, urinateValue, true, true, object))
+
+        ISWorldObjectContextMenu.getUpAndThen(player, function()
+            BF.ReequipBottomClothing(player)
+            BF.ResetRemovedClothing(player)
+        end)
+    else
+        -- Male: stand and urinate
+        ISTimedActionQueue.add(ISWalkToTimedAction:new(player, object))
+        ISTimedActionQueue.add(ToiletUrinate:new(player, urinateValue, true, true, object))
     end
-    ISTimedActionQueue.add(ToiletUrinate:new(player, urinateValue, true, true, object))
 end
 
 function BF.TriggerGroundUrinate()

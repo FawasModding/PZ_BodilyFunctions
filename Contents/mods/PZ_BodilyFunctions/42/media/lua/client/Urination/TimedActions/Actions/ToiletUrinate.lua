@@ -1,5 +1,6 @@
 ---@class ToiletUrinate : ISBaseTimedAction
 ---@field character IsoPlayer
+---@field toiletObject IsoObject
 ToiletUrinate = ISBaseTimedAction:derive("ToiletUrinate")
 function ToiletUrinate:isValid()
 	return true
@@ -16,7 +17,7 @@ function ToiletUrinate:update()
 
     -- Males face opposite direction, females face toilet direction
     if not self.character:isFemale() then
-        facing = IsoDirections.reverse(facing)
+        facing = facing:Rot180()
     end
 
     self.character:setDir(facing)
@@ -27,10 +28,8 @@ function ToiletUrinate:start()
 	-- Save the initial urination value at the start of the action
     self.initialUrinateValue = self.character:getModData().urinateValue or 0
 
-	--Character pees in toilet, has animation for male/female
-	if self.character:isFemale() then --If female, sit
-		self:setActionAnim("bathroomSitToilet")
-	else --If male, stand
+	--If male, stand. Female, use vanilla rest
+	if not self.character:isFemale() then
 		self:setActionAnim("bathroomStandToilet")
 	end
 
