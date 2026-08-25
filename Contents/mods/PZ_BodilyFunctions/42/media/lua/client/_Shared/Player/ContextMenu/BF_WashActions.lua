@@ -56,10 +56,14 @@ function BF.WashingRightClick(player, context, worldObjects)
 		if storeWater == nil then return end
 		if storeWater:getSquare():DistToProper(player:getSquare()) > 10 then return end
 
-		local washOption = context:addOptionOnTop("Wash Soiled Items", nil, nil)
-		washOption.iconTexture = getTexture("media/ui/PeedSelf.png")
-		local subMenu = ISContextMenu:getNew(context)
-		context:addSubMenu(washOption, subMenu)
+		local isSink = BF.IsSinkObject(storeWater)
+		local menu
+		if isSink then
+			local sinkSubMenu = BF.FindSinkSubMenu(context, 0)
+			menu = sinkSubMenu or context
+		else
+			menu = context
+		end
 
 		-- Soiled CLOTHING Option
 		if soiledClothing then
@@ -67,7 +71,13 @@ function BF.WashingRightClick(player, context, worldObjects)
 				soiledClothing:getModData().originalName = soiledClothing:getScriptItem():getDisplayName()
 			end
 
-			local option = subMenu:addOption(soiledClothing:getName(), player, BF.WashSoiled, square, soiledClothing, cleaningItem, storeWater, soiledClothingEquipped)
+			local option
+			if isSink then
+				option = menu:addOption("Wash Soiled Clothing", player, BF.WashSoiled, square, soiledClothing, cleaningItem, storeWater, soiledClothingEquipped)
+			else
+				option = menu:addOptionOnTop("Wash Soiled Clothing", player, BF.WashSoiled, square, soiledClothing, cleaningItem, storeWater, soiledClothingEquipped)
+			end
+			option.iconTexture = getTexture("media/ui/PeedSelf.png")
 
 			local waterRemaining = storeWater:getFluidAmount()
 			if waterRemaining < 15 then
@@ -101,19 +111,48 @@ function BF.WashingRightClick(player, context, worldObjects)
 
 		end
 
-        -- Soiled ITEM Option
-        for _, item in ipairs(soiledItems) do
-            local option = subMenu:addOption(item:getName(), player, BF.WashSoiledItem, square, item, cleaningItem, storeWater)
+        -- Soiled ITEM(s) Option
+        if #soiledItems > 0 then
+            if #soiledItems == 1 then
+                local item = soiledItems[1]
+                local option
+                if isSink then
+                    option = menu:addOption("Wash Soiled Item", player, BF.WashSoiledItem, square, item, cleaningItem, storeWater)
+                else
+                    option = menu:addOptionOnTop("Wash Soiled Item", player, BF.WashSoiledItem, square, item, cleaningItem, storeWater)
+                end
+                option.iconTexture = getTexture("media/ui/PeedSelf.png")
 
-            local waterRemaining = storeWater:getFluidAmount()
-            if waterRemaining < 5 then -- Less water needed for items
-                option.notAvailable = true
+                local waterRemaining = storeWater:getFluidAmount()
+                if waterRemaining < 5 then -- Less water needed for items
+                    option.notAvailable = true
+                end
+            else
+                local itemOption
+                if isSink then
+                    itemOption = menu:addOption("Wash Soiled Item", nil, nil)
+                else
+                    itemOption = menu:addOptionOnTop("Wash Soiled Item", nil, nil)
+                end
+                itemOption.iconTexture = getTexture("media/ui/PeedSelf.png")
+
+                local itemSubMenu = ISContextMenu:getNew(menu)
+                menu:addSubMenu(itemOption, itemSubMenu)
+
+                for _, item in ipairs(soiledItems) do
+                    local option = itemSubMenu:addOption(item:getName(), player, BF.WashSoiledItem, square, item, cleaningItem, storeWater)
+
+                    local waterRemaining = storeWater:getFluidAmount()
+                    if waterRemaining < 5 then -- Less water needed for items
+                        option.notAvailable = true
+                    end
+
+                    -- Require a cleaning item for pooped items
+                    --if cleaningItem == nil or cleaningItem:getCurrentUses() <= 0 then
+                    --    option.notAvailable = true
+                    --end
+                end
             end
-
-            -- Require a cleaning item for pooped items
-            --if cleaningItem == nil or cleaningItem:getCurrentUses() <= 0 then
-            --    option.notAvailable = true
-            --end
         end
 	end
 end

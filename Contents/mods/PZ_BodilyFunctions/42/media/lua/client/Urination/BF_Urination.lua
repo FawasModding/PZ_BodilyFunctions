@@ -250,6 +250,36 @@ function BF.TriggerToiletUrinate(object, player)
     end
 end
 
+function BF.TriggerFixtureUrinate(object, player)
+    local player = getPlayer()
+    local urinateValue = BF.GetUrinateValue()
+    local requirement = SandboxVars.BF.PeeInToiletRequirement or 40
+    local bladderMaxValue = SandboxVars.BathroomFunctions.BladderMaxValue or 100
+    local hasShyBladder = player:hasTrait(BFTraits.ShyBladder)
+    local isBeingWatched = BF.IsBeingWatched(player)
+
+    -- Only allow action if requirements are met
+    if urinateValue < (requirement / 100) * bladderMaxValue or (hasShyBladder and isBeingWatched) then
+        return
+    end
+
+    -- Remove obstructive clothing right where the player is standing
+    local excreteObstructive = BF.GetExcreteObstructiveClothing()
+    local removedClothing = {}
+
+    for _, location in ipairs(excreteObstructive) do
+        local clothingItem = player:getWornItem(location)
+        if clothingItem then
+            table.insert(removedClothing, clothingItem)
+            ISTimedActionQueue.add(ISUnequipAction:new(player, clothingItem, 50))
+        end
+    end
+
+    player:getModData().removedClothing = removedClothing
+
+    ISTimedActionQueue.add(FixtureUrinate:new(player, urinateValue, true, true))
+end
+
 function BF.TriggerGroundUrinate()
     local player = getPlayer()
     local urinateValue = BF.GetUrinateValue()
