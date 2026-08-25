@@ -1,0 +1,69 @@
+{
+  "UI_BodilyFunctions": "Excreción",
+  "UI_BodilyFunctionsPanel": "Panel de funciones corporales con todos los valores detallados disponibles.",
+
+  "UI_BF_options_PeeInContainersOption": "Opción para Orinar en Recipientes",
+  "UI_BF_options_PeeInContainersOption_tooltip": "Mostrar opciones para orinar en recipientes en el menú contextual.",
+
+  "UI_BF_options_PeeSelfOption": "Opción para Orinarse",
+  "UI_BF_options_PeeSelfOption_tooltip": "Mostrar opción para orinarse a uno mismo en el menú contextual.",
+
+  "UI_BF_options_PoopSelfOption": "Opción para Defecarse",
+  "UI_BF_options_PoopSelfOption_tooltip": "Mostrar opción para defecarse a uno mismo en el menú contextual.",
+
+  "UI_BF_options_ShowMoodles": "Mostrar Indicadores de Vejiga / Intestinos",
+  "UI_BF_options_ShowMoodles_tooltip": "Mostrar indicadores básicos de ganas de orinar y defecar.",
+
+  "UI_BF_options_MoodleType": "Tipo de Indicador de Vejiga / Intestinos (no implementado)",
+  "UI_BF_options_MoodleType_tooltip": "Selecciona en qué se basarán los indicadores de vejiga / intestinos.",
+  "UI_BF_options_MoodleType_1": "Basado en Llenado",
+  "UI_BF_options_MoodleType_2": "Basado en Urgencia",
+
+  "UI_BF_options_ShowSoiledMoodles": "Mostrar Indicadores de Orinarse / Defecarse",
+  "UI_BF_options_ShowSoiledMoodles_tooltip": "Mostrar indicadores de haberse orinado o defecado.",
+
+  "UI_BF_options_PlayerSayStatus": "Estado 'Anunciar'",
+  "UI_BF_options_PlayerSayStatus_tooltip": "Si el jugador anunciará su estado sobre su cabeza (ej. 'Me he orinado.').",
+
+  "UI_trait_SmallBladder": "Vejiga pequeña",
+  "UI_trait_SmallBladderDesc": "La vejiga se llena más rápido y con mayor urgencia.",
+
+  "UI_trait_Bedwetter": "Mija-camas",
+  "UI_trait_BedwetterDesc": "Micción involuntaria mientras duermes.",
+
+  "UI_trait_UrinaryIncontinence": "Incontinencia urinaria",
+  "UI_trait_UrinaryIncontinenceDesc": "Mal control de la vejiga en general.",
+
+  "UI_trait_Paruresis": "Paruresis",
+  "UI_trait_ParuresisDesc": "Orinar es difícil cuando hay zombis o jugadores cerca.",
+
+  "UI_trait_ShyBladder": "Vejiga tímida",
+  "UI_trait_ShyBladderDesc": "Orinar es difícil sin usar un inodoro.",
+
+  "UI_trait_BigBladder": "Vejiga grande",
+  "UI_trait_BigBladderDesc": "La vejiga tarda más en llenarse.",
+
+  "UI_trait_BladderControl": "Control de vejiga",
+  "UI_trait_BladderControlDesc": "75% de probabilidad de detener la micción tras avanzar un 5% al orinarse encima.",
+
+  "UI_trait_SmallBowels": "Intestinos pequeños",
+  "UI_trait_SmallBowelsDesc": "Los intestinos se llenan más rápido y con mayor urgencia.",
+
+  "UI_trait_Bedsoiler": "Ensucia la cama",
+  "UI_trait_BedsoilerDesc": "Defecación involuntaria mientras duermes.",
+
+  "UI_trait_FecalIncontinence": "Incontinencia fecal",
+  "UI_trait_FecalIncontinenceDesc": "Mal control intestinal en general.",
+
+  "UI_trait_Parcopresis": "Parcopresis",
+  "UI_trait_ParcopresisDesc": "Defecar es difícil cuando hay zombis o jugadores cerca.",
+
+  "UI_trait_ShyBowels": "Intestino tímido",
+  "UI_trait_ShyBowelsDesc": "Defecar es difícil sin usar un inodoro.",
+
+  "UI_trait_BigBowels": "Intestinos grandes",
+  "UI_trait_BigBowelsDesc": "Los intestinos tardan más en llenarse.",
+
+  "UI_trait_BowelControl": "Control intestinal",
+  "UI_trait_BowelControlDesc": "75% de probabilidad de detener la defecación tras avanzar un 5% al defecarse encima."
+}

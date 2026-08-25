@@ -1,0 +1,27 @@
+{
+  "BF.AnticholinergicPill": "Pastilla Anticolinérgica",
+  "BF.AntiDiarrhealPillBox": "Caja de Antidiarreicos",
+  "BF.AnticholinergicPillBox": "Caja de Anticolinérgicos",
+  "BF.DiureticPillBox": "Caja de Diuréticos",
+  "BF.LaxativePillBox": "Caja de Laxantes",
+  "BF.DiureticPill": "Pastilla Diurética",
+  "BF.LaxativePill": "Pastilla Laxante",
+
+  "BF.GraphPaperPooped": "Papel Milimetrado (Usado)",
+  "BF.GrassTuftPooped": "Manojo de Pasto (Usado)",
+  "BF.HottieZPooped": "Revista: HottieZ (Usada)",
+  "BF.HunkZPooped": "Revista: HunkZ (Usada)",
+  "BF.MagazinePooped": "Revista (Usada)",
+  "BF.NewspaperPooped": "Periódico (Usado)",
+  "BF.PaperNapkins2Pooped": "Servilletas (Usadas)",
+  "BF.PaperworkPooped": "Documentos (Usados)",
+  "BF.RippedSheetsPooped": "Trapo (Usado)",
+  "BF.ReceiptPooped": "Recibo (Usado)",
+  "BF.SheetPaper2Pooped": "Hoja de Papel (Usada)",
+  "BF.TissuePooped": "Pañuelo Desechable (Usado)",
+
+  "BF.PulledDown_Trousers": "Pantalones Bajados",
+
+  "BF.HumanFeces": "Heces Humanas",
+  "BF.HumanFeces_Throwable": "Heces Humanas Arrojadizas"
+}

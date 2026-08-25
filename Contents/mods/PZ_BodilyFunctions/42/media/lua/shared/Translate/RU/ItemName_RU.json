@@ -1,0 +1,27 @@
+{
+  "ItemName_BF.AnticholinergicPill": "Антихолинергическая таблетка",
+  "ItemName_BF.AntiDiarrhealPillBox": "Коробка противодиарейных таблеток",
+  "ItemName_BF.AnticholinergicPillBox": "Коробка антихолинергических таблеток",
+  "ItemName_BF.DiureticPillBox": "Коробка мочегонных таблеток",
+  "ItemName_BF.LaxativePillBox": "Коробка слабительных таблеток",
+  "ItemName_BF.DiureticPill": "Мочегонная таблетка",
+  "ItemName_BF.LaxativePill": "Слабительная таблетка",
+
+  "ItemName_BF.GraphPaperPooped": "Миллиметровая бумага (испачкано)",
+  "ItemName_BF.GrassTuftPooped": "Пучок травы (испачкано)",
+  "ItemName_BF.HottieZPooped": "Журнал «HottieZ» (испачкано)",
+  "ItemName_BF.HunkZPooped": "Журнал «HunkZ» (испачкано)",
+  "ItemName_BF.MagazinePooped": "Журнал (испачкано)",
+  "ItemName_BF.NewspaperPooped": "Газета (испачкано)",
+  "ItemName_BF.PaperNapkins2Pooped": "Бумажные салфетки (испачкано)",
+  "ItemName_BF.PaperworkPooped": "Документы (испачкано)",
+  "ItemName_BF.RippedSheetsPooped": "Тряпка (испачкано)",
+  "ItemName_BF.ReceiptPooped": "Чек (испачкано)",
+  "ItemName_BF.SheetPaper2Pooped": "Лист бумаги (испачкано)",
+  "ItemName_BF.TissuePooped": "Бумажный платок (испачкано)",
+
+  "ItemName_BF.PulledDown_Trousers": "Спущенные штаны",
+
+  "ItemName_BF.HumanFeces": "Человеческие фекалии",
+  "ItemName_BF.HumanFeces_Throwable": "Метательные человеческие фекалии"
+}

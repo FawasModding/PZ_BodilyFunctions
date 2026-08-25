@@ -162,12 +162,12 @@ function BathroomCharacterInfo_GUIHandler:render()
         local bladderValue = BF.GetUrinateValue() or 0
         local bladderPercent = bladderValue / bladderMax
         updateBar(self.bladderBar, bladderPercent)
-        updateLabel(self.labelBladderValue, string.format("%.1f%%", bladderPercent * 100))
+        updateLabel(self.labelBladderValue, tostring(math.floor(bladderPercent * 1000) / 10) .. "%")
 
         local bowelValue = BF.GetDefecateValue() or 0
         local bowelPercent = bowelValue / bowelsMax
         updateBar(self.bowelBar, bowelPercent)
-        updateLabel(self.labelBowelValue, string.format("%.1f%%", bowelPercent * 100))
+        updateLabel(self.labelBowelValue, tostring(math.floor(bowelPercent * 1000) / 10) .. "%")
 
         if self.iconBladder then
             self:drawTextureScaled(self.iconBladder, self.iconBladderX, self.iconBladderY, self.iconSize, self.iconSize, 1, 1, 1, 1)

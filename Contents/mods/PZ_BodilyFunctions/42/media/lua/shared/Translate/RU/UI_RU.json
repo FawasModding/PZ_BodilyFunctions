@@ -1,0 +1,69 @@
+{
+  "UI_BodilyFunctions": "Выделение",
+  "UI_BodilyFunctionsPanel": "Панель телесных функций со всеми доступными детализированными значениями.",
+
+  "UI_BF_options_PeeInContainersOption": "Опция 'Писать в контейнеры'",
+  "UI_BF_options_PeeInContainersOption_tooltip": "Показывать опции для мочеиспускания в контейнеры в контекстном меню.",
+
+  "UI_BF_options_PeeSelfOption": "Опция 'Описаться'",
+  "UI_BF_options_PeeSelfOption_tooltip": "Показывать опцию для мочеиспускания на себя в контекстном меню.",
+
+  "UI_BF_options_PoopSelfOption": "Опция 'Обкакаться'",
+  "UI_BF_options_PoopSelfOption_tooltip": "Показывать опцию для дефекации на себя в контекстном меню.",
+
+  "UI_BF_options_ShowMoodles": "Показывать иконку состояния мочевого пузыря / кишечника",
+  "UI_BF_options_ShowMoodles_tooltip": "Показывать ли базовые иконки состояния для мочеиспускания и дефекации.",
+
+  "UI_BF_options_MoodleType": "Тип иконки состояния мочевого пузыря / кишечника (не реализовано)",
+  "UI_BF_options_MoodleType_tooltip": "На основе чего должны быть настроены иконки состояния мочевого пузыря / кишечника.",
+  "UI_BF_options_MoodleType_1": "На основе наполненности",
+  "UI_BF_options_MoodleType_2": "На основе позывов",
+
+  "UI_BF_options_ShowSoiledMoodles": "Показывать иконку состояния 'Описался / Обкакался'",
+  "UI_BF_options_ShowSoiledMoodles_tooltip": "Показывать ли иконки состояния для состояния 'Описался / Обкакался'.",
+
+  "UI_BF_options_PlayerSayStatus": "Сообщать статус",
+  "UI_BF_options_PlayerSayStatus_tooltip": "Сообщать ли статус игрока над его головой (например, 'Я описался.').",
+
+  "UI_trait_SmallBladder": "Маленький мочевой пузырь",
+  "UI_trait_SmallBladderDesc": "Мочевой пузырь наполняется быстрее и с большей срочностью.",
+
+  "UI_trait_Bedwetter": "Энурезник",
+  "UI_trait_BedwetterDesc": "Непроизвольное мочеиспускание во сне.",
+
+  "UI_trait_UrinaryIncontinence": "Недержание мочи",
+  "UI_trait_UrinaryIncontinenceDesc": "Плохой контроль над мочевым пузырем в целом.",
+
+  "UI_trait_Paruresis": "Парурез",
+  "UI_trait_ParuresisDesc": "Затрудненное мочеиспускание рядом с зомби или игроками.",
+
+  "UI_trait_ShyBladder": "Застенчивый мочевой пузырь",
+  "UI_trait_ShyBladderDesc": "Затрудненное мочеиспускание без использования туалета.",
+
+  "UI_trait_BigBladder": "Большой мочевой пузырь",
+  "UI_trait_BigBladderDesc": "Мочевой пузырь наполняется дольше.",
+
+  "UI_trait_BladderControl": "Контроль мочевого пузыря",
+  "UI_trait_BladderControlDesc": "75% шанс остановить мочеиспускание, пройдя 5% процесса, если описались.",
+
+  "UI_trait_SmallBowels": "Маленький кишечник",
+  "UI_trait_SmallBowelsDesc": "Кишечник наполняется быстрее и с большей срочностью.",
+
+  "UI_trait_Bedsoiler": "Пачкает кровать",
+  "UI_trait_BedsoilerDesc": "Непроизвольная дефекация во сне.",
+
+  "UI_trait_FecalIncontinence": "Недержание кала",
+  "UI_trait_FecalIncontinenceDesc": "Плохой контроль над кишечником в целом.",
+
+  "UI_trait_Parcopresis": "Паркопрез",
+  "UI_trait_ParcopresisDesc": "Затрудненная дефекация рядом с зомби или игроками.",
+
+  "UI_trait_ShyBowels": "Застенчивый кишечник",
+  "UI_trait_ShyBowelsDesc": "Затрудненная дефекация без использования туалета.",
+
+  "UI_trait_BigBowels": "Большой кишечник",
+  "UI_trait_BigBowelsDesc": "Кишечник наполняется дольше.",
+
+  "UI_trait_BowelControl": "Контроль кишечника",
+  "UI_trait_BowelControlDesc": "75% шанс остановить дефекацию, пройдя 5% процесса, если обкакались."
+}

@@ -1,0 +1,12 @@
+{
+  "IGUI_announce_IPeedMyself": "Я описался...",
+  "IGUI_announce_IPoopedMyself": "Я обкакался...",
+  "IGUI_announce_UrgeHiccup": "О нет, я не могу сдержаться!",
+  "IGUI_announce_CantPickUpPee": "Мне нужно это убрать.",
+  "IGUI_announce_SilentOops": "О нет...",
+
+  "IGUI_BladderFullness": "Заполненность мочевого пузыря",
+  "IGUI_BowelsFullness": "Заполненность кишечника",
+  "IGUI_Empty": "Пусто",
+  "IGUI_Full": "Полный"
+}
