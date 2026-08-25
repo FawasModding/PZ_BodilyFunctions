@@ -100,7 +100,7 @@
             }
           }
         ],
-        "currentTab": 1
+        "currentTab": 2
       }
     ],
     "direction": "horizontal",
@@ -215,11 +215,12 @@
   },
   "active": "09efa89abecc8580",
   "lastOpenFiles": [
-    "Changelog 0.13.0 and below.md",
-    "Changelog v0.14.0.md",
-    "code-languages.json",
-    "Untitled.md",
     "Steam Description.md",
+    "New Steam.md",
+    "Changelog v0.14.0.md",
+    "Untitled.md",
+    "Changelog 0.13.0 and below.md",
+    "code-languages.json",
     "Untitled",
     "UI.md",
     "Cool Experiences I get to have!.md",
@@ -245,7 +246,6 @@
     "Items/Fluids",
     "Items/Fish/Tuna.md",
     "Items/Fish/Squid.md",
-    "Items/Fish/Snail.md",
     "Items/Fish",
     "Items/Minerals",
     "Items/Food",
