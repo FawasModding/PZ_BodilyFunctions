@@ -1,4 +1,36 @@
 
+local function BF_NormalizeMenuName(s)
+    return string.lower(tostring(s or ""))
+end
+
+-- Recursively finds the vanilla "Toilet" submenu
+-- by option name (localized where possible), resolved via menu:getSubMenu.
+local function BF_FindToiletSubMenu(menu, depth)
+    if not menu or (depth or 0) > 5 then return nil end
+    depth = depth or 0
+
+    for i = 1, #menu.options do
+        local option = menu.options[i]
+        if option and option.subOption then
+            local name = BF_NormalizeMenuName(option.name)
+            local sub = menu:getSubMenu(option.subOption)
+
+            local localizedToilet = BF_NormalizeMenuName(getText("ContextMenu_UseToilet"))
+            local isToilet = string.find(name, "toilet", 1, true) ~= nil
+                or (localizedToilet ~= "" and localizedToilet ~= "contextmenu_usetoilet" and name == localizedToilet)
+
+            if sub and isToilet then
+                return sub
+            end
+
+            local found = BF_FindToiletSubMenu(sub, depth + 1)
+            if found then return found end
+        end
+    end
+
+    return nil
+end
+
 function BF.ReliefRightClick(player, context, worldObjects)
     player = getSpecificPlayer(player)
     local firstObject = worldObjects[1]
@@ -71,7 +103,7 @@ function BF.ReliefRightClick(player, context, worldObjects)
     -- Add options for each type
     BF.AddGroundOptions(peeSubMenu, poopSubMenu, worldObjects, player, urinateValue, defecateValue, bladderMaxValue, bowelsMaxValue, peeOnGroundRequirement, poopOnGroundRequirement, hasShyBladder, hasShyBowels, isBeingWatched)
     BF.AddSelfOptions(peeSubMenu, poopSubMenu, worldObjects, player, urinateValue, defecateValue, bladderMaxValue, bowelsMaxValue, peeOnSelfRequirement, poopOnSelfRequirement, hasShyBladder, hasShyBowels, modOptions)
-    BF.AddToiletOptions(peeSubMenu, poopSubMenu, worldObjects, player, urinateValue, defecateValue, bladderMaxValue, bowelsMaxValue, peeInToiletRequirement, poopInToiletRequirement, toiletTiles, toiletOptionAdded)
+           BF.AddToiletOptions(context, worldObjects, player, urinateValue, defecateValue, bladderMaxValue, bowelsMaxValue, peeInToiletRequirement, poopInToiletRequirement, toiletTiles)
     BF.AddUrinalOptions(peeSubMenu, poopSubMenu, worldObjects, player, urinateValue, bladderMaxValue, peeInToiletRequirement, urinalTiles, hasShyBladder)
     BF.AddOuthouseOptions(peeSubMenu, poopSubMenu, worldObjects, player, urinateValue, defecateValue, bladderMaxValue, bowelsMaxValue, peeInToiletRequirement, poopInToiletRequirement, outhouseTiles, toiletOptionAdded)
     BF.AddSinkOptions(peeSubMenu, worldObjects, player, urinateValue, bladderMaxValue, peeInToiletRequirement, sinkTiles, hasShyBladder)
@@ -150,21 +182,39 @@ function BF.AddSelfOptions(peeSubMenu, poopSubMenu, worldObjects, player, urinat
     end
 end
 
-function BF.AddToiletOptions(peeSubMenu, poopSubMenu, worldObjects, player, urinateValue, defecateValue, bladderMaxValue, bowelsMaxValue, peeInToiletRequirement, poopInToiletRequirement, toiletTiles, toiletOptionAdded)
+function BF.AddToiletOptions(context, worldObjects, player, urinateValue, defecateValue, bladderMaxValue, bowelsMaxValue, peeInToiletRequirement, poopInToiletRequirement, toiletTiles)
     for i = 0, worldObjects:size() - 1 do
         local object = worldObjects:get(i)
         for j = 1, #toiletTiles do
             local tile = toiletTiles[j]
             if object:getTextureName() == tile and object:getSquare():DistToProper(player:getSquare()) < 5 then
+                local toiletSubMenu = BF_FindToiletSubMenu(context, 0)
+                local menu = toiletSubMenu or context
+
                 local isPodiumToilet = tile == "location_entertainment_gallery_02_56"
-                local toiletText = isPodiumToilet and getText("ContextMenu_UsePodiumToilet") or getText("ContextMenu_UseToilet")
-                local toiletPeeOption = peeSubMenu:addOption(getText("ContextMenu_Pee") .. " " .. toiletText, object, BF.TriggerToiletUrinate, player)
-                local toiletPoopOption = poopSubMenu:addOption(getText("ContextMenu_Poop") .. " " .. toiletText, object, BF.TriggerToiletDefecate, player)
+
+                -- Reuse our own options if this handler somehow runs twice against
+                -- the same menu, instead of matching by display text or object identity.
+                local toiletPeeOption, toiletPoopOption
+                for k = 1, #menu.options do
+                    local opt = menu.options[k]
+                    if opt.bfToiletPee then toiletPeeOption = opt end
+                    if opt.bfToiletPoop then toiletPoopOption = opt end
+                end
+
+                if not toiletPeeOption then
+                    toiletPeeOption = menu:addOption(getText("ContextMenu_Pee"), object, BF.TriggerToiletUrinate, player)
+                    toiletPeeOption.bfToiletPee = true
+                    toiletPeeOption.iconTexture = getTexture("media/textures/Item_HumanUrine.png")
+                end
+                if not toiletPoopOption then
+                    toiletPoopOption = menu:addOption(getText("ContextMenu_Poop"), object, BF.TriggerToiletDefecate, player)
+                    toiletPoopOption.bfToiletPoop = true
+                    toiletPoopOption.iconTexture = getTexture("media/textures/Item_HumanFeces.png")
+                end
+
                 BF.AddTooltip(toiletPeeOption, "Urinate in the " .. (isPodiumToilet and "podium toilet" or "toilet") .. ". (Requires " .. peeInToiletRequirement .. "%)")
                 BF.AddTooltip(toiletPoopOption, "Defecate in the " .. (isPodiumToilet and "podium toilet" or "toilet") .. ". (Requires " .. poopInToiletRequirement .. "%)")
-                toiletPeeOption.iconTexture = getTexture("media/textures/ContextMenuToilet.png")
-                toiletPoopOption.iconTexture = getTexture("media/textures/ContextMenuToilet.png")
-                toiletOptionAdded = true
 
                 if urinateValue < (peeInToiletRequirement / 100) * bladderMaxValue then
                     toiletPeeOption.notAvailable = true
@@ -172,15 +222,16 @@ function BF.AddToiletOptions(peeSubMenu, poopSubMenu, worldObjects, player, urin
                 if defecateValue < (poopInToiletRequirement / 100) * bowelsMaxValue then
                     toiletPoopOption.notAvailable = true
                 end
-                if toiletPoopOption.notAvailable then
-                    return
-                end
 
-                local wipeType, wipeItem = BF.CheckForWipeables(player)
-                local wipeSubMenuForToilet = BF.AddWipingOptions(
-                    poopSubMenu, worldObjects, player, defecateValue, poopInToiletRequirement, bowelsMaxValue, wipeType, wipeItem, BF.TriggerToiletDefecate, object
-                )
-                poopSubMenu:addSubMenu(toiletPoopOption, wipeSubMenuForToilet)
+                if not toiletPoopOption.notAvailable then
+                    local wipeType, wipeItem = BF.CheckForWipeables(player)
+                    local wipeSubMenuForToilet = BF.AddWipingOptions(
+                        menu, worldObjects, player, defecateValue, poopInToiletRequirement, bowelsMaxValue, wipeType, wipeItem, BF.TriggerToiletDefecate, object
+                    )
+                    if wipeSubMenuForToilet then
+                        menu:addSubMenu(toiletPoopOption, wipeSubMenuForToilet)
+                    end
+                end
             end
         end
     end

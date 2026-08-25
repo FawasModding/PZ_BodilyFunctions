@@ -18,6 +18,8 @@
 > ---
 > - If wearing underwear, pants shares 80% of the peed severity when an accident occurs. If not wearing underwear, it gets full severity.
 > - Resolved https://github.com/FawasModding/PZ_BodilyFunctions/issues/82
+> ---
+> - Pee/Poop Options for Toilet appear in Submenu
 
 > [!SUCCESS] 8/23/26
 > - Deleted Fecal Footprints system almost entirely.
