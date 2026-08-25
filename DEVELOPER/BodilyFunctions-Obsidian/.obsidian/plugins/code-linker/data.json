@@ -1,0 +1,38 @@
+{
+  "trigger": "@@",
+  "uriTemplate": "vscode://file/{code-root}/{path}:{line}",
+  "jetbrainsProduct": "rider",
+  "codeRoot": "C:\\Users\\ethan\\Zomboid\\Workshop\\BodilyFunctions\\Contents\\mods\\PZ_BodilyFunctions\\",
+  "scanRoots": "42",
+  "skipDirs": "obj\nbin\n.git\nLibrary\nTemp\nnode_modules",
+  "useGitignore": true,
+  "editors": [],
+  "hiddenPresets": [
+    "gitlab",
+    "file",
+    "jetbrains",
+    "github"
+  ],
+  "presetsInitialized": true,
+  "recentPresets": [
+    "jetbrains"
+  ],
+  "askOnInsert": false,
+  "showStatusBar": true,
+  "showRibbonIcon": true,
+  "enabledLanguages": [
+    "lua"
+  ],
+  "languagesFile": "code-languages.json",
+  "disabledKinds": [],
+  "autoRefresh": true,
+  "hoverPreview": true,
+  "hoverBefore": 3,
+  "hoverAfter": 20,
+  "markStaleLinks": true,
+  "minChars": 1,
+  "maxResults": 12,
+  "maxFileSizeKb": 2048,
+  "contextMenu": true,
+  "linkPrecedence": 20
+}

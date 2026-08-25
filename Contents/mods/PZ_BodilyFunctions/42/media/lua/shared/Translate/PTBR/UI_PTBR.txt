@@ -1,0 +1,73 @@
+UI_PTBR = {
+    UI_BodilyFunctions = "Excreção",
+    UI_BodilyFunctionsPanel = "Painel de funções corporais com todos os valores detalhados disponíveis.",
+
+    UI_BF_options_PeeInContainersOption = "Urinar em Recipientes",
+    UI_BF_options_PeeInContainersOption_tooltip = "Mostra a opção de urinar em recipientes no menu de contexto.",
+
+    UI_BF_options_PeeSelfOption = "Mijar nas Calças",
+    UI_BF_options_PeeSelfOption_tooltip = "Mostra a opção de se mijar no menu de contexto.",
+
+    UI_BF_options_PoopSelfOption = "Cagar nas Calças",
+    UI_BF_options_PoopSelfOption_tooltip = "Mostra a opção de se cagar no menu de contexto.",
+
+    UI_BF_options_ShowMoodles = "Mostrar Indicadores de Bexiga / Intestino",
+    UI_BF_options_ShowMoodles_tooltip = "Define se os moodles de mijar e cagar aparecem.",
+
+    UI_BF_options_MoodleType = "Tipo de Indicador de Bexiga / Intestino (não implementado)",
+    UI_BF_options_MoodleType_tooltip = "Escolha o tipo de indicador para bexiga/intestino.",
+    UI_BF_options_MoodleType_1 = "Com base no Preenchimento",
+    UI_BF_options_MoodleType_2 = "Com base na Urgência",
+
+    UI_BF_options_ShowSoiledMoodles = "Mostrar Indicadores de Calças Sujas",
+    UI_BF_options_ShowSoiledMoodles_tooltip = "Define se aparecem moodles de mijado ou cagado.",
+
+    UI_BF_options_PlayerSayStatus = "Fala de Status",
+    UI_BF_options_PlayerSayStatus_tooltip = "Define se o personagem anuncia seu estado acima da cabeça (ex: 'Me mijei.').",
+
+   UI_trait_SmallBladder = "Bexiga Pequena"
+   UI_trait_SmallBladderDesc = "A bexiga enche mais rápido e com mais urgência."
+
+   UI_trait_Bedwetter = "Mijão de Cama"
+   UI_trait_BedwetterDesc = "Micção involuntária durante o sono."
+
+   UI_trait_UrinaryIncontinence = "Incontinência Urinária"
+   UI_trait_UrinaryIncontinenceDesc = "Controle urinário fraco em geral."
+
+   UI_trait_Paruresis = "Parurese"
+   UI_trait_ParuresisDesc = "Dificuldade para urinar perto de zumbis ou pessoas."
+
+   UI_trait_ShyBladder = "Bexiga Tímida"
+   UI_trait_ShyBladderDesc = "Só consegue urinar no vaso sanitário."
+
+   UI_trait_BigBladder = "Bexiga Grande"
+   UI_trait_BigBladderDesc = "Demora mais para encher a bexiga."
+
+   UI_trait_BladderControl = "Controle da Bexiga"
+   UI_trait_BladderControlDesc = "75% de chance de interromper a micção logo no início."
+
+   UI_trait_SmallBowels = "Intestino Pequeno"
+   UI_trait_SmallBowelsDesc = "Os intestinos enchem mais rápido e com mais urgência."
+
+   UI_trait_Bedsoiler = "Cagão de Cama"
+   UI_trait_BedsoilerDesc = "Defecação involuntária durante o sono."
+
+   UI_trait_FecalIncontinence = "Incontinência Fecal"
+   UI_trait_FecalIncontinenceDesc = "Controle intestinal fraco em geral."
+
+   UI_trait_Parcopresis = "Parcoprese"
+   UI_trait_ParcopresisDesc = "Dificuldade para defecar perto de zumbis ou pessoas."
+
+   UI_trait_ShyBowels = "Intestino Tímido"
+   UI_trait_ShyBowelsDesc = "Só consegue defecar usando o vaso sanitário."
+
+   UI_trait_BigBowels = "Intestino Grande"
+   UI_trait_BigBowelsDesc = "Demora mais para encher os intestinos."
+
+   UI_trait_BowelControl = "Controle Intestinal"
+   UI_trait_BowelControlDesc = "75% de chance de interromper a defecação logo no início."
+
+
+
+
+}

@@ -1,0 +1,129 @@
+module BF
+{
+    item TissuePooped
+    {
+        DisplayCategory = Junk,
+        ItemType = base:normal,
+        Weight = 0.1,
+        Icon = TissuePooped,
+        Tooltip = Tooltip_tissue_tooltip,
+        WorldStaticModel = Tissue,
+        Tags = BF:isFireFuel;BF:isFireTinder;BF:FitsWallet,
+        FireFuelRatio = 0.25,
+    }
+
+    item PaperNapkins2Pooped
+    {
+        DisplayCategory = Junk,
+        ItemType = base:normal,
+        Weight = 0.1,
+        Icon = PaperNapkinsPooped,
+        WorldStaticModel = PaperNapkins_Ground,
+        Tags = BF:isFireFuel;BF:isFireTinder;BF:FitsWallet,
+        FireFuelRatio = 0.25,
+    }
+
+    item GraphPaperPooped
+    {
+        DisplayCategory = Junk,
+        ItemType = base:normal,
+        Weight = 0.1,
+        Icon = GraphPaperPooped,
+        StaticModel = GraphPaper,
+        WorldStaticModel = GraphPaper,
+    }
+
+    item PaperworkPooped
+    {
+        DisplayCategory = Junk,
+        ItemType = base:normal,
+        Weight = 0.1,
+        Icon = Paperwork1Pooped,
+        StaticModel = Paperwork1,
+        WorldStaticModel = Paperwork1,
+    }
+
+    item ReceiptPooped
+    {
+        DisplayCategory = Junk,
+        ItemType = base:normal,
+        Weight = 0.05,
+        Icon = ReceiptPooped,
+        StaticModel = Receipt,
+        WorldStaticModel = Receipt,
+    }
+
+    item SheetPaper2Pooped
+    {
+        DisplayCategory = Junk,
+        ItemType = base:normal,
+        Weight = 0.1,
+        Icon = PaperPooped,
+        StaticModel = SheetOfPaper,
+        WorldStaticModel = SheetOfPaper,
+    }
+
+    item RippedSheetsPooped
+    {
+        DisplayCategory = Junk,
+        ItemType = base:normal,
+        Weight = 0.1,
+        Icon = RippedSheetsPooped,
+        WorldStaticModel = RippedSheets,
+        Tags = BF:Binding;BF:FitsWallet;BF:isFireFuel;BF:isFireTinder;BF:NoPour,
+        FireFuelRatio = 0.25,
+    }
+
+    item NewspaperPooped
+    {
+        DisplayCategory = Junk,
+        ItemType = base:normal,
+        Weight = 0.5,
+        Icon = NewspaperPooped,
+        StaticModel = Newspaper,
+        WorldStaticModel = Newspaper_Ground,
+        OnCreate = SpecialLootSpawns.OnCreateOldNewspaper,
+    }
+
+    item MagazinePooped
+    {
+        DisplayCategory = Junk,
+        ItemType = base:normal,
+        Weight = 0.5,
+        Icon = MagazinePooped,
+        StaticModel = Magazine,
+        WorldStaticModel = MagazineGround,
+    }
+
+    item HottieZPooped
+    {
+        DisplayCategory = Junk,
+        ItemType = base:normal,
+        Weight = 0.5,
+        Icon = HottieZPooped,
+        OnCreate = SpecialLootSpawns.OnCreateHottieZ,
+        StaticModel = HottieZ,
+        WorldStaticModel = HottieZGround,
+    }
+
+    item HunkZPooped
+    {
+        DisplayCategory = Junk,
+        ItemType = base:normal,
+        Weight = 0.5,
+        Icon = HunkZPooped,
+        OnCreate = SpecialLootSpawns.OnCreateHunkZ,
+        StaticModel = HottieZ2,
+        WorldStaticModel = HottieZGround2,
+    }
+
+    item GrassTuftPooped
+    {
+        DisplayCategory = Junk,
+        ItemType = base:normal,
+        Weight = 0.1,
+        Icon = GrassTuftPooped,
+        StaticModel = GrassTuft,
+        WorldStaticModel = GrassTuft,
+    }
+}

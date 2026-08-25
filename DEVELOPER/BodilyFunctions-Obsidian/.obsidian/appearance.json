@@ -1,0 +1,10 @@
+{
+  "accentColor": "#ffa270",
+  "cssTheme": "",
+  "textFontFamily": "Inter",
+  "interfaceFontFamily": "Arial",
+  "baseFontSizeAction": false,
+  "theme": "obsidian",
+  "showRibbon": false,
+  "nativeMenus": false
+}

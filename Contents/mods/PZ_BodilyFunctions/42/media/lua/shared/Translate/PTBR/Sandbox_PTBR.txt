@@ -1,0 +1,115 @@
+
+Sandbox_PTBR = {
+    -- Funções Corporais Gerais
+    Sandbox_Bathroom = "Funções Corporais",
+    Sandbox_BF_RequireWipe = "Exigir Limpeza (Em Desenvolvimento)",
+    Sandbox_BF_RequireWipe_tooltip = "Ativa a mecânica de se limpar.",
+    Sandbox_BF_DoMoodles = "Exibir Indicadores (Em Desenvolvimento)",
+    Sandbox_BF_DoMoodles_tooltip = "Ativa/desativa os moodles de urina/fezes.",
+
+    -- Ativar/Desativar Funções
+    Sandbox_BF_EnableDefecation = "[Defecar] Defecação Ativada (Em Desenvolvimento)",
+    Sandbox_BF_EnableDefecation_tooltip = "Ativa/desativa a mecânica de defecar.",
+    Sandbox_BF_EnableUrination = "[Urinar] Urinar Ativado (Em Desenvolvimento)",
+    Sandbox_BF_EnableUrination_tooltip = "Ativa/desativa a mecânica de urinar.",
+    Sandbox_BF_EnableVomiting = "[Vomitar] Vômito Ativado (Em Desenvolvimento)",
+    Sandbox_BF_EnableVomiting_tooltip = "Ativa/desativa a mecânica de vomitar.",
+    Sandbox_BF_EnableFarting = "[Pum] Peidar Ativado (Em Desenvolvimento)",
+    Sandbox_BF_EnableFarting_tooltip = "Ativa/desativa a mecânica de peidar.",
+    Sandbox_BF_EnableBurping = "[Arroto] Arrotar Ativado (Em Desenvolvimento)",
+    Sandbox_BF_EnableBurping_tooltip = "Ativa/desativa a mecânica de arrotar.",
+    Sandbox_BF_EnableSneezing = "[Espirro] Espirro (expandido) Ativado (Em Desenvolvimento)",
+    Sandbox_BF_EnableSneezing_tooltip = "Ativa/desativa a mecânica de espirro.",
+    Sandbox_BF_EnableCoughing = "[Tosse] Tosse (expandida) Ativada (Em Desenvolvimento)",
+    Sandbox_BF_EnableCoughing_tooltip = "Ativa/desativa a mecânica de tosse.",
+
+    Sandbox_BF_UNIMPLEMENTEDHeader = "Recursos em breve!",
+    Sandbox_BF_UNIMPLEMENTEDHeader_tooltip = "Recursos ainda não implementados, mas planejados.",
+
+    -- Defecação
+    Sandbox_Defecation = "Funções Corporais - Defecação",
+    Sandbox_BF_BowelsMaxValue = "Capacidade Máxima dos Intestinos",
+    Sandbox_BF_BowelsMaxValue_tooltip = "Preenchimento máximo do intestino.",
+    Sandbox_BF_BowelsIncreaseMultiplier = "Velocidade de Enchimento Intestinal",
+    Sandbox_BF_BowelsIncreaseMultiplier_tooltip = "Aumento do medidor intestinal a cada 10 minutos.",
+    Sandbox_BF_DefecateSpeedMultiplier = "Tempo Para Defecar (Em Desenvolvimento)",
+    Sandbox_BF_DefecateSpeedMultiplier_tooltip = "Tempo necessário para defecar.",
+
+    -- Ações Voluntárias de Defecar
+    Sandbox_BF_POOPREQUIREMENTSHeader = "Defecação Voluntária",
+    Sandbox_BF_POOPREQUIREMENTSHeader_tooltip = "Limiares de preenchimento intestinal para ações.",
+    Sandbox_BF_PoopOnSelfRequirement = "Porcentagem para se cagar de propósito",
+    Sandbox_BF_PoopOnSelfRequirement_tooltip = "Nível intestinal necessário para se sujar de propósito.",
+    Sandbox_BF_PoopOnGroundRequirement = "Porcentagem para Cagar no Chão",
+    Sandbox_BF_PoopOnGroundRequirement_tooltip = "Nível intestinal para defecar no chão.",
+    Sandbox_BF_PoopInToiletRequirement = "Porcentagem para Cagar no Vaso",
+    Sandbox_BF_PoopInToiletRequirement_tooltip = "Nível necessário para usar o vaso sanitário.",
+
+    -- Defecação Involuntária
+    Sandbox_BF_POOPSELFHeader = "Defecação Involuntária",
+    Sandbox_BF_POOPSELFHeader_tooltip = "Opções de cagadas involuntárias.",
+    Sandbox_BF_CanHavePoopAccident = "Ativar Cagada Acidental (Em Desenvolvimento)",
+    Sandbox_BF_CanHavePoopAccident_tooltip = "Permite que o personagem se suje acidentalmente.",
+    Sandbox_BF_NightPoopAccidents = "Ativar Cagada na Cama (Em Desenvolvimento)",
+    Sandbox_BF_NightPoopAccidents_tooltip = "Permite defecar enquanto dorme.",
+
+    -- Extras de Defecação
+    Sandbox_BF_POOPEXTRAHeader = "Configurações Extras",
+    Sandbox_BF_POOPEXTRAHeader_tooltip = "Ajustes adicionais para defecação.",
+    Sandbox_BF_VisiblePoopStain = "Mostrar Manchas de Cocô",
+    Sandbox_BF_VisiblePoopStain_tooltip = "Mostra manchas fecais nas roupas.",
+    Sandbox_BF_EnableDiarrhea = "Ativar Diarreia (Em Desenvolvimento)",
+    Sandbox_BF_EnableDiarrhea_tooltip = "Ativa/desativa a mecânica de diarreia.",
+    Sandbox_BF_CreatePoopObject = "Criar Montinhos de Cocô",
+    Sandbox_BF_CreatePoopObject_tooltip = "Permite que o cocô apareça no chão/personagem.",
+    Sandbox_BF_FliesOnPoop = "Moscas no Cocô (Em Desenvolvimento)",
+    Sandbox_BF_FliesOnPoop_tooltip = "Mostra partículas de moscas ao redor das fezes.",
+    Sandbox_BF_EnableFecalFootprints = "Pegadas ao pisar no Cocô",
+    Sandbox_BF_EnableFecalFootprints_option1 = "Sem Pegadas",
+    Sandbox_BF_EnableFecalFootprints_option1_tooltip = "Nem jogadores nem zumbis deixam rastros ao pisar no cocô.",
+    Sandbox_BF_EnableFecalFootprints_option2 = "Apenas Jogadores",
+    Sandbox_BF_EnableFecalFootprints_option2_tooltip = "Só jogadores deixam pegadas com cocô (zumbis não). Deve ser otimizado.",
+    Sandbox_BF_EnableFecalFootprints_option3 = "Jogadores e Zumbis",
+    Sandbox_BF_EnableFecalFootprints_option3_tooltip = "Jogadores e zumbis deixam pegadas com cocô. Pode não estar otimizado.",
+    Sandbox_BF_EnableDefecationTraits = "Ativar Traços de Defecação (Em Desenvolvimento)",
+    Sandbox_BF_EnableDefecationTraits_tooltip = "Define se esse save permite traços relacionados à defecação.",
+
+    -- Urinação
+    Sandbox_Urination = "Funções Corporais - Urinar",
+    Sandbox_BF_BladderMaxValue = "Capacidade Máxima da Bexiga",
+    Sandbox_BF_BladderMaxValue_tooltip = "Preenchimento máximo da bexiga.",
+    Sandbox_BF_BladderIncreaseMultiplier = "Velocidade de Enchimento da Bexiga",
+    Sandbox_BF_BladderIncreaseMultiplier_tooltip = "Aumento do medidor da bexiga a cada 10 minutos.",
+    Sandbox_BF_UrinateSpeedMultiplier = "Tempo Para Urinar (Em Desenvolvimento)",
+    Sandbox_BF_UrinateSpeedMultiplier_tooltip = "Tempo necessário para urinar.",
+
+    -- Ações Voluntárias de Urinar
+    Sandbox_BF_PEEREQUIREMENTSHeader = "Urinação Voluntária",
+    Sandbox_BF_PEEREQUIREMENTSHeader_tooltip = "Limiares da bexiga para ações.",
+    Sandbox_BF_PeeOnSelfRequirement = "Porcentagem para se mijar de propósito",
+    Sandbox_BF_PeeOnSelfRequirement_tooltip = "Nível necessário da bexiga para se molhar intencionalmente.",
+    Sandbox_BF_PeeOnGroundRequirement = "Porcentagem para Mijar no Chão",
+    Sandbox_BF_PeeOnGroundRequirement_tooltip = "Nível da bexiga para urinar no chão.",
+    Sandbox_BF_PeeInToiletRequirement = "Porcentagem para Mijar no Vaso",
+    Sandbox_BF_PeeInToiletRequirement_tooltip = "Nível da bexiga para usar o vaso sanitário.",
+    Sandbox_BF_PeeInContainerRequirement = "Porcentagem para Mijar no Recipiente",
+    Sandbox_BF_PeeInContainerRequirement_tooltip = "Nível da bexiga para urinar num recipiente.",
+
+    -- Urinação Involuntária
+    Sandbox_BF_PEESELFHeader = "Urinação Involuntária",
+    Sandbox_BF_PEESELFHeader_tooltip = "Opções de mijadas acidentais.",
+    Sandbox_BF_CanHavePeeAccident = "Ativar Mijada Acidental (Em Desenvolvimento)",
+    Sandbox_BF_CanHavePeeAccident_tooltip = "Permite urinar involuntariamente.",
+    Sandbox_BF_NightPeeAccidents = "Ativar Mijar na Cama (Em Desenvolvimento)",
+    Sandbox_BF_NightPeeAccidents_tooltip = "Permite mijar enquanto dorme.",
+
+    -- Extras de Urinação
+    Sandbox_BF_PEEEXTRAHeader = "Configurações Extras",
+    Sandbox_BF_PEEEXTRAHeader_tooltip = "Ajustes adicionais para urinação.",
+    Sandbox_BF_VisiblePeeStain = "Mostrar Mancha Molhada",
+    Sandbox_BF_VisiblePeeStain_tooltip = "Mostra mancha de urina nas roupas molhadas.",
+    Sandbox_BF_CreatePeeObject = "Criar Poças de Urina",
+    Sandbox_BF_CreatePeeObject_tooltip = "Permite que a urina apareça no chão/personagem.",
+    Sandbox_BF_EnableUrinationTraits = "Ativar Traços de Urinação (Em Desenvolvimento)",
+    Sandbox_BF_EnableUrinationTraits_tooltip = "Define se esse save permite traços relacionados à urina."
+}

@@ -1,0 +1,9 @@
+Recipes_PTBR = {
+
+    Recipe_OpenAntiDiarrhealPillBox = "Abrir Caixa de Comprimidos Antidiarreicos",
+    Recipe_OpenLaxativePillBox = "Abrir Caixa de Comprimidos Laxantes",
+    Recipe_OpenDiureticPillBox = "Abrir Caixa de Comprimidos Diuréticos",
+    Recipe_OpenAnticholinergicPillBox = "Abrir Caixa de Comprimidos Anticolinérgicos",
+
+    Recipe_PrepareThrowableHumanWaste = "Preparar Fezes para Jogar",
+}

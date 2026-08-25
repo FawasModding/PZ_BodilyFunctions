@@ -1,0 +1,32 @@
+ItemName_ES = {
+
+    -- Medicina
+    ItemName_BF.AnticholinergicPill = "Pastilla Anticolinérgica",
+    ItemName_BF.AntiDiarrhealPillBox = "Caja de Antidiarreicos",
+    ItemName_BF.AnticholinergicPillBox = "Caja de Anticolinérgicos",
+    ItemName_BF.DiureticPillBox = "Caja de Diuréticos",
+    ItemName_BF.LaxativePillBox = "Caja de Laxantes",
+    ItemName_BF.DiureticPill = "Pastilla Diurética",
+    ItemName_BF.LaxativePill = "Pastilla Laxante",
+
+    -- Papel de desecho
+    ItemName_BF.GraphPaperPooped = "Papel Milimetrado (Usado)",
+    ItemName_BF.GrassTuftPooped = "Manojo de Pasto (Usado)",
+    ItemName_BF.HottieZPooped = "Revista: HottieZ (Usada)",
+    ItemName_BF.HunkZPooped = "Revista: HunkZ (Usada)",
+    ItemName_BF.MagazinePooped = "Revista (Usada)",
+    ItemName_BF.NewspaperPooped = "Periódico (Usado)",
+    ItemName_BF.PaperNapkins2Pooped = "Servilletas (Usadas)",
+    ItemName_BF.PaperworkPooped = "Documentos (Usados)",
+    ItemName_BF.RippedSheetsPooped = "Trapo (Usado)",
+    ItemName_BF.ReceiptPooped = "Recibo (Usado)",
+    ItemName_BF.SheetPaper2Pooped = "Hoja de Papel (Usada)",
+    ItemName_BF.TissuePooped = "Pañuelo Desechable (Usado)",
+
+    -- Ropa
+    ItemName_BF.PulledDown_Trousers = "Pantalones Bajados",
+
+    -- Desechos Humanos
+    ItemName_BF.HumanFeces = "Heces Humanas",
+    ItemName_BF.HumanFeces_Throwable = "Heces Humanas Arrojadizas",
+}

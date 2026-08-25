@@ -1,0 +1,75 @@
+ContextMenu_PTBR = {
+
+	-- 🧻 Menu Principal
+	ContextMenu_BodilyFunctions = "Funções Corporais",
+	ContextMenu_Urinate = "Urinar",
+	ContextMenu_Defecate = "Defecar",
+
+	-- 💩 Ações (Comuns)
+	ContextMenu_Pee    = "Mijar",
+	ContextMenu_Poop   = "Cagar",
+	ContextMenu_Peed   = "Mijado",
+	ContextMenu_Pooped = "Cagado",
+
+	-- 🚻 Locais de Uso
+	ContextMenu_UseGround     = "No Chão",
+	ContextMenu_UseSelf       = "Nas Roupas",
+	ContextMenu_UseToilet     = "No Vaso Sanitário",
+	ContextMenu_UseOuthouse   = "Na Fossa",
+	ContextMenu_UseUrinal     = "No Mictório",
+	ContextMenu_UseShower     = "No Chuveiro / Banheira",
+	ContextMenu_UseSink       = "Na Pia",
+	ContextMenu_UseContainer  = "No Recipiente",
+
+	-- 💬 Tooltips de Uso (com Requisitos)
+	ContextMenu_tooltip_PeeGround     = "Urinar no chão. (Requer %d%%)",
+	ContextMenu_tooltip_PoopGround    = "Defecar no chão. (Requer %d%%)",
+	ContextMenu_tooltip_PeeToilet     = "Urinar no vaso sanitário. (Requer %d%%)",
+	ContextMenu_tooltip_PoopToilet    = "Defecar no vaso sanitário. (Requer %d%%)",
+	ContextMenu_tooltip_PeeOuthouse   = "Urinar na fossa. (Requer %d%%)",
+	ContextMenu_tooltip_PoopOuthouse  = "Defecar na fossa. (Requer %d%%)",
+	ContextMenu_tooltip_PeeSink       = "Urinar na pia. (Requer %d%%)",
+	ContextMenu_tooltip_PeeShower     = "Urinar no chuveiro ou banheira. (Requer %d%%)",
+	ContextMenu_tooltip_PeeUrinal     = "Urinar no mictório. (Requer %d%%)",
+	ContextMenu_tooltip_PeeContainer  = "Mijar no recipiente. (Requer %d%%)",
+
+	-- 🫣 Tooltips de Timidez
+	ContextMenu_tooltip_ShyPee          = "Você é tímido demais para urinar enquanto está sendo observado.",
+	ContextMenu_tooltip_ShyPoop         = "Você é tímido demais para defecar enquanto está sendo observado.",
+	ContextMenu_tooltip_ShyPeeSink      = "Você é tímido demais para urinar na pia.",
+	ContextMenu_tooltip_ShyPeeShower    = "Você é tímido demais para urinar no chuveiro ou banheira.",
+	ContextMenu_tooltip_ShyPeeContainer = "Você é tímido demais para urinar em um recipiente.",
+
+	-- 🚫 Tooltips Especiais
+	ContextMenu_tooltip_PoopUrinal = "Nem pense nisso.",
+	ContextMenu_tooltip_DontWipe   = "Escolha não se limpar após defecar. (5%% de sujeira nas roupas)",
+
+	-- 🧼 Ações de Higiene
+	ContextMenu_DontWipe         = "Não Limpar",
+	ContextMenu_WipeWith         = "Limpar com: ",
+	ContextMenu_WipeSelf         = "Se Limpar",
+	ContextMenu_WashSoiled       = "Lavar Roupas Sujas",
+	ContextMenu_WashSoiledItems  = "Lavar Itens Sujos",
+
+	-- 🧽 Tooltips de Limpeza
+	ContextMenu_tooltip_WipeDrainable = "Usar um item drenável diminuirá seus usos em 1.",
+	ContextMenu_tooltip_WipeOther     = "Usar um item de papel aleatório lhe dará um equivalente em lixo.",
+	ContextMenu_tooltip_WipeClothing  = "Usar uma peça de roupa irá sujá-la.",
+
+	-- 🚽 Extra
+	ContextMenu_FlushToilet = "Dar Descarga",
+
+	-- 💊 Pílulas
+	ContextMenu_Take_AntiDiarrhealPill   = "Tomar Pílula Antidiarreica",
+	ContextMenu_Take_LaxativePill        = "Tomar Laxante",
+	ContextMenu_Take_DiureticPill        = "Tomar Diurético",
+	ContextMenu_Take_AnticholinergicPill = "Tomar Pílula Anticolinérgica",
+
+	-- 📊 Tooltips de Barras de Status (Inventário)
+	ContextMenu_Tooltip_Urinated  = "Mijada:",
+	ContextMenu_Tooltip_Defecated = "Cagada:",
+
+	-- 🧍 Tooltips: Usar em si mesmo
+	ContextMenu_tooltip_PeeSelf  = "Urinar em si mesmo. Poucas situações em que isso seria útil. (Requer %d%%)",
+	ContextMenu_tooltip_PoopSelf = "Defecar em si mesmo. Poucas situações em que isso seria útil. (Requer %d%%)",
+}

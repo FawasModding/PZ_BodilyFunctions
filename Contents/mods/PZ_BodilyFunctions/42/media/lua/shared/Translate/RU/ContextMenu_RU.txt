@@ -1,0 +1,102 @@
+ContextMenu_RU = {
+	-- 🧻 Главное меню
+	ContextMenu_BodilyFunctions = "Телесные функции",
+	ContextMenu_Urinate = "Мочеиспускание",
+	ContextMenu_Defecate = "Дефекация",
+
+	-- 💩 Действия
+	ContextMenu_Pee = "Писать",
+	ContextMenu_Poop = "Какать",
+	ContextMenu_Peed = "Пописал",
+	ContextMenu_Pooped = "Покакал",
+
+	-- 🚻 Места использования
+	ContextMenu_UseGround = "На землю",
+	ContextMenu_UseSelf = "Под себя",
+	ContextMenu_UseToilet = "В туалет",
+	ContextMenu_UsePodiumToilet = "В подиумный туалет",
+	ContextMenu_UseUrinal = "В писсуар",
+	ContextMenu_UseOuthouse = "В уличный туалет",
+	ContextMenu_UseShower = "В душ",
+	ContextMenu_UseBathtub = "В ванну",
+	ContextMenu_UseBush = "В куст",
+	ContextMenu_UseDumpster = "В мусорный бак",
+	ContextMenu_UseSink = "В раковину",
+	ContextMenu_UseTree = "Под дерево",
+	ContextMenu_UseTrashCan = "В мусорное ведро",
+	ContextMenu_UseWater = "В воду",
+	ContextMenu_UseContainer = "В контейнер",
+
+	-- 💬 Подсказки по использованию (с требованиями)
+	ContextMenu_tooltip_PeeGround = "Писать на землю. (Требуется %d%%)",
+	ContextMenu_tooltip_PoopGround = "Какать на землю. (Требуется %d%%)",
+	ContextMenu_tooltip_PeeSelf = "Писать под себя. Вряд ли это когда-либо пригодится. (Требуется %d%%)",
+	ContextMenu_tooltip_PoopSelf = "Какать под себя. Вряд ли это когда-либо пригодится. (Требуется %d%%)",
+	ContextMenu_tooltip_PeeToilet = "Писать в туалет. (Требуется %d%%)",
+	ContextMenu_tooltip_PoopToilet = "Какать в туалет. (Требуется %d%%)",
+	ContextMenu_tooltip_PeeUrinal = "Писать в писсуар. (Требуется %d%%)",
+	ContextMenu_tooltip_PoopUrinal = "Даже не думай.",
+	ContextMenu_tooltip_PeeOuthouse = "Писать в уличный туалет. (Требуется %d%%)",
+	ContextMenu_tooltip_PoopOuthouse = "Какать в уличный туалет. (Требуется %d%%)",
+	ContextMenu_tooltip_PeeSink = "Писать в раковину. (Требуется %d%%)",
+	ContextMenu_tooltip_PeeShower = "Писать в душ. (Требуется %d%%)",
+	ContextMenu_tooltip_PeeBathtub = "Писать в ванну. (Требуется %d%%)",
+	ContextMenu_tooltip_PeeBush = "Писать в куст. (Требуется %d%%)",
+	ContextMenu_tooltip_PoopBush = "Какать в куст. (Требуется %d%%)",
+	ContextMenu_tooltip_PeeTree = "Писать под дерево. (Требуется %d%%)",
+	ContextMenu_tooltip_PeeWater = "Писать в воду. (Требуется %d%%)",
+	ContextMenu_tooltip_PoopWater = "Какать в воду. (Требуется %d%%)",
+	ContextMenu_tooltip_PeeTrashCan = "Писать в мусорное ведро. (Требуется %d%%)",
+	ContextMenu_tooltip_PoopTrashCan = "Какать в мусорное ведро. (Требуется %d%%)",
+	ContextMenu_tooltip_PeeDumpster = "Писать в мусорный бак. (Требуется %d%%)",
+	ContextMenu_tooltip_PoopDumpster = "Какать в мусорный бак. (Требуется %d%%)",
+	ContextMenu_tooltip_PeeOpenWindow = "Писать в открытое окно. (Требуется %d%%)",
+	ContextMenu_tooltip_PeeContainer = "Писать в контейнер. (Требуется %d%%)",
+
+	-- 🫣 Подсказки застенчивости
+	ContextMenu_tooltip_ShyPee = "Вы слишком застенчивы, чтобы писать на публике.",
+	ContextMenu_tooltip_ShyPoop = "Вы слишком застенчивы, чтобы какать на публике.",
+	ContextMenu_tooltip_ShyPeeSelf = "Вы слишком застенчивы, чтобы писать под себя, даже в одиночестве.",
+	ContextMenu_tooltip_ShyPoopSelf = "Вы слишком застенчивы, чтобы какать под себя, даже в одиночестве.",
+	ContextMenu_tooltip_ShyPeeUrinal = "Вы слишком застенчивы, чтобы писать в писсуар.",
+	ContextMenu_tooltip_ShyPeeSink = "Вы слишком застенчивы, чтобы писать в раковину.",
+	ContextMenu_tooltip_ShyPeeShower = "Вы слишком застенчивы, чтобы писать в душ.",
+	ContextMenu_tooltip_ShyPeeBathtub = "Вы слишком застенчивы, чтобы писать в ванну.",
+	ContextMenu_tooltip_ShyPeeBush = "Вы слишком застенчивы, чтобы писать в куст.",
+	ContextMenu_tooltip_ShyPoopBush = "Вы слишком застенчивы, чтобы какать в куст.",
+	ContextMenu_tooltip_ShyPeeTree = "Вы слишком застенчивы, чтобы писать под дерево.",
+	ContextMenu_tooltip_ShyPeeWater = "Вы слишком застенчивы, чтобы писать в воду.",
+	ContextMenu_tooltip_ShyPoopWater = "Вы слишком застенчивы, чтобы какать в воду.",
+	ContextMenu_tooltip_ShyPeeTrashCan = "Вы слишком застенчивы, чтобы писать в мусорное ведро.",
+	ContextMenu_tooltip_ShyPoopTrashCan = "Вы слишком застенчивы, чтобы какать в мусорное ведро.",
+	ContextMenu_tooltip_ShyPeeDumpster = "Вы слишком застенчивы, чтобы писать в мусорный бак.",
+	ContextMenu_tooltip_ShyPoopDumpster = "Вы слишком застенчивы, чтобы какать в мусорный бак.",
+	ContextMenu_tooltip_ShyPeeOpenWindow = "Вы слишком застенчивы, чтобы писать в окно.",
+	ContextMenu_tooltip_ShyPeeContainer = "Вы слишком застенчивы, чтобы писать в контейнер.",
+
+	-- 🧼 Гигиена
+	ContextMenu_DontWipe = "Не подтираться",
+	ContextMenu_WipeWith = "Подтереться: ",
+	ContextMenu_WipeSelf = "Подтереться",
+	ContextMenu_WashSoiled = "Постирать испачканную одежду",
+	ContextMenu_WashSoiledItems = "Постирать испачканные предметы",
+
+	-- 🧽 Подсказки очистки
+	ContextMenu_tooltip_WipeDrainable = "Использование расходуемого предмета уменьшит его использование на 1.",
+	ContextMenu_tooltip_WipeOther = "Использование случайного бумажного предмета даст мусорный аналог.",
+	ContextMenu_tooltip_WipeClothing = "Использование одежды испачкает её.",
+
+	-- 🚽 Дополнительно
+	ContextMenu_FlushToilet = "Смыть в туалете",
+
+	-- 💊 Лекарства
+	ContextMenu_Take_AntiDiarrhealPill = "Принять противодиарейное",
+	ContextMenu_Take_LaxativePill = "Принять слабительное",
+	ContextMenu_Take_DiureticPill = "Принять мочегонное",
+	ContextMenu_Take_AnticholinergicPill = "Принять антихолинергик",
+
+	-- 📊 Статус-бары и прочее
+	ContextMenu_Tooltip_Urinated = "Записано:",
+	ContextMenu_Tooltip_Defecated = "Запачкано:",
+
+}

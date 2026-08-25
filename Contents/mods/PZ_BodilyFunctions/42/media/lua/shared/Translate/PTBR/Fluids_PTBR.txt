@@ -1,0 +1,6 @@
+Fluids_PTBR = {
+	Fluid_Name_Urine = "Urina",
+	Fluid_Name_FilteredUrine = "Urina Filtrada",
+	Fluid_Name_LiquidLaxative = "Laxante",
+	Fluid_Name_LiquidDiuretic = "Diurético",
+}

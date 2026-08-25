@@ -1,0 +1,22 @@
+[
+  {
+    "id": "kotlin",
+    "name": "Kotlin",
+    "prism": "kotlin",
+    "extensions": [".kt", ".kts"],
+    "patterns": [
+      { "re": "^\\s*(?:(?:public|private|internal|open|abstract|sealed|data)\\s+)*(class|interface|object)\\s+([A-Za-z_]\\w*)", "kindGroup": 1, "nameGroup": 2 },
+      { "re": "^\\s*(?:(?:public|private|internal|override|suspend|inline)\\s+)*fun\\s+([A-Za-z_]\\w*)", "kind": "fn", "nameGroup": 1 }
+    ]
+  },
+  {
+    "id": "lua",
+    "name": "Lua",
+    "prism": "lua",
+    "extensions": [".lua"],
+    "patterns": [
+      { "re": "^\\s*function\\s+([A-Za-z_]\\w*(?:\\.[A-Za-z_]\\w*)*)\\s*\\(", "kind": "fn", "nameGroup": 1 },
+      { "re": "^\\s*local\\s+function\\s+([A-Za-z_]\\w*)\\s*\\(", "kind": "fn", "nameGroup": 1 }
+    ]
+  }
+]

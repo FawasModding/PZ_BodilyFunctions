@@ -1,0 +1,12 @@
+IGUI_PTBR = {
+    IGUI_announce_IPeedMyself = "Eu me mijei...",
+    IGUI_announce_IPoopedMyself = "Eu me caguei...",
+    IGUI_announce_UrgeHiccup = "Ah não, não consigo segurar!",
+    IGUI_announce_CantPickUpPee = "Preciso limpar isso."
+    IGUI_announce_SilentOops	= "Ah não..."
+    IGUI_BladderFullness = "Bexiga",
+    IGUI_BowelsFullness = "Intestino",
+    IGUI_Empty = "Vazio",
+    IGUI_Full = "Cheio",
+
+}

@@ -1,0 +1,116 @@
+module BF
+{
+    item AntiDiarrhealPill
+    {
+        ItemType = base:food,
+        Weight = 0.1,
+        Icon = AntiDiarrhealPill,
+        CustomContextMenu = Take_AntiDiarrhealPill,
+        OnEat = OnEat_AntiDiarrhealPill,
+        UseDelta = 0.1,
+        Tooltip = Tooltip_AntiDiarrhealPill,
+        WorldStaticModel = Antibiotics,
+    }
+
+    item LaxativePill
+    {
+        ItemType = base:food,
+        Weight = 0.1,
+        Icon = Laxative,
+        CustomContextMenu = Take_LaxativePill,
+        OnEat = OnEat_LaxativePill,
+        UseDelta = 0.1,
+        Tooltip = Tooltip_LaxativePill,
+        WorldStaticModel = Antibiotics,
+    }
+
+    item DiureticPill
+    {
+        ItemType = base:food,
+        Weight = 0.1,
+        Icon = PeePill,
+        CustomContextMenu = Take_DiureticPill,
+        OnEat = OnEat_DiureticPill,
+        UseDelta = 0.1,
+        Tooltip = Tooltip_DiureticPill,
+        WorldStaticModel = Antibiotics,
+    }
+
+    item AnticholinergicPill
+    {
+        ItemType = base:food,
+        Weight = 0.1,
+        Icon = AnticholinergicPill,
+        CustomContextMenu = Take_AnticholinergicPill,
+        OnEat = OnEat_AnticholinergicPill,
+        UseDelta = 0.1,
+        Tooltip = Tooltip_AnticholinergicPill,
+        WorldStaticModel = Antibiotics,
+    }
+
+
+    item AntiDiarrhealPillBox
+    {
+        ItemType = base:normal,
+        Weight = 1.0,
+        Icon = AntiDiarrhealPillBox,
+        WorldStaticModel = AntiDiarrhealPillBox_Ground,
+        Tags = base:IgnoreZombieDensity,
+    }
+
+    item LaxativePillBox
+    {
+        ItemType = base:normal,
+        Weight = 1.0,
+        Icon = LaxativeBox,
+        WorldStaticModel = LaxativePillBox_Ground,
+        Tags = base:IgnoreZombieDensity,
+    }
+
+    item DiureticPillBox
+    {
+        ItemType = base:normal,
+        Weight = 1.0,
+        Icon = PeePillBox,
+        WorldStaticModel = DiureticPillBox_Ground,
+        Tags = base:IgnoreZombieDensity,
+    }
+
+    item AnticholinergicPillBox
+    {
+        ItemType = base:normal,
+        Weight = 1.0,
+        Icon = AnticholinergicPillBox,
+        WorldStaticModel = AnticholinergicPillBox_Ground,
+        Tags = base:IgnoreZombieDensity,
+    }
+
+
+    model AntiDiarrhealPillBox_Ground
+    {
+        mesh = WorldItems/SleepingTablets,
+        texture = WorldItems/AntiDiarrhealPillBox,
+        scale = 0.4,
+    }
+
+    model LaxativePillBox_Ground
+    {
+        mesh = WorldItems/SleepingTablets,
+        texture = WorldItems/LaxativeBox,
+        scale = 0.4,
+    }
+
+    model DiureticPillBox_Ground
+    {
+        mesh = WorldItems/SleepingTablets,
+        texture = WorldItems/PeePillBox,
+        scale = 0.4,
+    }
+
+    model AnticholinergicPillBox_Ground
+    {
+        mesh = WorldItems/SleepingTablets,
+        texture = WorldItems/AnticholinergicPillBox,
+        scale = 0.4,
+    }
+}

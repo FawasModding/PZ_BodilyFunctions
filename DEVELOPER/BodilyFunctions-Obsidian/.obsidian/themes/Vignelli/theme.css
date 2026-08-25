@@ -1,0 +1,925 @@
+/* =========================================================================
+   VIGNELLI  —  an Obsidian theme
+   -------------------------------------------------------------------------
+   Chalkboard black · bone white · gold. A screen port of the "Vignelli
+   reference" print house style: serif type (Bodoni display / Georgia body),
+   a rigorous grid, and a strict rule hierarchy. Hierarchy is carried by
+   GOLD rules, not by scattered color — headers, dividers (---) and table
+   bars are gold in BOTH themes; the black/bone ground simply reverses.
+
+     Dark  — chalkboard #1A1917 ground, bone #EDE6D6 text, gold headers.
+     Light — bone #EDE6D6 ground, chalkboard #1A1917 text, gold headers.
+
+   Structure
+     1.  Style Settings block (optional plugin)
+     2.  :root                — fonts, rule weights, type scale, shared tokens
+     3.  .theme-dark          — chalkboard ground
+     4.  .theme-light         — bone ground (reversed, gold constant)
+     5.  Typography           — headings (reading/live-preview/source), prose
+     6.  Inline marks & links
+     7.  Lists & tasks
+     8.  Blockquote & horizontal rule (the gold divider)
+     9.  Code — inline, block, and desaturated cm6/Prism syntax
+     10. Tables — the gold-barred editorial grid
+     11. Callouts
+     12. Highlights — native + plugin-free multi-color + Highlightr classes
+     13. Tags, images, embeds, footnotes, math, mermaid
+     14. Properties / frontmatter
+     15. App chrome — tabs, nav, search, modals, ribbon, status bar,
+                       scrollbars, tooltips, graph, canvas
+     16. Mobile & print
+     17. Style Settings toggle implementations
+   ========================================================================= */
+
+
+/* ------------------------------------------------------------------ 1. STYLE SETTINGS */
+/* @settings
+
+name: Vignelli
+id: vignelli
+settings:
+  -
+    id: vignelli-type-heading
+    title: Typography
+    type: heading
+    level: 1
+    collapsed: false
+  -
+    id: vignelli-display-font
+    title: Display font (headings)
+    description: The Didone serif for headings — matches the Vignelli doc engine (Bodoni MT, ships with Office/Windows).
+    type: variable-text
+    default: '"Bodoni MT", "Bodoni 72", "Bodoni Moda", Didot, Georgia, serif'
+  -
+    id: vignelli-body-font
+    title: Body font
+    type: variable-text
+    default: 'Georgia, "Iowan Old Style", "Palatino Linotype", "Times New Roman", serif'
+  -
+    id: vignelli-mono-font
+    title: Monospace font
+    type: variable-text
+    default: '"Courier New", Consolas, ui-monospace, monospace'
+  -
+    id: vignelli-body-size
+    title: Body font size
+    type: variable-number-slider
+    default: 18
+    min: 15
+    max: 22
+    step: 1
+    format: px
+  -
+    id: vignelli-line-height
+    title: Body line height
+    type: variable-number-slider
+    default: 1.6
+    min: 1.4
+    max: 1.9
+    step: 0.05
+  -
+    id: vignelli-reading-width
+    title: Reading line width
+    description: Editorial measure — keep it near 40rem so lines stay ~66 characters.
+    type: variable-number-slider
+    default: 40
+    min: 32
+    max: 55
+    step: 1
+    format: rem
+  -
+    id: inline-title-size
+    title: Note title size
+    description: The big title at the top of each note.
+    type: variable-number-slider
+    default: 3.2
+    min: 2
+    max: 5
+    step: 0.1
+    format: em
+  -
+    id: vg-nav-size
+    title: Sidebar font size
+    description: Left menu / file-explorer text size.
+    type: variable-number-slider
+    default: 16
+    min: 13
+    max: 22
+    step: 1
+    format: px
+  -
+    id: vignelli-color-heading
+    title: Palette
+    type: heading
+    level: 1
+    collapsed: false
+  -
+    id: vg-gold
+    title: Gold (headers, dividers, table bars)
+    type: variable-themed-color
+    format: hex
+    default-dark: '#d1ac23'
+    default-light: '#d1ac23'
+  -
+    id: vg-teal
+    title: Highlight colour (marks & selection)
+    type: variable-themed-color
+    format: hex
+    default-dark: '#74d2b4'
+    default-light: '#74d2b4'
+  -
+    id: vignelli-plain-headings
+    title: Ink headings (gold rules only)
+    description: Turn on for bone/ink heading text instead of gold; the gold rules stay either way.
+    type: class-toggle
+    default: false
+  -
+    id: vignelli-behavior-heading
+    title: Behaviour
+    type: heading
+    level: 1
+    collapsed: false
+  -
+    id: vignelli-uppercase-h1
+    title: Uppercase H1 (masthead)
+    description: Set the top heading in spaced small-caps, like a document masthead.
+    type: class-toggle
+    default: false
+  -
+    id: vignelli-justify
+    title: Justify body text
+    type: class-toggle
+    default: false
+  -
+    id: vignelli-hide-inline-title
+    title: Hide inline title
+    description: Hide Obsidian's filename title so a leading H1 is the sole masthead.
+    type: class-toggle
+    default: false
+*/
+
+
+/* ------------------------------------------------------------------ 2. :root
+   Fonts, the rule hierarchy, and a proper editorial type scale (a
+   perfect-fourth ramp so H1 reads as a masthead, not a Word heading).          */
+body {
+	--vg-display: "Bodoni MT", "Bodoni 72", "Bodoni Moda", Didot, Georgia, serif;
+	--vg-body:    Georgia, "Iowan Old Style", "Palatino Linotype", "Times New Roman", serif;
+	--vg-mono:    "Courier New", Consolas, ui-monospace, monospace;
+
+	--font-text-theme:      var(--vg-body);
+	--font-interface-theme: var(--vg-body);
+	--font-monospace-theme: var(--vg-mono);
+
+	--vg-body-size:     18px;
+	--vg-line-height:   1.6;
+	--vg-reading-width: 40rem;
+
+	--font-text-size:     var(--vg-body-size);
+	--line-height-normal: var(--vg-line-height);
+	--line-height-tight:  1.3;
+	--file-line-width:    var(--vg-reading-width);
+	--max-width:          var(--vg-reading-width);
+	--vg-nav-size:        16px;   /* left menu / file-explorer text size */
+
+	/* rule hierarchy (on-screen equivalents of the print twip weights) */
+	--vg-rule-thick: 2px;   /* masthead / hr divider / table bar   */
+	--vg-rule-med:   1.5px;
+	--vg-rule-hair:  1px;    /* row rules, quiet dividers           */
+
+	/* type scale — perfect fourth, opened at the top */
+	--h1-size: 3.0em;
+	--h2-size: 1.95em;
+	--h3-size: 1.45em;
+	--h4-size: 1.12em;
+	--h5-size: 0.95em;
+	--h6-size: 0.82em;
+
+	--h1-weight: 600;
+	--h2-weight: 600;
+	--h3-weight: 600;
+	--h4-weight: 700;
+	--h5-weight: 700;
+	--h6-weight: 700;
+
+	--h1-line-height: 1.08;
+	--h2-line-height: 1.14;
+	--h3-line-height: 1.2;
+
+	--h1-font: var(--vg-display);
+	--h2-font: var(--vg-display);
+	--h3-font: var(--vg-display);
+	--h4-font: var(--vg-display);
+	--h5-font: var(--vg-body);
+	--h6-font: var(--vg-body);
+
+	/* note title (inline title) — the masthead. Driven through Obsidian's own
+	   --inline-title-* vars so the cascade always wins and the Style Settings
+	   "Note title size" slider controls it live. */
+	--inline-title-size: 3.2em;
+	--inline-title-weight: 600;
+	--inline-title-color: var(--vg-gold);
+	--inline-title-font: var(--vg-display);
+	--inline-title-line-height: 1.06;
+
+	/* heading colour via Obsidian's own vars → gold in every render mode */
+	--h1-color: var(--vg-gold);
+	--h2-color: var(--vg-gold);
+	--h3-color: var(--vg-gold);
+	--h4-color: var(--vg-gold);
+	--h5-color: var(--vg-gold);
+	--h6-color: var(--vg-gold-dim);
+
+	--bold-weight: 700;
+
+	/* square everything — Vignelli grid */
+	--radius-s: 0px; --radius-m: 0px; --radius-l: 0px; --radius-xl: 0px;
+	--tab-radius: 0px; --tab-radius-active: 0px; --input-radius: 0px;
+	--modal-radius: 0px; --checkbox-radius: 0px; --table-cell-radius: 0px;
+	--toggle-radius: 0px; --slider-thumb-radius: 0px; --button-radius: 0px;
+
+	--tab-outline-width: 0px;
+}
+
+
+/* ------------------------------------------------------------------ 3. .theme-dark  (CHALKBOARD)
+   Chalkboard-black ground, bone type, gold hierarchy. Bright bone (not
+   mid-gray) so the delicate Didone hairlines don't shimmer out on the dark
+   field.                                                                        */
+.theme-dark {
+	--color-base-00: #2f2f2f;   /* black — primary background        */
+	--color-base-05: #353535;
+	--color-base-10: #3b3b3b;   /* panels / secondary surface        */
+	--color-base-20: #434343;
+	--color-base-25: #4c4c4c;
+	--color-base-30: #565656;   /* borders                           */
+	--color-base-35: #646464;
+	--color-base-40: #7a7a7a;   /* faint text / thin rules           */
+	--color-base-50: #969696;
+	--color-base-60: #b4b4b4;   /* muted                             */
+	--color-base-70: #d9d7db;
+	--color-base-100: #f8f4f9;  /* white — normal text               */
+
+	--vg-gold:        #d1ac23;
+	--vg-gold-bright: #e6c341;
+	--vg-gold-dim:    #a98a1c;
+	--vg-teal:        #74d2b4;
+	--vg-teal-bright: #93e2c8;
+	--vg-root-fg:     #2f2f2f;   /* black text on the gold root-folder bars */
+
+	--background-primary:        var(--color-base-00);
+	--background-primary-alt:    #353535;
+	--background-secondary:      #2b2b2b;   /* menu = page bg, a hair darker */
+	--background-secondary-alt:  var(--color-base-10);
+
+	--text-normal:    #f8f4f9;
+	--text-muted:     #b0aeb2;
+	--text-faint:     #7a7a7a;
+	--text-on-accent: #2f2f2f;
+
+	--background-modifier-border:        #4a4a4a;
+	--background-modifier-border-hover:  #5e5e5e;
+	--background-modifier-border-focus:  var(--vg-gold);
+
+	--accent-h: 47; --accent-s: 71%; --accent-l: 48%;
+	--interactive-accent:        var(--vg-gold);
+	--interactive-accent-hover:  var(--vg-gold-bright);
+	--text-accent:        var(--vg-gold);
+	--text-accent-hover:  var(--vg-gold-bright);
+	--text-selection:     rgba(116, 210, 180, 0.22);
+	--text-selection:     color-mix(in srgb, var(--vg-teal) 22%, transparent);
+	--text-highlight-bg:  rgba(116, 210, 180, 0.34);
+	--text-highlight-bg:  color-mix(in srgb, var(--vg-teal) 34%, transparent);
+	--text-highlight-bg-active: rgba(147, 226, 200, 0.50);
+	--text-highlight-bg-active: color-mix(in srgb, var(--vg-teal-bright) 55%, transparent);
+
+	color-scheme: dark;
+}
+
+
+/* ------------------------------------------------------------------ 4. .theme-light  (BONE)
+   The reverse: bone-paper ground, chalkboard ink, gold pinned. Gold is
+   deepened to old-gold so headers stay legible on the pale ground.             */
+.theme-light {
+	--color-base-00: #f8f4f9;   /* white — primary background        */
+	--color-base-05: #f1eef3;
+	--color-base-10: #e9e5ec;   /* panels / secondary surface        */
+	--color-base-20: #ddd8e1;
+	--color-base-25: #d0cad5;
+	--color-base-30: #c0bac6;   /* borders                           */
+	--color-base-35: #aca5b3;
+	--color-base-40: #8d8695;   /* faint text / thin rules           */
+	--color-base-50: #6f6976;
+	--color-base-60: #524d59;   /* muted                             */
+	--color-base-70: #3b3740;
+	--color-base-100: #2f2f2f;  /* black — normal text               */
+
+	--vg-gold:        #a8871a;
+	--vg-gold-bright: #8f7016;
+	--vg-gold-dim:    #9a8340;
+	--vg-teal:        #74d2b4;
+	--vg-teal-bright: #4bbd99;
+	--vg-root-fg:     #f8f4f9;   /* white text on the gold root-folder bars */
+
+	--background-primary:        var(--color-base-00);
+	--background-primary-alt:    #f3eff4;
+	--background-secondary:      #f3eff4;   /* menu = page bg, a hair darker */
+	--background-secondary-alt:  var(--color-base-10);
+
+	--text-normal:    #2f2f2f;
+	--text-muted:     #524d59;
+	--text-faint:     #8d8695;
+	--text-on-accent: #2f2f2f;
+
+	--background-modifier-border:        #d2ccd7;
+	--background-modifier-border-hover:  #c0bac6;
+	--background-modifier-border-focus:  var(--vg-gold);
+
+	--accent-h: 47; --accent-s: 72%; --accent-l: 42%;
+	--interactive-accent:        var(--vg-gold);
+	--interactive-accent-hover:  var(--vg-gold-bright);
+	--text-accent:        var(--vg-gold);
+	--text-accent-hover:  var(--vg-gold-bright);
+	--text-selection:     rgba(116, 210, 180, 0.24);
+	--text-selection:     color-mix(in srgb, var(--vg-teal) 26%, transparent);
+	--text-highlight-bg:  rgba(116, 210, 180, 0.40);
+	--text-highlight-bg:  color-mix(in srgb, var(--vg-teal) 42%, transparent);
+	--text-highlight-bg-active: rgba(75, 189, 153, 0.48);
+	--text-highlight-bg-active: color-mix(in srgb, var(--vg-teal-bright) 52%, transparent);
+
+	color-scheme: light;
+}
+
+
+/* ------------------------------------------------------------------ 5. TYPOGRAPHY */
+body {
+	--font-text: var(--vg-body);
+	--font-interface: var(--vg-body);
+	--font-monospace: var(--vg-mono);
+	font-feature-settings: "liga" 1, "kern" 1;
+	-webkit-font-smoothing: antialiased;
+	text-rendering: optimizeLegibility;
+}
+
+.markdown-preview-view,
+.markdown-rendered,
+.markdown-source-view.mod-cm6 .cm-content {
+	font-family: var(--vg-body);
+	font-size: var(--vg-body-size);
+	line-height: var(--vg-line-height);
+	color: var(--text-normal);
+}
+
+/* paragraph rhythm — space between, never indent + space */
+.markdown-rendered p { margin: 0 0 1em; text-indent: 0; }
+
+/* — Headings: display Didone, gold, tight, asymmetric spacing so a heading
+     binds to the text it introduces (space above ≫ space below). Style reading
+     (hN), live-preview (.HyperMD-header-N) and source (.cm-header-N) alike. —  */
+.markdown-rendered h1, .markdown-rendered h2, .markdown-rendered h3,
+.markdown-rendered h4, .markdown-rendered h5, .markdown-rendered h6,
+.HyperMD-header, .cm-header, .inline-title {
+	font-family: var(--vg-display);
+	color: var(--vg-gold);
+	font-weight: 600;
+	letter-spacing: -0.01em;
+}
+
+.markdown-rendered h1, .HyperMD-header-1, .cm-header-1 {
+	font-size: var(--h1-size); line-height: var(--h1-line-height);
+	margin: 0 0 0.5em;
+	padding-bottom: 0.18em;
+	border-bottom: var(--vg-rule-thick) solid var(--vg-gold);
+}
+.markdown-rendered h2, .HyperMD-header-2, .cm-header-2 {
+	font-size: var(--h2-size); line-height: var(--h2-line-height);
+	margin: 1.9em 0 0.45em;
+	padding-bottom: 0.12em;
+	border-bottom: var(--vg-rule-hair) solid var(--vg-gold);
+}
+.markdown-rendered h3, .HyperMD-header-3, .cm-header-3 {
+	font-size: var(--h3-size); line-height: var(--h3-line-height);
+	margin: 1.7em 0 0.4em;
+}
+.markdown-rendered h4, .HyperMD-header-4, .cm-header-4 {
+	font-size: var(--h4-size); margin: 1.5em 0 0.35em; font-weight: 700;
+}
+.markdown-rendered h5, .HyperMD-header-5, .cm-header-5 {
+	font-size: var(--h5-size); margin: 1.4em 0 0.3em;
+	font-family: var(--vg-body); font-weight: 700;
+	letter-spacing: 0.08em; text-transform: uppercase; color: var(--vg-gold);
+}
+.markdown-rendered h6, .HyperMD-header-6, .cm-header-6 {
+	font-size: var(--h6-size); margin: 1.3em 0 0.3em;
+	font-family: var(--vg-body); font-weight: 700;
+	letter-spacing: 0.12em; text-transform: uppercase; color: var(--vg-gold-dim);
+}
+
+/* the heading-fold hash marks stay quiet gold */
+.cm-formatting-header, .markdown-rendered .heading-collapse-indicator { color: var(--vg-gold-dim); }
+
+/* Inline title (filename) — a lighter echo of the masthead, no rule, so it
+   never fights a leading H1. */
+.inline-title {
+	font-size: var(--inline-title-size);
+	font-weight: var(--inline-title-weight);
+	font-family: var(--inline-title-font);
+	line-height: var(--inline-title-line-height);
+	color: var(--inline-title-color);
+	margin-bottom: 0.4em; letter-spacing: -0.01em;
+}
+
+
+/* ------------------------------------------------------------------ 6. INLINE MARKS & LINKS */
+.markdown-rendered strong, .cm-strong { font-weight: 700; color: var(--text-normal); }
+.markdown-rendered em, .cm-em        { font-style: italic; color: var(--text-normal); }
+.markdown-rendered del, .cm-strikethrough { color: var(--text-muted); }
+
+/* Links — bone/ink text with a gold underline; state is encoded in the
+   underline style, never left to color alone. */
+.markdown-rendered a.internal-link,
+.markdown-rendered a.external-link,
+.cm-s-obsidian .cm-link, .cm-s-obsidian .cm-hmd-internal-link, .cm-url {
+	color: var(--text-normal);
+	text-decoration: underline;
+	text-decoration-color: var(--vg-gold);
+	text-decoration-thickness: 0.07em;
+	text-underline-offset: 0.16em;
+	font-weight: 400;
+}
+.markdown-rendered a.internal-link:hover,
+.markdown-rendered a.external-link:hover,
+.cm-s-obsidian .cm-link:hover {
+	color: var(--vg-gold);
+	text-decoration-thickness: 0.12em;
+}
+.markdown-rendered a.internal-link.is-unresolved {
+	color: var(--text-faint);
+	text-decoration-style: dashed;
+	text-decoration-color: var(--text-faint);
+}
+.markdown-rendered a.external-link { text-decoration-style: solid; }
+
+
+/* ------------------------------------------------------------------ 7. LISTS & TASKS
+   Recolour the native markers (do NOT replace them with ::before — that breaks
+   in live-preview/source and collides with checkboxes). Gold markers.          */
+.markdown-rendered ul > li::marker,
+.markdown-rendered ol > li::marker { color: var(--vg-gold); font-weight: 700; }
+.markdown-source-view .list-bullet::after,
+.markdown-source-view .cm-formatting-list-ul { color: var(--vg-gold); }
+.markdown-source-view .cm-formatting-list-ol { color: var(--vg-gold); }
+.markdown-rendered li { margin: 0.2em 0; }
+.markdown-rendered li::marker { font-family: var(--vg-body); }
+
+/* Task checkboxes — a crisp gold square that fills gold when checked. */
+.markdown-rendered input[type="checkbox"],
+.markdown-source-view input[type="checkbox"] {
+	-webkit-appearance: none; appearance: none;
+	width: 1.02em; height: 1.02em; margin-inline: 0 0.55em;
+	border: var(--vg-rule-med) solid var(--vg-gold);
+	border-radius: 0; background: transparent;
+	position: relative; top: 0.14em; cursor: pointer;
+}
+.markdown-rendered input[type="checkbox"]:checked,
+.markdown-source-view input[type="checkbox"]:checked { background: var(--vg-gold); }
+.markdown-rendered input[type="checkbox"]:checked::after,
+.markdown-source-view input[type="checkbox"]:checked::after {
+	content: ""; position: absolute; left: 0.3em; top: 0.08em;
+	width: 0.24em; height: 0.5em;
+	border: solid var(--background-primary);
+	border-width: 0 0.14em 0.14em 0; transform: rotate(45deg);
+}
+.markdown-rendered li.task-list-item.is-checked,
+.markdown-rendered li.task-list-item[data-task="x"] {
+	color: var(--text-muted);
+	text-decoration: line-through;
+	text-decoration-color: var(--text-faint);
+}
+
+
+/* ------------------------------------------------------------------ 8. BLOCKQUOTE & HORIZONTAL RULE */
+.markdown-rendered blockquote, .HyperMD-quote {
+	border-left: var(--vg-rule-thick) solid var(--vg-gold);
+	background: transparent;
+	margin: 1.1em 0; padding: 0.1em 0 0.1em 1.15em;
+	color: var(--text-muted); font-style: italic;
+}
+.markdown-rendered blockquote p { margin: 0.2em 0; }
+
+/* the gold divider */
+.markdown-rendered hr, .cm-hr {
+	border: none; height: 0;
+	border-top: var(--vg-rule-thick) solid var(--vg-gold);
+	margin: 2em 0; opacity: 1;
+}
+.cm-hr { display: block; }
+
+
+/* ------------------------------------------------------------------ 9. CODE
+   Inline + block in a faint panel; syntax desaturated INTO the palette
+   (bone body, muted italic comments, gold keywords) across reading (Prism
+   .token.*) AND live-preview/source (cm6 .cm-*).                               */
+.markdown-rendered code, .cm-inline-code, :not(pre) > code {
+	font-family: var(--vg-mono); font-size: 0.85em;
+	background: var(--color-base-10);
+	border: var(--vg-rule-hair) solid var(--background-modifier-border);
+	border-radius: 0; padding: 0.05em 0.35em; color: var(--text-normal);
+}
+.markdown-rendered pre {
+	background: var(--color-base-10);
+	border: var(--vg-rule-hair) solid var(--background-modifier-border);
+	border-left: var(--vg-rule-thick) solid var(--vg-gold);
+	border-radius: 0; padding: 0.85em 1em;
+}
+.markdown-rendered pre > code {
+	background: none; border: none; padding: 0;
+	font-size: 0.82em; line-height: 1.55; color: var(--text-normal);
+}
+.HyperMD-codeblock, .cm-s-obsidian .HyperMD-codeblock {
+	font-family: var(--vg-mono); background: var(--color-base-10);
+}
+.markdown-source-view .HyperMD-codeblock-begin,
+.markdown-source-view .HyperMD-codeblock-end { border-left: var(--vg-rule-thick) solid var(--vg-gold); }
+/* language flair label */
+.markdown-rendered .code-block-flair { color: var(--text-faint); font-family: var(--vg-mono); }
+
+/* — desaturated syntax: reading (Prism) — */
+.token.comment, .token.prolog, .token.doctype, .token.cdata { color: var(--text-faint); font-style: italic; }
+.token.punctuation, .token.operator { color: var(--text-muted); }
+.token.keyword, .token.tag, .token.selector, .token.important, .token.atrule { color: var(--vg-gold); font-weight: 700; }
+.token.string, .token.char, .token.attr-value, .token.regex { color: var(--text-normal); }
+.token.function, .token.class-name, .token.property, .token.attr-name { color: var(--text-normal); font-weight: 700; }
+.token.number, .token.boolean, .token.constant, .token.symbol { color: var(--color-base-70); }
+.token.variable, .token.entity, .token.url { color: var(--text-normal); }
+
+/* — desaturated syntax: live-preview / source (cm6) — */
+.cm-s-obsidian .cm-comment { color: var(--text-faint); font-style: italic; }
+.cm-s-obsidian .cm-keyword, .cm-s-obsidian .cm-tag, .cm-s-obsidian .cm-atom { color: var(--vg-gold); font-weight: 700; }
+.cm-s-obsidian .cm-string, .cm-s-obsidian .cm-string-2 { color: var(--text-normal); }
+.cm-s-obsidian .cm-def, .cm-s-obsidian .cm-property, .cm-s-obsidian .cm-variable-2, .cm-s-obsidian .cm-type { color: var(--text-normal); font-weight: 700; }
+.cm-s-obsidian .cm-number, .cm-s-obsidian .cm-bool { color: var(--color-base-70); }
+.cm-s-obsidian .cm-operator, .cm-s-obsidian .cm-meta { color: var(--text-muted); }
+.cm-s-obsidian .cm-variable { color: var(--text-normal); }
+
+
+/* ------------------------------------------------------------------ 10. TABLES
+   An editorial grid: gold bar above the header, gold bar under it, gold bar
+   closing the body; hairline row rules between; no vertical borders, no zebra.
+   Header set in tracked small-caps.                                            */
+.markdown-rendered table { border-collapse: collapse; width: 100%; font-size: 0.92em; margin: 1.1em 0; }
+.markdown-rendered thead { border: none; }
+.markdown-rendered thead tr {
+	border-top: var(--vg-rule-thick) solid var(--vg-gold);
+	border-bottom: var(--vg-rule-med) solid var(--vg-gold);
+}
+.markdown-rendered th {
+	font-family: var(--vg-body); font-weight: 700;
+	text-transform: uppercase; letter-spacing: 0.06em; font-size: 0.86em;
+	color: var(--text-normal); text-align: left;
+	padding: 0.55em 0.8em; background: transparent; border: none;
+}
+.markdown-rendered td {
+	padding: 0.5em 0.8em; border: none;
+	border-bottom: var(--vg-rule-hair) solid var(--background-modifier-border);
+	color: var(--text-normal); background: transparent;
+}
+.markdown-rendered tbody tr:last-child td { border-bottom: var(--vg-rule-thick) solid var(--vg-gold); }
+.markdown-rendered tbody td:first-child { font-weight: 700; }
+.markdown-rendered td[align="right"], .markdown-rendered th[align="right"] { text-align: right; font-variant-numeric: tabular-nums; }
+.markdown-rendered td[align="center"], .markdown-rendered th[align="center"] { text-align: center; }
+.markdown-rendered tbody tr:hover td { background: var(--color-base-05); }
+
+
+/* ------------------------------------------------------------------ 11. CALLOUTS
+   Not an admonition box — a Vignelli set-off: a faint panel with a gold left
+   rule and a gold small-caps label. Icons hidden for the plain print look;
+   the whole [data-callout] color system routed to gold.                        */
+.markdown-rendered .callout {
+	--callout-color: 209, 172, 35;
+	--callout-radius: 0px;
+	background: var(--color-base-05);
+	border: var(--vg-rule-hair) solid var(--background-modifier-border);
+	border-left: var(--vg-rule-thick) solid var(--vg-gold);
+	margin: 1.15em 0; padding: 0.7em 1em; mix-blend-mode: normal;
+}
+.markdown-rendered .callout-title { padding: 0; align-items: center; }
+.markdown-rendered .callout-title-inner {
+	font-family: var(--vg-display); font-weight: 700;
+	letter-spacing: 0.05em; text-transform: uppercase; font-size: 0.9em;
+	color: var(--vg-gold);
+}
+.markdown-rendered .callout-icon { display: none; }
+.markdown-rendered .callout-content { color: var(--text-normal); }
+.markdown-rendered .callout-content > :first-child { margin-top: 0.4em; }
+.markdown-rendered .callout-content > :last-child  { margin-bottom: 0; }
+/* warning family = a heavier gold rule, still no color shift */
+.markdown-rendered .callout[data-callout="warning"],
+.markdown-rendered .callout[data-callout="caution"],
+.markdown-rendered .callout[data-callout="attention"],
+.markdown-rendered .callout[data-callout="danger"],
+.markdown-rendered .callout[data-callout="error"],
+.markdown-rendered .callout[data-callout="failure"],
+.markdown-rendered .callout[data-callout="fail"],
+.markdown-rendered .callout[data-callout="bug"],
+.markdown-rendered .callout[data-callout="important"] { border-left-width: 4px; }
+.markdown-rendered .callout[data-callout="quote"],
+.markdown-rendered .callout[data-callout="cite"] { background: transparent; }
+
+
+/* ------------------------------------------------------------------ 12. HIGHLIGHTS
+   Native ==x== is gold. Multi-colour WITHOUT a plugin via the reading `mark`
+   + live-preview `.cm-highlight` pairing, keyed by an inner wrapper:
+       ==text==            → gold  (default)
+       ==**text**==        → rust
+       ==*text*==          → sage
+       ==~~text~~==        → slate
+   And Highlightr-plugin classes (set Highlightr to "CSS classes" mode; name
+   the highlights gold/rust/sage/slate/plum/rose — or the common colour names). */
+.markdown-rendered mark, .cm-highlight, .cm-s-obsidian span.cm-highlight {
+	background: var(--text-highlight-bg);
+	color: var(--text-normal);
+	border-radius: 0; padding: 0.05em 0.15em;
+}
+
+/* plugin-free variants (reading + live-preview): ==x== teal (default),
+   ==**x**== gold, ==*x*== rust, ==~~x~~== slate */
+.markdown-rendered mark strong, .cm-highlight.cm-strong { background: rgba(209, 172, 35, 0.34); box-decoration-break: clone; }
+.markdown-rendered mark em,     .cm-highlight.cm-em     { background: rgba(181, 84, 62, 0.34); font-style: italic; box-decoration-break: clone; }
+.markdown-rendered mark del,    .cm-highlight.cm-strikethrough { background: rgba(90, 113, 134, 0.40); text-decoration: none; box-decoration-break: clone; }
+
+/* Highlightr CSS-class palette (both grounds) — teal, gold, rust, slate, plum, rose */
+.markdown-rendered mark.hltr-teal,  .cm-highlight.hltr-teal,
+.markdown-rendered mark.hltr-mint,  .cm-highlight.hltr-mint,
+.markdown-rendered mark.hltr-green, .cm-highlight.hltr-green { background: rgba(116, 210, 180, 0.36); }
+.markdown-rendered mark.hltr-gold,  .cm-highlight.hltr-gold,
+.markdown-rendered mark.hltr-yellow,.cm-highlight.hltr-yellow{ background: rgba(209, 172, 35, 0.34); }
+.markdown-rendered mark.hltr-rust,  .cm-highlight.hltr-rust,
+.markdown-rendered mark.hltr-red,   .cm-highlight.hltr-red,
+.markdown-rendered mark.hltr-orange,.cm-highlight.hltr-orange{ background: rgba(181, 84, 62, 0.34); }
+.markdown-rendered mark.hltr-slate, .cm-highlight.hltr-slate,
+.markdown-rendered mark.hltr-blue,  .cm-highlight.hltr-blue  { background: rgba(90, 113, 134, 0.40); }
+.markdown-rendered mark.hltr-plum,  .cm-highlight.hltr-plum,
+.markdown-rendered mark.hltr-purple,.cm-highlight.hltr-purple{ background: rgba(122, 94, 134, 0.36); }
+.markdown-rendered mark.hltr-rose,  .cm-highlight.hltr-rose,
+.markdown-rendered mark.hltr-pink,  .cm-highlight.hltr-pink  { background: rgba(169, 106, 130, 0.36); }
+
+
+/* ------------------------------------------------------------------ 13. TAGS, IMAGES, EMBEDS, FOOTNOTES, MATH, MERMAID */
+
+/* Tags — a boxed gold label, not a pill */
+.markdown-rendered a.tag, .cm-s-obsidian .cm-hashtag {
+	background: transparent; color: var(--vg-gold);
+	border: var(--vg-rule-hair) solid var(--vg-gold-dim); border-radius: 0;
+	padding: 0.02em 0.4em; font-family: var(--vg-mono); font-size: 0.78em;
+	text-decoration: none; font-weight: 400;
+}
+.markdown-rendered a.tag:hover { border-color: var(--vg-gold); color: var(--vg-gold-bright); }
+.cm-s-obsidian .cm-hashtag { border-top: none; border-bottom: none; }
+.cm-s-obsidian .cm-hashtag-begin { border-right: none; }
+.cm-s-obsidian .cm-hashtag-end { border-left: none; }
+
+/* Images — a hairline frame */
+.markdown-rendered img:not(.emoji) {
+	border: var(--vg-rule-hair) solid var(--background-modifier-border); border-radius: 0;
+}
+/* alt text as a caption line */
+.markdown-rendered img[alt]:not([alt=""]) { display: block; }
+
+/* Embeds / transclusions */
+.markdown-rendered .markdown-embed, .markdown-rendered .internal-embed {
+	border: none; border-left: var(--vg-rule-thick) solid var(--vg-gold-dim);
+	border-radius: 0; padding-left: 1em; background: transparent;
+}
+.markdown-rendered .markdown-embed-title {
+	font-family: var(--vg-display); color: var(--vg-gold); font-weight: 600;
+}
+
+/* Footnotes */
+.markdown-rendered .footnote-ref a, .markdown-rendered sup a { color: var(--vg-gold); text-decoration: none; }
+.markdown-rendered .footnotes { color: var(--text-muted); font-size: 0.9em; border-top: var(--vg-rule-hair) solid var(--background-modifier-border); }
+.markdown-rendered .footnote-backref { color: var(--vg-gold); }
+
+/* Math — keep it ink/bone, serif-compatible, never colored */
+.markdown-rendered .math, mjx-container, .MathJax { color: var(--text-normal) !important; }
+
+/* Mermaid — force grayscale-into-palette: bone/ink nodes, gold accents */
+.markdown-rendered .mermaid { --mermaid-node-bg: var(--color-base-10); color: var(--text-normal); }
+.markdown-rendered .mermaid .node rect, .markdown-rendered .mermaid .node polygon,
+.markdown-rendered .mermaid .node circle, .markdown-rendered .mermaid .cluster rect {
+	fill: var(--color-base-10) !important; stroke: var(--vg-gold) !important;
+}
+.markdown-rendered .mermaid .edgePath .path, .markdown-rendered .mermaid line { stroke: var(--text-muted) !important; }
+.markdown-rendered .mermaid .nodeLabel, .markdown-rendered .mermaid .edgeLabel,
+.markdown-rendered .mermaid text { fill: var(--text-normal) !important; color: var(--text-normal) !important; }
+
+
+/* ------------------------------------------------------------------ 14. PROPERTIES / FRONTMATTER */
+.metadata-container {
+	border: none; border-top: var(--vg-rule-hair) solid var(--background-modifier-border);
+	border-bottom: var(--vg-rule-hair) solid var(--background-modifier-border);
+	border-radius: 0; padding: 0.4em 0; margin-bottom: 1.2em; background: transparent;
+}
+.metadata-property { border-radius: 0; }
+.metadata-property-key, .metadata-property-key-input {
+	font-family: var(--vg-body); font-weight: 700; color: var(--text-muted);
+	text-transform: uppercase; letter-spacing: 0.04em; font-size: 0.82em;
+}
+.metadata-property-value { color: var(--text-normal); }
+.metadata-property-icon { color: var(--vg-gold-dim); }
+.metadata-add-button { color: var(--text-faint); }
+
+
+/* ------------------------------------------------------------------ 15. APP CHROME */
+
+/* Workspace tabs (incl. stacked) */
+.workspace-tab-header-inner-title { font-family: var(--vg-body); color: var(--text-muted); }
+.workspace-tab-header.is-active .workspace-tab-header-inner-title { color: var(--text-normal); font-weight: 700; }
+.workspace-tab-header.is-active { box-shadow: inset 0 -2px 0 0 var(--vg-gold); }
+.workspace-tabs.mod-stacked .workspace-tab-header.is-active { box-shadow: inset -2px 0 0 0 var(--vg-gold); }
+
+/* File explorer / left nav — gold folders, bone files, gold active row + arrows.
+   Driven through Obsidian's own --nav-* variables so it holds across modes. */
+.workspace-split.mod-left-split, .workspace-split.mod-right-split {
+	--nav-item-color:             var(--text-normal);          /* files = bone   */
+	--nav-item-color-hover:       var(--text-normal);
+	--nav-item-color-active:      var(--vg-gold);               /* active = gold  */
+	--nav-item-background-hover:  var(--color-base-05);
+	--nav-item-background-active: var(--color-base-10);
+	--nav-item-weight-active:     700;
+	--nav-collapse-icon-color:    var(--vg-gold);               /* arrows = gold  */
+	--nav-indentation-guide-color: var(--background-modifier-border);
+}
+.workspace .nav-file-title, .workspace .nav-folder-title {
+	font-family: var(--vg-body); font-size: var(--vg-nav-size); border-radius: 0;
+}
+
+/* nested folders — gold, bold (the "index" headings of the vault) */
+.nav-folder-title, .nav-folder-title-content { color: var(--vg-gold); font-weight: 700; }
+
+/* ROOT (top-level) folders — a gold bar with black text on top.
+   Selectors cover the mod-root path, a direct child, and a wrapped child;
+   !important defeats Obsidian's own row-background rules. */
+.nav-folder.mod-root > .nav-folder-children > .nav-folder > .nav-folder-title,
+.nav-files-container > .tree-item.nav-folder > .nav-folder-title,
+.nav-files-container > div > .tree-item.nav-folder > .nav-folder-title {
+	background-color: var(--vg-gold) !important;
+	color: var(--vg-root-fg) !important;
+	font-weight: 700;
+	margin: 3px 6px 3px 0;
+	padding-top: 4px; padding-bottom: 4px;
+}
+.nav-folder.mod-root > .nav-folder-children > .nav-folder > .nav-folder-title .nav-folder-title-content,
+.nav-folder.mod-root > .nav-folder-children > .nav-folder > .nav-folder-title .collapse-icon svg,
+.nav-files-container > .tree-item.nav-folder > .nav-folder-title .nav-folder-title-content,
+.nav-files-container > .tree-item.nav-folder > .nav-folder-title .collapse-icon svg,
+.nav-files-container > div > .tree-item.nav-folder > .nav-folder-title .nav-folder-title-content,
+.nav-files-container > div > .tree-item.nav-folder > .nav-folder-title .collapse-icon svg {
+	color: var(--vg-root-fg) !important;
+}
+.nav-folder.mod-root > .nav-folder-children > .nav-folder > .nav-folder-title:hover,
+.nav-files-container > .tree-item.nav-folder > .nav-folder-title:hover,
+.nav-files-container > div > .tree-item.nav-folder > .nav-folder-title:hover {
+	background-color: var(--vg-gold-bright) !important;
+}
+
+/* files — bone */
+.nav-file-title-content { color: var(--text-normal); }
+
+/* active file — gold rule + gold text + faint tint */
+.nav-file-title.is-active {
+	box-shadow: inset 2px 0 0 0 var(--vg-gold);
+	background: var(--color-base-10);
+}
+.nav-file-title.is-active .nav-file-title-content { color: var(--vg-gold); font-weight: 700; }
+
+/* collapse arrows — gold (folders use currentColor, so the gold title covers it;
+   set the variable + svg colour explicitly for older builds) */
+.tree-item-self .collapse-icon svg,
+.nav-folder-collapse-indicator svg { color: var(--vg-gold); }
+
+/* rows */
+.tree-item-self:hover { background: var(--color-base-05); }
+.nav-file-tag { color: var(--vg-gold-dim); background: transparent; border: 1px solid var(--background-modifier-border); border-radius: 0; }
+
+/* nav header action icons (new note / sort / collapse) */
+.nav-action-button:hover, .clickable-icon:hover { color: var(--vg-gold); }
+
+/* Outline / backlinks / outgoing / tag panes */
+.outline .tree-item-inner, .backlink-pane .tree-item-inner, .tag-pane-tag-text { font-family: var(--vg-body); }
+.backlink-pane .tree-item-self { border-radius: 0; }
+
+/* Search + quick switcher + command palette */
+.search-result-file-title { font-family: var(--vg-body); font-weight: 700; }
+.search-result-file-matched-text { background: var(--text-highlight-bg); color: var(--text-normal); }
+.suggestion-item.is-selected { background: var(--color-base-10); box-shadow: inset 2px 0 0 0 var(--vg-gold); }
+.suggestion-highlight { color: var(--vg-gold); font-weight: 700; text-decoration: none; }
+.prompt { border: var(--vg-rule-hair) solid var(--vg-gold-dim); border-radius: 0; }
+
+/* Settings & other modals */
+.modal, .modal-container .modal { border-radius: 0; }
+.setting-item { border-top: var(--vg-rule-hair) solid var(--background-modifier-border); }
+.vertical-tab-header-group-title { font-family: var(--vg-display); color: var(--vg-gold); }
+.vertical-tab-nav-item.is-active { color: var(--text-normal); box-shadow: inset 2px 0 0 0 var(--vg-gold); }
+.setting-item-name { font-family: var(--vg-body); }
+
+/* Buttons / inputs — square, gold focus */
+button:not(.clickable-icon), .mod-cta, input, textarea, select, .dropdown {
+	border-radius: 0;
+}
+.mod-cta { background: var(--vg-gold); color: var(--text-on-accent); font-weight: 700; }
+.mod-cta:hover { background: var(--vg-gold-bright); }
+input:focus, textarea:focus, .dropdown:focus { border-color: var(--vg-gold); box-shadow: 0 0 0 1px var(--vg-gold); }
+
+/* Ribbon */
+.side-dock-ribbon, .workspace-ribbon { background: var(--background-secondary); }
+.side-dock-ribbon-action:hover, .ribbon-action:hover { color: var(--vg-gold); }
+
+/* Status bar — mono, understated */
+.status-bar { font-family: var(--vg-mono); font-size: 0.74em; border-top: var(--vg-rule-hair) solid var(--background-modifier-border); }
+.status-bar-item { color: var(--text-muted); }
+
+/* Titlebar / dividers */
+.titlebar { font-family: var(--vg-body); }
+.workspace-leaf-resize-handle:hover { background: var(--vg-gold); }
+
+/* Scrollbars */
+::-webkit-scrollbar { width: 12px; height: 12px; }
+::-webkit-scrollbar-thumb { background: var(--color-base-25); border: 3px solid var(--background-primary); border-radius: 0; }
+::-webkit-scrollbar-thumb:hover { background: var(--vg-gold-dim); }
+::-webkit-scrollbar-corner, ::-webkit-scrollbar-track { background: transparent; }
+
+/* Tooltips + menus + popovers */
+.tooltip { font-family: var(--vg-body); border-radius: 0; border: var(--vg-rule-hair) solid var(--vg-gold-dim); }
+.menu { border-radius: 0; border: var(--vg-rule-hair) solid var(--background-modifier-border); }
+.menu-item.is-selected, .menu-item:hover { background: var(--color-base-10); }
+.popover.hover-popover { border-radius: 0; border: var(--vg-rule-hair) solid var(--vg-gold-dim); }
+
+/* Selection */
+::selection { background: var(--text-selection); }
+
+/* Notices / toasts */
+.notice { border-radius: 0; border-left: var(--vg-rule-thick) solid var(--vg-gold); }
+
+/* Graph view — collapse to bone/ink/gold, no rainbow color groups */
+.graph-view.color-fill { color: var(--text-muted); }
+.graph-view.color-fill-focused { color: var(--vg-gold); }
+.graph-view.color-circle { color: var(--vg-gold); }
+.graph-view.color-line { color: var(--background-modifier-border); }
+.graph-view.color-text { color: var(--text-normal); }
+.graph-view.color-fill-tag { color: var(--vg-gold-dim); }
+.graph-view.color-fill-attachment { color: var(--text-faint); }
+.graph-view.color-fill-unresolved { color: var(--text-faint); }
+.graph-view.color-arrow { color: var(--text-muted); }
+
+/* Canvas */
+.canvas-wrapper { --canvas-background: var(--background-primary); --canvas-card-label-color: var(--text-muted); }
+.canvas-node-content { border-radius: 0; }
+.canvas-node .canvas-node-container { border-radius: 0; border-color: var(--background-modifier-border); }
+
+
+/* ------------------------------------------------------------------ 16. MOBILE & PRINT */
+.is-mobile { --font-text-size: 17px; }
+.is-mobile .markdown-rendered h1, .is-mobile .HyperMD-header-1 { font-size: 2.5em; }
+.is-mobile .mobile-toolbar { border-top: var(--vg-rule-hair) solid var(--background-modifier-border); }
+
+@media print {
+	.markdown-rendered { color: #000 !important; font-size: 11pt; }
+	.markdown-rendered h1, .markdown-rendered h2, .markdown-rendered h3,
+	.markdown-rendered h4, .markdown-rendered h5, .markdown-rendered h6 { color: #000 !important; }
+	.markdown-rendered h1 { border-bottom: 2px solid #000 !important; }
+	.markdown-rendered h2 { border-bottom: 1px solid #000 !important; }
+	.markdown-rendered hr { border-top: 2px solid #000 !important; }
+	.markdown-rendered thead tr,
+	.markdown-rendered tbody tr:last-child td { border-color: #000 !important; }
+	.markdown-rendered a { color: #000 !important; text-decoration: underline; }
+	.markdown-rendered .callout { border-left: 2px solid #000 !important; background: none !important; }
+	.status-bar, .workspace-ribbon, .titlebar, .workspace-tabs { display: none !important; }
+}
+
+
+/* ------------------------------------------------------------------ 17. STYLE SETTINGS TOGGLE IMPLEMENTATIONS */
+
+/* Uppercase, spaced H1 masthead */
+.vignelli-uppercase-h1 .markdown-rendered h1,
+.vignelli-uppercase-h1 .HyperMD-header-1,
+.vignelli-uppercase-h1 .inline-title { text-transform: uppercase; letter-spacing: 0.03em; }
+
+/* Justified body */
+.vignelli-justify .markdown-rendered p,
+.vignelli-justify .markdown-source-view.mod-cm6 .cm-line { text-align: justify; -webkit-hyphens: auto; hyphens: auto; }
+
+/* Ink/bone heading text (gold rules stay) — opt-IN, so gold is the default
+   even when the Style Settings plugin isn't loaded. */
+.vignelli-plain-headings .markdown-rendered h1,
+.vignelli-plain-headings .markdown-rendered h2,
+.vignelli-plain-headings .markdown-rendered h3,
+.vignelli-plain-headings .markdown-rendered h4,
+.vignelli-plain-headings .markdown-rendered h5,
+.vignelli-plain-headings .markdown-rendered h6,
+.vignelli-plain-headings .HyperMD-header,
+.vignelli-plain-headings .cm-header,
+.vignelli-plain-headings .inline-title { color: var(--text-normal); }
+
+/* Hide inline title */
+.vignelli-hide-inline-title .inline-title { display: none; }

@@ -1,0 +1,27 @@
+{
+    "BF.AnticholinergicPill": "Anticholinergic Pill",
+    "BF.AntiDiarrhealPillBox": "Box of Anti-Diarrheal Pills",
+    "BF.AnticholinergicPillBox": "Box of Anticholinergic Pills",
+    "BF.DiureticPillBox": "Box of Diuretics",
+    "BF.LaxativePillBox": "Box of Laxatives",
+    "BF.DiureticPill": "Diuretic Pill",
+    "BF.LaxativePill": "Laxative Pill",
+
+    "BF.GraphPaperPooped": "Graph Paper (Wiped)",
+    "BF.GrassTuftPooped": "Grass Tuft (Wiped)",
+    "BF.HottieZPooped": "Magazine: HottieZ (Wiped)",
+    "BF.HunkZPooped": "Magazine: HunkZ (Wiped)",
+    "BF.MagazinePooped": "Magazine (Wiped)",
+    "BF.NewspaperPooped": "Newspaper (Wiped)",
+    "BF.PaperNapkins2Pooped": "Paper Napkins (Wiped)",
+    "BF.PaperworkPooped": "Paperwork (Wiped)",
+    "BF.RippedSheetsPooped": "Rag (Wiped)",
+    "BF.ReceiptPooped": "Receipt (Wiped)",
+    "BF.SheetPaper2Pooped": "Sheet of Paper (Wiped)",
+    "BF.TissuePooped": "Tissue (Wiped)",
+
+    "BF.PulledDown_Trousers": "Pulled-Down Trousers",
+
+    "BF.HumanFeces": "Human Feces",
+    "BF.HumanFeces_Throwable": "Throwable Human Feces"
+}

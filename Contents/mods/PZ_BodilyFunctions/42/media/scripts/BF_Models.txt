@@ -1,0 +1,30 @@
+module BF
+{
+	model Urine_Model_Large
+    {
+		mesh = UrinePuddle,
+		texture = WorldItems/Urine_Hydrated_0,
+		scale = 0.002,
+    }
+
+	model Urine_Model_Small
+    {
+		mesh = UrinePuddle,
+		texture = WorldItems/Urine_Hydrated_0,
+		scale = 0.0015,
+    }
+
+	model Feces_Model
+    {
+		mesh = PoopPile,
+		texture = WorldItems/FecesTexture,
+		scale = 0.075,
+    }
+
+	model Vomit_Model_Small
+    {
+		mesh = VomitPile,
+		texture = WorldItems/Vomit_Green_0,
+		scale = 0.002,
+    }
+}

@@ -4,7 +4,7 @@
 [VERSION 0.13.0]
 ==============
 
-- Moved relief points from BF_Lists.lua to BF_ReliefPoints.lua
+- Moved relief points from BF_Lists.lua to BF_ReliefTiles.lua
 - Added / Altered the following relief points:
 	- Bathtub (previously merged with Shower)
 	- Bush
@@ -16,6 +16,33 @@
 - Moved context menu functions to ContextMenu folder in isolated scripts
 
 - Added potentially buggy ShyBladder and ShyBowel trait functionality. With them, you'll be unable to use anything besides a toilet.
+
+- Added "Feces", "Vomit", "Snot", and "Sweat" fluids. All of these will tie into the mod eventually.
+
+- Sound Overhaul
+	- Medium pee ground sound when peeing on ground.
+	- Light pee ground sound when peeing self.
+	- Single fart sound when pooping, either self, toilet, or on ground.
+
+- Re-added "Pants_Skinny" body location for soilable clothing (may be buggy) -- Disabled in PREVIEW for now
+
+- Added support for Bleach and CleaningLiquid2 as cleaning items in addition to Soap2.
+- Washing logic now estimates and displays post-wash severity if no cleaning item is available, and partially cleans items based on severity.
+
+- Moved most direct language instances in code to translation keys in scripts. This is partly based on the mod by Não é o Gui.
+- Added [Brazilian Portuguese] translation from "Bodily Functions (Brazilian Portuguese)" by Não é o Gui.
+
+- Added functions to BF_Overlays to make adding compatibility with clothing mods (using the overlays) easier:
+[  BF_RegisterClothingCategory(name, data)  ]
+[  BF_AddSoilableLocation(location)]
+[  BF_AddClothingTypesToCategory(category, newTypes)  ]
+
+- Renamed "BF_ReliefPoints" to "BF_ReliefTiles"
+- Renamed "BF_ClothingConfig" to "BF_Overlays"
+- Separated code into folders for specific systems
+- Deleted deprecated BF_WipingItems script, since the same data (and more) is already in what's now called BF_Wipes
+
+- Renamed IGUI lang files to IG_UI to fix translation bug. ex. "IGUI_EN" -> "IG_UI_EN"
 
 ==============
 [VERSION 0.12.0]
@@ -69,7 +96,7 @@
 - Added crafting recipes for opening pill boxes.
 - Medicine's tooltips are more accurate, showing that it just adds / removes from the value.
 
-- Created "BF_ClothingConfig.lua" for new mapping of overlays to clothing items
+- Created "BF_Overlays.lua" for new mapping of overlays to clothing items
 - Renamed "BF_ClothingStains" to "BF_ClothingOverlays" and merged most of the functionality for simplicity (and better organization)
 - Ensured no dirt on the body when player pees or poops themselves
 

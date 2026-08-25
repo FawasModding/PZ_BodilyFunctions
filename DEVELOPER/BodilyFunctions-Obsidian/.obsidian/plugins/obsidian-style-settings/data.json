@@ -1,0 +1,17 @@
+{
+  "obsidian-prism-theme@@color-schemes-dt": "pt-color-scheme-raven-dt",
+  "obsidian-prism-theme@@accent-style-dt": "pt-accent-style-filled-dt",
+  "obsidian-prism-theme@@dark-accent-color-preset": "pt-accent-color-orange-dt",
+  "obsidian-prism-theme@@pt-focused-mode": false,
+  "obsidian-prism-theme@@pt-colored-folders": true,
+  "obsidian-prism-theme@@pt-colored-folders-style": "pt-colored-folders-style-rainbow",
+  "obsidian-prism-theme@@pt-colored-folders-files-match": false,
+  "anuppuccin-theme-settings@@anuppuccin-theme-accents": "ctp-accent-rosewater",
+  "anuppuccin-theme-settings@@anuppuccin-theme-light": "ctp-latte",
+  "obsidian-prism-theme@@pt-fade-inactive-tabs": true,
+  "retroma-obsidian-theme@@theme-variant": "theme-variant-2",
+  "retroma-obsidian-theme@@folder-border-stlye": "retroma-folder-border-style-2",
+  "retroma-obsidian-theme@@folder-color-toggle": "default",
+  "retroma-obsidian-theme@@window-border-radius": "0px",
+  "retroma-obsidian-theme@@button-border-radius": "0px"
+}
