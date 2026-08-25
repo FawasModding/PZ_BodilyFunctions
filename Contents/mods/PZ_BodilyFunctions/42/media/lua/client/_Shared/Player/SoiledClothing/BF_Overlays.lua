@@ -24,7 +24,6 @@ end
 
 BF_Overlays = BF_Overlays or {}
 
-BF_Overlays.soilableBodyLocations = {ItemBodyLocation.UNDERWEAR_BOTTOM, ItemBodyLocation.UNDERWEAR, ItemBodyLocation.TORSO1LEGS1, ItemBodyLocation.LEGS1, ItemBodyLocation.PANTS, ItemBodyLocation.PANTS_SKINNY, ItemBodyLocation.BATH_ROBE, ItemBodyLocation.FULL_SUIT, ItemBodyLocation.FULL_SUIT_HEAD, ItemBodyLocation.FULL_TOP, ItemBodyLocation.BODY_COSTUME, ItemBodyLocation.SHORT_PANTS, ItemBodyLocation.SHORTS_SHORT}
 BF_Overlays.clothingModels = {
 Trousers = {
     types = {"Trousers_Black","Trousers_CamoDesert","Trousers_CamoDesertNew","Trousers_CamoGreen","Trousers_CamoMilius","Trousers_CamoTigerStripe","Trousers_CamoUrban","Trousers_Chef","Trousers_DeerHide","Trousers_Denim_Punk","Trousers_Denim","Trousers_FaunHide","Trousers_Fireman","Trousers_Hide","Trousers_HuntingCamo","Trousers_JeanBaggy_Punk","Trousers_JeanBaggy","Trousers_LeatherBlack","Trousers_LeatherCrafted","Trousers_NavyBlue","Trousers_OliveDrab","Trousers_Padded_HuntingCamo","Trousers_Padded","Trousers_Police","Trousers_PoliceGrey","Trousers_PrisonGuard","Trousers_Ranger","Trousers_Scrubs","Trousers_Shellsuit_Black", "Trousers_Shellsuit_Blue", "Trousers_Shellsuit_Green", "Trousers_Shellsuit_Pink", "Trousers_Shellsuit_Teal", "Trousers_Shellsuit_White", "Trousers_Sheriff", "Trousers_Sport", "Trousers_WhiteTINT", "Trousers", "TrousersMesh_DenimLight", "TrousersMesh_Leather"}, 
@@ -130,17 +129,14 @@ end
 -- @param location: A string body location name (ex. "Pants", "UnderwearBottom").
 -- TODO: Verify this works in 42.13
 function BF_AddSoilableLocation(location)
-    if not BF_Overlays then return end
-    if not BF_Overlays.soilableBodyLocations then
-        BF_Overlays.soilableBodyLocations = {}
-    end
+    local soilableClothing = BF.GetSoilableClothing()
 
     -- Prevent duplicates
-    for _, loc in ipairs(BF_Overlays.soilableBodyLocations) do
+    for _, loc in ipairs(soilableClothing) do
         if loc == location then return end
     end
 
-    table.insert(BF_Overlays.soilableBodyLocations, location)
+    table.insert(soilableClothing, location)
     print("BF_AddSoilableLocation: Added '" .. location .. "'")
 end
 

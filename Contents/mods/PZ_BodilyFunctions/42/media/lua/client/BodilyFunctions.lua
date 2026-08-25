@@ -212,13 +212,14 @@ function BF.HandleUrgencyHiccup()
                 if urinateValue >= 0.4 * bladderMaxValue then
                     if player:hasTrait(BFTraits.BladderControl) then
                         -- With BladderControl, 75% chance for a small leak vs 25% full leak
-                        if ZombRand(100) < 75 then
-                                BF.TriggerSelfUrinate(true)  -- small leak version
+                        -- Small leaks are only possible before the bladder is full.
+                        if urinateValue < bladderThreshold and ZombRand(100) < 75 then
+                                BF.TriggerSelfUrinate(true) -- small leak version
                         else
-                                BF.TriggerSelfUrinate()        -- full leak
+                                BF.TriggerSelfUrinate() -- full leak
                         end
                     else
-                        BF.TriggerSelfUrinate()            -- no control trait → full leak
+                        BF.TriggerSelfUrinate() -- no control trait -> full leak
                         print("Triggered full leak (no trait)")
                     end
                 end
@@ -254,11 +255,11 @@ function BF.PlayUrgencyIdles(hiccupType, doTimedAction)
     -- Based on the hiccupType (bladder or bowels), play the corresponding animation
     if hiccupType == "bladder" then
         print("Playing Urgent Pee Animation!")
-        player:playerVoiceSound("PainFromGlassCut")  -- Replace this with specific pee sound if you want
+        player:playerVoiceSound("PainFromGlassCut") -- Replace this with specific pee sound if needed
         ISTimedActionQueue.add(Idle_PeeUrgency:new(player, 40, false, true))  -- Trigger bladder urgency animation
     elseif hiccupType == "bowels" then
         print("Playing Urgent Poop Animation!")
-        player:playerVoiceSound("PainFromGlassCut")  -- Replace this with specific poop sound if needed
+        player:playerVoiceSound("PainFromGlassCut") -- Replace this with specific poop sound if needed
         ISTimedActionQueue.add(Idle_PoopUrgency:new(player, 40, false, true))  -- Trigger bowel urgency animation
     end
 end

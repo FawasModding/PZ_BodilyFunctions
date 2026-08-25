@@ -232,7 +232,7 @@ end
 function BF_Overlays.RefreshOverlaysForPlayer(player, stainType)
     BF_Overlays.ClearAllOverlaysByType(player, stainType)
 
-    for _, bodyLocation in ipairs(BF_Overlays.soilableBodyLocations) do
+    for _, bodyLocation in ipairs(BF.GetSoilableClothing()) do
         local wornItem = player:getWornItem(bodyLocation)
 
         if wornItem and wornItem:getModData()[stainType] then

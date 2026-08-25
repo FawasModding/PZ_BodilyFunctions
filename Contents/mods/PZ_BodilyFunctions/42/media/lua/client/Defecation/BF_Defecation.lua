@@ -74,7 +74,7 @@ function BF.DefecateBottoms(leakTriggered)
         ItemBodyLocation.UNDERWEAR_BOTTOM,
         ItemBodyLocation.UNDERWEAR
     }
-    local outerwearLocations = BF_Overlays.soilableBodyLocations
+    local outerwearLocations = {unpack(BF.GetSoilableClothing())}
     for i = #outerwearLocations, 1, -1 do
         if outerwearLocations[i] == ItemBodyLocation.UNDERWEAR_BOTTOM or outerwearLocations[i] == ItemBodyLocation.UNDERWEAR then
             table.remove(outerwearLocations, i)

@@ -133,9 +133,16 @@ end
 --[[
 Function defining all of the soilable clothing.
 ]]--
+local soilableClothing = {
+    ItemBodyLocation.UNDERWEAR_BOTTOM, ItemBodyLocation.UNDERWEAR,
+    ItemBodyLocation.TORSO1LEGS1, ItemBodyLocation.LEGS1, ItemBodyLocation.PANTS,
+    ItemBodyLocation.PANTS_SKINNY, ItemBodyLocation.BATH_ROBE, ItemBodyLocation.FULL_SUIT,
+    ItemBodyLocation.FULL_SUIT_HEAD, ItemBodyLocation.FULL_TOP, ItemBodyLocation.BODY_COSTUME,
+    ItemBodyLocation.SHORT_PANTS, ItemBodyLocation.SHORTS_SHORT
+}
+
 function BF.GetSoilableClothing()
-    local bodyLocations = {ItemBodyLocation.UNDERWEAR_BOTTOM, ItemBodyLocation.UNDERWEAR, ItemBodyLocation.TORSO1LEGS1, ItemBodyLocation.LEGS1, ItemBodyLocation.PANTS, ItemBodyLocation.PANTS_SKINNY, ItemBodyLocation.BATH_ROBE, ItemBodyLocation.FULL_SUIT, ItemBodyLocation.FULL_SUIT_HEAD, ItemBodyLocation.FULL_TOP, ItemBodyLocation.BODY_COSTUME, ItemBodyLocation.SHORT_PANTS, ItemBodyLocation.SHORTS_SHORT}
-    return bodyLocations
+    return soilableClothing
 end
 
 --[[

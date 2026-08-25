@@ -92,7 +92,7 @@ function BF.UrinateBottoms(leakTriggered)
         ItemBodyLocation.UNDERWEAR_BOTTOM,
         ItemBodyLocation.UNDERWEAR
     }
-    local outerwearLocations = BF_Overlays.soilableBodyLocations
+    local outerwearLocations = {unpack(BF.GetSoilableClothing())}
     for i = #outerwearLocations, 1, -1 do
         if outerwearLocations[i] == ItemBodyLocation.UNDERWEAR_BOTTOM or outerwearLocations[i] == ItemBodyLocation.UNDERWEAR then
             table.remove(outerwearLocations, i)
@@ -152,13 +152,13 @@ function BF.UrinateBottoms(leakTriggered)
         if modData.peedSeverity >= 90 then showPeeObject = true end
     end
 
-    -- Step 4: Apply remaining severity to pants if applicable
+    -- Step 4: Apply severity to pants if applicable
     if pants and (remainingUrinatePercentage > 0 or urinatePercentage >= 50) then
         local modData = pants:getModData()
         modData.peed = true
 
         -- Apply spillover or partial severity for realism
-        local pantsSeverity = remainingUrinatePercentage > 0 and remainingUrinatePercentage or urinatePercentage * 0.5
+        local pantsSeverity = underwear and (urinatePercentage * 0.8) or urinatePercentage
         modData.peedSeverity = (modData.peedSeverity or 0) + pantsSeverity
 
         -- Cap severity at 100
