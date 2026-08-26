@@ -9,5 +9,6 @@
   "file-tree-alternative",
   "multi-properties",
   "fold-properties",
-  "code-linker"
+  "code-linker",
+  "custom-note-width"
 ]
