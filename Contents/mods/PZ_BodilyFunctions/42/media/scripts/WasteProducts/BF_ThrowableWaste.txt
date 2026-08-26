@@ -19,11 +19,11 @@ module BF
 		SwingSound = FlameTrapThrow,
 		SwingTime = 1.5,
 		Tooltip = Tooltip_Trap,
-		UseSelf = TRUE,
+		UseSelf = true,
 		WeaponSprite = BF.Feces_Model,
 		WorldStaticModel = BF.Feces_Model,
-        CanBePlaced = TRUE,
-        CanBeReused =	TRUE,
+        CanBePlaced = true,
+        CanBeReused = true,
 		ConditionMax = 1,
 	}
 }

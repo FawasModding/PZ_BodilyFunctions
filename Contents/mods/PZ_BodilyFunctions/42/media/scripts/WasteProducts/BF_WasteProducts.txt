@@ -49,7 +49,7 @@ module BF
 
 		DaysFresh = 3,
 		DaysTotallyRotten = 4,
-		IsCookable = TRUE,
+		IsCookable = true,
 		MinutesToCook = 10,
 		MinutesToBurn = 30,
 		GoodHot = false,

@@ -108,12 +108,6 @@ module BF
             }
         }
 
-        Poison
-        {
-            maxEffect         = Low
-            minAmount         = 0.5
-            diluteRatio       = 0.05
-        }
     }
 
     fluid HumanSweat
@@ -137,18 +131,12 @@ module BF
             }
         }
 
-        Poison
-        {
-            maxEffect         = Low
-            minAmount         = 0.5
-            diluteRatio       = 0.3
-        }
     }
 
     fluid FilteredHumanUrine
     {
         ColorReference  = Khaki,
-        DisplayName     = Fluid_Name_FilteredHumanUrine,
+        DisplayName     = Fluid_Name_FilteredUrine,
 
         Categories
         {
