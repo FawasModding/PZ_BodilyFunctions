@@ -2,10 +2,13 @@ module BF
 {
     item AntiDiarrhealPill
     {
+        DisplayCategory = FirstAid,
         ItemType = base:food,
         Weight = 0.1,
         Icon = AntiDiarrhealPill,
         CustomContextMenu = Take_AntiDiarrhealPill,
+        CantBeFrozen = true,
+        Medical = true,
         OnEat = OnEat_AntiDiarrhealPill,
         UseDelta = 0.1,
         Tooltip = Tooltip_AntiDiarrhealPill,
@@ -14,10 +17,13 @@ module BF
 
     item LaxativePill
     {
+        DisplayCategory = FirstAid,
         ItemType = base:food,
         Weight = 0.1,
         Icon = Laxative,
         CustomContextMenu = Take_LaxativePill,
+        CantBeFrozen = true,
+        Medical = true,
         OnEat = OnEat_LaxativePill,
         UseDelta = 0.1,
         Tooltip = Tooltip_LaxativePill,
@@ -26,10 +32,13 @@ module BF
 
     item DiureticPill
     {
+        DisplayCategory = FirstAid,
         ItemType = base:food,
         Weight = 0.1,
         Icon = PeePill,
         CustomContextMenu = Take_DiureticPill,
+        CantBeFrozen = true,
+        Medical = true,
         OnEat = OnEat_DiureticPill,
         UseDelta = 0.1,
         Tooltip = Tooltip_DiureticPill,
@@ -38,10 +47,13 @@ module BF
 
     item AnticholinergicPill
     {
+        DisplayCategory = FirstAid,
         ItemType = base:food,
         Weight = 0.1,
         Icon = AnticholinergicPill,
         CustomContextMenu = Take_AnticholinergicPill,
+        CantBeFrozen = true,
+        Medical = true,
         OnEat = OnEat_AnticholinergicPill,
         UseDelta = 0.1,
         Tooltip = Tooltip_AnticholinergicPill,
@@ -51,37 +63,45 @@ module BF
 
     item AntiDiarrhealPillBox
     {
+        DisplayCategory = FirstAid,
         ItemType = base:normal,
         Weight = 1.0,
         Icon = AntiDiarrhealPillBox,
         WorldStaticModel = AntiDiarrhealPillBox_Ground,
+        Medical = true,
         Tags = base:IgnoreZombieDensity,
     }
 
     item LaxativePillBox
     {
+        DisplayCategory = FirstAid,
         ItemType = base:normal,
         Weight = 1.0,
         Icon = LaxativeBox,
         WorldStaticModel = LaxativePillBox_Ground,
+        Medical = true,
         Tags = base:IgnoreZombieDensity,
     }
 
     item DiureticPillBox
     {
+        DisplayCategory = FirstAid,
         ItemType = base:normal,
         Weight = 1.0,
         Icon = PeePillBox,
         WorldStaticModel = DiureticPillBox_Ground,
+        Medical = true,
         Tags = base:IgnoreZombieDensity,
     }
 
     item AnticholinergicPillBox
     {
+        DisplayCategory = FirstAid,
         ItemType = base:normal,
         Weight = 1.0,
         Icon = AnticholinergicPillBox,
         WorldStaticModel = AnticholinergicPillBox_Ground,
+        Medical = true,
         Tags = base:IgnoreZombieDensity,
     }
 

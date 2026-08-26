@@ -2,9 +2,10 @@ module BF
 {
     item PulledDown_Trousers
     {
+		DisplayCategory = Clothing,
         ItemType = base:clothing,
         Icon = TrousersDenimLightBlue,
-        BodyLocation = Pants,
+        BodyLocation = base:pants,
         ClothingItem = PulledDown_Trousers,
         FabricType = Denim,
 

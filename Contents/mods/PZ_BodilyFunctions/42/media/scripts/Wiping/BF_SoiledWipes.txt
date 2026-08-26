@@ -8,7 +8,7 @@ module BF
         Icon = TissuePooped,
         Tooltip = Tooltip_tissue_tooltip,
         WorldStaticModel = Tissue,
-        Tags = BF:isFireFuel;BF:isFireTinder;BF:FitsWallet,
+        Tags = base:FitsWallet;base:IsFireFuel;base:IsFireTinder,
         FireFuelRatio = 0.25,
     }
 
@@ -19,16 +19,16 @@ module BF
         Weight = 0.1,
         Icon = PaperNapkinsPooped,
         WorldStaticModel = PaperNapkins_Ground,
-        Tags = BF:isFireFuel;BF:isFireTinder;BF:FitsWallet,
+        Tags = base:FitsWallet;base:IsFireFuel;base:IsFireTinder,
         FireFuelRatio = 0.25,
     }
 
     item GraphPaperPooped
     {
         DisplayCategory = Junk,
+        Weight	=	0.1,
         ItemType = base:normal,
-        Weight = 0.1,
-        Icon = GraphPaperPooped,
+        Icon	=	GraphPaperPooped,
         StaticModel = GraphPaper,
         WorldStaticModel = GraphPaper,
     }
@@ -36,9 +36,9 @@ module BF
     item PaperworkPooped
     {
         DisplayCategory = Junk,
+        Weight	=	0.1,
         ItemType = base:normal,
-        Weight = 0.1,
-        Icon = Paperwork1Pooped,
+        Icon	=	Paperwork1Pooped,
         StaticModel = Paperwork1,
         WorldStaticModel = Paperwork1,
     }
@@ -46,9 +46,9 @@ module BF
     item ReceiptPooped
     {
         DisplayCategory = Junk,
+        Weight	=	0.05,
         ItemType = base:normal,
-        Weight = 0.05,
-        Icon = ReceiptPooped,
+        Icon	=	ReceiptPooped,
         StaticModel = Receipt,
         WorldStaticModel = Receipt,
     }
@@ -70,7 +70,7 @@ module BF
         Weight = 0.1,
         Icon = RippedSheetsPooped,
         WorldStaticModel = RippedSheets,
-        Tags = BF:Binding;BF:FitsWallet;BF:isFireFuel;BF:isFireTinder;BF:NoPour,
+        Tags = base:Binding;base:FitsWallet;base:IsFireFuel;base:IsFireTinder;base:NoPour,
         FireFuelRatio = 0.25,
     }
 
@@ -120,10 +120,10 @@ module BF
     item GrassTuftPooped
     {
         DisplayCategory = Junk,
-        ItemType = base:normal,
         Weight = 0.1,
-        Icon = GrassTuftPooped,
+        ItemType = base:normal,
         StaticModel = GrassTuft,
+        Icon	=	GrassTuftPooped,
         WorldStaticModel = GrassTuft,
     }
 }
