@@ -2,7 +2,7 @@ require "ISUI/ISPanelJoypad"
 
 BathroomCharacterInfo_GUIHandler = ISPanelJoypad:derive("BathroomCharacterInfo_GUIHandler")
 
-local FONT_HGT_SMALL = getTextManager():getFontHeight(UIFont.Small)
+local FONT_HGT_SMALL -- lazily initialized in createChildren to avoid nil during Lua loading
 local WINDOW_WIDTH = 500
 local WINDOW_HEIGHT = 200
 local UI_BORDER_SPACING = 10
@@ -18,6 +18,14 @@ end
 function BathroomCharacterInfo_GUIHandler:createChildren()
     -- Clear existing children to prevent duplicates
     self:clearChildren()
+
+    -- Reset y for this render pass (module-level variable must be reset each call)
+    y = UI_BORDER_SPACING
+
+    -- Lazily resolve FONT_HGT_SMALL; getTextManager() may be nil at module load time
+    if not FONT_HGT_SMALL then
+        FONT_HGT_SMALL = getTextManager():getFontHeight(UIFont.Small)
+    end
 
     if not SandboxVars.BF then return end
 
@@ -52,7 +60,9 @@ function BathroomCharacterInfo_GUIHandler:createChildren()
 
     -- Bladder Section
     local str = getText("IGUI_BladderFullness")
-    self.labelBladder = ISLabel:new(barStartPosition + barLength / 2 - textManager:MeasureStringX(font, str) / 2, y, FONT_HGT_SMALL, str, self.TextColor.r, self.TextColor.g, self.TextColor.b, self.TextColor.a, font, true)
+    local bladderLabelX = barStartPosition + barLength / 2 - textManager:MeasureStringX(font, str) / 2
+    local bladderLabelY = y
+    self.labelBladder = ISLabel:new(bladderLabelX, bladderLabelY, FONT_HGT_SMALL, str, self.TextColor.r, self.TextColor.g, self.TextColor.b, self.TextColor.a, font, true)
     self:addChild(self.labelBladder)
     y = y + FONT_HGT_SMALL + 5
 
@@ -82,7 +92,9 @@ function BathroomCharacterInfo_GUIHandler:createChildren()
 
     -- Bowel Section
     str = getText("IGUI_BowelsFullness")
-    self.labelBowel = ISLabel:new(barStartPosition + barLength / 2 - textManager:MeasureStringX(font, str) / 2, y, FONT_HGT_SMALL, str, self.TextColor.r, self.TextColor.g, self.TextColor.b, self.TextColor.a, font, true)
+    local bowelLabelX = barStartPosition + barLength / 2 - textManager:MeasureStringX(font, str) / 2
+    local bowelLabelY = y
+    self.labelBowel = ISLabel:new(bowelLabelX, bowelLabelY, FONT_HGT_SMALL, str, self.TextColor.r, self.TextColor.g, self.TextColor.b, self.TextColor.a, font, true)
     self:addChild(self.labelBowel)
     y = y + FONT_HGT_SMALL + 5
 
@@ -120,12 +132,11 @@ function BathroomCharacterInfo_GUIHandler:createChildren()
         print("Warning: Bowel icon 'media/ui/Defecation.png' not found")
     end
     self.iconSize = 24 -- Reduced size to fit beside headers
-    local bladderHeaderX = barStartPosition + barLength / 2 - textManager:MeasureStringX(font, getText("Bladder Fullness")) / 2
-    local bowelHeaderX = barStartPosition + barLength / 2 - textManager:MeasureStringX(font, getText("Bowels Fullness")) / 2
-    self.iconBladderX = bladderHeaderX - self.iconSize - UI_BORDER_SPACING -- Left of Bladder Fullness
-    self.iconBladderY = UI_BORDER_SPACING -- Align with Bladder Fullness header
-    self.iconBowelX = bowelHeaderX - self.iconSize - UI_BORDER_SPACING -- Left of Bowels Fullness
-    self.iconBowelY = self.iconBladderY + FONT_HGT_SMALL + 5 + BAR_HEIGHT + UI_BORDER_SPACING + FONT_HGT_SMALL + 5 -- Align with Bowels Fullness header
+    -- Use actual saved label positions so icons align correctly in all languages
+    self.iconBladderX = bladderLabelX - self.iconSize - 5
+    self.iconBladderY = bladderLabelY
+    self.iconBowelX = bowelLabelX - self.iconSize - 5
+    self.iconBowelY = bowelLabelY
 
     WINDOW_HEIGHT = y + FONT_HGT_SMALL * 2
 end
@@ -162,12 +173,12 @@ function BathroomCharacterInfo_GUIHandler:render()
         local bladderValue = BF.GetUrinateValue() or 0
         local bladderPercent = bladderValue / bladderMax
         updateBar(self.bladderBar, bladderPercent)
-        updateLabel(self.labelBladderValue, tostring(math.floor(bladderPercent * 1000) / 10) .. "%")
+        updateLabel(self.labelBladderValue, string.format("%.1f%%", bladderPercent * 100))
 
         local bowelValue = BF.GetDefecateValue() or 0
         local bowelPercent = bowelValue / bowelsMax
         updateBar(self.bowelBar, bowelPercent)
-        updateLabel(self.labelBowelValue, tostring(math.floor(bowelPercent * 1000) / 10) .. "%")
+        updateLabel(self.labelBowelValue, string.format("%.1f%%", bowelPercent * 100))
 
         if self.iconBladder then
             self:drawTextureScaled(self.iconBladder, self.iconBladderX, self.iconBladderY, self.iconSize, self.iconSize, 1, 1, 1, 1)
@@ -200,4 +211,6 @@ function BathroomCharacterInfo_GUIHandler:new(x, y, width, height, playerNum)
     return o
 end
 
-AddCharacterPageTab("BodilyFunctions", BathroomCharacterInfo_GUIHandler)
+if type(AddCharacterPageTab) == "function" then
+    AddCharacterPageTab("BodilyFunctions", BathroomCharacterInfo_GUIHandler)
+end

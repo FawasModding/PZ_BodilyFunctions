@@ -1,11 +1,16 @@
 ---@diagnostic disable: duplicate-set-field
 
+local hasTCHVersion = false
+
 local modInfoTCH = getModInfoByID("TchernoLib")
 if modInfoTCH and isModActive(modInfoTCH) then
-    --use the version from TchernoLib instead
-    require 'UI/CharacterInfoAddTab'
-    return
+    local ok = pcall(function() require 'UI/CharacterInfoAddTab' end)
+    if ok and type(AddCharacterPageTab) == "function" then
+        hasTCHVersion = true
+    end
 end
+
+if not hasTCHVersion then
 
 function AddCharacterPageTab(tabName,pageType)
 
@@ -55,3 +60,4 @@ end
 
 end
 
+end

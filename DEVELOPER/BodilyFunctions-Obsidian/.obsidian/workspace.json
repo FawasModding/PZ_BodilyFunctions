@@ -35,7 +35,8 @@
               "title": "Changelog v1.2.0"
             }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "vertical"
@@ -212,10 +213,10 @@
       "code-linker:Code index": false
     }
   },
-  "active": "6775250541344ed1",
+  "active": "dbd51e986eb33970",
   "lastOpenFiles": [
-    "Changelogs/Changelog v1.2.0.md",
     "BodilyFunctions_PatchNotes_ForAuthor.md",
+    "Changelogs/Changelog v1.2.0.md",
     "Untitled.md",
     "Changelogs/Changelog v1.1.0.md",
     "Changelog v0.14.0.md",
