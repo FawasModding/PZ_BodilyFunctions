@@ -29,4 +29,6 @@ script loading before the main menu.
 > 	    reset at the top of each pass.
 > 	- Icon X/Y were derived from `getText("Bladder Fullness")` which was not a real key, so the  
 > 	    measured width was wrong and icons drifted, badly in non-English locales. They now  
-> 	    use the actual label positions saved when the labels are created.
+> 		use the actual label positions saved when the labels are created.
+> ---
+> - Fixed two issues (trailing comma and odd character) in Recipes & Moodles EN locale files.
