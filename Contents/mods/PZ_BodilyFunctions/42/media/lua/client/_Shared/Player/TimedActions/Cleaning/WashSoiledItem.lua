@@ -36,10 +36,17 @@ function WashSoiledItem:perform()
         local itemType = self.soiledItem:getType()
         -- Remove pooped item
         self.character:getInventory():RemoveOneOf(itemType)
-        -- Remove "Pooped" from item type to get clean item type
+        -- Strip "Pooped" to get the clean item type.
         local cleanItemType = string.gsub(itemType, "Pooped", "")
-        -- Add cleaned item back to inventory
-        self.character:getInventory():AddItem("BF." .. cleanItemType)
+        -- The clean version of a rag is the VANILLA Base.RippedSheets, not a BF item.
+        -- Map known junk back to their real clean counterparts.
+        local cleanFullType
+        if cleanItemType == "RippedSheets" then
+            cleanFullType = "Base.RippedSheets"
+        else
+            cleanFullType = "BF." .. cleanItemType
+        end
+        self.character:getInventory():AddItem(cleanFullType)
     end
 
 

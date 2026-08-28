@@ -87,5 +87,8 @@
   "ContextMenu_Take_AnticholinergicPill": "Take Anticholinergic Pill",
 
   "ContextMenu_Tooltip_Urinated": "Urinated:",
-  "ContextMenu_Tooltip_Defecated": "Defecated:"
+  "ContextMenu_Tooltip_Defecated": "Defecated:",
+
+  "ContextMenu_PaperScraps": "Paper scraps",
+  "ContextMenu_ClothScraps": "Cloth scraps"
 }

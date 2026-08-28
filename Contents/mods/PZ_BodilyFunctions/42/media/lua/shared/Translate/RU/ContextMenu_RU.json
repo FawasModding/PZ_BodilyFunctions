@@ -87,5 +87,8 @@
   "ContextMenu_Take_AnticholinergicPill": "Принять антихолинергик",
 
   "ContextMenu_Tooltip_Urinated": "Записано:",
-  "ContextMenu_Tooltip_Defecated": "Запачкано:"
+  "ContextMenu_Tooltip_Defecated": "Запачкано:",
+
+  "ContextMenu_PaperScraps": "Обрывки бумаги",
+  "ContextMenu_ClothScraps": "Тряпки"
 }

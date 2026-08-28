@@ -1,70 +1,82 @@
 ---@class ToiletDefecate : ISBaseTimedAction
 ---@field character IsoPlayer
 ToiletDefecate = ISBaseTimedAction:derive("ToiletDefecate")
+
+-- True when the character is on/next to the toilet, OR already seated on it.
+local function canUseToilet(character, toiletObject)
+	if not toiletObject then return false end
+	if character:isSittingOnFurniture() then
+		return true
+	end
+	local objSq = toiletObject:getSquare()
+	local charSq = character and character:getCurrentSquare()
+	if not objSq or not charSq then return false end
+	if objSq:getZ() ~= charSq:getZ() then return false end
+	local dx = math.abs(objSq:getX() - charSq:getX())
+	local dy = math.abs(objSq:getY() - charSq:getY())
+	return dx <= 1 and dy <= 1
+end
+
 function ToiletDefecate:isValid()
-	return true
+	return canUseToilet(self.character, self.toiletObject)
 end
 
 function ToiletDefecate:update()
-	-- Reduce defecation value proportionally to the elapsed time
-    local delta = self:getJobDelta() -- Get the progress of the action (0.0 to 1.0)
-    local initialValue = self.character:getModData().defecateValue
-    local newValue = self.initialDefecateValue - (delta * self.initialDefecateValue)
-    self.character:getModData().defecateValue = math.max(newValue, 0) -- Ensure it doesn't go below 0
+	-- Reduce bowel + bladder proportionally to elapsed time.
+	local delta = self:getJobDelta()
 
-	-- Reduce urination value proportionally to the elapsed time
-    local delta = self:getJobDelta() -- Get the progress of the action (0.0 to 1.0)
-    local initialValue = self.character:getModData().urinateValue
-    local newValue = self.initialUrinateValue - (delta * self.initialUrinateValue)
-    self.character:getModData().urinateValue = math.max(newValue, 0) -- Ensure it doesn't go below 0
-	
-	self.character:setDir(self.toiletObject:getFacing())
+	local newDefecate = self.initialDefecateValue - (delta * self.initialDefecateValue)
+	self.character:getModData().defecateValue = math.max(newDefecate, 0)
+
+	local newUrinate = self.initialUrinateValue - (delta * self.initialUrinateValue)
+	self.character:getModData().urinateValue = math.max(newUrinate, 0)
+
+	-- When seated (vanilla pose), don't steer facing.
+	if not self.character:isSittingOnFurniture() then
+		self.character:setDir(self.toiletObject:getFacing())
+	end
 end
 
 function ToiletDefecate:start()
-	-- Save the initial defecation value at the start of the action
-    self.initialDefecateValue = self.character:getModData().defecateValue or 0
+	self.initialDefecateValue = self.character:getModData().defecateValue or 0
+	self.initialUrinateValue = self.character:getModData().urinateValue or 0
+	self.removedClothing = {}
 
-	-- Save the initial urination value at the start of the action
-    self.initialUrinateValue = self.character:getModData().urinateValue or 0
+	-- Seated (vanilla pose) needs no mod animation, like reading while seated.
+	-- Standing fallback keeps the mod's sit animation.
+	if not self.character:isSittingOnFurniture() then
+		self:setActionAnim("bathroomSitToilet")
+	end
 
-	-- Remove clothing items before starting the defecation
-    self.removedClothing = {}
-
-	-- Play poop toilet sound
-    self.sound = self.character:getEmitter():playSound("BF_Poop_Self_Light")
-
+	self.sound = self.character:getEmitter():playSound("BF_Poop_Self_Light")
 end
 
 function ToiletDefecate:stop()
 	ISBaseTimedAction.stop(self)
 
-	-- If ending early, don't keep the items stored
+	BF.ReequipBottomClothing(self.character)
 	BF.ResetRemovedClothing(self.character)
 
-	self:stopSound() -- Stop pooping sound
+	self:stopSound()
 end
 
 function ToiletDefecate:perform()
-	local defecateValue = BF.GetDefecateValue()
-
-	self.character:getModData().defecateValue = 0.0 --RESET DEFECATE VALUE
-	self.character:getModData().urinateValue = 0.0 --RESET URINE VALUE
+	self.character:getModData().defecateValue = 0.0 -- reset bowel
+	self.character:getModData().urinateValue = 0.0  -- reset bladder
 	ISBaseTimedAction.perform(self)
 
-	-- Put back on bottom clothing afterwards
-    BF.ReequipBottomClothing(self.character)
+	BF.ReequipBottomClothing(self.character)
 
-	self:stopSound() -- Stop peeing sound
+	self:stopSound()
 end
 
 function ToiletDefecate:stopSound()
 	if self.sound and self.character:getEmitter():isPlaying(self.sound) then
-		self.character:stopOrTriggerSound(self.sound);
+		self.character:stopOrTriggerSound(self.sound)
 	end
 end
 
-function ToiletDefecate:new(character, time, stopWalk, stopRun, toiletObject)
+function ToiletDefecate:new(character, time, stopWalk, stopRun, toiletObject, seated)
 	local o = {}
 	setmetatable(o, self)
 	self.__index = self
@@ -73,5 +85,6 @@ function ToiletDefecate:new(character, time, stopWalk, stopRun, toiletObject)
 	o.stopOnRun = stopRun
 	o.maxTime = time
 	o.toiletObject = toiletObject
+	o.seated = seated
 	return o
 end

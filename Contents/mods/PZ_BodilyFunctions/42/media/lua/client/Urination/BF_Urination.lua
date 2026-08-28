@@ -92,7 +92,7 @@ function BF.UrinateBottoms(leakTriggered)
         ItemBodyLocation.UNDERWEAR_BOTTOM,
         ItemBodyLocation.UNDERWEAR
     }
-    local outerwearLocations = {unpack(BF.GetSoilableClothing())}
+    local outerwearLocations = BF.GetSoilableClothing()
     for i = #outerwearLocations, 1, -1 do
         if outerwearLocations[i] == ItemBodyLocation.UNDERWEAR_BOTTOM or outerwearLocations[i] == ItemBodyLocation.UNDERWEAR then
             table.remove(outerwearLocations, i)
@@ -158,7 +158,7 @@ function BF.UrinateBottoms(leakTriggered)
         modData.peed = true
 
         -- Apply spillover or partial severity for realism
-        local pantsSeverity = underwear and (urinatePercentage * 0.8) or urinatePercentage
+        local pantsSeverity = remainingUrinatePercentage > 0 and remainingUrinatePercentage or urinatePercentage * 0.5
         modData.peedSeverity = (modData.peedSeverity or 0) + pantsSeverity
 
         -- Cap severity at 100
@@ -205,52 +205,85 @@ end
 --
 -- =====================================================
 
-function BF.TriggerToiletUrinate(object, player)
-    local player = getPlayer()
-    local urinateValue = BF.GetUrinateValue()
-    local requirement = SandboxVars.BF.PeeInToiletRequirement or 40
-    local bladderMaxValue = SandboxVars.BathroomFunctions.BladderMaxValue or 100
-    local hasShyBladder = player:hasTrait(BFTraits.ShyBladder)
-    local isBeingWatched = BF.IsBeingWatched(player)
+-- Walks the player to the toilet. When mustSit is true (females), seats them
+-- EXACTLY like vanilla "Rest": pathToSitOnFurniture -> ISRestAction (which sits
+-- the character and self-completes, leaving the sitting STATE). The relief
+-- action then runs on top, like reading while seated. When mustSit is false
+-- (males urinating), the character just walks adjacent and stands.
+--
+-- reliefActionFactory(goalObject, seated) queues the relief action(s).
+-- True if the object has vanilla sitting data (a real toilet), false for sinks,
+-- urinals, showers, etc. that share the same relief action but can't be sat on.
+function BF.CanSitOnObject(object)
+    if not object then return false end
+    return SeatingManager.getInstance():getTilePositionCount(object) > 0
+end
 
-    -- Only allow action if requirements are met
-    if urinateValue < (requirement / 100) * bladderMaxValue or (hasShyBladder and isBeingWatched) then
-        return
-    end
+-- Queues the vanilla "get up from furniture" after toilet actions, so the
+-- character stands once they've finished (and after any wiping).
+function BF.StandUpAfterToilet(player)
+    player:setVariable("forceGetUp", true)
+    ISTimedActionQueue.add(ISWaitWhileGettingUp:new(player))
+end
 
-    if player:isFemale() then
-        -- Female: sit down and remove obstructive clothing
-        ISTimedActionQueue.add(ISPathFindAction:pathToSitOnFurniture(player, object, false))
+function BF.WalkThenRelief(player, object, mustSit, reliefActionFactory)
+    if not object or not object:getSquare() then return false end
 
-        local excreteObstructive = BF.GetExcreteObstructiveClothing()
-        local removedClothing = {}
-
-        for _, location in ipairs(excreteObstructive) do
-            local clothingItem = player:getWornItem(location)
-
-            if clothingItem then
-                table.insert(removedClothing, clothingItem)
-                ISTimedActionQueue.add(ISUnequipAction:new(player, clothingItem, 50))
+    if not mustSit then
+        -- Standing use (male / sinks / urinals): stand on a cardinally-adjacent
+        -- tile touching the object (N/S/E/W, never diagonal or a tile away), so
+        -- the character is right next to it without standing on top of it.
+        local objSq = object:getSquare()
+        local cell = getCell()
+        local ox, oy, oz = objSq:getX(), objSq:getY(), objSq:getZ()
+        local best = nil
+        local bestDist = 9999
+        local charSq = player:getCurrentSquare()
+        for _, d in ipairs({ {1,0}, {-1,0}, {0,1}, {0,-1} }) do
+            local sq = cell and cell:getGridSquare(ox + d[1], oy + d[2], oz)
+            if sq and sq:isFree(false) then
+                local dist = charSq and IsoUtils.DistanceToSquared(charSq:getX(), charSq:getY(), sq:getX(), sq:getY()) or 0
+                if dist < bestDist then
+                    bestDist = dist
+                    best = sq
+                end
             end
         end
-
-        player:getModData().removedClothing = removedClothing
-
-        ISTimedActionQueue.add(ISRestAction:new(player, object, true))
-        ISTimedActionQueue.add(ToiletUrinate:new(player, urinateValue, true, true, object))
-
-        ISWorldObjectContextMenu.getUpAndThen(player, function()
-            BF.ReequipBottomClothing(player)
-            BF.ResetRemovedClothing(player)
-        end)
-    else
-        -- Male: stand and urinate
-        ISTimedActionQueue.add(ISWalkToTimedAction:new(player, object))
-        ISTimedActionQueue.add(ToiletUrinate:new(player, urinateValue, true, true, object))
+        best = best or AdjacentFreeTileFinder.Find(objSq, player, nil)
+        if best and best ~= charSq then
+            ISTimedActionQueue.add(ISWalkToTimedAction:new(player, best))
+        end
+        reliefActionFactory(object, false)
+        return true
     end
+
+    local action = ISPathFindAction:pathToSitOnFurniture(player, object, true)
+
+    action:setOnComplete(function()
+        local goal = action.goalFurnitureObject or object
+        local restAction = ISRestAction:new(player, goal, true)
+        if action:addAfter(restAction) == nil then
+            ISTimedActionQueue.add(restAction)
+        end
+        reliefActionFactory(goal, true)
+    end)
+
+    action:setOnFail(function()
+        local adjacent = AdjacentFreeTileFinder.Find(object:getSquare(), player, nil)
+        if adjacent then
+            action:setRunActionsAfterFailing(true)
+            if adjacent ~= player:getCurrentSquare() then
+                action:addAfter(ISWalkToTimedAction:new(player, adjacent))
+            end
+            reliefActionFactory(object, false)
+        end
+    end)
+
+    ISTimedActionQueue.add(action)
+    return true
 end
 
-function BF.TriggerFixtureUrinate(object, player)
+function BF.TriggerToiletUrinate(object, player, isWiping, wipeType, wipeItem, wipeEfficiency, pooledTypes)
     local player = getPlayer()
     local urinateValue = BF.GetUrinateValue()
     local requirement = SandboxVars.BF.PeeInToiletRequirement or 40
@@ -259,55 +292,118 @@ function BF.TriggerFixtureUrinate(object, player)
     local isBeingWatched = BF.IsBeingWatched(player)
 
     -- Only allow action if requirements are met
-    if urinateValue < (requirement / 100) * bladderMaxValue or (hasShyBladder and isBeingWatched) then
+    if urinateValue < (requirement / 100) * bladderMaxValue then
+        return
+    end
+    if hasShyBladder and isBeingWatched then
         return
     end
 
-    -- Remove obstructive clothing right where the player is standing
-    local excreteObstructive = BF.GetExcreteObstructiveClothing()
-    local removedClothing = {}
+    local isFemale = player:isFemale() == true
+    -- Sit only for females on a real toilet (objects with sitting data). Sinks,
+    -- urinals, showers etc. use this same trigger but must be used standing.
+    local mustSit = isFemale and BF.CanSitOnObject(object)
 
-    for _, location in ipairs(excreteObstructive) do
-        local clothingItem = player:getWornItem(location)
-        if clothingItem then
-            table.insert(removedClothing, clothingItem)
-            ISTimedActionQueue.add(ISUnequipAction:new(player, clothingItem, 50))
-        end
+    -- Remove clothing before walking to / sitting on the toilet.
+    if isFemale then
+        BF.RemoveBottomClothing(player)
     end
 
-    player:getModData().removedClothing = removedClothing
-
-    ISTimedActionQueue.add(FixtureUrinate:new(player, urinateValue, true, true))
+    BF.WalkThenRelief(player, object, mustSit, function(goalObject, seated)
+        ISTimedActionQueue.add(ToiletUrinate:new(player, urinateValue, true, true, goalObject, seated))
+        if isFemale then
+            BF.HandlePeeWiping(player, isWiping, wipeType, wipeItem, pooledTypes)
+        end
+        if seated then
+            BF.StandUpAfterToilet(player)
+        end
+    end)
 end
 
-function BF.TriggerGroundUrinate()
+-- Standing/crouching urination at a non-sittable, non-oriented fixture (sink,
+-- shower, bush, water, trash can, dumpster). Always walks adjacent and never
+-- sits — these objects have no seating data and no meaningful facing.
+function BF.TriggerFixtureUrinate(object, player, isWiping, wipeType, wipeItem, wipeEfficiency, pooledTypes)
+    local player = getPlayer()
+    local urinateValue = BF.GetUrinateValue()
+    local requirement = SandboxVars.BF.PeeInToiletRequirement or 40
+    local bladderMaxValue = SandboxVars.BathroomFunctions.BladderMaxValue or 100
+    local hasShyBladder = player:hasTrait(BFTraits.ShyBladder)
+    local isBeingWatched = BF.IsBeingWatched(player)
+
+    if urinateValue < (requirement / 100) * bladderMaxValue then
+        return
+    end
+    if hasShyBladder and isBeingWatched then
+        return
+    end
+
+    local isFemale = player:isFemale() == true
+
+    BF.WalkThenRelief(player, object, false, function(goalObject, seated)
+        if isFemale then
+            BF.RemoveBottomClothing(player)
+        end
+        ISTimedActionQueue.add(FixtureUrinate:new(player, urinateValue, true, true))
+        if isFemale then
+            BF.HandlePeeWiping(player, isWiping, wipeType, wipeItem, pooledTypes)
+        end
+    end)
+end
+
+function BF.TriggerGroundUrinate(isWiping, wipeType, wipeItem, wipeEfficiency, pooledTypes)
     local player = getPlayer()
     local urinateValue = BF.GetUrinateValue()
     local peeTime = urinateValue
 
+    local isFemale = player:isFemale() == true
+
     -- If female, must take off clothing. Males would just unzip their pants.
-    if player:isFemale() == true then
-        -- Remove bottom clothing first
+    if isFemale then
         BF.RemoveBottomClothing(player)
     end
 
     -- Urinate on the ground
     ISTimedActionQueue.add(GroundUrinate:new(player, peeTime, true, true))
+
+    -- Wiping is female-only.
+    if isFemale then
+        BF.HandlePeeWiping(player, isWiping, wipeType, wipeItem, pooledTypes)
+    end
+end
+
+-- Shared post-urination wiping flow for female characters.
+-- Mirrors the defecation wiping logic but with a lighter default penalty.
+function BF.HandlePeeWiping(player, isWiping, wipeType, wipeItem, pooledTypes)
+    if isWiping then
+        ISTimedActionQueue.add(WipeSelf:new(player, 15, wipeType, wipeItem, "pee", pooledTypes))
+    else
+        -- Small residual-urine penalty on unequipped bottom clothing (pee only).
+        local soilableClothing = BF.GetSoilableClothing()
+        for _, bodyLocation in ipairs(soilableClothing) do
+            local clothingItem = player:getWornItem(bodyLocation)
+            if clothingItem then
+                local modData = clothingItem:getModData()
+                modData.peed = true
+                modData.peedSeverity = math.min((modData.peedSeverity or 0) + 3, 100)
+            end
+        end
+        BF.ReequipBottomClothing(player)
+        BF.ResetRemovedClothing(player)
+    end
 end
 
 function BF.TriggerSelfUrinate(isLeak)
     local isLeak = isLeak or false
-    local player = getPlayer() -- Fetch the current player object
-    local urinateValue = BF.GetUrinateValue() -- Current bladder level
+    local player = getPlayer()
+    local urinateValue = BF.GetUrinateValue()
     local peeTime = urinateValue / 4 -- Determine the time based on the bladder level
 
-    -- Optionally, you can adjust the bladderMaxValue based on mode.
-    local bladderMaxValue = isLeak and (SandboxVars.BathroomFunctions.BladderMaxValue or 500)
-                                     or (SandboxVars.BathroomFunctions.BladderMaxValue or 100)
+    local bladderMaxValue = isLeak and (SandboxVars.BathroomFunctions.BladderMaxValue or 500) or (SandboxVars.BathroomFunctions.BladderMaxValue or 100)
 
     -- Check if player is wearing clothing that can be soiled.
     if BF.HasClothingOn(player, unpack(BF.GetSoilableClothing())) then
-        BF.UrinateBottoms(isLeak)  -- Pass in the leak flag.
+        BF.UrinateBottoms(isLeak)
     else
         -- If the player isn't wearing clothing, create the pee object if that option is enabled.
         if SandboxVars.BF.CreatePeeObject == true then
@@ -320,11 +416,11 @@ function BF.TriggerSelfUrinate(isLeak)
     -- The last parameter, `isLeak`, tells the timed action to use the leak behavior.
     ISTimedActionQueue.add(SelfUrinate:new(player, peeTime, false, false, true, false, nil, isLeak))
 
-    if isLeak then
-        print("Leak triggered: Updated Peed Self Value: " .. BF.GetPeedSelfValue())
-    else
-        print("Updated Peed Self Value: " .. BF.GetPeedSelfValue())
-    end
+    --if isLeak then
+    --    print("Leak triggered: Updated Peed Self Value: " .. BF.GetPeedSelfValue())
+    --else
+    --    print("Updated Peed Self Value: " .. BF.GetPeedSelfValue())
+    --end
 end
 
 function BF.PeeInContainer(item)

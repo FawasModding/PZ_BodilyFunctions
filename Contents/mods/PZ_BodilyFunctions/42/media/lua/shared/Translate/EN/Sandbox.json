@@ -28,7 +28,7 @@
   "Sandbox_BF_BowelsMaxValue_tooltip": "Maximum bowel fullness.",
   "Sandbox_BF_BowelsIncreaseMultiplier": "Bowels Fill Rate Multiplier",
   "Sandbox_BF_BowelsIncreaseMultiplier_tooltip": "Bowel meter increase per 10 minutes.",
-  "Sandbox_BF_DefecateSpeedMultiplier": "Time It Takes To Poop (WIP)",
+  "Sandbox_BF_DefecateSpeedMultiplier": "Time It Takes To Poop (Placeholder Setting)",
   "Sandbox_BF_DefecateSpeedMultiplier_tooltip": "Time taken to defecate.",
 
   "Sandbox_BF_POOPREQUIREMENTSHeader": "Voluntary Defecation",
@@ -42,16 +42,16 @@
 
   "Sandbox_BF_POOPSELFHeader": "Involuntary Defecation",
   "Sandbox_BF_POOPSELFHeader_tooltip": "Involuntary defecation options.",
-  "Sandbox_BF_CanHavePoopAccident": "Enable Accidental Poop (WIP)",
+  "Sandbox_BF_CanHavePoopAccident": "Enable Accidental Poop (Placeholder Setting)",
   "Sandbox_BF_CanHavePoopAccident_tooltip": "Allow accidental self-defecation.",
-  "Sandbox_BF_NightPoopAccidents": "Enable Bed Pooping (WIP)",
+  "Sandbox_BF_NightPoopAccidents": "Enable Bed Pooping (Placeholder Setting)",
   "Sandbox_BF_NightPoopAccidents_tooltip": "Allow defecation during sleep.",
 
   "Sandbox_BF_POOPEXTRAHeader": "Extra Settings",
   "Sandbox_BF_POOPEXTRAHeader_tooltip": "Additional defecation settings.",
   "Sandbox_BF_VisiblePoopStain": "Show Poop Stain",
   "Sandbox_BF_VisiblePoopStain_tooltip": "Show fecal stain on soiled clothing.",
-  "Sandbox_BF_EnableDiarrhea": "Enable Diarrhea (WIP)",
+  "Sandbox_BF_EnableDiarrhea": "Enable Diarrhea (Placeholder Setting)",
   "Sandbox_BF_EnableDiarrhea_tooltip": "Enable/disable diarrhea mechanics.",
   "Sandbox_BF_CreatePoopObject": "Create Poop Piles",
   "Sandbox_BF_CreatePoopObject_tooltip": "Enable poop objects on ground/self.",
@@ -72,7 +72,7 @@
   "Sandbox_BF_BladderMaxValue_tooltip": "Maximum bladder fullness.",
   "Sandbox_BF_BladderIncreaseMultiplier": "Bladder Fill Rate Multiplier",
   "Sandbox_BF_BladderIncreaseMultiplier_tooltip": "Bladder meter increase per 10 minutes.",
-  "Sandbox_BF_UrinateSpeedMultiplier": "Time It Takes To Pee (WIP)",
+  "Sandbox_BF_UrinateSpeedMultiplier": "Time It Takes To Pee (Placeholder Setting)",
   "Sandbox_BF_UrinateSpeedMultiplier_tooltip": "Time taken to urinate.",
 
   "Sandbox_BF_PEEREQUIREMENTSHeader": "Voluntary Urination",
@@ -88,7 +88,7 @@
 
   "Sandbox_BF_PEESELFHeader": "Involuntary Urination",
   "Sandbox_BF_PEESELFHeader_tooltip": "Involuntary urination options.",
-  "Sandbox_BF_CanHavePeeAccident": "Enable Accidental Pee (WIP)",
+  "Sandbox_BF_CanHavePeeAccident": "Enable Accidental Pee (Placeholder Setting)",
   "Sandbox_BF_CanHavePeeAccident_tooltip": "Allow accidental self-urination.",
   "Sandbox_BF_NightPeeAccidents": "Enable Bed Wetting (WIP)",
   "Sandbox_BF_NightPeeAccidents_tooltip": "Allow urination during sleep.",
@@ -99,6 +99,6 @@
   "Sandbox_BF_VisiblePeeStain_tooltip": "Show urine stain on wet clothing.",
   "Sandbox_BF_CreatePeeObject": "Create Urine Puddles",
   "Sandbox_BF_CreatePeeObject_tooltip": "Enable urine objects on ground/self.",
-  "Sandbox_BF_EnableUrinationTraits": "Enable Urination Traits (WIP)",
+  "Sandbox_BF_EnableUrinationTraits": "Enable Urination Traits (Placeholder Setting)",
   "Sandbox_BF_EnableUrinationTraits_tooltip": "Toggle whether this save permits urination related traits."
 }

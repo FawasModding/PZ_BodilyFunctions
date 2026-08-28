@@ -17,8 +17,16 @@ function FixtureUrinate:start()
     -- Save the initial urination value at the start of the action
     self.initialUrinateValue = self.character:getModData().urinateValue or 0
 
-    -- No sitting, walking, or direction changes (yet). Player uses bathroom where they are.
-    -- todo: this will be improved, but for now this is the best way to simulate it generically enough.
+    -- Crouch like a ground pee (females squat, males stand). No facing logic:
+    -- fixtures like water/bushes/trash cans/dumpsters have no orientation to
+    -- face toward, unlike a placed toilet.
+    -- todo: sinks are a byproduct, unable to orient. possibly make orientation an extra option here
+    if self.character:isFemale() then
+        self:setActionAnim("bathroomSquat")
+    else
+        self:setActionAnim("bathroomStandPee")
+    end
+
     self.sound = self.character:getEmitter():playSound("BF_Pee_Toilet_Light")
 end
 
@@ -33,10 +41,13 @@ end
 
 function FixtureUrinate:perform()
     self.character:getModData().urinateValue = 0.0 -- RESET URINE VALUE
+    self.character:getModData().urinateValue = 0.0
     ISBaseTimedAction.perform(self)
 
     -- Put clothing back on now that we're done
-    BF.ReequipBottomClothing(self.character)
+    if self.character:isFemale() then
+        BF.ReequipBottomClothing(self.character)
+    end
 
     self:stopSound()
 end

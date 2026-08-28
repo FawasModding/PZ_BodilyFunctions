@@ -1,38 +1,53 @@
 
+-- Returns true if an item is a soiled paper/rag/grass junk item that can be
+-- washed. Matches the universal used-paper junk plus the legacy variants.
+function BF.IsSoiledJunk(item)
+    if not item then return false end
+    local t = item:getType()
+    -- Only cloth rags can be washed and reused. Grass and paper are disposable.
+    if t == "RippedSheetsPooped" then
+        return true
+    end
+    return false
+end
+
 function BF.WashingRightClick(player, context, worldObjects)
 	--local player = getPlayer()
     player = getSpecificPlayer(player)
 
 	local hasSoiledItem = false
 	local soiledClothingEquipped = false
-	local soiledClothing = nil
 	local cleaningItem = nil
 
-	-- Track soiled rags and GrassTufts, items that can be cleaned after wiping
+	-- All soiled clothing pieces and all soiled junk items (so the menu can list
+	-- each of them separately, not just the last one found).
+	local soiledClothingList = {}
     local soiledItems = {}
 
+	-- Soiled clothing / rags are searched on the player (worn + main inventory).
 	for i = 0, player:getInventory():getItems():size() - 1 do
 		local item = player:getInventory():getItems():get(i)
-
-		if item:getType() == "Soap2" or item:getType() == "Bleach" or item:getType() == "CleaningLiquid2" then
-			cleaningItem = item
-		end
 
 		if item:getModData().peed == true or item:getModData().pooped == true then
 			hasSoiledItem = true
 			if item:isEquipped() then
 				soiledClothingEquipped = true
 			end
-			soiledClothing = item
+			table.insert(soiledClothingList, item)
 		end
 
-        -- Track soiled rags and grass tufts
-		if item:getType() == "RippedSheetsPooped" or item:getType() == "GrassTuftPooped" then
+        -- Track any soiled junk item (used paper, rags, grass, etc.).
+		if BF.IsSoiledJunk(item) then
 			hasSoiledItem = true
 			table.insert(soiledItems, item)
 		end
-
 	end
+
+	-- Cleaning agent (soap/bleach) may live in bags or nearby, not just main inv.
+	cleaningItem = BF.FindReachableItem(player, function(it)
+		local t = it:getType()
+		return t == "Soap2" or t == "Bleach" or t == "CleaningLiquid2"
+	end)
 
 	if hasSoiledItem then
 		local storeWater = nil
@@ -56,36 +71,38 @@ function BF.WashingRightClick(player, context, worldObjects)
 		if storeWater == nil then return end
 		if storeWater:getSquare():DistToProper(player:getSquare()) > 10 then return end
 
-		local isSink = BF.IsSinkObject(storeWater)
-		local menu
-		if isSink then
-			local sinkSubMenu = BF.FindSinkSubMenu(context, 0)
-			menu = sinkSubMenu or context
-		else
-			menu = context
-		end
+		-- Nest under vanilla's "Sink" submenu when washing at a sink fixture;
+        -- otherwise fall back to a standalone top-level entry.
+        local vanillaSinkSubMenu = BF.IsSinkObject(storeWater) and BF.FindSinkSubMenu(context) or nil
 
-		-- Soiled CLOTHING Option
-		if soiledClothing then
+        local washOption, subMenu
+        if vanillaSinkSubMenu then
+            washOption = vanillaSinkSubMenu:addOption("Wash Soiled Items", nil, nil)
+            subMenu = ISContextMenu:getNew(vanillaSinkSubMenu)
+            vanillaSinkSubMenu:addSubMenu(washOption, subMenu)
+        else
+            washOption = context:addOptionOnTop("Wash Soiled Items", nil, nil)
+            subMenu = ISContextMenu:getNew(context)
+            context:addSubMenu(washOption, subMenu)
+        end
+        washOption.iconTexture = getTexture("media/ui/PeedSelf.png")
+
+		-- Soiled CLOTHING Options (one per soiled garment)
+		for _, soiledClothing in ipairs(soiledClothingList) do
 			if not soiledClothing:getModData().originalName then
 				soiledClothing:getModData().originalName = soiledClothing:getScriptItem():getDisplayName()
 			end
 
-			local option
-			if isSink then
-				option = menu:addOption("Wash Soiled Clothing", player, BF.WashSoiled, square, soiledClothing, cleaningItem, storeWater, soiledClothingEquipped)
-			else
-				option = menu:addOptionOnTop("Wash Soiled Clothing", player, BF.WashSoiled, square, soiledClothing, cleaningItem, storeWater, soiledClothingEquipped)
-			end
-			option.iconTexture = getTexture("media/ui/PeedSelf.png")
+			local thisEquipped = soiledClothing:isEquipped()
+			local option = subMenu:addOption(soiledClothing:getName(), player, BF.WashSoiled, square, soiledClothing, cleaningItem, storeWater, thisEquipped)
 
 			local waterRemaining = storeWater:getFluidAmount()
 			if waterRemaining < 15 then
 				option.notAvailable = true
 			end
 
-			-- Estimate post-wash poopedSeverity
-			local currentSeverity = soiledClothing:getModData().poopedSeverity or 0
+			-- Estimate post-wash severity (use whichever soiling is present)
+			local currentSeverity = math.max(soiledClothing:getModData().poopedSeverity or 0, soiledClothing:getModData().peedSeverity or 0)
 			local estimatedSeverity
 
 			if cleaningItem and cleaningItem:getCurrentUses() > 0 then
@@ -98,61 +115,27 @@ function BF.WashingRightClick(player, context, worldObjects)
 				estimatedSeverity = currentSeverity
 			end
 
-			-- Build tooltip with correct markup
 			local toolTip = ISWorldObjectContextMenu.addToolTip()
 			toolTip:setName(soiledClothing:getName())
-
 			local cleaningName = (cleaningItem and (cleaningItem:getDisplayName() or cleaningItem:getName())) or "Water"
-
-			local severityFormatted = string.format("%5.1f%%", estimatedSeverity) -- e.g. 5.0%, 12.3%, 99.9%
-
+			local severityFormatted = string.format("%5.1f%%", estimatedSeverity)
 			toolTip.description = "Cleaning With: " .. cleaningName .. " | New Severity: " .. severityFormatted
 			option.toolTip = toolTip
-
 		end
 
-        -- Soiled ITEM(s) Option
-        if #soiledItems > 0 then
-            if #soiledItems == 1 then
-                local item = soiledItems[1]
-                local option
-                if isSink then
-                    option = menu:addOption("Wash Soiled Item", player, BF.WashSoiledItem, square, item, cleaningItem, storeWater)
-                else
-                    option = menu:addOptionOnTop("Wash Soiled Item", player, BF.WashSoiledItem, square, item, cleaningItem, storeWater)
-                end
-                option.iconTexture = getTexture("media/ui/PeedSelf.png")
+        -- Soiled ITEM Option
+        for _, item in ipairs(soiledItems) do
+            local option = subMenu:addOption(item:getName(), player, BF.WashSoiledItem, square, item, cleaningItem, storeWater)
 
-                local waterRemaining = storeWater:getFluidAmount()
-                if waterRemaining < 5 then -- Less water needed for items
-                    option.notAvailable = true
-                end
-            else
-                local itemOption
-                if isSink then
-                    itemOption = menu:addOption("Wash Soiled Item", nil, nil)
-                else
-                    itemOption = menu:addOptionOnTop("Wash Soiled Item", nil, nil)
-                end
-                itemOption.iconTexture = getTexture("media/ui/PeedSelf.png")
-
-                local itemSubMenu = ISContextMenu:getNew(menu)
-                menu:addSubMenu(itemOption, itemSubMenu)
-
-                for _, item in ipairs(soiledItems) do
-                    local option = itemSubMenu:addOption(item:getName(), player, BF.WashSoiledItem, square, item, cleaningItem, storeWater)
-
-                    local waterRemaining = storeWater:getFluidAmount()
-                    if waterRemaining < 5 then -- Less water needed for items
-                        option.notAvailable = true
-                    end
-
-                    -- Require a cleaning item for pooped items
-                    --if cleaningItem == nil or cleaningItem:getCurrentUses() <= 0 then
-                    --    option.notAvailable = true
-                    --end
-                end
+            local waterRemaining = storeWater:getFluidAmount()
+            if waterRemaining < 5 then -- Less water needed for items
+                option.notAvailable = true
             end
+
+            -- Require a cleaning item for pooped items
+            --if cleaningItem == nil or cleaningItem:getCurrentUses() <= 0 then
+            --    option.notAvailable = true
+            --end
         end
 	end
 end
@@ -167,7 +150,7 @@ function BF.WashSoiled(playerObj, square, soiledItem, bleachItem, storeWater, so
 		ISTimedActionQueue.add(ISUnequipAction:new(playerObj, soiledItem, 50))
 	end
 	
-	ISTimedActionQueue.add(WashSoiled:new(playerObj, 400, square, soiledItem, bleachItem, storeWater))
+	ISTimedActionQueue.add(WashSoiled:new(playerObj, 400, square, soiledItem, bleachItem, storeWater, soiledItemEquipped))
 end
 function BF.WashSoiledItem(playerObj, square, soiledItem, bleachItem, storeWater)
 	if not square or not luautils.walkAdj(playerObj, square, true) then
@@ -178,20 +161,12 @@ function BF.WashSoiledItem(playerObj, square, soiledItem, bleachItem, storeWater
 end
 
 function BF.RemoveBottomClothing(player)
-    local removedClothing = {}
+    -- Every worn garment that gets in the way, tights and modded legwear included
+    local removedClothing = BF.GetExcreteObstructiveWornItems(player)
 
-    -- Get the list of excretion obstructive clothing body locations
-    local excreteObstructive = BF.GetExcreteObstructiveClothing()
-
-    for _, location in ipairs(excreteObstructive) do
-        local clothingItem = player:getWornItem(location)
-        if clothingItem then
-            -- Store the removed item in the array
-            table.insert(removedClothing, clothingItem)
-
-            -- Remove the clothing with a timed action
-            ISTimedActionQueue.add(ISUnequipAction:new(player, clothingItem, 50))
-        end
+    -- Take the outermost layers off first
+    for i = #removedClothing, 1, -1 do
+        ISTimedActionQueue.add(ISUnequipAction:new(player, removedClothing[i], 50))
     end
 
     -- Store the removed items in the player's mod data for later re-equipping

@@ -57,8 +57,14 @@ function WashSoiled:perform()
     end
 
 	self.soiledItem:setWetness(100)
-	-- Info: Build 42.14 changed "setDirtyness" to "setDirtiness"
 	self.soiledItem:setDirtiness(0)
+	-- Clear dirt per covered body part instead
+	--local washCoveredParts = BloodClothingType.getCoveredParts(self.soiledItem:getBloodClothingType())
+	--if washCoveredParts then
+	--	for j = 0, washCoveredParts:size() - 1 do
+	--		self.soiledItem:setDirt(washCoveredParts:get(j), 0)
+	--	end
+	--end
 
 	if self.soiledItem:getModData().peed == true then --Do stuff if clothing peed
 		self.soiledItem:getModData().peed = false
@@ -100,10 +106,18 @@ function WashSoiled:perform()
 
 	--ISTakeWaterAction.SendTakeWaterCommand(self.character, self.storeWater, 15)
 
+	-- If the garment was being worn before washing, put it back on using the
+	-- game's own wear action (queued after this one). Doing it manually mid-action
+	-- desyncs the model and the inventory UI, so we let ISWearClothing handle it.
+	if self.wasEquipped and self.soiledItem and self.soiledItem:IsClothing()
+		and not self.soiledItem:isEquipped() then
+		ISTimedActionQueue.add(ISWearClothing:new(self.character, self.soiledItem))
+	end
+
 	ISBaseTimedAction.perform(self)
 end
 
-function WashSoiled:new(character, time, square, soiledItem, cleaningItem, storeWater)
+function WashSoiled:new(character, time, square, soiledItem, cleaningItem, storeWater, wasEquipped)
 	local o = {}
 	setmetatable(o, self)
 	self.__index = self
@@ -115,5 +129,6 @@ function WashSoiled:new(character, time, square, soiledItem, cleaningItem, store
 	o.cleaningItem = cleaningItem
 	o.soiledItem = soiledItem
 	o.storeWater = storeWater
+	o.wasEquipped = wasEquipped
 	return o
 end 
