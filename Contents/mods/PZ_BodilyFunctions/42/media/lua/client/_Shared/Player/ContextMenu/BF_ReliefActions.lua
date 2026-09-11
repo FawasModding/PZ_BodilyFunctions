@@ -127,12 +127,10 @@ function BF.ReliefRightClick(player, context, worldObjects)
     -- Add options for each type
     BF.AddGroundOptions(peeSubMenu, poopSubMenu, worldObjects, player, urinateValue, defecateValue, bladderMaxValue, bowelsMaxValue, peeOnGroundRequirement, poopOnGroundRequirement, hasShyBladder, hasShyBowels, isBeingWatched)
     BF.AddSelfOptions(peeSubMenu, poopSubMenu, worldObjects, player, urinateValue, defecateValue, bladderMaxValue, bowelsMaxValue, peeOnSelfRequirement, poopOnSelfRequirement, hasShyBladder, hasShyBowels, modOptions)
-    BF.AddToiletOptions(vanillaToiletSubMenu, worldObjects, player, urinateValue, defecateValue,
-    bladderMaxValue, bowelsMaxValue, peeInToiletRequirement, poopInToiletRequirement, toiletTiles)
+    BF.AddToiletOptions(vanillaToiletSubMenu, peeSubMenu, poopSubMenu, worldObjects, player, urinateValue, defecateValue, bladderMaxValue, bowelsMaxValue, peeInToiletRequirement, poopInToiletRequirement, toiletTiles)
     BF.AddUrinalOptions(peeSubMenu, poopSubMenu, worldObjects, player, urinateValue, bladderMaxValue, peeInToiletRequirement, urinalTiles, hasShyBladder)
     BF.AddOuthouseOptions(peeSubMenu, poopSubMenu, worldObjects, player, urinateValue, defecateValue, bladderMaxValue, bowelsMaxValue, peeInToiletRequirement, poopInToiletRequirement, outhouseTiles, toiletOptionAdded)
-    BF.AddSinkOptions(vanillaSinkSubMenu, worldObjects, player, urinateValue,
-    bladderMaxValue, peeInToiletRequirement, sinkTiles, hasShyBladder)
+    BF.AddSinkOptions(vanillaSinkSubMenu, peeSubMenu, worldObjects, player, urinateValue, bladderMaxValue, peeInToiletRequirement, sinkTiles, hasShyBladder)
     BF.AddShowerOptions(peeSubMenu, worldObjects, player, urinateValue, bladderMaxValue, peeInToiletRequirement, showerTiles, hasShyBladder)
     BF.AddBushOptions(peeSubMenu, poopSubMenu, worldObjects, player, urinateValue, defecateValue, bladderMaxValue, bowelsMaxValue, peeInToiletRequirement, poopInToiletRequirement, bushTiles, hasShyBladder, hasShyBowels)
     BF.AddWaterOptions(peeSubMenu, poopSubMenu, worldObjects, player, urinateValue, defecateValue, bladderMaxValue, bowelsMaxValue, peeInToiletRequirement, poopInToiletRequirement, waterTiles, hasShyBladder, hasShyBowels)
@@ -215,10 +213,8 @@ function BF.AddSelfOptions(peeSubMenu, poopSubMenu, worldObjects, player, urinat
     end
 end
 
-function BF.AddToiletOptions(vanillaToiletSubMenu, worldObjects, player, urinateValue, defecateValue,
+function BF.AddToiletOptions(vanillaToiletSubMenu, peeSubMenu, poopSubMenu, worldObjects, player, urinateValue, defecateValue,
     bladderMaxValue, bowelsMaxValue, peeInToiletRequirement, poopInToiletRequirement, toiletTiles)
-
-    if not vanillaToiletSubMenu then return end
 
     for i = 0, worldObjects:size() - 1 do
         local object = worldObjects:get(i)
@@ -228,8 +224,14 @@ function BF.AddToiletOptions(vanillaToiletSubMenu, worldObjects, player, urinate
                 local isPodiumToilet = tile == "location_entertainment_gallery_02_56"
                 local toiletText = isPodiumToilet and getText("ContextMenu_UsePodiumToilet") or getText("ContextMenu_UseToilet")
 
-                local toiletPeeOption = vanillaToiletSubMenu:addOption(getText("ContextMenu_Pee") .. " " .. toiletText, object, BF.TriggerToiletUrinate, player)
-                local toiletPoopOption = vanillaToiletSubMenu:addOption(getText("ContextMenu_Poop") .. " " .. toiletText, object, BF.TriggerToiletDefecate, player)
+                -- If we couldn't find the vanilla toilet submenu (e.g. localized name
+                -- didn't match), fall back to the mod's own Pee/Poop submenus instead
+                -- of dropping the options entirely.
+                local peeTargetMenu = vanillaToiletSubMenu or peeSubMenu
+                local poopTargetMenu = vanillaToiletSubMenu or poopSubMenu
+
+                local toiletPeeOption = peeTargetMenu:addOption(getText("ContextMenu_Pee") .. " " .. toiletText, object, BF.TriggerToiletUrinate, player)
+                local toiletPoopOption = poopTargetMenu:addOption(getText("ContextMenu_Poop") .. " " .. toiletText, object, BF.TriggerToiletDefecate, player)
                 BF.AddTooltip(toiletPeeOption, "Urinate in the " .. (isPodiumToilet and "podium toilet" or "toilet") .. ". (Requires " .. peeInToiletRequirement .. "%)")
                 BF.AddTooltip(toiletPoopOption, "Defecate in the " .. (isPodiumToilet and "podium toilet" or "toilet") .. ". (Requires " .. poopInToiletRequirement .. "%)")
                 toiletPeeOption.iconTexture = getTexture("media/textures/ContextMenuToilet.png")
@@ -240,10 +242,10 @@ function BF.AddToiletOptions(vanillaToiletSubMenu, worldObjects, player, urinate
                 elseif player:isFemale() then
                     -- Female characters can wipe after urinating in the toilet.
                     local wipeSubMenuForToiletPee = BF.AddWipingOptions(
-                        vanillaToiletSubMenu, worldObjects, player, urinateValue, peeInToiletRequirement, bladderMaxValue, BF.TriggerToiletUrinate, object, "pee"
+                        peeTargetMenu, worldObjects, player, urinateValue, peeInToiletRequirement, bladderMaxValue, BF.TriggerToiletUrinate, object, "pee"
                     )
                     if wipeSubMenuForToiletPee then
-                        vanillaToiletSubMenu:addSubMenu(toiletPeeOption, wipeSubMenuForToiletPee)
+                        peeTargetMenu:addSubMenu(toiletPeeOption, wipeSubMenuForToiletPee)
                     end
                 end
 
@@ -251,10 +253,10 @@ function BF.AddToiletOptions(vanillaToiletSubMenu, worldObjects, player, urinate
                     toiletPoopOption.notAvailable = true
                 else
                     local wipeSubMenuForToiletPoop = BF.AddWipingOptions(
-                        vanillaToiletSubMenu, worldObjects, player, defecateValue, poopInToiletRequirement, bowelsMaxValue, BF.TriggerToiletDefecate, object, "poop"
+                        poopTargetMenu, worldObjects, player, defecateValue, poopInToiletRequirement, bowelsMaxValue, BF.TriggerToiletDefecate, object, "poop"
                     )
                     if wipeSubMenuForToiletPoop then
-                        vanillaToiletSubMenu:addSubMenu(toiletPoopOption, wipeSubMenuForToiletPoop)
+                        poopTargetMenu:addSubMenu(toiletPoopOption, wipeSubMenuForToiletPoop)
                     end
                 end
 
@@ -324,17 +326,18 @@ function BF.AddOuthouseOptions(peeSubMenu, poopSubMenu, worldObjects, player, ur
     end
 end
 
-function BF.AddSinkOptions(vanillaSinkSubMenu, worldObjects, player, urinateValue,
+function BF.AddSinkOptions(vanillaSinkSubMenu, peeSubMenu, worldObjects, player, urinateValue,
     bladderMaxValue, peeInToiletRequirement, sinkTiles, hasShyBladder)
-
-    if not vanillaSinkSubMenu then return end
 
     for i = 0, worldObjects:size() - 1 do
         local object = worldObjects:get(i)
-        if object:getTextureName() and luautils.stringStarts(object:getTextureName(), "fixtures_sinks_01")
-            and object:getSquare():DistToProper(player:getSquare()) < 5 then
+        if BF.IsSinkObject(object) and object:getSquare():DistToProper(player:getSquare()) < 5 then
 
-            local sinkPeeOption = vanillaSinkSubMenu:addOption(getText("ContextMenu_Pee") .. " " .. getText("ContextMenu_UseSink"), object, BF.TriggerFixtureUrinate, player)
+            -- Fall back to the mod's own Pee submenu if the vanilla sink submenu
+            -- couldn't be located by name (e.g. non-English client).
+            local targetMenu = vanillaSinkSubMenu or peeSubMenu
+
+            local sinkPeeOption = targetMenu:addOption(getText("ContextMenu_Pee") .. " " .. getText("ContextMenu_UseSink"), object, BF.TriggerFixtureUrinate, player)
             BF.AddTooltip(sinkPeeOption, getText("ContextMenu_tooltip_PeeSink", tostring(peeInToiletRequirement)))
             sinkPeeOption.iconTexture = getTexture("media/textures/ContextMenuSink.png")
 
@@ -346,10 +349,10 @@ function BF.AddSinkOptions(vanillaSinkSubMenu, worldObjects, player, urinateValu
             elseif player:isFemale() then
                 -- Female characters can wipe after urinating at the sink.
                 local wipeSubMenuForSink = BF.AddWipingOptions(
-                    vanillaSinkSubMenu, worldObjects, player, urinateValue, peeInToiletRequirement, bladderMaxValue, BF.TriggerFixtureUrinate, object, "pee"
+                    targetMenu, worldObjects, player, urinateValue, peeInToiletRequirement, bladderMaxValue, BF.TriggerFixtureUrinate, object, "pee"
                 )
                 if wipeSubMenuForSink then
-                    vanillaSinkSubMenu:addSubMenu(sinkPeeOption, wipeSubMenuForSink)
+                    targetMenu:addSubMenu(sinkPeeOption, wipeSubMenuForSink)
                 end
             end
 
