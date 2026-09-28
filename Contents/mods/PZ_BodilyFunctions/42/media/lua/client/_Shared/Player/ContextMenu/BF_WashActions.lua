@@ -11,6 +11,65 @@ function BF.IsSoiledJunk(item)
     return false
 end
 
+-- Cleaning agents changed shape in B42: soap is still a drainable with uses,
+-- but bleach and cleaning liquid became FluidContainer items whose remaining
+-- amount has nothing to do with getCurrentUses(). Checking uses alone treats an
+-- empty bleach bottle as a full one, so both shapes are handled explicitly.
+function BF.IsCleaningAgent(item)
+    if not item then return false end
+
+    if item:hasComponent(ComponentType.FluidContainer) then
+        local fluidContainer = item:getFluidContainer()
+        if not fluidContainer or fluidContainer:getAmount() <= 0 then return false end
+        if Fluid.CleaningLiquid and fluidContainer:contains(Fluid.CleaningLiquid) then return true end
+        if Fluid.Bleach and fluidContainer:contains(Fluid.Bleach) then return true end
+        if Fluid.Soapy and fluidContainer:contains(Fluid.Soapy) then return true end
+        return false
+    end
+
+    if instanceof(item, "DrainableComboItem") and item:getType() == "Soap2" then
+        return item:getCurrentUses() > 0
+    end
+
+    return false
+end
+
+-- Spends one dose of the agent. Returns true when a dose was actually spent,
+-- which is what decides whether the wash counts as a full clean.
+function BF.ConsumeCleaningAgent(item)
+    if not BF.IsCleaningAgent(item) then return false end
+
+    if item:hasComponent(ComponentType.FluidContainer) then
+        local fluidContainer = item:getFluidContainer()
+        local newAmount = fluidContainer:getAmount() - ZomboidGlobals.CleanStainCleaningFluidAmount
+        if newAmount <= 0.001 then
+            fluidContainer:Empty()
+        else
+            fluidContainer:adjustAmount(newAmount)
+        end
+        sendItemStats(item)
+        return true
+    end
+
+    item:UseAndSync()
+    return true
+end
+
+-- One wash step. With an agent the garment comes out clean; with plain water it
+-- halves and anything left under the threshold is close enough to call clean.
+-- Previously a severity between 11 and 50 hit neither branch and washing did
+-- nothing at all, no matter how many times it was repeated.
+BF.WaterOnlyClearThreshold = 10
+
+function BF.ReduceSoilSeverity(severity, usedCleaningAgent)
+    severity = severity or 0
+    if usedCleaningAgent then return 0 end
+
+    severity = severity * 0.5
+    if severity <= BF.WaterOnlyClearThreshold then return 0 end
+    return severity
+end
+
 function BF.WashingRightClick(player, context, worldObjects)
 	--local player = getPlayer()
     player = getSpecificPlayer(player)
@@ -44,10 +103,7 @@ function BF.WashingRightClick(player, context, worldObjects)
 	end
 
 	-- Cleaning agent (soap/bleach) may live in bags or nearby, not just main inv.
-	cleaningItem = BF.FindReachableItem(player, function(it)
-		local t = it:getType()
-		return t == "Soap2" or t == "Bleach" or t == "CleaningLiquid2"
-	end)
+	cleaningItem = BF.FindReachableItem(player, BF.IsCleaningAgent)
 
 	if hasSoiledItem then
 		local storeWater = nil
@@ -105,15 +161,7 @@ function BF.WashingRightClick(player, context, worldObjects)
 			local currentSeverity = math.max(soiledClothing:getModData().poopedSeverity or 0, soiledClothing:getModData().peedSeverity or 0)
 			local estimatedSeverity
 
-			if cleaningItem and cleaningItem:getCurrentUses() > 0 then
-				estimatedSeverity = 0
-			elseif currentSeverity > 50 then
-				estimatedSeverity = ZombRand(5, 11)
-			elseif currentSeverity <= 10 then
-				estimatedSeverity = 0
-			else
-				estimatedSeverity = currentSeverity
-			end
+			estimatedSeverity = BF.ReduceSoilSeverity(currentSeverity, cleaningItem ~= nil)
 
 			local toolTip = ISWorldObjectContextMenu.addToolTip()
 			toolTip:setName(soiledClothing:getName())

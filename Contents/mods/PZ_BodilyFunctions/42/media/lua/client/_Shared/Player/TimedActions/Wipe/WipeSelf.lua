@@ -150,7 +150,10 @@ function WipeSelf:perform()
             -- Becomes wet/dirty vanilla item (one per consumed tool).
             if cfg.peeReplace then
                 for _ = 1, toConsume do
-                    self.character:getInventory():AddItem(cfg.peeReplace)
+                    local created = self.character:getInventory():AddItem(cfg.peeReplace)
+                    if created and isClient() then
+                        sendAddItemToContainer(self.character:getInventory(), created)
+                    end
                 end
             end
         else
@@ -174,7 +177,10 @@ function WipeSelf:perform()
 
         -- Return clean torn-out pages (the unused part of the book).
         for _ = 1, BOOK_CLEAN_PAGES do
-            self.character:getInventory():AddItem(BOOK_CLEAN_RETURN)
+            local created = self.character:getInventory():AddItem(BOOK_CLEAN_RETURN)
+            if created and isClient() then
+                sendAddItemToContainer(self.character:getInventory(), created)
+            end
         end
 
         -- A book produces a handful of dirty scraps (generic used paper).
@@ -187,14 +193,16 @@ function WipeSelf:perform()
     if self.bodilyFunction == "poop" then
         for junkType, n in pairs(junkTally) do
             for _ = 1, n do
-                self.character:getInventory():AddItem(junkType)
+                local created = self.character:getInventory():AddItem(junkType)
+                if created and isClient() then
+                    sendAddItemToContainer(self.character:getInventory(), created)
+                end
             end
         end
     end
 
     -- Residual soiling penalty when the wipe was insufficient.
-    if (self.wipeType == "usingOneTime" or self.wipeType == "usingDrainable" or self.wipeType == "usingBook")
-        and wipeEfficiency < 1.0 then
+    if wipeEfficiency < 1.0 then
         -- Pee residue is lighter than poop residue.
         local basePenalty = (self.bodilyFunction == "pee") and 3 or 5
         local soilPenalty = basePenalty * (1 - wipeEfficiency)
@@ -203,6 +211,10 @@ function WipeSelf:perform()
         end
     end
 
+    -- The removed-clothing list is only needed for the penalty above; the
+    -- garments themselves were already queued for re-equipping by the relief
+    -- action, which captured them by reference.
+    BF.ResetRemovedClothing(self.character)
 end
 
 function WipeSelf:new(character, time, wipeType, wipingWith, bodilyFunction, pooledTypes)

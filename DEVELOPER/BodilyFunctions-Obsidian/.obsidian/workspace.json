@@ -8,35 +8,34 @@
         "type": "tabs",
         "children": [
           {
-            "id": "6775250541344ed1",
+            "id": "a5285a7b30c2d088",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "BodilyFunctions_PatchNotes_ForAuthor.md",
-                "mode": "preview",
-                "source": true
-              },
-              "icon": "lucide-file",
-              "title": "BodilyFunctions_PatchNotes_ForAuthor"
-            }
-          },
-          {
-            "id": "dbd51e986eb33970",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "Changelogs/Changelog v1.2.0.md",
+                "file": "Changelogs/Changelog v1.3.0.md",
                 "mode": "source",
                 "source": true
               },
               "icon": "lucide-file",
-              "title": "Changelog v1.2.0"
+              "title": "Changelog v1.3.0"
+            }
+          },
+          {
+            "id": "a998df7178894845",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "BF_notes_for_author.md",
+                "mode": "preview",
+                "source": true
+              },
+              "icon": "lucide-file",
+              "title": "BF_notes_for_author"
             }
           }
-        ],
-        "currentTab": 1
+        ]
       }
     ],
     "direction": "vertical"
@@ -100,7 +99,7 @@
             }
           }
         ],
-        "currentTab": 1
+        "currentTab": 2
       }
     ],
     "direction": "horizontal",
@@ -213,8 +212,10 @@
       "code-linker:Code index": false
     }
   },
-  "active": "dbd51e986eb33970",
+  "active": "a5285a7b30c2d088",
   "lastOpenFiles": [
+    "BF_notes_for_author.md",
+    "Changelogs/Changelog v1.3.0.md",
     "BodilyFunctions_PatchNotes_ForAuthor.md",
     "Changelogs/Changelog v1.2.0.md",
     "Untitled.md",
@@ -243,8 +244,6 @@
     "Items/Fluids/Milk.md",
     "Items/Fluids/Wine.md",
     "Items/Fluids/Tea.md",
-    "Items/Fluids/Juice.md",
-    "Items/Fluids/Coffee.md",
     "Items/Fluids",
     "Items/Fish",
     "Items/Minerals",

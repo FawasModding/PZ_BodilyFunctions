@@ -30,8 +30,8 @@ function BF.GatherReachableItemRecords(player)
         if not items then return end
         for i = 0, items:size() - 1 do
             local item = items:get(i)
-            if item and not seen[item] then
-                seen[item] = true
+            if item and not seen[item:getID()] then
+                seen[item:getID()] = true
                 table.insert(result, { item = item, container = container, worldItem = nil })
             end
         end
@@ -85,8 +85,8 @@ function BF.GatherReachableItemRecords(player)
                                 addContainer(object:getContainer())
                                 if object.getItem and object:getObjectName() == "WorldInventoryItem" then
                                     local floorItem = object:getItem()
-                                    if floorItem and not seen[floorItem] then
-                                        seen[floorItem] = true
+                                    if floorItem and not seen[floorItem:getID()] then
+                                        seen[floorItem:getID()] = true
                                         table.insert(result, { item = floorItem, container = nil, worldItem = object })
                                     end
                                 end
@@ -140,6 +140,9 @@ function BF.RemoveReachableItemType(player, itemType, count)
         if rec.item:getType() == itemType then
             if rec.container then
                 rec.container:Remove(rec.item)
+                if isClient() then
+                    sendRemoveItemFromContainer(rec.container, rec.item)
+                end
             elseif rec.worldItem then
                 local wsq = rec.worldItem:getSquare()
                 if wsq then

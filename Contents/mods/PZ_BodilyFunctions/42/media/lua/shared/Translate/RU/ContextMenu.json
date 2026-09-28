@@ -1,13 +1,11 @@
 {
-  "ContextMenu_BodilyFunctions": "Телесные функции",
+  "ContextMenu_BodilyFunctions": "Естественные потребности",
   "ContextMenu_Urinate": "Мочеиспускание",
   "ContextMenu_Defecate": "Дефекация",
-
   "ContextMenu_Pee": "Писать",
   "ContextMenu_Poop": "Какать",
   "ContextMenu_Peed": "Пописал",
   "ContextMenu_Pooped": "Покакал",
-
   "ContextMenu_UseGround": "На землю",
   "ContextMenu_UseSelf": "Под себя",
   "ContextMenu_UseToilet": "В туалет",
@@ -23,7 +21,6 @@
   "ContextMenu_UseTrashCan": "В мусорное ведро",
   "ContextMenu_UseWater": "В воду",
   "ContextMenu_UseContainer": "В контейнер",
-
   "ContextMenu_tooltip_PeeGround": "Писать на землю. (Требуется %1%%)",
   "ContextMenu_tooltip_PoopGround": "Какать на землю. (Требуется %1%%)",
   "ContextMenu_tooltip_PeeSelf": "Писать под себя. Вряд ли это когда-либо пригодится. (Требуется %1%%)",
@@ -48,7 +45,6 @@
   "ContextMenu_tooltip_PoopDumpster": "Какать в мусорный бак. (Требуется %1%%)",
   "ContextMenu_tooltip_PeeOpenWindow": "Писать в открытое окно. (Требуется %1%%)",
   "ContextMenu_tooltip_PeeContainer": "Писать в контейнер. (Требуется %1%%)",
-
   "ContextMenu_tooltip_ShyPee": "Вы слишком застенчивы, чтобы писать на публике.",
   "ContextMenu_tooltip_ShyPoop": "Вы слишком застенчивы, чтобы какать на публике.",
   "ContextMenu_tooltip_ShyPeeSelf": "Вы слишком застенчивы, чтобы писать под себя, даже в одиночестве.",
@@ -68,27 +64,21 @@
   "ContextMenu_tooltip_ShyPoopDumpster": "Вы слишком застенчивы, чтобы какать в мусорный бак.",
   "ContextMenu_tooltip_ShyPeeOpenWindow": "Вы слишком застенчивы, чтобы писать в окно.",
   "ContextMenu_tooltip_ShyPeeContainer": "Вы слишком застенчивы, чтобы писать в контейнер.",
-
   "ContextMenu_DontWipe": "Не подтираться",
   "ContextMenu_WipeWith": "Подтереться: ",
   "ContextMenu_WipeSelf": "Подтереться",
   "ContextMenu_WashSoiled": "Постирать испачканную одежду",
   "ContextMenu_WashSoiledItems": "Постирать испачканные предметы",
-
   "ContextMenu_tooltip_WipeDrainable": "Использование расходуемого предмета уменьшит его использование на 1.",
-  "ContextMenu_tooltip_WipeOther": "Использование случайного бумажного предмета даст мусорный аналог.",
+  "ContextMenu_tooltip_WipeOther": "Использование обычного бумажного предмета даст его испачканный аналог.",
   "ContextMenu_tooltip_WipeClothing": "Использование одежды испачкает её.",
-
   "ContextMenu_FlushToilet": "Смыть в туалете",
-
   "ContextMenu_Take_AntiDiarrhealPill": "Принять противодиарейное",
   "ContextMenu_Take_LaxativePill": "Принять слабительное",
   "ContextMenu_Take_DiureticPill": "Принять мочегонное",
   "ContextMenu_Take_AnticholinergicPill": "Принять антихолинергик",
-
-  "ContextMenu_Tooltip_Urinated": "Записано:",
-  "ContextMenu_Tooltip_Defecated": "Запачкано:",
-
+  "ContextMenu_Tooltip_Urinated": "Помочился:",
+  "ContextMenu_Tooltip_Defecated": "Испражнился:",
   "ContextMenu_PaperScraps": "Обрывки бумаги",
   "ContextMenu_ClothScraps": "Тряпки"
 }

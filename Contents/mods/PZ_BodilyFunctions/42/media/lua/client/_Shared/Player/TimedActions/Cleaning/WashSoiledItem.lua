@@ -34,8 +34,13 @@ function WashSoiledItem:perform()
 
     if self.soiledItem then
         local itemType = self.soiledItem:getType()
-        -- Remove pooped item
-        self.character:getInventory():RemoveOneOf(itemType)
+        local inventory = self.character:getInventory()
+        -- Remove the exact item that was picked in the menu, not just any of its
+        -- type, so the client and the server agree on which one disappeared.
+        inventory:Remove(self.soiledItem)
+        if isClient() then
+            sendRemoveItemFromContainer(inventory, self.soiledItem)
+        end
         -- Strip "Pooped" to get the clean item type.
         local cleanItemType = string.gsub(itemType, "Pooped", "")
         -- The clean version of a rag is the VANILLA Base.RippedSheets, not a BF item.
@@ -46,7 +51,10 @@ function WashSoiledItem:perform()
         else
             cleanFullType = "BF." .. cleanItemType
         end
-        self.character:getInventory():AddItem(cleanFullType)
+        local created = inventory:AddItem(cleanFullType)
+        if created and isClient() then
+            sendAddItemToContainer(inventory, created)
+        end
     end
 
 
