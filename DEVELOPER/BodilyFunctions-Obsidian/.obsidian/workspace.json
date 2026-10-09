@@ -20,20 +20,6 @@
               "icon": "lucide-file",
               "title": "Changelog v1.3.0"
             }
-          },
-          {
-            "id": "a998df7178894845",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "BF_notes_for_author.md",
-                "mode": "preview",
-                "source": true
-              },
-              "icon": "lucide-file",
-              "title": "BF_notes_for_author"
-            }
           }
         ]
       }

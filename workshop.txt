@@ -1,6 +1,6 @@
 version=1
 id=3396456841
-title=[42.20!] Bodily Functions [v1.3.1]
+title=[42.20!] Bodily Functions [v1.3.2]
 description=[h1][b]💀 Bodily Functions 💀[/b][/h1]
 description=[h3][i]Welcome to a level of realism a surprising amount of people desire.[/i][/h3]
 description=[h3][i]The whole zombie thing isn't tame enough, why not make it worse?[/i][/h3]
@@ -62,7 +62,7 @@ description=
 description=[hr][/hr]
 description=[h3]🙏 Thanks & Credits[/h3]
 description=[list]
-description=[*][url=https://steamcommunity.com/id/gamarjoba99][b]SweetBabyINC[/b][/url]: Major contributions (1.2 Update). For polish, quality of life features, and cleaning up code.
+description=[*][url=https://steamcommunity.com/id/gamarjoba99][b]SweetBabyINC[/b][/url]: Major contributions (1.2 & 1.3 Updates). For polish, quality of life features, and cleaning up code.
 description=[*][b]NICETRY[/b]: Major contributions and inspiration.
 description=[*][url=https://steamcommunity.com/profiles/76561197996201821][b]RSilience[/b][/url]: Creator of "Bodily Functions Remixed", provided tons of code and improvements.
 description=[*][b]nigel[/b]: Helped with toilet interaction code.

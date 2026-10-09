@@ -1,14 +1,18 @@
+## 1.3.2
+
+> [!question] 10/6/26
+> - 
+
+## 1.3.1
 
 ## 1.3.0
+
 > [!question] 9/10/26
 > Bug Fixes:
 > - Since **B42.15** translation files must not carry the language code in the filename. `Translate/RU/` included `IG_UI_RU.json`, `Sandbox_RU.json`, etc., so the game looked for `RU/IG_UI.json` and failed.
 > 	- This affects **RU, ES and PTBR**. RU was renamed + brought up to date.
 > 	- TODO: ES needs the same rename; PTBR is still outdated and needs fixing.
 > - Recipe prefix for Recipe localization was removed for similar reasons. Should be fixed.
-
-
-
 > Bug Fixes:
 - Fixed non-English translations failing to load due to incorrect filenames. Affects **RU, ES and PTBR**. RU has also been updated.
 - Fixed recipe localization keys not being recognized.
