@@ -7,6 +7,28 @@ MF.createMoodle("PoopedSelf");
 MF.createMoodle("PeedSelf");
 MF.createMoodle("BodilyFumes");
 
+-- PZAPI.ModOptions:getOptions()/getOption() were being looked up three times a
+-- frame per player. The handles never change once the options are built, so
+-- resolve them once.
+local cachedOptions = nil
+local function getBFOption(id)
+	if not cachedOptions then
+		cachedOptions = PZAPI.ModOptions:getOptions("BF")
+		if not cachedOptions then return nil end
+	end
+	return cachedOptions:getOption(id)
+end
+
+-- MF.ISMoodle:setValue() recomputes the level, recomputes good/bad/neutral and
+-- adds or removes the moodle from the UI manager. Only the two urge moodles
+-- were guarded against re-setting the same value; the other three fired that
+-- whole path every frame. All five are guarded now.
+local function setMoodleValue(moodle, value)
+	if moodle and moodle:getValue() ~= value then
+		moodle:setValue(value)
+	end
+end
+
 local function CheckBathroomMeters(player)
 		local playerNum = player:getPlayerNum()
 		local moodle = MF.getMoodle("Defecation",playerNum)
@@ -18,10 +40,8 @@ local function CheckBathroomMeters(player)
 		local bowelsMaxValue = SandboxVars.BathroomFunctions.BowelsMaxValue or 100 -- Get the max bowel value, default to 100 if not set
 		local bladderMaxValue = SandboxVars.BathroomFunctions.BladderMaxValue or 100 -- Get the max bladder value, default to 100 if not set
 
-		local modOptions = PZAPI.ModOptions:getOptions("BF")
-
-		local showMoodles = modOptions:getOption("4")
-		if(showMoodles:getValue(1)) then
+		local showMoodles = getBFOption("4")
+		if showMoodles and showMoodles:getValue(1) then
 			if moodle then
 				local defecationValue = BF.GetDefecateValue()
 				local defecationThreshold = {
@@ -41,9 +61,6 @@ local function CheckBathroomMeters(player)
 				end
 				table.sort(sortedDefecationThresholds)
 
-				-- Track the previous moodle value
-				local previousDefecationMoodleValue = moodle:getValue()
-
 				-- Apply moodle value based on sorted thresholds
 				local newDefecationMoodleValue = 0.5 -- Default value
 				for i = 1, #sortedDefecationThresholds do
@@ -53,10 +70,7 @@ local function CheckBathroomMeters(player)
 					end
 				end
 
-				-- Only set the moodle value if it changes
-				if newDefecationMoodleValue ~= previousDefecationMoodleValue then
-					moodle:setValue(newDefecationMoodleValue)
-				end
+				setMoodleValue(moodle, newDefecationMoodleValue)
 			end
 
 			if moodle2 then
@@ -78,9 +92,6 @@ local function CheckBathroomMeters(player)
 				end
 				table.sort(sortedUrinationThresholds)
 
-				-- Track the previous moodle value
-				local previousMoodleValue = moodle2:getValue()
-
 				-- Apply moodle value based on sorted thresholds
 				local newMoodleValue = 0.5 -- Default value
 				for i = 1, #sortedUrinationThresholds do
@@ -90,21 +101,16 @@ local function CheckBathroomMeters(player)
 					end
 				end
 
-				-- Only set the moodle value if it changes
-				if newMoodleValue ~= previousMoodleValue then
-					moodle2:setValue(newMoodleValue)
-				end
+				setMoodleValue(moodle2, newMoodleValue)
 
 			end
 		else
-			if moodle and moodle2 then
-				moodle:setValue(.5)
-				moodle2:setValue(.5)
-			end
+			setMoodleValue(moodle, .5)
+			setMoodleValue(moodle2, .5)
 		end
 
-		local showSoiledMoodles = modOptions:getOption("5")
-		if(showSoiledMoodles:getValue(1)) then
+		local showSoiledMoodles = getBFOption("5")
+		if showSoiledMoodles and showSoiledMoodles:getValue(1) then
 			if moodle3 then
 				local poopedSelfValue = BF.GetPoopedSelfValue()
 				local poopedSelfPercent = poopedSelfValue / 100 -- Assuming a max value of 100 for severity
@@ -118,15 +124,15 @@ local function CheckBathroomMeters(player)
 
 				-- Adjusted conditional logic to ensure correct thresholds
 				if poopedSelfPercent >= 1.0 then
-					moodle3:setValue(poopedSelfThreshold[1.0])
+					setMoodleValue(moodle3, poopedSelfThreshold[1.0])
 				elseif poopedSelfPercent >= 0.75 then
-					moodle3:setValue(poopedSelfThreshold[0.75])
+					setMoodleValue(moodle3, poopedSelfThreshold[0.75])
 				elseif poopedSelfPercent >= 0.5 then
-					moodle3:setValue(poopedSelfThreshold[0.5])
+					setMoodleValue(moodle3, poopedSelfThreshold[0.5])
 				elseif poopedSelfPercent >= 0.25 then
-					moodle3:setValue(poopedSelfThreshold[0.25])
+					setMoodleValue(moodle3, poopedSelfThreshold[0.25])
 				else
-					moodle3:setValue(0.5)
+					setMoodleValue(moodle3, 0.5)
 				end
 			end
 
@@ -143,22 +149,20 @@ local function CheckBathroomMeters(player)
 
 				-- Adjusted conditional logic to ensure correct thresholds
 				if peedSelfPercent >= 1.0 then
-					moodle4:setValue(peedSelfThreshold[1.0])
+					setMoodleValue(moodle4, peedSelfThreshold[1.0])
 				elseif peedSelfPercent >= 0.75 then
-					moodle4:setValue(peedSelfThreshold[0.75])
+					setMoodleValue(moodle4, peedSelfThreshold[0.75])
 				elseif peedSelfPercent >= 0.5 then
-					moodle4:setValue(peedSelfThreshold[0.5])
+					setMoodleValue(moodle4, peedSelfThreshold[0.5])
 				elseif peedSelfPercent >= 0.25 then
-					moodle4:setValue(peedSelfThreshold[0.25])
+					setMoodleValue(moodle4, peedSelfThreshold[0.25])
 				else
-					moodle4:setValue(0.5)
+					setMoodleValue(moodle4, 0.5)
 				end
 			end
 		else
-			if moodle3 and moodle4 then
-				moodle3:setValue(.5)
-				moodle4:setValue(.5)
-			end
+			setMoodleValue(moodle3, .5)
+			setMoodleValue(moodle4, .5)
 		end
 
 		-- TODO: Create "showBodilyFumesMoodle"
@@ -174,15 +178,15 @@ local function CheckBathroomMeters(player)
 		}
 
 	if bodilyFumesPercent >= 1.0 then
-		moodle5:setValue(bodilyFumesThreshold[1.0])
+		setMoodleValue(moodle5, bodilyFumesThreshold[1.0])
 	elseif bodilyFumesPercent >= 0.75 then
-		moodle5:setValue(bodilyFumesThreshold[0.75])
+		setMoodleValue(moodle5, bodilyFumesThreshold[0.75])
 	elseif bodilyFumesPercent >= 0.5 then
-		moodle5:setValue(bodilyFumesThreshold[0.5])
+		setMoodleValue(moodle5, bodilyFumesThreshold[0.5])
 	elseif bodilyFumesPercent >= 0.25 then
-		moodle5:setValue(bodilyFumesThreshold[0.25])
+		setMoodleValue(moodle5, bodilyFumesThreshold[0.25])
 	else
-		moodle5:setValue(0.5)
+		setMoodleValue(moodle5, 0.5)
 	end
 
 	end

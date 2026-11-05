@@ -74,6 +74,15 @@ module BF
         FireFuelRatio = 0.25,
     }
 
+    item BathTowelPooped
+    {
+        DisplayCategory = Junk,
+        ItemType = base:normal,
+        Weight = 0.3,
+        Icon = BathTowelPooped,
+        WorldStaticModel = BF.BathTowelPooped_Model,
+    }
+
     item NewspaperPooped
     {
         DisplayCategory = Junk,

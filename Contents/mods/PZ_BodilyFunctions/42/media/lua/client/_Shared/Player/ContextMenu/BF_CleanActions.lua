@@ -60,23 +60,28 @@ function BF.CleaningRightClick(player, context, worldObjects)
 end
 
 
--- Overwriting the base grab function so that you cannot pick up human urine
--- TODO: Remove display name for urine so it doesn't show in the inventory, and implement custom cleaning mechanic with mop
-ISGrabItemAction.o_transferItem = ISGrabItemAction.transferItem
+-- Human urine can't be picked up, only cleaned.
+-- TODO: Remove display name for urine so it doesn't show in the inventory.
+--
+-- This has to stop the action before it starts. ISGrabItemAction:start() opens an
+-- item transaction, and from then on the server moves the item whatever the
+-- client's transferItem does, so blocking there still put urine in the inventory
+-- in multiplayer and left the action unfinished.
+local originalGrabIsValid = ISGrabItemAction.isValid
 
-function ISGrabItemAction:transferItem(item)
-    local itemObject = item:getItem()
-    if itemObject:getType() == "Urine_Hydrated_0" then
-        local modOptions = PZAPI.ModOptions:getOptions("BF")
-
-        local playerSayStatus = modOptions:getOption("6")
-	    if(playerSayStatus:getValue(1)) then
-            self.character:Say(getText("IGUI_announce_CantPickUpPee"))
+function ISGrabItemAction:isValid()
+    local inventoryItem = self.item and self.item:getItem()
+    if inventoryItem and BF.UrineWorldTypes[inventoryItem:getFullType()] then
+        if not self.bfRefusalSaid then
+            self.bfRefusalSaid = true
+            local playerSayStatus = PZAPI.ModOptions:getOptions("BF"):getOption("6")
+            if playerSayStatus:getValue(1) then
+                self.character:Say(getText("IGUI_announce_CantPickUpPee"))
+            end
         end
-        --print("Blocked picking up Urine_Hydrated_0!")
-    else
-        self:o_transferItem(item)
+        return false
     end
+    return originalGrabIsValid(self)
 end
 
 function BF.CleanUrine()

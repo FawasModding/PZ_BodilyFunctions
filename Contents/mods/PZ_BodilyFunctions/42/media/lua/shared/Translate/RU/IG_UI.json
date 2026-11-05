@@ -7,5 +7,10 @@
   "IGUI_BladderFullness": "Заполненность мочевого пузыря",
   "IGUI_BowelsFullness": "Заполненность кишечника",
   "IGUI_Empty": "Пусто",
-  "IGUI_Full": "Полный"
+  "IGUI_Full": "Полный",
+
+  "IGUI_BF_WashItemMissing": "Этой вещи больше нет в инвентаре.",
+  "IGUI_BF_WashNoWater": "Здесь не хватает воды.",
+  "IGUI_BF_CleanWasteFailed": "Не могу дотянуться, чтобы это убрать.",
+  "IGUI_BF_WipeRejected": "Этим нельзя вытереться."
 }

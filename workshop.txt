@@ -1,6 +1,6 @@
 version=1
 id=3396456841
-title=[42.20!] Bodily Functions [v1.3.2]
+title=[42.20!] Bodily Functions [v1.4.0]
 description=[h1][b]💀 Bodily Functions 💀[/b][/h1]
 description=[h3][i]Welcome to a level of realism a surprising amount of people desire.[/i][/h3]
 description=[h3][i]The whole zombie thing isn't tame enough, why not make it worse?[/i][/h3]

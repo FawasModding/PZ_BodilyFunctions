@@ -32,31 +32,11 @@ end
 function WashSoiledItem:perform()
 	self:stopSound()
 
-    if self.soiledItem then
-        local itemType = self.soiledItem:getType()
-        local inventory = self.character:getInventory()
-        -- Remove the exact item that was picked in the menu, not just any of its
-        -- type, so the client and the server agree on which one disappeared.
-        inventory:Remove(self.soiledItem)
-        if isClient() then
-            sendRemoveItemFromContainer(inventory, self.soiledItem)
-        end
-        -- Strip "Pooped" to get the clean item type.
-        local cleanItemType = string.gsub(itemType, "Pooped", "")
-        -- The clean version of a rag is the VANILLA Base.RippedSheets, not a BF item.
-        -- Map known junk back to their real clean counterparts.
-        local cleanFullType
-        if cleanItemType == "RippedSheets" then
-            cleanFullType = "Base.RippedSheets"
-        else
-            cleanFullType = "BF." .. cleanItemType
-        end
-        local created = inventory:AddItem(cleanFullType)
-        if created and isClient() then
-            sendAddItemToContainer(inventory, created)
-        end
+    -- The server swaps the item for its clean version: an item a client makes on
+    -- its own can't be moved afterwards. These don't use a cleaning agent.
+    if self.soiledItem and self.storeWater then
+        BF.SendTrackedCommand(self.character, "wash", BF.BuildWashArgs(self.soiledItem, nil, self.storeWater))
     end
-
 
 	ISBaseTimedAction.perform(self)
 end

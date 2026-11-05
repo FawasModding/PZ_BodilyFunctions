@@ -12,13 +12,32 @@
 -- {item=, source=} records so callers can consume items from the exact place
 -- they were found (no double-spending across containers).
 --
+-- The scan walks nine squares plus every container on them. One right-click menu
+-- asks for it up to eleven times, so the client caches the result for
+-- BF.ReachableScanCacheMs. The server must never act on a cached scan and uses
+-- BF.BuildReachableItemRecords directly.
+--
 -- =====================================================
 
 BF = BF or {}
 
+-- How long a scan result stays usable, in real milliseconds: long enough to cover
+-- one context-menu build, too short for the surroundings to change meaningfully.
+BF.ReachableScanCacheMs = 200
+
+local cachedPlayer = nil
+local cachedRecords = nil
+local cachedAt = 0
+
+function BF.InvalidateReachableCache()
+    cachedPlayer = nil
+    cachedRecords = nil
+    cachedAt = 0
+end
+
 -- Returns an array of records: { item = InventoryItem, container = ItemContainer or nil, worldItem = IsoWorldInventoryObject or nil }
 -- Each physical item appears exactly once, tied to where it lives.
-function BF.GatherReachableItemRecords(player)
+function BF.BuildReachableItemRecords(player)
     local result = {}
     if not player then return result end
 
@@ -101,6 +120,22 @@ function BF.GatherReachableItemRecords(player)
     return result
 end
 
+-- Cached form of BF.BuildReachableItemRecords, for menus. The returned table is
+-- shared: read it, don't change it.
+function BF.GatherReachableItemRecords(player)
+    if not player then return {} end
+
+    if cachedRecords and cachedPlayer == player
+        and (getTimestampMs() - cachedAt) < BF.ReachableScanCacheMs then
+        return cachedRecords
+    end
+
+    cachedRecords = BF.BuildReachableItemRecords(player)
+    cachedPlayer = player
+    cachedAt = getTimestampMs()
+    return cachedRecords
+end
+
 -- Convenience: flat array of just the items (no source info).
 function BF.GatherReachableItems(player)
     local items = {}
@@ -131,26 +166,18 @@ function BF.FindReachableItem(player, predicate)
     return nil
 end
 
--- Removes up to `count` reachable items of the given type, each from the exact
--- place it lives (so an item is never removed twice). Returns count removed.
-function BF.RemoveReachableItemType(player, itemType, count)
-    local removed = 0
-    for _, rec in ipairs(BF.GatherReachableItemRecords(player)) do
-        if removed >= count then break end
-        if rec.item:getType() == itemType then
-            if rec.container then
-                rec.container:Remove(rec.item)
-                if isClient() then
-                    sendRemoveItemFromContainer(rec.container, rec.item)
-                end
-            elseif rec.worldItem then
-                local wsq = rec.worldItem:getSquare()
-                if wsq then
-                    wsq:transmitRemoveItemFromSquare(rec.worldItem)
-                end
-            end
-            removed = removed + 1
-        end
+-- Server only: removes a record's item from wherever it lives. Returns true if
+-- it was removed, and a record can only be removed once.
+function BF.RemoveItemRecord(record)
+    if record.removed then return false end
+    if record.container then
+        record.container:Remove(record.item)
+        sendRemoveItemFromContainer(record.container, record.item)
+    elseif record.worldItem and record.worldItem:getSquare() then
+        record.worldItem:getSquare():transmitRemoveItemFromSquare(record.worldItem)
+    else
+        return false
     end
-    return removed
+    record.removed = true
+    return true
 end

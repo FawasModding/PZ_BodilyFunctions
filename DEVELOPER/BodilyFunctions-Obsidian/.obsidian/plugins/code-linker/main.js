@@ -5935,7 +5935,7 @@ var CodeLinkerPlugin = class extends Plugin {
       return lang.prism;
     return PRISM_LANG[langId] || langId;
   }
-  // Empty the index (nothing to scan) and persist, telling whoever's listening.
+  // Empty the index (nothing to scan) and persist, telling whatev3er's listening.
   async resetIndex(noticeKey, notify) {
     this.setIndex([]);
     this.fileCache = /* @__PURE__ */ new Map();

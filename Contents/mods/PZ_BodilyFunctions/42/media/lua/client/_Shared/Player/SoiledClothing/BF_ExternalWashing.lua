@@ -206,9 +206,13 @@ end
 -- Multiplayer value sync
 -- ----------------------------------------------------------------------------
 
-local lastDefecateValue = nil
-local lastUrinateValue = nil
+local SYNCED_VALUES = {
+    "urinateValue", "defecateValue", "peedSelfValue", "poopedSelfValue", "bodilyFumesValue", "bfBladderStrain",
+}
+local lastSentValues = {}
 
+-- Sends only what changed, as named fields the server validates. This used to be
+-- player:transmitModData(), which pushed the whole table every minute.
 local function syncPlayerValues()
     if not isClient() then return end
 
@@ -216,13 +220,19 @@ local function syncPlayerValues()
     if not player then return end
 
     local modData = player:getModData()
-    if modData.defecateValue == lastDefecateValue and modData.urinateValue == lastUrinateValue then
-        return
+    local changed = nil
+    for _, field in ipairs(SYNCED_VALUES) do
+        local value = modData[field]
+        if type(value) == "number" and value ~= lastSentValues[field] then
+            changed = changed or {}
+            changed[field] = value
+            lastSentValues[field] = value
+        end
     end
 
-    lastDefecateValue = modData.defecateValue
-    lastUrinateValue = modData.urinateValue
-    player:transmitModData()
+    if changed then
+        sendClientCommand(player, "BF", "setValues", { values = changed })
+    end
 end
 
 -- ----------------------------------------------------------------------------

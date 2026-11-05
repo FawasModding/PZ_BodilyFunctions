@@ -40,10 +40,16 @@ end
 function CleanWasteProduct:perform()
     self.character:stopOrTriggerSound(self.sound)
 
-	-- Remove the puddle from the world
-    if self.puddleToRemove and self.square then
-        self.square:transmitRemoveItemFromSquare(self.puddleToRemove)
-        print("Urine puddle removed successfully.")
+	-- The server removes the puddle from the world.
+    local puddleItem = self.puddleToRemove and self.puddleToRemove:getItem()
+    if puddleItem and self.square and self.cleaningItem then
+        BF.SendTrackedCommand(self.character, "cleanWaste", {
+            itemId = puddleItem:getID(),
+            toolId = self.cleaningItem:getID(),
+            x = self.square:getX(),
+            y = self.square:getY(),
+            z = self.square:getZ(),
+        })
     end
 
 	ISBaseTimedAction.perform(self)

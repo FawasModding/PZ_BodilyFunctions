@@ -51,8 +51,7 @@ function GroundUrinate:perform()
 	--self.character:playSound("BF_Pee_Ground_Medium")
 
 	if SandboxVars.BF.CreatePeeObject == true then
-		local urineItem = instanceItem("BF.Urine_Hydrated_0")
-		self.character:getCurrentSquare():AddWorldInventoryItem(urineItem, 0, 0, 0)
+		BF.SpawnWaste(self.character, "pee")
 	end
 
 	self.character:getModData().urinateValue = 0.0 --RESET URINE VALUE

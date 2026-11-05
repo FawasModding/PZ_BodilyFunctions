@@ -50,6 +50,20 @@ function BF.UpdateBathroomValues()
 
 end
 
+-- Whether an involuntary accident is allowed right now. kind is "pee" or "poop".
+-- Asleep is the bed-accident option, awake is the accident option.
+function BF.CanHaveAccident(player, kind)
+    local vars = SandboxVars.BF
+    if kind == "pee" then
+        if not BF.IsUrinationEnabled() then return false end
+        if player:isAsleep() then return vars.NightPeeAccidents ~= false end
+        return vars.CanHavePeeAccident ~= false
+    end
+    if not BF.IsDefecationEnabled() then return false end
+    if player:isAsleep() then return vars.NightPoopAccidents ~= false end
+    return vars.CanHavePoopAccident ~= false
+end
+
 -- Make the player urinate / defecate in very "sudden" situations.
 -- Like, getting injured (car crash, shot). Overflowing (bladder max capacity).
 -- todo: injuries and car crashes don't do anything yet
@@ -82,18 +96,16 @@ function BF.HandleInstantAccidents()
 
 
     -- Leaking feature for urination
-    if player:hasTrait(BFTraits.UrinaryIncontinence) and (urinateValue >= 0.2 * bladderMaxValue) then
+    if BF.CanHaveAccident(player, "pee") and BF.HasTrait(player, BFTraits.UrinaryIncontinence) and (urinateValue >= 0.2 * bladderMaxValue) then
         if ZombRand(100) < leakChance then
             BF.TriggerSelfUrinate(true)  -- Trigger self urination leak action
-            print("Leaked Pee" .. tostring(leakChance))
         end
     end
 
     -- Leaking feature for defecation
-    if player:hasTrait(BFTraits.FecalIncontinence) and (defecateValue >= 0.2 * bowelsMaxValue) then
+    if BF.CanHaveAccident(player, "poop") and BF.HasTrait(player, BFTraits.FecalIncontinence) and (defecateValue >= 0.2 * bowelsMaxValue) then
         if ZombRand(100) < leakChance then
             BF.TriggerSelfDefecate(true)  -- Trigger self defecation leak action
-            print("Leaked Poo" .. tostring(leakChance))
         end
     end
 
@@ -108,7 +120,7 @@ function BF.HandleInstantAccidents()
             player:forceAwake() -- Wake the player up if they need to pee
 
             -- If the player has the "Bedwetter" trait, trigger urination accident
-            if player:hasTrait(BFTraits.Bedwetter) then
+            if BF.CanHaveAccident(player, "pee") and BF.HasTrait(player, BFTraits.Bedwetter) then
                 BF.UrinateBottoms() -- Simulate peeing in bed
                 BF.SetUrinateValue(0) -- Reset pee value after accident
             end
@@ -118,7 +130,7 @@ function BF.HandleInstantAccidents()
             player:forceAwake()  -- Wake the player up if they need to defecate
 
             -- If the player has the "Bedsoiler" trait, trigger defecation accident
-            if player:hasTrait(BFTraits.Bedsoiler) then
+            if BF.CanHaveAccident(player, "poop") and BF.HasTrait(player, BFTraits.Bedsoiler) then
                 BF.DefecateBottoms() -- Simulate pooping in bed
                 BF.SetDefecateValue(0)  -- Reset defecate value after accident
             end
@@ -126,9 +138,9 @@ function BF.HandleInstantAccidents()
         end
     else
         -- If the player is awake, start the pee or poop process based on their bladder/bowel status
-        if urinateValue >= bladderThreshold then
+        if urinateValue >= bladderThreshold and BF.CanHaveAccident(player, "pee") then
             BF.TriggerSelfUrinate()  -- Trigger self urination action
-        elseif defecateValue >= bowelsThreshold then
+        elseif defecateValue >= bowelsThreshold and BF.CanHaveAccident(player, "poop") then
             BF.TriggerSelfDefecate()  -- Trigger self defecation action
         end
     end
@@ -162,13 +174,7 @@ function BF.HandleUrgencyHiccup()
             hiccupChance = hiccupChance + (player:getMoodles():getMoodleLevel(MoodleType.PANIC) * 2)  -- Increase by Panic level
         end
 
-        local panicLevel = player:getMoodles():getMoodleLevel(MoodleType.PANIC)
-        print("Panic Level:", panicLevel, "Calculated Value:", panicLevel * 2)
-
     end
-
-    -- Print the hiccup chance each time it activates
-    print("Hiccup Chance: " .. hiccupChance .. "%")
 
     -- Hiccup will only trigger if bladder or bowels are 40% or more full
     if ZombRand(100) < hiccupChance then
@@ -186,7 +192,6 @@ function BF.HandleUrgencyHiccup()
 
         if hiccupType then
             -- Trigger Hiccup and inform the type
-            print("Urgency Hiccup Occurred! Hiccup Type: " .. hiccupType)
 
             local playerSayStatus = modOptions:getOption("6")
 	        if(playerSayStatus:getValue(1)) then
@@ -205,12 +210,14 @@ function BF.HandleUrgencyHiccup()
             end
 
             -- Urination logic
-            if player:hasTrait(BFTraits.UrinaryIncontinence) then
+            if not BF.CanHaveAccident(player, "pee") then
+                -- Accidents are off: the urge still shows, nothing happens.
+            elseif BF.HasTrait(player, BFTraits.UrinaryIncontinence) then
                 -- Incontinent players always leak fully
                 BF.TriggerSelfUrinate()
             elseif ZombRand(100) < accidentChance then
                 if urinateValue >= 0.4 * bladderMaxValue then
-                    if player:hasTrait(BFTraits.BladderControl) then
+                    if BF.HasTrait(player, BFTraits.BladderControl) then
                         -- With BladderControl, 75% chance for a small leak vs 25% full leak
                         -- Small leaks are only possible before the bladder is full.
                         if urinateValue < bladderThreshold and ZombRand(100) < 75 then
@@ -220,18 +227,19 @@ function BF.HandleUrgencyHiccup()
                         end
                     else
                         BF.TriggerSelfUrinate() -- no control trait -> full leak
-                        print("Triggered full leak (no trait)")
                     end
                 end
             end
 
             -- Defecation logic
-            if player:hasTrait(BFTraits.FecalIncontinence) then
+            if not BF.CanHaveAccident(player, "poop") then
+                -- Accidents are off: the urge still shows, nothing happens.
+            elseif BF.HasTrait(player, BFTraits.FecalIncontinence) then
                 -- Incontinent players always defecate fully
                 BF.TriggerSelfDefecate()
             elseif ZombRand(100) < accidentChance then
                 if defecateValue >= 0.4 * bowelsMaxValue then
-                    if player:hasTrait(BFTraits.BowelControl) then
+                    if BF.HasTrait(player, BFTraits.BowelControl) then
                         if ZombRand(100) < 75 then
                                 BF.TriggerSelfDefecate(true)
                         else
@@ -254,11 +262,9 @@ function BF.PlayUrgencyIdles(hiccupType, doTimedAction)
 
     -- Based on the hiccupType (bladder or bowels), play the corresponding animation
     if hiccupType == "bladder" then
-        print("Playing Urgent Pee Animation!")
         player:playerVoiceSound("PainFromGlassCut") -- Replace this with specific pee sound if needed
         ISTimedActionQueue.add(Idle_PeeUrgency:new(player, 40, false, true))  -- Trigger bladder urgency animation
     elseif hiccupType == "bowels" then
-        print("Playing Urgent Poop Animation!")
         player:playerVoiceSound("PainFromGlassCut") -- Replace this with specific poop sound if needed
         ISTimedActionQueue.add(Idle_PoopUrgency:new(player, 40, false, true))  -- Trigger bowel urgency animation
     end

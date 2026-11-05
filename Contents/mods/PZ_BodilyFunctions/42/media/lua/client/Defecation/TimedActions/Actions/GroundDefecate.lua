@@ -44,8 +44,7 @@ function GroundDefecate:perform()
 
 	--Manage poop objects, poops should be different dependant on defecate value, diarrhea, and corn
 	if SandboxVars.BF.CreatePoopObject == true then
-		local fecesItem = instanceItem("BF.HumanFeces")
-		self.character:getCurrentSquare():AddWorldInventoryItem(fecesItem, ZombRand(0.1, 0.5), ZombRand(0.1, 0.5), 0)
+		BF.SpawnWaste(self.character, "poop")
 	end
 
 	self.character:getModData().defecateValue = 0.0 --RESET DEFECATE VALUE

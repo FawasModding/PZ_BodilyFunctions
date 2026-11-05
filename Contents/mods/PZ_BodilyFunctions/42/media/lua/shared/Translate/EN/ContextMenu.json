@@ -90,5 +90,10 @@
   "ContextMenu_Tooltip_Defecated": "Defecated:",
 
   "ContextMenu_PaperScraps": "Paper scraps",
-  "ContextMenu_ClothScraps": "Cloth scraps"
+  "ContextMenu_ClothScraps": "Cloth scraps",
+
+  "ContextMenu_BF_Redress": "Get Dressed",
+  "ContextMenu_BF_Redress_tooltip": "Put back on the clothes taken off to relieve yourself.",
+  "ContextMenu_BF_RedressForget": "Forget These Clothes",
+  "ContextMenu_BF_NoWater": "Not enough water in the tank to flush."
 }

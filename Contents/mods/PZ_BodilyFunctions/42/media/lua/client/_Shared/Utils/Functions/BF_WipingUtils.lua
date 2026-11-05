@@ -19,9 +19,27 @@ function BF.CollectWipeables(player)
     local records = BF.GatherReachableItemRecords(player)
 
     local countByType = {}
+    -- Drainables are counted in charges, not items, and pooled across every
+    -- reachable roll/box. Picking the first record found meant a nearly spent
+    -- roll on the bathroom floor was offered at 25% while a full one sat in the
+    -- player's bag. The best item is kept so the menu entry points somewhere
+    -- sensible; WipeSelf spends the pool best-first.
+    local drainCharges = {}
+    local drainBestItem = {}
     for _, rec in ipairs(records) do
         local t = rec.item:getType()
         countByType[t] = (countByType[t] or 0) + 1
+
+        if BF_WipingConfig.drainableWipeables[t] and BF.IsChargeBasedWipeable(rec.item) then
+            local uses = rec.item:getCurrentUses()
+            if uses >= 1 then
+                drainCharges[t] = (drainCharges[t] or 0) + uses
+                local best = drainBestItem[t]
+                if not best or uses > best:getCurrentUses() then
+                    drainBestItem[t] = rec.item
+                end
+            end
+        end
     end
 
     local emittedType = {}
@@ -31,12 +49,16 @@ function BF.CollectWipeables(player)
         local item = rec.item
         local itemType = item:getType()
 
-        -- Toilet paper (drainable)
+        -- Charge-based (toilet paper, tissues)
         local drainCfg = BF_WipingConfig.drainableWipeables[itemType]
-        if drainCfg and item.getCurrentUses and item:getCurrentUses() >= 1 then
+        if drainCfg and BF.IsChargeBasedWipeable(item) and item:getCurrentUses() >= 1 then
             if not emittedType[itemType] then
-                local eff = math.min(item:getCurrentUses() / drainCfg.usesRequired, 1.0)
-                table.insert(options, { wipeType = "usingDrainable", item = item, efficiency = eff })
+                local eff = math.min((drainCharges[itemType] or 0) / drainCfg.usesRequired, 1.0)
+                table.insert(options, {
+                    wipeType = "usingDrainable",
+                    item = drainBestItem[itemType] or item,
+                    efficiency = eff
+                })
                 emittedType[itemType] = true
             end
 

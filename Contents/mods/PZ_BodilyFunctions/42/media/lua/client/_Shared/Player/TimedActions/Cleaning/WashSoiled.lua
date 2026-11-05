@@ -29,17 +29,11 @@ function WashSoiled:stop()
     ISBaseTimedAction.stop(self)
 end
 
-function WashSoiled:perform()
-	self:stopSound()
-
+-- Runs on the server's reply. Soiling is simulated on the client, so the garment
+-- is updated here once the server has taken the water and cleaning agent.
+function WashSoiled:applyWash(usedCleaner)
 	local item = self.soiledItem
-	if not item then
-		ISBaseTimedAction.perform(self)
-		return
-	end
-
 	local modData = item:getModData()
-	local usedCleaner = BF.ConsumeCleaningAgent(self.cleaningItem)
 
 	if modData.peed == true then
 		modData.peedSeverity = BF.ReduceSoilSeverity(modData.peedSeverity, usedCleaner)
@@ -81,6 +75,22 @@ function WashSoiled:perform()
 
 	self.character:resetModelNextFrame()
 	triggerEvent("OnClothingUpdated", self.character)
+end
+
+function WashSoiled:perform()
+	self:stopSound()
+
+	local item = self.soiledItem
+	if not item or not self.storeWater then
+		ISBaseTimedAction.perform(self)
+		return
+	end
+
+	BF.SendTrackedCommand(self.character, "wash", BF.BuildWashArgs(item, self.cleaningItem, self.storeWater), function(result)
+		if result.ok then
+			self:applyWash(result.usedCleaner)
+		end
+	end)
 
 	-- If the garment was being worn before washing, put it back on using the
 	-- game's own wear action (queued after this one). Doing it manually mid-action

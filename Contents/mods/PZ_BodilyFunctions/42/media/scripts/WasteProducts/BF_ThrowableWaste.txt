@@ -6,7 +6,7 @@ module BF
 		ItemType = base:weapon,
 		Weight = 0.2,
 		Icon = HumanFeces,
-		ExplosionSound = BF_PoopLanding,
+		ExplosionSound = BF_Poop_Landing,
         NoiseRange = 2,
 		MaxDamage = 0,
 		MaxHitCount = 0,

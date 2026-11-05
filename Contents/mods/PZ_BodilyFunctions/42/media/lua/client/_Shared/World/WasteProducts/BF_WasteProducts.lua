@@ -109,7 +109,7 @@ BF_WasteProducts.ApplyWasteExposureEffects = function(lastWasteSquare, wasteAmou
     end
 
     -- Only track HumanFeces for flies
-    if lastWasteSquare and hasFeces and not lastWasteSquare:hasFlies() then
+    if lastWasteSquare and hasFeces and SandboxVars.BF.FliesOnPoop ~= false and not lastWasteSquare:hasFlies() then
         lastWasteSquare:setHasFlies(true)
         table.insert(BF_WasteProducts.wasteProductSquares, lastWasteSquare)
     end
@@ -123,6 +123,15 @@ end
 BF_WasteProducts.UpdateWasteFlies = function()
     BF_WasteProducts.ScanNearbyForWaste()
     local player = getPlayer()   -- using getPlayer() for singleplayer
+
+    -- Remove the flies if they were turned off mid-game through sandbox options.
+    if SandboxVars.BF.FliesOnPoop == false then
+        for i = #BF_WasteProducts.wasteProductSquares, 1, -1 do
+            BF_WasteProducts.wasteProductSquares[i]:setHasFlies(false)
+            table.remove(BF_WasteProducts.wasteProductSquares, i)
+        end
+        return
+    end
 
     for i = #BF_WasteProducts.wasteProductSquares, 1, -1 do
         local fecesSquare = BF_WasteProducts.wasteProductSquares[i]
@@ -147,7 +156,7 @@ BF_WasteProducts.UpdateWasteFlies = function()
 
         if fecesFound then
             if ZombRand(6) == 0 and getGameTime():getTrueMultiplier() <= 5 then
-                fecesSquare:playSound("BF_WasteFlies")
+                fecesSquare:playSound("BF_Waste_Flies")
             end
         else
             table.remove(BF_WasteProducts.wasteProductSquares, i)

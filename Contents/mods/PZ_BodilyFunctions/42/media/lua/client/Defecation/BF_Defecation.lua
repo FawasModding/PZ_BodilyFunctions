@@ -1,5 +1,23 @@
 require "BodilyFunctions"
 
+-- How long a defecation action takes, after the sandbox multiplier. A timed action
+-- needs at least one tick, so a multiplier of 0 means as fast as possible.
+function BF.GetDefecateTime(baseTime)
+    return math.max(1, baseTime * (SandboxVars.BF.DefecateSpeedMultiplier or 1))
+end
+
+-- Food sickness above this (on the stat's 0-100 scale) brings on diarrhea.
+BF.DiarrheaSicknessThreshold = 25
+
+-- Bowel fill multiplier from diarrhea: 1 when healthy, about x3 at Nauseous (50),
+-- x5 at the worst.
+function BF.GetDiarrheaMultiplier(player)
+    if SandboxVars.BF.EnableDiarrhea == false then return 1 end
+    local sickness = player:getStats():get(CharacterStat.FOOD_SICKNESS)
+    if sickness <= BF.DiarrheaSicknessThreshold then return 1 end
+    return 1 + sickness / BF.DiarrheaSicknessThreshold
+end
+
 -- Update defecation values
 function BF.UpdateDefecationValues()
     local player = getPlayer()
@@ -28,11 +46,7 @@ function BF.UpdateDefecationValues()
     local finalBowelMultiplier = bowelMultiplier + stressEffect + urgencyFactor
 
     -- Multiply random variation with final multiplier
-    finalBowelMultiplier = finalBowelMultiplier * randomBowelFactor
-
-    print("Hunger level: " .. tostring(hunger))
-    print("Bowel multiplier: " .. tostring(bowelMultiplier))
-    print("Final bowel multiplier: " .. tostring(finalBowelMultiplier))
+    finalBowelMultiplier = finalBowelMultiplier * randomBowelFactor * BF.GetDiarrheaMultiplier(player)
 
     -- Get base max capacities (from SandboxVars or defaults).
     local baseBowelsMax  = BF.GetMaxBowelValue()
@@ -46,8 +60,13 @@ function BF.UpdateDefecationValues()
     -- New bowel value = old bowel value + (3.5 * sandbox multiplier * hunger/stress/endurance/random multiplier)
     local defecateIncrease = defecateBaseIncreaseRate * SandboxVars.BF.BowelsIncreaseMultiplier * finalBowelMultiplier
 
-    -- Update the fill values!
-    defecateValue = defecateValue + defecateIncrease
+    -- Update the fill values! With defecation off the bowels stay empty. The cap
+    -- matters when accidents are off, since nothing else stops it from climbing.
+    if BF.IsDefecationEnabled() then
+        defecateValue = math.min(defecateValue + defecateIncrease, baseBowelsMax)
+    else
+        defecateValue = 0
+    end
 
     player:getModData().defecateValue = tonumber(defecateValue)
 
@@ -181,103 +200,24 @@ end
 --
 -- =====================================================
 
--- Walks the player to the toilet. When mustSit is true (females), seats them
--- EXACTLY like vanilla "Rest": pathToSitOnFurniture -> ISRestAction (which sits
--- the character and self-completes, leaving the sitting STATE). The relief
--- action then runs on top, like reading while seated. When mustSit is false
--- (males urinating), the character just walks adjacent and stands.
---
--- reliefActionFactory(goalObject, seated) queues the relief action(s).
--- True if the object has vanilla sitting data (a real toilet), false for sinks,
--- urinals, showers, etc. that share the same relief action but can't be sat on.
-function BF.CanSitOnObject(object)
-    if not object then return false end
-    return SeatingManager.getInstance():getTilePositionCount(object) > 0
-end
-
--- Queues the vanilla "get up from furniture" after toilet actions, so the
--- character stands once they've finished (and after any wiping).
-function BF.StandUpAfterToilet(player)
-    player:setVariable("forceGetUp", true)
-    ISTimedActionQueue.add(ISWaitWhileGettingUp:new(player))
-end
-
-function BF.WalkThenRelief(player, object, mustSit, reliefActionFactory)
-    if not object or not object:getSquare() then return false end
-
-    if not mustSit then
-        -- Standing use (male / sinks / urinals): stand on a cardinally-adjacent
-        -- tile touching the object (N/S/E/W, never diagonal or a tile away), so
-        -- the character is right next to it without standing on top of it.
-        local objSq = object:getSquare()
-        local cell = getCell()
-        local ox, oy, oz = objSq:getX(), objSq:getY(), objSq:getZ()
-        local best = nil
-        local bestDist = 9999
-        local charSq = player:getCurrentSquare()
-        for _, d in ipairs({ {1,0}, {-1,0}, {0,1}, {0,-1} }) do
-            local sq = cell and cell:getGridSquare(ox + d[1], oy + d[2], oz)
-            if sq and sq:isFree(false) then
-                local dist = charSq and IsoUtils.DistanceToSquared(charSq:getX(), charSq:getY(), sq:getX(), sq:getY()) or 0
-                if dist < bestDist then
-                    bestDist = dist
-                    best = sq
-                end
-            end
-        end
-        best = best or AdjacentFreeTileFinder.Find(objSq, player, nil)
-        if best and best ~= charSq then
-            ISTimedActionQueue.add(ISWalkToTimedAction:new(player, best))
-        end
-        reliefActionFactory(object, false)
-        return true
-    end
-
-    local action = ISPathFindAction:pathToSitOnFurniture(player, object, true)
-
-    action:setOnComplete(function()
-        local goal = action.goalFurnitureObject or object
-        local restAction = ISRestAction:new(player, goal, true)
-        if action:addAfter(restAction) == nil then
-            ISTimedActionQueue.add(restAction)
-        end
-        reliefActionFactory(goal, true)
-    end)
-
-    action:setOnFail(function()
-        local adjacent = AdjacentFreeTileFinder.Find(object:getSquare(), player, nil)
-        if adjacent then
-            action:setRunActionsAfterFailing(true)
-            if adjacent ~= player:getCurrentSquare() then
-                action:addAfter(ISWalkToTimedAction:new(player, adjacent))
-            end
-            reliefActionFactory(object, false)
-        end
-    end)
-
-    ISTimedActionQueue.add(action)
-    return true
-end
+-- BF.WalkThenRelief, BF.CanSitOnObject and BF.StandUpAfterToilet are in BF_Urination.lua.
 
 function BF.TriggerToiletDefecate(object, player, isWiping, wipeType, wipeItem, wipeEfficiency, pooledTypes)
     local player = getPlayer()
     local defecateValue = BF.GetDefecateValue()
     local requirement = SandboxVars.BF.PoopInToiletRequirement or 40
     local bowelsMaxValue = SandboxVars.BathroomFunctions.BowelsMaxValue or 100
-    local hasShyBowels = player:hasTrait(BFTraits.ShyBowels)
+    local hasShyBowels = BF.HasTrait(player, BFTraits.ShyBowels)
     local isBeingWatched = BF.IsBeingWatched(player)
 
     if defecateValue < (requirement / 100) * bowelsMaxValue or (hasShyBowels and isBeingWatched) then
         return
     end
 
-    -- Remove clothing before walking to / sitting on the toilet.
-    BF.RemoveBottomClothing(player)
-
     -- Walk to the toilet using the vanilla furniture-sitting pathfinder, then
     -- run the relief action once the character has arrived and is seated.
     BF.WalkThenRelief(player, object, BF.CanSitOnObject(object), function(goalObject, seated)
-        ISTimedActionQueue.add(ToiletDefecate:new(player, defecateValue * 2, true, true, goalObject, seated))
+        ISTimedActionQueue.add(ToiletDefecate:new(player, BF.GetDefecateTime(defecateValue * 2), true, true, goalObject, seated))
 
         if isWiping then
             ISTimedActionQueue.add(WipeSelf:new(player, 20, wipeType, wipeItem, "poop", pooledTypes))
@@ -293,12 +233,13 @@ function BF.TriggerToiletDefecate(object, player, isWiping, wipeType, wipeItem, 
                     modData.poopedSeverity = math.min(modData.poopedSeverity, 100)
                 end
             end
-            BF.ReequipBottomClothing(player)
             BF.ResetRemovedClothing(player)
         end
         if seated then
             BF.StandUpAfterToilet(player)
         end
+    end, function()
+        BF.RemoveBottomClothing(player)
     end)
 end
 
@@ -311,17 +252,15 @@ function BF.TriggerFixtureDefecate(object, player, isWiping, wipeType, wipeItem,
     local defecateValue = BF.GetDefecateValue()
     local requirement = SandboxVars.BF.PoopInToiletRequirement or 40
     local bowelsMaxValue = SandboxVars.BathroomFunctions.BowelsMaxValue or 100
-    local hasShyBowels = player:hasTrait(BFTraits.ShyBowels)
+    local hasShyBowels = BF.HasTrait(player, BFTraits.ShyBowels)
     local isBeingWatched = BF.IsBeingWatched(player)
 
     if defecateValue < (requirement / 100) * bowelsMaxValue or (hasShyBowels and isBeingWatched) then
         return
     end
 
-    BF.RemoveBottomClothing(player)
-
     BF.WalkThenRelief(player, object, false, function(goalObject, seated)
-        ISTimedActionQueue.add(FixtureDefecate:new(player, defecateValue * 2, true, true))
+        ISTimedActionQueue.add(FixtureDefecate:new(player, BF.GetDefecateTime(defecateValue * 2), true, true))
 
         if isWiping then
             ISTimedActionQueue.add(WipeSelf:new(player, 20, wipeType, wipeItem, "poop", pooledTypes))
@@ -336,9 +275,10 @@ function BF.TriggerFixtureDefecate(object, player, isWiping, wipeType, wipeItem,
                     modData.poopedSeverity = math.min(modData.poopedSeverity, 100)
                 end
             end
-            BF.ReequipBottomClothing(player)
             BF.ResetRemovedClothing(player)
         end
+    end, function()
+        BF.RemoveBottomClothing(player)
     end)
 end
 
@@ -348,7 +288,7 @@ function BF.TriggerGroundDefecate(isWiping, wipeType, wipeItem, wipeEfficiency, 
     local poopTime = defecateValue * 2
 
     BF.RemoveBottomClothing(player)
-    ISTimedActionQueue.add(GroundDefecate:new(player, poopTime, true, true))
+    ISTimedActionQueue.add(GroundDefecate:new(player, BF.GetDefecateTime(poopTime), true, true))
 
     if isWiping then
         ISTimedActionQueue.add(WipeSelf:new(player, 20, wipeType, wipeItem, "poop", pooledTypes))
@@ -365,8 +305,7 @@ function BF.TriggerGroundDefecate(isWiping, wipeType, wipeItem, wipeEfficiency, 
             end
         end
 
-        BF.ReequipBottomClothing(player) -- put back on bottom clothing
-        BF.ResetRemovedClothing(player) -- reset removed clothing
+        BF.ResetRemovedClothing(player) -- GroundDefecate re-dresses when it finishes
     end
 end
 
@@ -386,7 +325,7 @@ function BF.TriggerSelfDefecate(isLeak)
 
     -- Enqueue the self-defecation timed action.
     -- The last parameter 'isLeak' determines whether it applies leak behavior.
-    ISTimedActionQueue.add(SelfDefecate:new(player, poopTime, false, false, true, false, nil, isLeak))
+    ISTimedActionQueue.add(SelfDefecate:new(player, BF.GetDefecateTime(poopTime), false, false, true, false, nil, isLeak))
 
     --print("Updated Pooped Self Value: " .. BF.GetPoopedSelfValue())
     --if isLeak then

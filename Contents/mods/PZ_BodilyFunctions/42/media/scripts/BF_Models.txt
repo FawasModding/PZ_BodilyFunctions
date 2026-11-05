@@ -21,6 +21,13 @@ module BF
 		scale = 0.075,
     }
 
+	model BathTowelPooped_Model
+    {
+		mesh = WorldItems/BathTowel,
+		texture = WorldItems/BathTowelPooped,
+		scale = 0.2,
+    }
+
 	model Vomit_Model_Small
     {
 		mesh = VomitPile,

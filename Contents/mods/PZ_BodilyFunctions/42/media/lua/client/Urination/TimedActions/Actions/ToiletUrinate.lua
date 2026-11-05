@@ -29,11 +29,18 @@ function ToiletUrinate:update()
 	local newValue = self.initialUrinateValue - (delta * self.initialUrinateValue)
 	self.character:getModData().urinateValue = math.max(newValue, 0)
 
-	-- When seated (vanilla pose), the seated state owns facing. When standing
-	-- (male / adjacent fallback), face TOWARD the toilet based on where it is
-	-- relative to the character (getFacing() points the way the toilet faces,
-	-- i.e. away from the user, so we compute the direction ourselves).
-	if not self.character:isSittingOnFurniture() and self.toiletObject then
+	-- When seated (vanilla pose), the seated state owns facing. Female characters
+	-- using the sit animation (a toilet with no seat data, such as an outhouse) back
+	-- onto it, the same as ToiletDefecate. Standing men face TOWARD the toilet based
+	-- on where it is relative to the character (getFacing() points the way the toilet
+	-- faces, i.e. away from the user, so we compute the direction ourselves).
+	if self.character:isSittingOnFurniture() or not self.toiletObject then
+		return
+	end
+
+	if self.character:isFemale() and self.toiletObject:getFacing() then
+		self.character:setDir(self.toiletObject:getFacing())
+	else
 		local objSq = self.toiletObject:getSquare()
 		local charSq = self.character:getCurrentSquare()
 		if objSq and charSq then
@@ -53,9 +60,15 @@ function ToiletUrinate:start()
 
 	-- If the character is seated on the toilet (vanilla Rest pose), don't apply
 	-- the mod's sitting animation — the engine already holds the correct pose,
-	-- exactly like reading while seated. Standing characters get the stand anim.
+	-- exactly like reading while seated. Otherwise women get the sit animation
+	-- and men the stand animation. Outhouses have no vanilla seat data, so this
+	-- is what makes women sit on them.
 	if not self.character:isSittingOnFurniture() then
-		self:setActionAnim("bathroomStandToilet")
+		if self.character:isFemale() then
+			self:setActionAnim("bathroomSitToilet")
+		else
+			self:setActionAnim("bathroomStandToilet")
+		end
 	end
 
 	self.sound = self.character:getEmitter():playSound("BF_Pee_Toilet_Light")
@@ -78,6 +91,8 @@ function ToiletUrinate:perform()
 	if self.character:isFemale() == true then
 		BF.ReequipBottomClothing(self.character)
 	end
+
+	BF_Toilet.markUsed(self.character, self.toiletObject)
 
 	self:stopSound()
 end

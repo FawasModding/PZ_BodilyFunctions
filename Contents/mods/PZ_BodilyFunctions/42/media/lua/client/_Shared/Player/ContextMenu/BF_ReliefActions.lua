@@ -53,6 +53,10 @@ function BF.IsSinkObject(object)
 end
 
 function BF.ReliefRightClick(player, context, worldObjects)
+    local urinationOn = BF.IsUrinationEnabled()
+    local defecationOn = BF.IsDefecationEnabled()
+    if not urinationOn and not defecationOn then return end
+
     player = getSpecificPlayer(player)
     local firstObject = worldObjects[1]
     local square = firstObject:getSquare()
@@ -91,34 +95,41 @@ function BF.ReliefRightClick(player, context, worldObjects)
     local modOptions = PZAPI.ModOptions:getOptions("BF")
 
     -- Check traits and conditions
-    local hasParuresis = player:hasTrait(BFTraits.Paruresis)
-    local hasParcopresis = player:hasTrait(BFTraits.Parcopresis)
-    local hasShyBladder = player:hasTrait(BFTraits.ShyBladder)
-    local hasShyBowels = player:hasTrait(BFTraits.ShyBowels)
+    local hasParuresis = BF.HasTrait(player, BFTraits.Paruresis)
+    local hasParcopresis = BF.HasTrait(player, BFTraits.Parcopresis)
+    local hasShyBladder = BF.HasTrait(player, BFTraits.ShyBladder)
+    local hasShyBowels = BF.HasTrait(player, BFTraits.ShyBowels)
 
     -- Use common function to check if being watched
     local isBeingWatched = BF.IsBeingWatched(player)
 
-    -- Main menu options
-    local peeOption = context:addOption(getText("ContextMenu_Urinate"), worldObjects, nil)
+    -- A disabled function's submenu is still built, so the Add*Options functions
+    -- below need no special cases, but nothing ever opens it.
     local peeSubMenu = ISContextMenu:getNew(context)
-    context:addSubMenu(peeOption, peeSubMenu)
-    peeOption.iconTexture = getTexture("media/ui/Urination.png")
-    -- Disable all urination options if player has Paruresis and is being watched
-    if hasParuresis and isBeingWatched then
-        peeOption.notAvailable = true
-        BF.AddTooltip(peeOption, "You are too shy to urinate while being watched.")
+    local poopSubMenu = ISContextMenu:getNew(context)
+
+    -- Main menu options
+    if urinationOn then
+        local peeOption = context:addOption(getText("ContextMenu_Urinate"), worldObjects, nil)
+        context:addSubMenu(peeOption, peeSubMenu)
+        peeOption.iconTexture = getTexture("media/ui/Urination.png")
+        -- Disable all urination options if player has Paruresis and is being watched
+        if hasParuresis and isBeingWatched then
+            peeOption.notAvailable = true
+            BF.AddTooltip(peeOption, "You are too shy to urinate while being watched.")
+        end
     end
 
     -- Main menu option: "Defecation"
-    local poopOption = context:addOption(getText("ContextMenu_Defecate"), worldObjects, nil)
-    local poopSubMenu = ISContextMenu:getNew(context)
-    context:addSubMenu(poopOption, poopSubMenu)
-    poopOption.iconTexture = getTexture("media/ui/Defecation.png")
-    -- Disable all defecation options if player has Parcopresis and is being watched
-    if hasParcopresis and isBeingWatched then
-        poopOption.notAvailable = true
-        BF.AddTooltip(poopOption, "You are too shy to defecate while being watched.")
+    if defecationOn then
+        local poopOption = context:addOption(getText("ContextMenu_Defecate"), worldObjects, nil)
+        context:addSubMenu(poopOption, poopSubMenu)
+        poopOption.iconTexture = getTexture("media/ui/Defecation.png")
+        -- Disable all defecation options if player has Parcopresis and is being watched
+        if hasParcopresis and isBeingWatched then
+            poopOption.notAvailable = true
+            BF.AddTooltip(poopOption, "You are too shy to defecate while being watched.")
+        end
     end
 
     local vanillaToiletSubMenu = BF.FindToiletSubMenu(context)
@@ -218,17 +229,17 @@ function BF.AddToiletOptions(vanillaToiletSubMenu, peeSubMenu, poopSubMenu, worl
 
     for i = 0, worldObjects:size() - 1 do
         local object = worldObjects:get(i)
-        for j = 1, #toiletTiles do
-            local tile = toiletTiles[j]
-            if object:getTextureName() == tile and object:getSquare():DistToProper(player:getSquare()) < 5 then
+        local tile = object:getTextureName()
+        if toiletTiles[tile] then
+            if object:getSquare():DistToProper(player:getSquare()) < 5 then
                 local isPodiumToilet = tile == "location_entertainment_gallery_02_56"
                 local toiletText = isPodiumToilet and getText("ContextMenu_UsePodiumToilet") or getText("ContextMenu_UseToilet")
 
                 -- If we couldn't find the vanilla toilet submenu (e.g. localized name
                 -- didn't match), fall back to the mod's own Pee/Poop submenus instead
                 -- of dropping the options entirely.
-                local peeTargetMenu = vanillaToiletSubMenu or peeSubMenu
-                local poopTargetMenu = vanillaToiletSubMenu or poopSubMenu
+                local peeTargetMenu = BF.IsUrinationEnabled() and vanillaToiletSubMenu or peeSubMenu
+                local poopTargetMenu = BF.IsDefecationEnabled() and vanillaToiletSubMenu or poopSubMenu
 
                 local toiletPeeOption = peeTargetMenu:addOption(getText("ContextMenu_Pee") .. " " .. toiletText, object, BF.TriggerToiletUrinate, player)
                 local toiletPoopOption = poopTargetMenu:addOption(getText("ContextMenu_Poop") .. " " .. toiletText, object, BF.TriggerToiletDefecate, player)
@@ -237,7 +248,13 @@ function BF.AddToiletOptions(vanillaToiletSubMenu, peeSubMenu, poopSubMenu, worl
                 toiletPeeOption.iconTexture = getTexture("media/textures/ContextMenuToilet.png")
                 toiletPoopOption.iconTexture = getTexture("media/textures/ContextMenuToilet.png")
 
-                if urinateValue < (peeInToiletRequirement / 100) * bladderMaxValue then
+                local noWater = BF_Toilet and BF_Toilet.isBlocked(object)
+                if noWater then
+                    BF.AddTooltip(toiletPeeOption, getText("ContextMenu_BF_NoWater"))
+                    BF.AddTooltip(toiletPoopOption, getText("ContextMenu_BF_NoWater"))
+                end
+
+                if noWater or urinateValue < (peeInToiletRequirement / 100) * bladderMaxValue then
                     toiletPeeOption.notAvailable = true
                 elseif player:isFemale() then
                     -- Female characters can wipe after urinating in the toilet.
@@ -249,7 +266,7 @@ function BF.AddToiletOptions(vanillaToiletSubMenu, peeSubMenu, poopSubMenu, worl
                     end
                 end
 
-                if defecateValue < (poopInToiletRequirement / 100) * bowelsMaxValue then
+                if noWater or defecateValue < (poopInToiletRequirement / 100) * bowelsMaxValue then
                     toiletPoopOption.notAvailable = true
                 else
                     local wipeSubMenuForToiletPoop = BF.AddWipingOptions(
@@ -269,9 +286,9 @@ function BF.AddUrinalOptions(peeSubMenu, poopSubMenu, worldObjects, player, urin
     if not player:isFemale() then
         for i = 0, worldObjects:size() - 1 do
             local object = worldObjects:get(i)
-            for j = 1, #urinalTiles do
-                local tile = urinalTiles[j]
-                if object:getTextureName() == tile and object:getSquare():DistToProper(player:getSquare()) < 5 then
+            local tile = object:getTextureName()
+            if urinalTiles[tile] then
+                if object:getSquare():DistToProper(player:getSquare()) < 5 then
                     local urinalPeeOption = peeSubMenu:addOption(getText("ContextMenu_Pee") .. " " .. getText("ContextMenu_UseUrinal"), object, BF.TriggerToiletUrinate, player)
                     BF.AddTooltip(urinalPeeOption, getText("ContextMenu_tooltip_PeeUrinal", tostring(peeInToiletRequirement)))
                     urinalPeeOption.iconTexture = getTexture("media/textures/ContextMenuToilet.png")
@@ -280,6 +297,10 @@ function BF.AddUrinalOptions(peeSubMenu, poopSubMenu, worldObjects, player, urin
                         if hasShyBladder then
                             BF.AddTooltip(urinalPeeOption, getText("ContextMenu_tooltip_ShyPeeUrinal"))
                         end
+                    end
+                    if BF_Toilet and BF_Toilet.isBlocked(object) then
+                        urinalPeeOption.notAvailable = true
+                        BF.AddTooltip(urinalPeeOption, getText("ContextMenu_BF_NoWater"))
                     end
 
                     local urinalPoopOption = poopSubMenu:addOption(getText("ContextMenu_Poop") .. " " .. getText("ContextMenu_UseUrinal"), object, nil, player)
@@ -295,9 +316,9 @@ end
 function BF.AddOuthouseOptions(peeSubMenu, poopSubMenu, worldObjects, player, urinateValue, defecateValue, bladderMaxValue, bowelsMaxValue, peeInToiletRequirement, poopInToiletRequirement, outhouseTiles, toiletOptionAdded)
     for i = 0, worldObjects:size() - 1 do
         local object = worldObjects:get(i)
-        for j = 1, #outhouseTiles do
-            local tile = outhouseTiles[j]
-            if object:getTextureName() == tile and object:getSquare():DistToProper(player:getSquare()) < 5 then
+        local tile = object:getTextureName()
+        if outhouseTiles[tile] then
+            if object:getSquare():DistToProper(player:getSquare()) < 5 then
                 local outhousePeeOption = peeSubMenu:addOption(getText("ContextMenu_Pee") .. " " .. getText("ContextMenu_UseOuthouse"), object, BF.TriggerToiletUrinate, player)
                 local outhousePoopOption = poopSubMenu:addOption(getText("ContextMenu_Poop") .. " " .. getText("ContextMenu_UseOuthouse"), object, BF.TriggerToiletDefecate, player)
                 BF.AddTooltip(outhousePeeOption, getText("ContextMenu_tooltip_PeeOuthouse", tostring(peeInToiletRequirement)))
@@ -308,19 +329,27 @@ function BF.AddOuthouseOptions(peeSubMenu, poopSubMenu, worldObjects, player, ur
 
                 if urinateValue < (peeInToiletRequirement / 100) * bladderMaxValue then
                     outhousePeeOption.notAvailable = true
-                end
-                if defecateValue < (poopInToiletRequirement / 100) * bowelsMaxValue then
-                    outhousePoopOption.notAvailable = true
-                end
-                if outhousePoopOption.notAvailable then
-                    return
+                elseif player:isFemale() then
+                    local wipeSubMenuForOuthousePee = BF.AddWipingOptions(
+                        peeSubMenu, worldObjects, player, urinateValue, peeInToiletRequirement, bladderMaxValue, BF.TriggerToiletUrinate, object, "pee"
+                    )
+                    if wipeSubMenuForOuthousePee then
+                        peeSubMenu:addSubMenu(outhousePeeOption, wipeSubMenuForOuthousePee)
+                    end
                 end
 
-                local wipeSubMenuForToilet = BF.AddWipingOptions(
-                    poopSubMenu, worldObjects, player, defecateValue, poopInToiletRequirement, bowelsMaxValue, BF.TriggerToiletDefecate, object, "poop"
-                )
-                poopSubMenu:addSubMenu(outhousePoopOption, wipeSubMenuForToilet)
-                break
+                if defecateValue < (poopInToiletRequirement / 100) * bowelsMaxValue then
+                    outhousePoopOption.notAvailable = true
+                else
+                    local wipeSubMenuForOuthousePoop = BF.AddWipingOptions(
+                        poopSubMenu, worldObjects, player, defecateValue, poopInToiletRequirement, bowelsMaxValue, BF.TriggerToiletDefecate, object, "poop"
+                    )
+                    if wipeSubMenuForOuthousePoop then
+                        poopSubMenu:addSubMenu(outhousePoopOption, wipeSubMenuForOuthousePoop)
+                    end
+                end
+
+                return
             end
         end
     end
@@ -335,7 +364,7 @@ function BF.AddSinkOptions(vanillaSinkSubMenu, peeSubMenu, worldObjects, player,
 
             -- Fall back to the mod's own Pee submenu if the vanilla sink submenu
             -- couldn't be located by name (e.g. non-English client).
-            local targetMenu = vanillaSinkSubMenu or peeSubMenu
+            local targetMenu = BF.IsUrinationEnabled() and vanillaSinkSubMenu or peeSubMenu
 
             local sinkPeeOption = targetMenu:addOption(getText("ContextMenu_Pee") .. " " .. getText("ContextMenu_UseSink"), object, BF.TriggerFixtureUrinate, player)
             BF.AddTooltip(sinkPeeOption, getText("ContextMenu_tooltip_PeeSink", tostring(peeInToiletRequirement)))
@@ -364,9 +393,9 @@ end
 function BF.AddShowerOptions(peeSubMenu, worldObjects, player, urinateValue, bladderMaxValue, peeInToiletRequirement, showerTiles, hasShyBladder)
     for i = 0, worldObjects:size() - 1 do
         local object = worldObjects:get(i)
-        for j = 1, #showerTiles do
-            local tile = showerTiles[j]
-            if object:getTextureName() == tile and object:getSquare():DistToProper(player:getSquare()) < 5 then
+        local tile = object:getTextureName()
+        if showerTiles[tile] then
+            if object:getSquare():DistToProper(player:getSquare()) < 5 then
                 local showerPeeOption = peeSubMenu:addOption(getText("ContextMenu_Pee") .. " " .. getText("ContextMenu_UseShower"), object, BF.TriggerFixtureUrinate, player)
                 BF.AddTooltip(showerPeeOption, getText("ContextMenu_tooltip_PeeShower", tostring(peeInToiletRequirement)))
                 showerPeeOption.iconTexture = getTexture("media/textures/ContextMenuShower.png")
@@ -385,9 +414,9 @@ end
 function BF.AddBathtubOptions(peeSubMenu, worldObjects, player, urinateValue, bladderMaxValue, peeInToiletRequirement, bathtubTiles, hasShyBladder)
     for i = 0, worldObjects:size() - 1 do
         local object = worldObjects:get(i)
-        for j = 1, #bathtubTiles do
-            local tile = bathtubTiles[j]
-            if object:getTextureName() == tile and object:getSquare():DistToProper(player:getSquare()) < 5 then
+        local tile = object:getTextureName()
+        if bathtubTiles[tile] then
+            if object:getSquare():DistToProper(player:getSquare()) < 5 then
                 local bathtubPeeOption = peeSubMenu:addOption(getText("ContextMenu_Pee") .. " " .. getText("ContextMenu_UseBathtub"), object, BF.TriggerFixtureUrinate, player)
                 BF.AddTooltip(bathtubPeeOption, getText("ContextMenu_tooltip_PeeBathtub", tostring(peeInToiletRequirement)))
                 bathtubPeeOption.iconTexture = getTexture("media/textures/ContextMenuBathtub.png")
@@ -406,9 +435,9 @@ end
 function BF.AddBushOptions(peeSubMenu, poopSubMenu, worldObjects, player, urinateValue, defecateValue, bladderMaxValue, bowelsMaxValue, peeInToiletRequirement, poopInToiletRequirement, bushTiles, hasShyBladder, hasShyBowels)
     for i = 0, worldObjects:size() - 1 do
         local object = worldObjects:get(i)
-        for j = 1, #bushTiles do
-            local tile = bushTiles[j]
-            if object:getTextureName() == tile and object:getSquare():DistToProper(player:getSquare()) < 5 then
+        local tile = object:getTextureName()
+        if bushTiles[tile] then
+            if object:getSquare():DistToProper(player:getSquare()) < 5 then
                 local bushPeeOption = peeSubMenu:addOption(getText("ContextMenu_Pee") .. " " .. getText("ContextMenu_UseBush"), object, BF.TriggerFixtureUrinate, player)
                 local bushPoopOption = poopSubMenu:addOption(getText("ContextMenu_Poop") .. " " .. getText("ContextMenu_UseBush"), object, BF.TriggerFixtureDefecate, player)
                 BF.AddTooltip(bushPeeOption, getText("ContextMenu_tooltip_PeeBush", tostring(peeInToiletRequirement)))
@@ -445,9 +474,9 @@ end
 function BF.AddTreeOptions(peeSubMenu, worldObjects, player, urinateValue, bladderMaxValue, peeInToiletRequirement, treeTiles, hasShyBladder)
     for i = 0, worldObjects:size() - 1 do
         local object = worldObjects:get(i)
-        for j = 1, #treeTiles do
-            local tile = treeTiles[j]
-            if object:getTextureName() == tile and object:getSquare():DistToProper(player:getSquare()) < 5 then
+        local tile = object:getTextureName()
+        if treeTiles[tile] then
+            if object:getSquare():DistToProper(player:getSquare()) < 5 then
                 local treePeeOption = peeSubMenu:addOption(getText("ContextMenu_Pee") .. " " .. getText("ContextMenu_UseTree"), object, BF.TriggerFixtureUrinate, player)
                 BF.AddTooltip(treePeeOption, getText("ContextMenu_tooltip_PeeTree", tostring(peeInToiletRequirement)))
                 treePeeOption.iconTexture = getTexture("media/textures/ContextMenuTree.png")
@@ -465,9 +494,9 @@ end
 function BF.AddWaterOptions(peeSubMenu, poopSubMenu, worldObjects, player, urinateValue, defecateValue, bladderMaxValue, bowelsMaxValue, peeInToiletRequirement, poopInToiletRequirement, waterTiles, hasShyBladder, hasShyBowels)
     for i = 0, worldObjects:size() - 1 do
         local object = worldObjects:get(i)
-        for j = 1, #waterTiles do
-            local tile = waterTiles[j]
-            if object:getTextureName() == tile and object:getSquare():DistToProper(player:getSquare()) < 5 then
+        local tile = object:getTextureName()
+        if waterTiles[tile] then
+            if object:getSquare():DistToProper(player:getSquare()) < 5 then
                 local waterPeeOption = peeSubMenu:addOption(getText("ContextMenu_Pee") .. " " .. getText("ContextMenu_UseWater"), object, BF.TriggerFixtureUrinate, player)
                 local waterPoopOption = poopSubMenu:addOption(getText("ContextMenu_Poop") .. " " .. getText("ContextMenu_UseWater"), object, BF.TriggerFixtureDefecate, player)
                 BF.AddTooltip(waterPeeOption, getText("ContextMenu_tooltip_PeeWater", tostring(peeInToiletRequirement)))
@@ -504,9 +533,9 @@ end
 function BF.AddTrashCanOptions(peeSubMenu, poopSubMenu, worldObjects, player, urinateValue, defecateValue, bladderMaxValue, bowelsMaxValue, peeInToiletRequirement, poopInToiletRequirement, trashCanTiles, hasShyBladder, hasShyBowels)
     for i = 0, worldObjects:size() - 1 do
         local object = worldObjects:get(i)
-        for j = 1, #trashCanTiles do
-            local tile = trashCanTiles[j]
-            if object:getTextureName() == tile and object:getSquare():DistToProper(player:getSquare()) < 5 then
+        local tile = object:getTextureName()
+        if trashCanTiles[tile] then
+            if object:getSquare():DistToProper(player:getSquare()) < 5 then
                 local trashCanPeeOption = peeSubMenu:addOption(getText("ContextMenu_Pee") .. " " .. getText("ContextMenu_UseTrashCan"), object, BF.TriggerFixtureUrinate, player)
                 local trashCanPoopOption = poopSubMenu:addOption(getText("ContextMenu_Poop") .. " " .. getText("ContextMenu_UseTrashCan"), object, BF.TriggerFixtureDefecate, player)
                 BF.AddTooltip(trashCanPeeOption, getText("ContextMenu_tooltip_PeeTrashCan", tostring(peeInToiletRequirement)))
@@ -542,9 +571,9 @@ end
 function BF.AddDumpsterOptions(peeSubMenu, poopSubMenu, worldObjects, player, urinateValue, defecateValue, bladderMaxValue, bowelsMaxValue, peeInToiletRequirement, poopInToiletRequirement, dumpsterTiles, hasShyBladder, hasShyBowels)
     for i = 0, worldObjects:size() - 1 do
         local object = worldObjects:get(i)
-        for j = 1, #dumpsterTiles do
-            local tile = dumpsterTiles[j]
-            if object:getTextureName() == tile and object:getSquare():DistToProper(player:getSquare()) < 5 then
+        local tile = object:getTextureName()
+        if dumpsterTiles[tile] then
+            if object:getSquare():DistToProper(player:getSquare()) < 5 then
                 local dumpsterPeeOption = peeSubMenu:addOption(getText("ContextMenu_Pee") .. " " .. getText("ContextMenu_UseDumpster"), object, BF.TriggerFixtureUrinate, player)
                 local dumpsterPoopOption = poopSubMenu:addOption(getText("ContextMenu_Poop") .. " " .. getText("ContextMenu_UseDumpster"), object, BF.TriggerFixtureDefecate, player)
                 BF.AddTooltip(dumpsterPeeOption, getText("ContextMenu_tooltip_PeeDumpster", tostring(peeInToiletRequirement)))
@@ -581,9 +610,9 @@ end
 function BF.AddOpenWindowOptions(peeSubMenu, worldObjects, player, urinateValue, bladderMaxValue, peeInToiletRequirement, openWindowTiles, hasShyBladder)
     for i = 0, worldObjects:size() - 1 do
         local object = worldObjects:get(i)
-        for j = 1, #openWindowTiles do
-            local tile = openWindowTiles[j]
-            if object:getTextureName() == tile and object:getSquare():DistToProper(player:getSquare()) < 5 then
+        local tile = object:getTextureName()
+        if openWindowTiles[tile] then
+            if object:getSquare():DistToProper(player:getSquare()) < 5 then
                 local openWindowPeeOption = peeSubMenu:addOption(getText("ContextMenu_Pee") .. " " .. getText("ContextMenu_UseOpenWindow"), object, BF.TriggerFixtureUrinate, player)
                 BF.AddTooltip(openWindowPeeOption, getText("ContextMenu_tooltip_PeeOpenWindow", tostring(peeInToiletRequirement)))
                 openWindowPeeOption.iconTexture = getTexture("media/textures/ContextMenuOpenWindow.png")
@@ -635,8 +664,8 @@ end
 function BF.IsBeingWatched(player)
     local isBeingWatched = false
     
-    if player:hasTrait(BFTraits.Paruresis) or player:hasTrait(BFTraits.Paruresis) or 
-       player:hasTrait(BFTraits.ShyBladder) or player:hasTrait(BFTraits.ShyBladder) then
+    if BF.HasTrait(player, BFTraits.Paruresis) or BF.HasTrait(player, BFTraits.Paruresis) or 
+       BF.HasTrait(player, BFTraits.ShyBladder) or BF.HasTrait(player, BFTraits.ShyBladder) then
         
         local checkRange = 10
         local playerX = player:getX()
@@ -696,11 +725,11 @@ function BF.AddWipingOptions(parentMenu, worldObjects, player, value, requiremen
     -- Shyness checks (poop uses bowel traits, pee uses bladder traits).
     local isBeingWatched = BF.IsBeingWatched(player)
     if bodilyFunction == "poop" then
-        if (player:hasTrait(BFTraits.Parcopresis) or player:hasTrait(BFTraits.ShyBowels)) and isBeingWatched then
+        if (BF.HasTrait(player, BFTraits.Parcopresis) or BF.HasTrait(player, BFTraits.ShyBowels)) and isBeingWatched then
             return nil
         end
     else
-        if (player:hasTrait(BFTraits.Paruresis) or player:hasTrait(BFTraits.ShyBladder)) and isBeingWatched then
+        if (BF.HasTrait(player, BFTraits.Paruresis) or BF.HasTrait(player, BFTraits.ShyBladder)) and isBeingWatched then
             return nil
         end
     end

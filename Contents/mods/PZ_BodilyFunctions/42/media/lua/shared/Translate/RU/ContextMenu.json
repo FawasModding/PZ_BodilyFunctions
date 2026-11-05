@@ -80,5 +80,10 @@
   "ContextMenu_Tooltip_Urinated": "Помочился:",
   "ContextMenu_Tooltip_Defecated": "Испражнился:",
   "ContextMenu_PaperScraps": "Обрывки бумаги",
-  "ContextMenu_ClothScraps": "Тряпки"
+  "ContextMenu_ClothScraps": "Тряпки",
+
+  "ContextMenu_BF_Redress": "Одеться",
+  "ContextMenu_BF_Redress_tooltip": "Надеть обратно одежду, снятую, чтобы справить нужду.",
+  "ContextMenu_BF_RedressForget": "Забыть эти вещи",
+  "ContextMenu_BF_NoWater": "В бачке не хватает воды на слив."
 }

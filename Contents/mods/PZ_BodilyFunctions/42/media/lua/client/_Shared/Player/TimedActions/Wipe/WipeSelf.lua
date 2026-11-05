@@ -2,13 +2,17 @@
 -- clothing when the wipe was insufficient.
 --
 -- Wipe types:
---   usingDrainable  - toilet paper (charges)
+--   usingDrainable  - toilet paper, tissues (charges, pooled across items)
 --   usingOneTime    - paper items (count-based, possibly pooled across tiers)
 --   usingBook       - books/notebooks; tears pages, returns clean paper + scraps
 --   usingClothTool  - dishcloth/towel/rag: defecation -> mod junk, urination -> wet/dirty vanilla
 --
 -- bodilyFunction is "poop" or "pee". Pee wiping is female-only (gated by caller)
 -- and applies a smaller penalty when insufficient.
+--
+-- The items are spent on the server (Commands.wipe in BF_ServerCommands.lua),
+-- which reports how good the wipe was. Soiling is simulated on the client, so the
+-- penalty is applied here on that reply.
 
 ---@class WipeSelf : ISBaseTimedAction
 ---@field character IsoPlayer
@@ -16,12 +20,6 @@
 ---@field wipingWith InventoryItem
 ---@field bodilyFunction string
 WipeSelf = ISBaseTimedAction:derive("WipeSelf")
-
--- Fallback junk if an item isn't in BF_WipeJunkMap.
-local DEFAULT_JUNK_ITEM = "BF.SheetPaper2Pooped"
--- Clean pages returned when wiping with a book.
-local BOOK_CLEAN_RETURN = "Base.SheetPaper2"
-local BOOK_CLEAN_PAGES = 10
 
 function WipeSelf:isValid()
     return true
@@ -39,12 +37,10 @@ end
 
 -- Applies the residual soiling penalty to unequipped bottom clothing (stored in
 -- removedClothing), preferring underwear. Works for both pee and poop.
-function WipeSelf:applyResidualPenalty(soilPenalty)
+function WipeSelf:applyResidualPenalty(soilPenalty, removedClothing)
     local func = self.bodilyFunction
     local severityKey = (func == "pee") and "peedSeverity" or "poopedSeverity"
     local flagKey = (func == "pee") and "peed" or "pooped"
-
-    local removedClothing = self.character:getModData().removedClothing or {}
 
     local underwearLocations = {
         ItemBodyLocation.UNDERWEAR_BOTTOM,
@@ -82,139 +78,27 @@ function WipeSelf:applyResidualPenalty(soilPenalty)
 end
 
 function WipeSelf:perform()
-    ISBaseTimedAction.perform(self)
+    -- Captured now: the list is cleared below, before the reply arrives.
+    local removedClothing = self.character:getModData().removedClothing or {}
 
-    local wipeEfficiency = 1.0
-
-    -- Drainable (toilet paper): consume charges.
-    if self.wipeType == "usingDrainable" then
-        local itemType = self.wipingWith:getType()
-        local requiredUses = BF_WipingConfig.drainableWipeables[itemType].usesRequired
-        local availableUses = self.wipingWith:getCurrentUses()
-        wipeEfficiency = math.min(availableUses / requiredUses, 1.0)
-        for _ = 1, math.min(availableUses, requiredUses) do
-            self.wipingWith:Use()
-        end
-        -- Toilet paper doesn't leave a junk item.
+    if self.wipingWith then
+        BF.SendTrackedCommand(self.character, "wipe", {
+            wipeType = self.wipeType,
+            itemType = self.wipingWith:getType(),
+            bodilyFunction = self.bodilyFunction,
+        }, function(result)
+            if not result.ok or result.efficiency >= 1.0 then return end
+            -- Pee residue is lighter than poop residue.
+            local basePenalty = (self.bodilyFunction == "pee") and 3 or 5
+            self:applyResidualPenalty(basePenalty * (1 - result.efficiency), removedClothing)
+        end)
     end
 
-    -- One-time paper: consume from the pooled types until a full wipe (weight 1.0)
-    -- is reached. Each item contributes 1/usesRequired, so mixed tiers (tier-2
-    -- sheets and tier-4 scraps) combine correctly. Junk is created per consumed
-    -- item using that item's own mapping.
-    local junkTally = {}   -- junkType -> count
-    if self.wipeType == "usingOneTime" then
-        local types = self.pooledTypes or { self.wipingWith:getType() }
-        local cap = BF_WipingConfig.oneTimeWipeables[types[1]].maxEfficiency or 1.0
-
-        -- Total available cleaning "weight" across the pool.
-        local availableWeight = 0
-        for _, t in ipairs(types) do
-            local req = BF_WipingConfig.oneTimeWipeables[t].usesRequired
-            availableWeight = availableWeight + (BF.CountReachableItemType(self.character, t) / req)
-        end
-        wipeEfficiency = math.min(availableWeight, cap)
-
-        -- Consume items until we've reached weight 1.0 (a full wipe) or run out.
-        local neededWeight = math.min(1.0, cap)
-        local gatheredWeight = 0
-        for _, t in ipairs(types) do
-            if gatheredWeight >= neededWeight then break end
-            local req = BF_WipingConfig.oneTimeWipeables[t].usesRequired
-            local perItem = 1 / req
-            local haveThis = BF.CountReachableItemType(self.character, t)
-            for _ = 1, haveThis do
-                if gatheredWeight >= neededWeight then break end
-                local removed = BF.RemoveReachableItemType(self.character, t, 1)
-                if removed <= 0 then break end
-                gatheredWeight = gatheredWeight + perItem
-                local junk = (BF_WipeJunkMap and BF_WipeJunkMap[t]) or DEFAULT_JUNK_ITEM
-                junkTally[junk] = (junkTally[junk] or 0) + 1
-            end
-        end
-    end
-
-    -- Cloth tool (dishcloth / bath towel / ripped sheets): individual item.
-    -- Defecation -> soiled mod junk (poopCount items). Urination -> the tool is
-    -- consumed and replaced with its wet/dirty vanilla counterpart.
-    if self.wipeType == "usingClothTool" then
-        local itemType = self.wipingWith:getType()
-        local cfg = BF_WipingConfig.clothToolWipeables[itemType]
-        local available = BF.CountReachableItemType(self.character, itemType)
-        wipeEfficiency = math.min(available / cfg.usesRequired, 1.0)
-
-        local toConsume = math.min(available, cfg.usesRequired)
-        BF.RemoveReachableItemType(self.character, itemType, toConsume)
-
-        if self.bodilyFunction == "pee" then
-            -- Becomes wet/dirty vanilla item (one per consumed tool).
-            if cfg.peeReplace then
-                for _ = 1, toConsume do
-                    local created = self.character:getInventory():AddItem(cfg.peeReplace)
-                    if created and isClient() then
-                        sendAddItemToContainer(self.character:getInventory(), created)
-                    end
-                end
-            end
-        else
-            -- Defecation: create the mod junk item(s).
-            if cfg.poopJunk then
-                local n = (cfg.poopCount or 1) * toConsume
-                junkTally[cfg.poopJunk] = (junkTally[cfg.poopJunk] or 0) + n
-            end
-        end
-    end
-
-    -- Book: always a full wipe, tears pages, returns clean paper + junk scraps.
-    if self.wipeType == "usingBook" then
-        local itemType = self.wipingWith:getType()
-        local bookCfg = BF_WipingConfig.bookWipeables[itemType]
-        local pages = (bookCfg and bookCfg.usesRequired) or 10
-        wipeEfficiency = 1.0
-
-        -- Consume the book itself (wherever it lives: inv, bag, nearby, floor).
-        BF.RemoveReachableItemType(self.character, itemType, 1)
-
-        -- Return clean torn-out pages (the unused part of the book).
-        for _ = 1, BOOK_CLEAN_PAGES do
-            local created = self.character:getInventory():AddItem(BOOK_CLEAN_RETURN)
-            if created and isClient() then
-                sendAddItemToContainer(self.character:getInventory(), created)
-            end
-        end
-
-        -- A book produces a handful of dirty scraps (generic used paper).
-        local bookJunk = math.max(1, math.floor(pages / 5))
-        junkTally[DEFAULT_JUNK_ITEM] = (junkTally[DEFAULT_JUNK_ITEM] or 0) + bookJunk
-    end
-
-    -- Create the item-specific junk scraps for paper/book wipes.
-    -- Only defecation produces soiled junk; urine wiping leaves no scrap.
-    if self.bodilyFunction == "poop" then
-        for junkType, n in pairs(junkTally) do
-            for _ = 1, n do
-                local created = self.character:getInventory():AddItem(junkType)
-                if created and isClient() then
-                    sendAddItemToContainer(self.character:getInventory(), created)
-                end
-            end
-        end
-    end
-
-    -- Residual soiling penalty when the wipe was insufficient.
-    if wipeEfficiency < 1.0 then
-        -- Pee residue is lighter than poop residue.
-        local basePenalty = (self.bodilyFunction == "pee") and 3 or 5
-        local soilPenalty = basePenalty * (1 - wipeEfficiency)
-        if soilPenalty > 0 then
-            self:applyResidualPenalty(soilPenalty)
-        end
-    end
-
-    -- The removed-clothing list is only needed for the penalty above; the
-    -- garments themselves were already queued for re-equipping by the relief
-    -- action, which captured them by reference.
+    -- The list is only needed for the penalty; the garments are re-equipped from
+    -- modData.bfRedress.
     BF.ResetRemovedClothing(self.character)
+
+    ISBaseTimedAction.perform(self)
 end
 
 function WipeSelf:new(character, time, wipeType, wipingWith, bodilyFunction, pooledTypes)

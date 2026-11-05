@@ -67,6 +67,8 @@ function ToiletDefecate:perform()
 
 	BF.ReequipBottomClothing(self.character)
 
+	BF_Toilet.markUsed(self.character, self.toiletObject)
+
 	self:stopSound()
 end
 

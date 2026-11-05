@@ -21,6 +21,7 @@ ItemName_PTBR = {
     ItemName_BF.PaperworkPooped = "Documentos (Usados)",
     ItemName_BF.PulledDown_Trousers = "Calças Arriadas",
     ItemName_BF.RippedSheetsPooped = "Pano Rasgado (Usado)",
+    ItemName_BF.BathTowelPooped = "Toalha de Banho (Usada)",
     ItemName_BF.ReceiptPooped = "Recibo (Usado)",
     ItemName_BF.SheetPaper2Pooped = "Folha de Papel (Usada)",
     ItemName_BF.HumanFeces_Throwable = "Fezes Humanas Lançáveis",

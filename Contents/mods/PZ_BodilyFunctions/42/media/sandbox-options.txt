@@ -37,6 +37,18 @@ option BF.EnableCoughing
     page = Bathroom, translation = BF_EnableCoughing,
 }
 
+/* Toilet use */
+option BF.UndressTiming
+{
+    type = enum, default = 2, numValues = 3,
+    page = Bathroom, translation = BF_UndressTiming,
+}
+option BF.ToiletRequiresWater
+{
+    type = boolean, default = true,
+    page = Bathroom, translation = BF_ToiletRequiresWater,
+}
+
 /* Defecation Settings */
 option BathroomFunctions.BowelsMaxValue
 {

@@ -8,5 +8,10 @@
     "IGUI_BladderFullness": "Bladder Fullness",
     "IGUI_BowelsFullness": "Bowels Fullness",
     "IGUI_Empty": "Empty",
-    "IGUI_Full": "Full"
+    "IGUI_Full": "Full",
+
+    "IGUI_BF_WashItemMissing": "That item isn't in my inventory anymore.",
+    "IGUI_BF_WashNoWater": "There isn't enough water here.",
+    "IGUI_BF_CleanWasteFailed": "I can't reach that to clean it.",
+    "IGUI_BF_WipeRejected": "I can't use that to wipe."
 }

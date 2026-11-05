@@ -5,7 +5,7 @@ module BodilyFunctionsAccident
         loop = true,
         is3D = true,
         clip {
-            file = media/sound/pee_ground_light.ogg,
+            file = media/sound/Relief/pee_ground_light.ogg,
             distanceMin = 1,
             distanceMax = 30,
             reverbFactor = 0.1,

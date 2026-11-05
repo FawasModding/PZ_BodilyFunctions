@@ -1,73 +1,8 @@
 
--- Returns true if an item is a soiled paper/rag/grass junk item that can be
--- washed. Matches the universal used-paper junk plus the legacy variants.
+-- Returns true if an item is soiled cloth that can be washed and reused.
 function BF.IsSoiledJunk(item)
     if not item then return false end
-    local t = item:getType()
-    -- Only cloth rags can be washed and reused. Grass and paper are disposable.
-    if t == "RippedSheetsPooped" then
-        return true
-    end
-    return false
-end
-
--- Cleaning agents changed shape in B42: soap is still a drainable with uses,
--- but bleach and cleaning liquid became FluidContainer items whose remaining
--- amount has nothing to do with getCurrentUses(). Checking uses alone treats an
--- empty bleach bottle as a full one, so both shapes are handled explicitly.
-function BF.IsCleaningAgent(item)
-    if not item then return false end
-
-    if item:hasComponent(ComponentType.FluidContainer) then
-        local fluidContainer = item:getFluidContainer()
-        if not fluidContainer or fluidContainer:getAmount() <= 0 then return false end
-        if Fluid.CleaningLiquid and fluidContainer:contains(Fluid.CleaningLiquid) then return true end
-        if Fluid.Bleach and fluidContainer:contains(Fluid.Bleach) then return true end
-        if Fluid.Soapy and fluidContainer:contains(Fluid.Soapy) then return true end
-        return false
-    end
-
-    if instanceof(item, "DrainableComboItem") and item:getType() == "Soap2" then
-        return item:getCurrentUses() > 0
-    end
-
-    return false
-end
-
--- Spends one dose of the agent. Returns true when a dose was actually spent,
--- which is what decides whether the wash counts as a full clean.
-function BF.ConsumeCleaningAgent(item)
-    if not BF.IsCleaningAgent(item) then return false end
-
-    if item:hasComponent(ComponentType.FluidContainer) then
-        local fluidContainer = item:getFluidContainer()
-        local newAmount = fluidContainer:getAmount() - ZomboidGlobals.CleanStainCleaningFluidAmount
-        if newAmount <= 0.001 then
-            fluidContainer:Empty()
-        else
-            fluidContainer:adjustAmount(newAmount)
-        end
-        sendItemStats(item)
-        return true
-    end
-
-    item:UseAndSync()
-    return true
-end
-
--- One wash step. With an agent the garment comes out clean; with plain water it
--- halves and anything left under the threshold is close enough to call clean.
--- Previously a severity between 11 and 50 hit neither branch and washing did
--- nothing at all, no matter how many times it was repeated.
-BF.WaterOnlyClearThreshold = 10
-
-function BF.ReduceSoilSeverity(severity, usedCleaningAgent)
-    severity = severity or 0
-    if usedCleaningAgent then return 0 end
-
-    severity = severity * 0.5
-    if severity <= BF.WaterOnlyClearThreshold then return 0 end
-    return severity
+    return BF.WashableJunk[item:getFullType()] ~= nil
 end
 
 function BF.WashingRightClick(player, context, worldObjects)
@@ -153,7 +88,7 @@ function BF.WashingRightClick(player, context, worldObjects)
 			local option = subMenu:addOption(soiledClothing:getName(), player, BF.WashSoiled, square, soiledClothing, cleaningItem, storeWater, thisEquipped)
 
 			local waterRemaining = storeWater:getFluidAmount()
-			if waterRemaining < 15 then
+			if waterRemaining < BF.WashWaterCost.garment then
 				option.notAvailable = true
 			end
 
@@ -176,7 +111,7 @@ function BF.WashingRightClick(player, context, worldObjects)
             local option = subMenu:addOption(item:getName(), player, BF.WashSoiledItem, square, item, cleaningItem, storeWater)
 
             local waterRemaining = storeWater:getFluidAmount()
-            if waterRemaining < 5 then -- Less water needed for items
+            if waterRemaining < BF.WashableJunk[item:getFullType()].water then
                 option.notAvailable = true
             end
 
@@ -206,39 +141,6 @@ function BF.WashSoiledItem(playerObj, square, soiledItem, bleachItem, storeWater
 	end
 	
 	ISTimedActionQueue.add(WashSoiledItem:new(playerObj, 400, square, soiledItem, bleachItem, storeWater))
-end
-
-function BF.RemoveBottomClothing(player)
-    -- Every worn garment that gets in the way, tights and modded legwear included
-    local removedClothing = BF.GetExcreteObstructiveWornItems(player)
-
-    -- Take the outermost layers off first
-    for i = #removedClothing, 1, -1 do
-        ISTimedActionQueue.add(ISUnequipAction:new(player, removedClothing[i], 50))
-    end
-
-    -- Store the removed items in the player's mod data for later re-equipping
-    player:getModData().removedClothing = removedClothing
-end
-function BF.ReequipBottomClothing(player)
-    local removedClothing = player:getModData().removedClothing
-
-    if removedClothing then
-        -- Re-equip each clothing item taken off before
-        for _, clothingItem in ipairs(removedClothing) do
-            if clothingItem then
-                -- Add the item back to the player with a timed action
-                ISTimedActionQueue.add(ISWearClothing:new(player, clothingItem))
-            end
-        end
-    end
-
-    -- This was moved to be directly inside of the trigger functions, so it happens after wiping.
-     --BF.ResetRemovedClothing(player)
-end
-function BF.ResetRemovedClothing(player)
-    -- Clear the removed clothing list
-    player:getModData().removedClothing = nil
 end
 
 Events.OnFillWorldObjectContextMenu.Add(BF.WashingRightClick)

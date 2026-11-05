@@ -153,4 +153,38 @@ function BF_ReliefTiles.GetHoleTiles()
     return holeTiles
 end
 
+-- =====================================================
+--
+-- The lists above are constant, but every Get*Tiles() call used to allocate a
+-- fresh table and 223 fresh strings, and BF.ReliefRightClick calls eleven of
+-- them on every single right-click in the world -- including on vehicles and
+-- loose items, where none of it is ever used.
+--
+-- Each list is now built once and memoised. Hash keys are added alongside the
+-- array entries (list["fixtures_bathroom_01_0"] == true), so a caller can test
+-- one texture name with a single lookup instead of walking the array for every
+-- object on the square. `#list` and `list[i]` keep working exactly as before,
+-- so nothing that already uses these tables as arrays needs to change.
+--
+-- The tables are shared now: read them, don't mutate them.
+--
+-- =====================================================
+local BF_TileListCache = {}
+
+for fnName, builder in pairs(BF_ReliefTiles) do
+    if type(builder) == "function" then
+        BF_ReliefTiles[fnName] = function()
+            local list = BF_TileListCache[fnName]
+            if not list then
+                list = builder()
+                for i = 1, #list do
+                    list[list[i]] = true
+                end
+                BF_TileListCache[fnName] = list
+            end
+            return list
+        end
+    end
+end
+
 return BF_ReliefTiles

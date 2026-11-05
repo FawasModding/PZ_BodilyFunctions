@@ -1,7 +1,20 @@
 BF_WipingConfig = {
-    -- Have multiple per. e.g. toilet paper
+    -- Charge-based wipeables: a wipe drains durability/charge/whatever and does not get removed.
+    -- Only for things that are genuinely used up sheet by sheet.
+    --
+    -- Tissue belongs here (no UseDelta line -> 0.03125 default -> 32 charges);
+    -- in oneTimeWipeables the whole box was destroyed per wipe.
+    --
+    -- Towels deliberately do NOT belong here even though vanilla gives them 10
+    -- charges. Nothing in the game refills a partly spent drainable, so a towel
+    -- left at 0.8 stays there until it is fully depleted -- and a towel someone
+    -- wiped themselves with should not still be half usable for drying their
+    -- face. They are consumed whole and replaced by their Wet variant instead,
+    -- which also keeps the behaviour identical on installs where another mod
+    -- strips their charges.
     drainableWipeables = {
-        ToiletPaper = { usesRequired = 4 }
+        ToiletPaper = { usesRequired = 4 },
+        Tissue      = { usesRequired = 4 },
     },
 
     -- Paper wipeables.
@@ -99,7 +112,6 @@ BF_WipingConfig = {
         SheetPaper2 = { usesRequired = 2, category = "paper" },
         TVMagazine = { usesRequired = 1, category = "paper_single" },
         TVMagazine_New = { usesRequired = 1, category = "paper_single" },
-        Tissue = { usesRequired = 2, category = "paper" },
         GrassTuft = { usesRequired = 3, category = "grass", maxEfficiency = 0.75 },
     },
 
@@ -109,9 +121,20 @@ BF_WipingConfig = {
     -- poopCount  = how many junk items to create
     -- peeReplace = item the tool becomes when wiping after urination
     clothToolWipeables = {
-        DishCloth  = { usesRequired = 1, poopJunk = "BF.RippedSheetsPooped", poopCount = 1, peeReplace = "Base.DishClothWet" },
-        BathTowel  = { usesRequired = 1, poopJunk = "BF.RippedSheetsPooped", poopCount = 3, peeReplace = "Base.BathTowelWet" },
+        -- Count-based cloth: one wipe consumes the item itself and returns
+        -- its soiled counterpart. The towels' Wet variants dry back into a full
+        -- towel on their own (Wet = true, WetCooldown, ItemWhenDry), so nothing
+        -- is lost -- it just has to go through the drying cycle.
+        --
+        -- DustCloth is Bath Towels Overhaul's own item (Base.DustCloth,
+        -- base:normal). The entry is inert when that mod isn't installed --
+        -- nothing looks up a type the player can't be holding. It has no Wet
+        -- variant, and BTO's own recipe turns a DustCloth into
+        -- Base.RippedSheets, so RippedSheetsDirty is the nearest counterpart.
         RippedSheets = { usesRequired = 2, poopJunk = "BF.RippedSheetsPooped", poopCount = 1, peeReplace = "Base.RippedSheetsDirty" },
+        BathTowel    = { usesRequired = 1, poopJunk = "BF.BathTowelPooped", poopCount = 1, peeReplace = "Base.BathTowelWet" },
+        DishCloth    = { usesRequired = 1, poopJunk = "BF.RippedSheetsPooped", poopCount = 1, peeReplace = "Base.DishClothWet" },
+        DustCloth    = { usesRequired = 1, poopJunk = "BF.RippedSheetsPooped", poopCount = 1, peeReplace = "Base.RippedSheetsDirty" },
     },
 
     -- Books & multi-page paper (notebooks, diaries, journals): individual entries,
