@@ -3,5 +3,6 @@
   "alwaysUpdateLinks": true,
   "showUnsupportedFiles": true,
   "defaultViewMode": "preview",
-  "livePreview": false
+  "livePreview": false,
+  "readableLineLength": true
 }

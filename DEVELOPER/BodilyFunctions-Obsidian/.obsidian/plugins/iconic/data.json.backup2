@@ -22,7 +22,7 @@
   "uncolorQuick": false,
   "maxBackups": 2,
   "dialogState": {
-    "iconMode": false,
+    "iconMode": true,
     "emojiMode": true,
     "rulePage": "file"
   },
@@ -36,74 +36,35 @@
     "!Development/Development Log": {
       "icon": "lucide-scroll-text"
     },
-    "!Development/Document Progress.md": {
-      "icon": "lucide-book-open-text"
-    },
     "!Development/Versions": {
       "icon": "lucide-cable"
     },
     "Characters": {
       "icon": "lucide-square-user"
     },
-    "Characters/NPCs/Bartholomew": {
-      "icon": "🎸"
+    "Content": {
+      "icon": "lucide-store"
     },
-    "Characters/NPCs/Beluga": {
-      "icon": "🤗"
+    "Content/Bowls": {
+      "icon": "lucide-soup"
     },
-    "Characters/NPCs/Boggs": {
-      "icon": "🐸"
+    "Content/Chimps": {
+      "icon": "🐒"
     },
-    "Characters/NPCs/Dream-Weaver": {
-      "icon": "🕸️"
+    "Content/Food": {
+      "icon": "lucide-cherry"
     },
-    "Characters/NPCs/Glover": {
-      "icon": "🐠"
+    "Content/Maps": {
+      "icon": "lucide-earth"
     },
-    "Characters/NPCs/Manatee": {
-      "icon": "🏝️"
-    },
-    "Characters/NPCs/Matilda": {
-      "icon": "🪢"
-    },
-    "Characters/NPCs/Oatmeal": {
-      "icon": "🐶"
-    },
-    "Characters/NPCs/Penelope": {
-      "icon": "🐦‍⬛"
-    },
-    "Characters/NPCs/Tender Tuft": {
-      "icon": "🪦"
-    },
-    "Characters/NPCs/Thornberry": {
-      "icon": "🐻"
-    },
-    "Characters/NPCs/Uncle Steam": {
-      "icon": "🚅"
-    },
-    "Characters/NPCs/Woodchip": {
-      "icon": "⛵"
+    "Content/Spoons": {
+      "icon": "🥄"
     },
     "Effects": {
       "icon": "lucide-telescope"
     },
-    "Items": {
-      "icon": "lucide-shopping-basket"
-    },
-    "Locations": {
-      "icon": "lucide-map-pin"
-    },
-    "Objectives": {
-      "icon": "lucide-flag"
-    },
-    "Props": {
-      "icon": "lucide-armchair"
-    },
     "Story": {
       "icon": "lucide-book-image"
-    },
-    "World": {
-      "icon": "lucide-earth"
     }
   },
   "bookmarkIcons": {},

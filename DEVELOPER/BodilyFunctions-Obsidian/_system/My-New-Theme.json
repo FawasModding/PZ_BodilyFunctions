@@ -1,0 +1,22 @@
+{
+  "name": "My New Theme",
+  "palette": {
+    "--color-background-primary": "#1a1a1a",
+    "--color-background-secondary": "#2e2e2e",
+    "--color-background-tertiary": "#5c5c5c",
+    "--color-text-heading": "#ffffff",
+    "--color-text-primary": "#ffffff",
+    "--color-text-secondary": "#ffffff",
+    "--color-border-primary": "#235751",
+    "--color-accent-primary": "#50473f",
+    "--color-icons": "#d08f53",
+    "--color-text-link": "#2563eb",
+    "--color-text-link-broken": "#b04a4a",
+    "--color-text-error": "#8b0000",
+    "--code-tag": "#b58900",
+    "--code-attribute": "#268bd2",
+    "--code-string": "#2aa198"
+  },
+  "headingFont": "\"Nunito\", sans-serif",
+  "bodyFont": "\"Nunito\", sans-serif"
+}

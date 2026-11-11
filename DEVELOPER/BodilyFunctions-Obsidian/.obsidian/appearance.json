@@ -5,6 +5,6 @@
   "interfaceFontFamily": "Arial",
   "baseFontSizeAction": false,
   "theme": "obsidian",
-  "showRibbon": false,
+  "showRibbon": true,
   "nativeMenus": false
 }
