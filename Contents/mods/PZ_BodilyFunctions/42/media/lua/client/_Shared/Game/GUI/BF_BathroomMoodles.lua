@@ -37,13 +37,13 @@ local function CheckBathroomMeters(player)
 		local moodle4 = MF.getMoodle("PeedSelf",playerNum)
 		local moodle5 = MF.getMoodle("BodilyFumes",playerNum)
 
-		local bowelsMaxValue = SandboxVars.BathroomFunctions.BowelsMaxValue or 100 -- Get the max bowel value, default to 100 if not set
-		local bladderMaxValue = SandboxVars.BathroomFunctions.BladderMaxValue or 100 -- Get the max bladder value, default to 100 if not set
+		local bowelsMaxValue = BF.GetBowelCapacity(player)
+		local bladderMaxValue = BF.GetBladderCapacity(player)
 
 		local showMoodles = getBFOption("4")
 		if showMoodles and showMoodles:getValue(1) then
 			if moodle then
-				local defecationValue = BF.GetDefecateValue()
+				local defecationValue = BF.GetBowelAmount(player)
 				local defecationThreshold = {
 					[0.4] = 0.4, -- Mild urge starts at 40%
 					[0.6] = 0.3, -- Moderate urge at 60%
@@ -74,7 +74,7 @@ local function CheckBathroomMeters(player)
 			end
 
 			if moodle2 then
-				local urinationValue = BF.GetUrinateValue()
+				local urinationValue = BF.GetBladderAmount(player)
 				local urinationThreshold = {
 					[0.4] = 0.4, -- Mild urge starts at 40%
 					[0.6] = 0.3, -- Moderate urge at 60%

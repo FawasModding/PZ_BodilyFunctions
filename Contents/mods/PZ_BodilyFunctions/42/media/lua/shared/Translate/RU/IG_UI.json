@@ -2,6 +2,7 @@
   "IGUI_announce_IPeedMyself": "Я описался...",
   "IGUI_announce_IPoopedMyself": "Я обкакался...",
   "IGUI_announce_UrgeHiccup": "О нет, я не могу сдержаться!",
+  "IGUI_announce_UrgeHiccupMild": "Мне очень надо в туалет...",
   "IGUI_announce_CantPickUpPee": "Мне нужно это убрать.",
   "IGUI_announce_SilentOops": "О нет...",
   "IGUI_BladderFullness": "Заполненность мочевого пузыря",

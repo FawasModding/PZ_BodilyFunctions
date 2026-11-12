@@ -28,8 +28,8 @@ Sandbox_PTBR = {
 
     -- Defecação
     Sandbox_Defecation = "Funções Corporais - Defecação",
-    Sandbox_BF_BowelsMaxValue = "Capacidade Máxima dos Intestinos",
-    Sandbox_BF_BowelsMaxValue_tooltip = "Preenchimento máximo do intestino.",
+    Sandbox_BF_BowelsMaxValue = "Capacidade Média dos Intestinos (mL)",
+    Sandbox_BF_BowelsMaxValue_tooltip = "Quanto os intestinos de um personagem médio comportam, em mililitros. Intestino Pequeno e Grande ajustam isso para cada personagem.",
     Sandbox_BF_BowelsIncreaseMultiplier = "Velocidade de Enchimento Intestinal",
     Sandbox_BF_BowelsIncreaseMultiplier_tooltip = "Aumento do medidor intestinal a cada 10 minutos.",
     Sandbox_BF_DefecateSpeedMultiplier = "Tempo Para Defecar",
@@ -64,20 +64,13 @@ Sandbox_PTBR = {
     Sandbox_BF_CreatePoopObject_tooltip = "Permite que o cocô apareça no chão/personagem.",
     Sandbox_BF_FliesOnPoop = "Moscas no Cocô",
     Sandbox_BF_FliesOnPoop_tooltip = "Mostra partículas de moscas ao redor das fezes.",
-    Sandbox_BF_EnableFecalFootprints = "Pegadas ao pisar no Cocô",
-    Sandbox_BF_EnableFecalFootprints_option1 = "Sem Pegadas",
-    Sandbox_BF_EnableFecalFootprints_option1_tooltip = "Nem jogadores nem zumbis deixam rastros ao pisar no cocô.",
-    Sandbox_BF_EnableFecalFootprints_option2 = "Apenas Jogadores",
-    Sandbox_BF_EnableFecalFootprints_option2_tooltip = "Só jogadores deixam pegadas com cocô (zumbis não). Deve ser otimizado.",
-    Sandbox_BF_EnableFecalFootprints_option3 = "Jogadores e Zumbis",
-    Sandbox_BF_EnableFecalFootprints_option3_tooltip = "Jogadores e zumbis deixam pegadas com cocô. Pode não estar otimizado.",
     Sandbox_BF_EnableDefecationTraits = "Ativar Traços de Defecação",
     Sandbox_BF_EnableDefecationTraits_tooltip = "Define se esse save permite traços relacionados à defecação.",
 
     -- Urinação
     Sandbox_Urination = "Funções Corporais - Urinar",
-    Sandbox_BF_BladderMaxValue = "Capacidade Máxima da Bexiga",
-    Sandbox_BF_BladderMaxValue_tooltip = "Preenchimento máximo da bexiga.",
+    Sandbox_BF_BladderMaxValue = "Capacidade Média da Bexiga (mL)",
+    Sandbox_BF_BladderMaxValue_tooltip = "Quanto a bexiga de um personagem médio comporta, em mililitros. Bexiga Pequena e Grande ajustam isso para cada personagem.",
     Sandbox_BF_BladderIncreaseMultiplier = "Velocidade de Enchimento da Bexiga",
     Sandbox_BF_BladderIncreaseMultiplier_tooltip = "Aumento do medidor da bexiga a cada 10 minutos.",
     Sandbox_BF_UrinateSpeedMultiplier = "Tempo Para Urinar",
@@ -111,5 +104,9 @@ Sandbox_PTBR = {
     Sandbox_BF_CreatePeeObject = "Criar Poças de Urina",
     Sandbox_BF_CreatePeeObject_tooltip = "Permite que a urina apareça no chão/personagem.",
     Sandbox_BF_EnableUrinationTraits = "Ativar Traços de Urinação",
-    Sandbox_BF_EnableUrinationTraits_tooltip = "Define se esse save permite traços relacionados à urina."
+    Sandbox_BF_EnableUrinationTraits_tooltip = "Define se esse save permite traços relacionados à urina.",
+    Sandbox_BF_UrgeFrequencyMultiplier = "Frequência de Urgências",
+    Sandbox_BF_UrgeFrequencyMultiplier_tooltip = "Com que frequência uma bexiga ou intestino cheio causa uma urgência repentina que faz o personagem parar e segurar. 0 desativa as urgências.",
+    Sandbox_BF_UrgeAccidentMultiplier = "Chance de Acidente por Urgência",
+    Sandbox_BF_UrgeAccidentMultiplier_tooltip = "Multiplica a chance de uma urgência virar um acidente. 0 significa que urgências nunca causam acidentes. Transbordar ainda causa."
 }

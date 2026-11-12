@@ -80,8 +80,8 @@ function BF.ReliefRightClick(player, context, worldObjects)
     local urinateValue = BF.GetUrinateValue()
     local defecateValue = BF.GetDefecateValue()
 
-    local bladderMaxValue = SandboxVars.BathroomFunctions.BladderMaxValue or 100
-    local bowelsMaxValue = SandboxVars.BathroomFunctions.BowelsMaxValue or 100
+    local bladderMaxValue = BF.GetBladderCapacity(player)
+    local bowelsMaxValue = BF.GetBowelCapacity(player)
 
     local peeOnSelfRequirement = SandboxVars.BF.PeeOnSelfRequirement or 85
     local peeOnGroundRequirement = SandboxVars.BF.PeeOnGroundRequirement or 50

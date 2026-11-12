@@ -39,32 +39,8 @@
     "!Development/Versions": {
       "icon": "lucide-cable"
     },
-    "Characters": {
-      "icon": "lucide-square-user"
-    },
-    "Content": {
-      "icon": "lucide-store"
-    },
-    "Content/Bowls": {
-      "icon": "lucide-soup"
-    },
-    "Content/Chimps": {
-      "icon": "🐒"
-    },
-    "Content/Food": {
-      "icon": "lucide-cherry"
-    },
-    "Content/Maps": {
-      "icon": "lucide-earth"
-    },
-    "Content/Spoons": {
-      "icon": "🥄"
-    },
     "Effects": {
       "icon": "lucide-telescope"
-    },
-    "Story": {
-      "icon": "lucide-book-image"
     }
   },
   "bookmarkIcons": {},

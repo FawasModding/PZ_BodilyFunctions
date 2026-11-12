@@ -26,7 +26,7 @@
   "UI_BF_options_PlayerSayStatus_tooltip": "Si el jugador anunciará su estado sobre su cabeza (ej. 'Me he orinado.').",
 
   "UI_trait_SmallBladder": "Vejiga pequeña",
-  "UI_trait_SmallBladderDesc": "La vejiga se llena más rápido y con mayor urgencia.",
+  "UI_trait_SmallBladderDesc": "La vejiga contiene una cuarta parte menos, así que necesitas ir antes y más a menudo.",
 
   "UI_trait_Bedwetter": "Mija-camas",
   "UI_trait_BedwetterDesc": "Micción involuntaria mientras duermes.",
@@ -41,13 +41,13 @@
   "UI_trait_ShyBladderDesc": "Orinar es difícil sin usar un inodoro.",
 
   "UI_trait_BigBladder": "Vejiga grande",
-  "UI_trait_BigBladderDesc": "La vejiga tarda más en llenarse.",
+  "UI_trait_BigBladderDesc": "La vejiga contiene una cuarta parte más, así que puedes esperar más entre visitas.",
 
   "UI_trait_BladderControl": "Control de vejiga",
-  "UI_trait_BladderControlDesc": "75% de probabilidad de detener la micción tras avanzar un 5% al orinarse encima.",
+  "UI_trait_BladderControlDesc": "La mitad de probabilidad de perder el control durante una urgencia, y 75% de probabilidad de detener la micción tras avanzar un 5% al orinarse encima.",
 
   "UI_trait_SmallBowels": "Intestinos pequeños",
-  "UI_trait_SmallBowelsDesc": "Los intestinos se llenan más rápido y con mayor urgencia.",
+  "UI_trait_SmallBowelsDesc": "Los intestinos contienen una cuarta parte menos, así que necesitas ir antes y más a menudo.",
 
   "UI_trait_Bedsoiler": "Ensucia la cama",
   "UI_trait_BedsoilerDesc": "Defecación involuntaria mientras duermes.",
@@ -62,8 +62,8 @@
   "UI_trait_ShyBowelsDesc": "Defecar es difícil sin usar un inodoro.",
 
   "UI_trait_BigBowels": "Intestinos grandes",
-  "UI_trait_BigBowelsDesc": "Los intestinos tardan más en llenarse.",
+  "UI_trait_BigBowelsDesc": "Los intestinos contienen una cuarta parte más, así que puedes esperar más entre visitas.",
 
   "UI_trait_BowelControl": "Control intestinal",
-  "UI_trait_BowelControlDesc": "75% de probabilidad de detener la defecación tras avanzar un 5% al defecarse encima."
+  "UI_trait_BowelControlDesc": "La mitad de probabilidad de perder el control durante una urgencia, y 75% de probabilidad de detener la defecación tras avanzar un 5% al defecarse encima."
 }

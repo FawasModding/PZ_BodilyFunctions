@@ -42,6 +42,28 @@ function BF.SpawnWaste(player, kind)
     sendClientCommand(player, MODULE, "spawnWaste", { kind = kind })
 end
 
+-- Whether this fixture is a dumpster or trash can, which keeps what goes in it.
+function BF.IsWasteBin(object)
+    local sprite = object and object:getTextureName()
+    if not sprite then return false end
+    return BF_ReliefTiles.GetDumpsterTiles()[sprite] == true
+        or BF_ReliefTiles.GetTrashCanTiles()[sprite] == true
+end
+
+-- Puts a waste item into a dumpster or trash can. The server finds the container
+-- and makes the item, for the same reason as SpawnWaste.
+function BF.DepositWaste(player, fixture, kind)
+    local square = fixture:getSquare()
+    if not square then return end
+    sendClientCommand(player, MODULE, "depositWaste", {
+        kind = kind,
+        x = square:getX(),
+        y = square:getY(),
+        z = square:getZ(),
+        sprite = fixture:getTextureName(),
+    })
+end
+
 -- Arguments shared by every wash request. The cleaner is left out for rags and
 -- towels, which don't use one.
 function BF.BuildWashArgs(item, cleaner, waterSource)

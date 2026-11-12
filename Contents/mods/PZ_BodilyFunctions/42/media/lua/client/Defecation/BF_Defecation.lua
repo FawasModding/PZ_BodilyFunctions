@@ -49,7 +49,7 @@ function BF.UpdateDefecationValues()
     finalBowelMultiplier = finalBowelMultiplier * randomBowelFactor * BF.GetDiarrheaMultiplier(player)
 
     -- Get base max capacities (from SandboxVars or defaults).
-    local baseBowelsMax  = BF.GetMaxBowelValue()
+    local baseBowelsMax  = BF.GetBowelCapacity(player) -- mL this character holds
 
     -- Get the current fill values.
     local defecateValue = BF.GetDefecateValue()
@@ -80,7 +80,7 @@ end
 function BF.DefecateBottoms(leakTriggered)
     local player = getPlayer()
     local modOptions = PZAPI.ModOptions:getOptions("BF")
-    local bowelsMaxValue = BF.GetMaxBowelValue()
+    local bowelsMaxValue = BF.GetBowelCapacity(player)
     local leakMultiplier = leakTriggered and 0.05 or 1.0
     local defecateValue = BF.GetDefecateValue()
     local defecatePercentage = (defecateValue / bowelsMaxValue) * 100 * leakMultiplier
@@ -206,7 +206,7 @@ function BF.TriggerToiletDefecate(object, player, isWiping, wipeType, wipeItem, 
     local player = getPlayer()
     local defecateValue = BF.GetDefecateValue()
     local requirement = SandboxVars.BF.PoopInToiletRequirement or 40
-    local bowelsMaxValue = SandboxVars.BathroomFunctions.BowelsMaxValue or 100
+    local bowelsMaxValue = BF.GetBowelCapacity(player)
     local hasShyBowels = BF.HasTrait(player, BFTraits.ShyBowels)
     local isBeingWatched = BF.IsBeingWatched(player)
 
@@ -251,7 +251,7 @@ function BF.TriggerFixtureDefecate(object, player, isWiping, wipeType, wipeItem,
     local player = getPlayer()
     local defecateValue = BF.GetDefecateValue()
     local requirement = SandboxVars.BF.PoopInToiletRequirement or 40
-    local bowelsMaxValue = SandboxVars.BathroomFunctions.BowelsMaxValue or 100
+    local bowelsMaxValue = BF.GetBowelCapacity(player)
     local hasShyBowels = BF.HasTrait(player, BFTraits.ShyBowels)
     local isBeingWatched = BF.IsBeingWatched(player)
 
@@ -260,7 +260,7 @@ function BF.TriggerFixtureDefecate(object, player, isWiping, wipeType, wipeItem,
     end
 
     BF.WalkThenRelief(player, object, false, function(goalObject, seated)
-        ISTimedActionQueue.add(FixtureDefecate:new(player, BF.GetDefecateTime(defecateValue * 2), true, true))
+        ISTimedActionQueue.add(FixtureDefecate:new(player, BF.GetDefecateTime(defecateValue * 2), true, true, goalObject))
 
         if isWiping then
             ISTimedActionQueue.add(WipeSelf:new(player, 20, wipeType, wipeItem, "poop", pooledTypes))
@@ -314,7 +314,7 @@ function BF.TriggerSelfDefecate(isLeak)
     local player = getPlayer()
     local defecateValue = BF.GetDefecateValue()
     local poopTime = defecateValue / 4
-    local bowelsMaxValue = SandboxVars.BathroomFunctions.BowelsMaxValue or 100
+    local bowelsMaxValue = BF.GetBowelCapacity(player)
 
     -- Check if the player has relevant clothing on and apply the "pooped bottoms" effects.
     if BF.HasClothingOn(player, unpack(BF.GetSoilableClothing())) then

@@ -37,7 +37,7 @@ function BF.UpdateUrinationValues()
     finalBladderMultiplier = finalBladderMultiplier * randomBladderFactor
 
     -- Get base max capacities (from SandboxVars or defaults).
-    local baseBladderMax = SandboxVars.BathroomFunctions.BladderMaxValue or 600
+    local baseBladderMax = BF.GetBladderCapacity(player) -- mL this character holds
 
     -- Get the current fill values.
     local urinateValue = BF.GetUrinateValue()
@@ -94,7 +94,7 @@ end
 function BF.UrinateBottoms(leakTriggered)
     local player = getPlayer()
     local modOptions = PZAPI.ModOptions:getOptions("BF")
-    local bladderMaxValue = BF.GetMaxBladderValue()
+    local bladderMaxValue = BF.GetBladderCapacity(player)
     local leakMultiplier = leakTriggered and 0.05 or 1.0
     local peeValue = BF.GetUrinateValue()
     local urinatePercentage = (peeValue / bladderMaxValue) * 100 * leakMultiplier
@@ -342,7 +342,7 @@ function BF.TriggerToiletUrinate(object, player, isWiping, wipeType, wipeItem, w
     local player = getPlayer()
     local urinateValue = BF.GetUrinateValue()
     local requirement = SandboxVars.BF.PeeInToiletRequirement or 40
-    local bladderMaxValue = SandboxVars.BathroomFunctions.BladderMaxValue or 100
+    local bladderMaxValue = BF.GetBladderCapacity(player)
     local hasShyBladder = BF.HasTrait(player, BFTraits.ShyBladder)
     local isBeingWatched = BF.IsBeingWatched(player)
 
@@ -379,7 +379,7 @@ function BF.TriggerFixtureUrinate(object, player, isWiping, wipeType, wipeItem, 
     local player = getPlayer()
     local urinateValue = BF.GetUrinateValue()
     local requirement = SandboxVars.BF.PeeInToiletRequirement or 40
-    local bladderMaxValue = SandboxVars.BathroomFunctions.BladderMaxValue or 100
+    local bladderMaxValue = BF.GetBladderCapacity(player)
     local hasShyBladder = BF.HasTrait(player, BFTraits.ShyBladder)
     local isBeingWatched = BF.IsBeingWatched(player)
 
@@ -449,7 +449,6 @@ function BF.TriggerSelfUrinate(isLeak)
     local urinateValue = BF.GetUrinateValue()
     local peeTime = urinateValue / 4 -- Determine the time based on the bladder level
 
-    local bladderMaxValue = isLeak and (SandboxVars.BathroomFunctions.BladderMaxValue or 500) or (SandboxVars.BathroomFunctions.BladderMaxValue or 100)
 
     -- Check if player is wearing clothing that can be soiled.
     if BF.HasClothingOn(player, unpack(BF.GetSoilableClothing())) then
@@ -472,18 +471,33 @@ function BF.TriggerSelfUrinate(isLeak)
     --end
 end
 
+-- Names to try for urine fluid. I'm kind of dumb and too lazy to verify which one works without crashing, so, this'll do.
+local URINE_FLUID_NAMES = { "BF.HumanUrine", "HumanUrine" }
+
+-- Adds `liters` of urine to the container. Returns the liters actually added.
+local function addUrine(fluidContainer, liters)
+    local before = fluidContainer:getAmount()
+    for _, name in ipairs(URINE_FLUID_NAMES) do
+        pcall(function() fluidContainer:addFluid(name, liters) end)
+        local added = fluidContainer:getAmount() - before
+        if added > 0 then return added end
+    end
+    return 0
+end
+
+-- Pours the bladder into an empty container, up to what the container holds.
+-- The bladder is in mL; fluid containers work in liters.
 function BF.PeeInContainer(item)
-    local fluidContainer = item:getFluidContainer() -- Access the container
-    local containerCapacity = fluidContainer:getCapacity() * 1000 -- Convert from L to mL (if it's in L)
-    local bladderUrine = BF.GetUrinateValue() -- Get bladder urine amount
+    local fluidContainer = item:getFluidContainer()
+    if not fluidContainer then return end
 
-    -- Calculate the amount to transfer
-    local amountToFill = math.min(containerCapacity, bladderUrine)
+    local freeMl = (fluidContainer:getCapacity() - fluidContainer:getAmount()) * 1000
+    local bladderMl = BF.GetUrinateValue()
+    local pourMl = math.min(freeMl, bladderMl)
+    if pourMl <= 0 then return end
 
-    -- Fill the bottle with the calculated amount
-    fluidContainer:addFluid("Urine", amountToFill)
+    local addedMl = addUrine(fluidContainer, pourMl / 1000) * 1000
+    if addedMl <= 0 then return end
 
-    -- Update the bladder to reflect the remaining urine
-    local remainingBladderUrine = bladderUrine - amountToFill
-    BF.SetUrinateValue(remainingBladderUrine)
+    BF.SetUrinateValue(math.max(0, bladderMl - addedMl))
 end

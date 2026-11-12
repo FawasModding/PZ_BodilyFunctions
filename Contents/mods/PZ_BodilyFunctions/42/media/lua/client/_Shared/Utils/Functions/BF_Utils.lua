@@ -185,15 +185,11 @@ end
 -- OTHER GETTERS
 -- =====================================================
 
-function BF.GetMaxBowelValue()
-    --local bowelsMaxValue = SandboxVars.BathroomFunctions.BowelsMaxValue or 500
-    local bowelsMaxValue = SandboxVars.BathroomFunctions.BowelsMaxValue or 100
-
-    return bowelsMaxValue
+-- Older names for the local player's capacity in mL, kept for other mods.
+-- New code should use BF.GetBowelCapacity / BF.GetBladderCapacity in BF_Shared.lua.
+function BF.GetMaxBowelValue(player)
+    return BF.GetBowelCapacity(player)
 end
-function BF.GetMaxBladderValue()
-    --local bladderMaxValue = SandboxVars.BathroomFunctions.BladderMaxValue or 800
-    local bladderMaxValue = SandboxVars.BathroomFunctions.BladderMaxValue or 100
-
-    return bladderMaxValue
+function BF.GetMaxBladderValue(player)
+    return BF.GetBladderCapacity(player)
 end

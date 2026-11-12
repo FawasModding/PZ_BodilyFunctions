@@ -49,6 +49,18 @@ option BF.ToiletRequiresWater
     page = Bathroom, translation = BF_ToiletRequiresWater,
 }
 
+/* Urge waves (hiccups) */
+option BF.UrgeFrequencyMultiplier
+{
+    type = double, min = 0, max = 10.0, default = 1.0,
+    page = Bathroom, translation = BF_UrgeFrequencyMultiplier,
+}
+option BF.UrgeAccidentMultiplier
+{
+    type = double, min = 0, max = 10.0, default = 1.0,
+    page = Bathroom, translation = BF_UrgeAccidentMultiplier,
+}
+
 /* Defecation Settings */
 option BathroomFunctions.BowelsMaxValue
 {
@@ -117,11 +129,6 @@ option BF.FliesOnPoop
 {
     type = boolean, default = true,
     page = Defecation, translation = BF_FliesOnPoop,
-}
-option BF.EnableFecalFootprints
-{
-    type = enum, default = 1, numValues = 3,
-    page = Defecation, translation = BF_EnableFecalFootprints,
 }
 option BF.EnableDefecationTraits
 {

@@ -26,7 +26,7 @@ UI_PTBR = {
     UI_BF_options_PlayerSayStatus_tooltip = "Define se o personagem anuncia seu estado acima da cabeça (ex: 'Me mijei.').",
 
    UI_trait_SmallBladder = "Bexiga Pequena"
-   UI_trait_SmallBladderDesc = "A bexiga enche mais rápido e com mais urgência."
+   UI_trait_SmallBladderDesc = "A bexiga comporta um quarto a menos, então você precisa ir mais cedo e com mais frequência."
 
    UI_trait_Bedwetter = "Mijão de Cama"
    UI_trait_BedwetterDesc = "Micção involuntária durante o sono."
@@ -41,13 +41,13 @@ UI_PTBR = {
    UI_trait_ShyBladderDesc = "Só consegue urinar no vaso sanitário."
 
    UI_trait_BigBladder = "Bexiga Grande"
-   UI_trait_BigBladderDesc = "Demora mais para encher a bexiga."
+   UI_trait_BigBladderDesc = "A bexiga comporta um quarto a mais, então você aguenta mais tempo entre idas ao banheiro."
 
    UI_trait_BladderControl = "Controle da Bexiga"
-   UI_trait_BladderControlDesc = "75% de chance de interromper a micção logo no início."
+   UI_trait_BladderControlDesc = "Metade da chance de perder o controle durante uma urgência, e 75% de chance de interromper a micção logo no início."
 
    UI_trait_SmallBowels = "Intestino Pequeno"
-   UI_trait_SmallBowelsDesc = "Os intestinos enchem mais rápido e com mais urgência."
+   UI_trait_SmallBowelsDesc = "Os intestinos comportam um quarto a menos, então você precisa ir mais cedo e com mais frequência."
 
    UI_trait_Bedsoiler = "Cagão de Cama"
    UI_trait_BedsoilerDesc = "Defecação involuntária durante o sono."
@@ -62,10 +62,10 @@ UI_PTBR = {
    UI_trait_ShyBowelsDesc = "Só consegue defecar usando o vaso sanitário."
 
    UI_trait_BigBowels = "Intestino Grande"
-   UI_trait_BigBowelsDesc = "Demora mais para encher os intestinos."
+   UI_trait_BigBowelsDesc = "Os intestinos comportam um quarto a mais, então você aguenta mais tempo entre idas ao banheiro."
 
    UI_trait_BowelControl = "Controle Intestinal"
-   UI_trait_BowelControlDesc = "75% de chance de interromper a defecação logo no início."
+   UI_trait_BowelControlDesc = "Metade da chance de perder o controle durante uma urgência, e 75% de chance de interromper a defecação logo no início."
 
 
 

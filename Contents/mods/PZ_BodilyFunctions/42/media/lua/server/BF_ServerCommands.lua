@@ -32,6 +32,7 @@ local MODULE = "BF"
 local REACH_WASH = 2
 local REACH_TOILET = 2
 local REACH_CLEAN_WASTE = 3
+local REACH_WASTE_BIN = 2
 
 local BOOK_CLEAN_RETURN = "Base.SheetPaper2"
 local BOOK_CLEAN_PAGES = 10
@@ -98,31 +99,25 @@ local Commands = {}
 -- Body values
 -- -----------------------------------------------------
 
-local function sandboxMax(key)
-    local page = SandboxVars and SandboxVars.BathroomFunctions
-    local value = page and page[key]
-    return isNumber(value) and value or nil
-end
-
--- field -> function returning its upper bound (nil = no upper bound known)
+-- field -> function(player) returning its upper bound (nil = no upper bound known).
+-- Bladder and bowels are capped at this player's own capacity, so Large Bladder/Bowels don't get clamped to the average.
 local SYNCED_FIELDS = {
-    urinateValue = function() return sandboxMax("BladderMaxValue") end,
-    defecateValue = function() return sandboxMax("BowelsMaxValue") end,
+    urinateValue = function(player) return BF.GetBladderCapacity(player) end,
+    defecateValue = function(player) return BF.GetBowelCapacity(player) end,
     peedSelfValue = function() return 100 end,
     poopedSelfValue = function() return 100 end,
     bodilyFumesValue = function() return 100 end,
     bfBladderStrain = function() return 100 end,
 }
 
--- Stored without re-transmitting: echoing the player's whole modData back could
--- rewind values the client has advanced since it sent these.
+-- Stored without re-transmitting: echoing the player's whole modData back could rewind values the client has advanced since it sent these.
 function Commands.setValues(player, args)
     if type(args.values) ~= "table" then return end
     local modData = player:getModData()
     for field, value in pairs(args.values) do
         local getMax = SYNCED_FIELDS[field]
         if getMax and isNumber(value) then
-            local max = getMax()
+            local max = getMax(player)
             value = math.max(value, 0)
             if max then value = math.min(value, max) end
             modData[field] = value
@@ -158,6 +153,61 @@ function Commands.spawnWaste(player, args)
     end
     -- The four-argument form transmits to clients itself.
     square:AddWorldInventoryItem(instanceItem(kind.fullType), x, y, 0)
+end
+
+-- The container a waste bin keeps its contents in. Big dumpsters span two tiles.
+-- Not checked whether every piece has a container, so if this piece has none, it
+-- falls back to a neighboring piece from the same tileset.
+local function findBinContainer(square, sprite)
+    local object = findObjectBySprite(square, sprite)
+    if not object then return nil end
+    if object:getContainer() then return object:getContainer() end
+
+    local tileset = sprite:match("^(.*_)%d+$")
+    if not tileset then return nil end
+    local cell = getCell()
+    for dx = -1, 1 do
+        for dy = -1, 1 do
+            local neighbor = cell:getGridSquare(square:getX() + dx, square:getY() + dy, square:getZ())
+            local objects = neighbor and neighbor:getObjects()
+            if objects then
+                for i = 0, objects:size() - 1 do
+                    local candidate = objects:get(i)
+                    local name = candidate:getTextureName()
+                    if candidate:getContainer() and name and name:sub(1, #tileset) == tileset then
+                        return candidate:getContainer()
+                    end
+                end
+            end
+        end
+    end
+    return nil
+end
+
+-- args = { kind, x, y, z, sprite }. Puts waste into a dumpster or trash can.
+-- If it's full, the waste lands on the ground beside it instead.
+function Commands.depositWaste(player, args)
+    local kind = WASTE_KINDS[args.kind]
+    if not kind or SandboxVars.BF[kind.option] ~= true then return end
+    if type(args.sprite) ~= "string" then return end
+
+    local now = getTimestampMs()
+    local username = player:getUsername() or "local"
+    if lastWasteSpawn[username] and now - lastWasteSpawn[username] < WASTE_SPAWN_INTERVAL_MS then return end
+    lastWasteSpawn[username] = now
+
+    local square = squareInReach(player, args, REACH_WASTE_BIN)
+    local container = square and findBinContainer(square, args.sprite)
+    if not container then return end
+
+    local item = instanceItem(kind.fullType)
+    if not item then return end
+    if container:hasRoomFor(player, item) then
+        container:AddItem(item)
+        sendAddItemToContainer(container, item)
+    else
+        square:AddWorldInventoryItem(item, ZombRandFloat(0.1, 0.5), ZombRandFloat(0.1, 0.5), 0)
+    end
 end
 
 function Commands.cleanWaste(player, args)

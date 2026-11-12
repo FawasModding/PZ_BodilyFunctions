@@ -34,8 +34,10 @@ function SelfUrinate:start()
     -- Save initial urinate value when the action begins.
     self.initialUrinateValue = self.character:getModData().urinateValue or 0
 
-    -- Play pee self loop
-    self.sound = self.character:getEmitter():playSound("BF_Pee_Self")
+    -- Play pee self loop. Ignore for leaks since that would be too quiet to hear.
+    if not self.isLeak then
+        self.sound = self.character:getEmitter():playSound("BF_Pee_Self")
+    end
 end
 
 -- If action is cancelled or stops early.

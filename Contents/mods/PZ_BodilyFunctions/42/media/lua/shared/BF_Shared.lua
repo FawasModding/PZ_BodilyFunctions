@@ -32,8 +32,7 @@ function BF.IsDefecationEnabled()
     return BF.IsSandboxOptionOn("EnableDefecation")
 end
 
--- A group of traits is available only while its bodily function and its trait
--- option are both on.
+-- A group of traits is available only while its bodily function and its trait option are both on.
 local TRAIT_GROUPS = {
     {
         options = { "EnableDefecation", "EnableDefecationTraits" },
@@ -62,6 +61,90 @@ end
 -- doing anything, and comes back if the option is turned on again.
 function BF.HasTrait(player, trait)
     return player:hasTrait(trait) and BF.IsTraitEnabled(trait)
+end
+
+-- -----------------------------------------------------
+-- Bladder and bowel capacity
+-- -----------------------------------------------------
+
+--[[
+urinateValue and defecateValue are stored in milliliters. Capacity is how many
+milliliters this character holds, and fullness (0-1) is one divided by the other.
+
+Every threshold (moodles, urges, accidents, menu requirements) reads fullness, so it
+works the same whatever the capacity. Real amounts (containers, how long relief
+takes) read milliliters.
+
+Nothing outside this section should read SandboxVars.BathroomFunctions.*MaxValue.
+The sandbox value is the average adult's capacity; traits scale it per character.
+]]
+
+BF.DefaultBladderCapacity = 800
+BF.DefaultBowelCapacity = 500
+
+-- Small/Large Bladder and Bowels. A small bladder doesn't make more urine, it
+-- just holds less, so you need to go sooner and more often.
+BF.SmallCapacityScale = 0.75
+BF.LargeCapacityScale = 1.25
+
+local function sandboxCapacity(key, default)
+    local page = SandboxVars and SandboxVars.BathroomFunctions
+    local value = page and tonumber(page[key])
+    if value and value > 0 then return value end
+    return default
+end
+
+-- The average adult's capacity in mL, from the sandbox.
+-- This is used for amounts that don't depend on the person, like how much a diuretic pill makes.
+function BF.GetBaseBladderCapacity()
+    return sandboxCapacity("BladderMaxValue", BF.DefaultBladderCapacity)
+end
+
+function BF.GetBaseBowelCapacity()
+    return sandboxCapacity("BowelsMaxValue", BF.DefaultBowelCapacity)
+end
+
+local function traitScale(player, smallTrait, largeTrait)
+    if not player then return 1 end
+    if BF.HasTrait(player, smallTrait) then return BF.SmallCapacityScale end
+    if BF.HasTrait(player, largeTrait) then return BF.LargeCapacityScale end
+    return 1
+end
+
+-- This character's capacity in mL. `player` defaults to the local player, so the server must always pass one.
+function BF.GetBladderCapacity(player)
+    player = player or (getPlayer and getPlayer())
+    return BF.GetBaseBladderCapacity() * traitScale(player, BFTraits.SmallBladder, BFTraits.BigBladder)
+end
+
+function BF.GetBowelCapacity(player)
+    player = player or (getPlayer and getPlayer())
+    return BF.GetBaseBowelCapacity() * traitScale(player, BFTraits.SmallBowels, BFTraits.BigBowels)
+end
+
+local function storedAmount(player, field)
+    local value = player and player:getModData()[field]
+    return type(value) == "number" and value or 0
+end
+
+-- mL currently held.
+function BF.GetBladderAmount(player)
+    return storedAmount(player or getPlayer(), "urinateValue")
+end
+
+function BF.GetBowelAmount(player)
+    return storedAmount(player or getPlayer(), "defecateValue")
+end
+
+-- 0 to 1. Can briefly go over 1 if capacity drops (a trait or sandbox change) until the next fill tick clamps it.
+function BF.GetBladderFullness(player)
+    player = player or getPlayer()
+    return BF.GetBladderAmount(player) / BF.GetBladderCapacity(player)
+end
+
+function BF.GetBowelFullness(player)
+    player = player or getPlayer()
+    return BF.GetBowelAmount(player) / BF.GetBowelCapacity(player)
 end
 
 -- -----------------------------------------------------
@@ -169,7 +252,7 @@ end
 -- Toilets
 -- -----------------------------------------------------
 
--- Litres per flush, by the sprite's GroupName.
+-- Liters per flush, by the sprite's GroupName.
 BF.ToiletWaterUse = { Fancy = 5, Low = 10, Hanging = 5 }
 
 function BF.GetToiletGroup(object)

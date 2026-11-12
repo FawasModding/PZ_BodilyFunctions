@@ -167,18 +167,19 @@ function BathroomCharacterInfo_GUIHandler:render()
     self:setHeightAndParentHeight(WINDOW_HEIGHT)
 
     if SandboxVars.BF then
-        local bladderMax = SandboxVars.BathroomFunctions.BladderMaxValue or 100
-        local bowelsMax = SandboxVars.BathroomFunctions.BowelsMaxValue or 100
+        local player = self.char
+        local bladderMax = BF.GetBladderCapacity(player)
+        local bowelsMax = BF.GetBowelCapacity(player)
 
-        local bladderValue = BF.GetUrinateValue() or 0
+        local bladderValue = BF.GetBladderAmount(player)
         local bladderPercent = bladderValue / bladderMax
         updateBar(self.bladderBar, bladderPercent)
-        updateLabel(self.labelBladderValue, string.format("%.1f%%", bladderPercent * 100))
+        updateLabel(self.labelBladderValue, string.format("%.1f%%  (%d / %d mL)", bladderPercent * 100, math.floor(bladderValue), math.floor(bladderMax)))
 
-        local bowelValue = BF.GetDefecateValue() or 0
+        local bowelValue = BF.GetBowelAmount(player)
         local bowelPercent = bowelValue / bowelsMax
         updateBar(self.bowelBar, bowelPercent)
-        updateLabel(self.labelBowelValue, string.format("%.1f%%", bowelPercent * 100))
+        updateLabel(self.labelBowelValue, string.format("%.1f%%  (%d / %d mL)", bowelPercent * 100, math.floor(bowelValue), math.floor(bowelsMax)))
 
         if self.iconBladder then
             self:drawTextureScaled(self.iconBladder, self.iconBladderX, self.iconBladderY, self.iconSize, self.iconSize, 1, 1, 1, 1)

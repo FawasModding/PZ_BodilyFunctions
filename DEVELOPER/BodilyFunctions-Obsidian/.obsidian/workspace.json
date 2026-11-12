@@ -22,6 +22,20 @@
             }
           },
           {
+            "id": "7be354591b1eff47",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "Changelogs/Changelog v1.5.0.md",
+                "mode": "source",
+                "source": true
+              },
+              "icon": "lucide-file",
+              "title": "Changelog v1.5.0"
+            }
+          },
+          {
             "id": "a35551f38a489bf2",
             "type": "leaf",
             "state": {
@@ -43,8 +57,7 @@
               "title": "1.5.0"
             }
           }
-        ],
-        "currentTab": 1
+        ]
       }
     ],
     "direction": "vertical"
@@ -121,7 +134,7 @@
             }
           }
         ],
-        "currentTab": 1
+        "currentTab": 4
       }
     ],
     "direction": "horizontal",
@@ -233,10 +246,15 @@
       "file-tree-alternative:File Tree Alternative Plugin": false
     }
   },
-  "active": "a35551f38a489bf2",
+  "active": "debb636e99f5e118",
   "lastOpenFiles": [
-    "!Development/Development Log/November 2026.md",
+    "Changelogs/Changelog v1.5.0.md",
     "!Development/Versions/Incomplete/1.5.0.md",
+    "!Development/Development Log/November 2026.md",
+    "Changelogs/Changelog v1.5.0.md.tmp.21124.6f2bc51de639",
+    "Changelogs/Changelog v1.5.0.md.tmp.21124.53283ef28ad2",
+    "Changelogs/Changelog v1.5.0.md.tmp.21124.d0894f7e446f",
+    "Changelogs/Changelog v1.5.0.md.tmp.21124.b7f0ab2872b8",
     "!Development/Credits.md",
     "!Development/Versions/Incomplete/Pre-Build 1.5.md",
     "Content/Maps",
@@ -247,10 +265,6 @@
     "Content",
     "!Development/Versions/Complete/Pre-Build 1.0.md",
     "!Development/Versions/Incomplete/Pre-Build 1.6.md",
-    "!Development/Versions/Incomplete/Pre-Build 1.6.md.tmp.53436.efa53c57b037",
-    "!Development/Versions/Incomplete/sedfnjuwd",
-    "!Development/Development Log/November 2026.md.tmp.43804.6cb96ea3bd97",
-    "!Development/Development Log/November 2026.md.tmp.43804.1d437796eaf8",
     "!Development/Development Log/October 2026.md",
     "!Development/Versions/Complete/Pre-Build 1.0 (2026-sprint).md",
     "Props/Builds/Oak Table.md",
@@ -269,8 +283,6 @@
     "Props/Buildings/Tent.md",
     "Props/Buildings/Mess Hall.md",
     "Characters/Critters/Bird.md",
-    "Props/Builds/Tent.md",
-    "Bed.md",
     "Locations.canvas"
   ]
 }

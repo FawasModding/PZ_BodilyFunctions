@@ -26,7 +26,7 @@
   "UI_BF_options_PlayerSayStatus_tooltip": "Whether to announce player status above their head (ex. 'I've peed myself.').",
 
   "UI_trait_SmallBladder": "Small Bladder",
-  "UI_trait_SmallBladderDesc": "Bladder fills quicker and more urgently.",
+  "UI_trait_SmallBladderDesc": "Bladder holds a quarter less, so you need to go sooner and more often.",
 
   "UI_trait_Bedwetter": "Bedwetter",
   "UI_trait_BedwetterDesc": "Involuntary urination while asleep",
@@ -41,13 +41,13 @@
   "UI_trait_ShyBladderDesc": "Urination is difficult without using the toilet.",
 
   "UI_trait_BigBladder": "Large Bladder",
-  "UI_trait_BigBladderDesc": "Bladder takes longer to fill.",
+  "UI_trait_BigBladderDesc": "Bladder holds a quarter more, so you can wait longer between trips.",
 
   "UI_trait_BladderControl": "Bladder Control",
-  "UI_trait_BladderControlDesc": "75% chance to stop urination 5% of the way through peeing self.",
+  "UI_trait_BladderControlDesc": "Half as likely to lose control during an urge, and 75% chance to stop urination 5% of the way through peeing self.",
 
   "UI_trait_SmallBowels": "Small Bowels",
-  "UI_trait_SmallBowelsDesc": "Bowels fill quicker and more urgently.",
+  "UI_trait_SmallBowelsDesc": "Bowels hold a quarter less, so you need to go sooner and more often.",
 
   "UI_trait_Bedsoiler": "Bedpooper",
   "UI_trait_BedsoilerDesc": "Involuntary defecation while asleep",
@@ -62,8 +62,8 @@
   "UI_trait_ShyBowelsDesc": "Defecation is difficult without using the toilet.",
 
   "UI_trait_BigBowels": "Large Bowels",
-  "UI_trait_BigBowelsDesc": "Bowels take longer to fill.",
+  "UI_trait_BigBowelsDesc": "Bowels hold a quarter more, so you can wait longer between trips.",
 
   "UI_trait_BowelControl": "Bowel Control",
-  "UI_trait_BowelControlDesc": "75% chance to stop defecation 5% of the way through pooping self."
+  "UI_trait_BowelControlDesc": "Half as likely to lose control during an urge, and 75% chance to stop defecation 5% of the way through pooping self."
 }

@@ -18,7 +18,7 @@
   "UI_BF_options_PlayerSayStatus": "Сообщать статус",
   "UI_BF_options_PlayerSayStatus_tooltip": "Сообщать ли статус игрока над его головой (например, «Я описался»).",
   "UI_trait_SmallBladder": "Маленький мочевой пузырь",
-  "UI_trait_SmallBladderDesc": "Мочевой пузырь наполняется быстрее и с большей срочностью.",
+  "UI_trait_SmallBladderDesc": "Мочевой пузырь вмещает на четверть меньше, поэтому в туалет нужно раньше и чаще.",
   "UI_trait_Bedwetter": "Энурезник",
   "UI_trait_BedwetterDesc": "Непроизвольное мочеиспускание во сне.",
   "UI_trait_UrinaryIncontinence": "Недержание мочи",
@@ -28,11 +28,11 @@
   "UI_trait_ShyBladder": "Застенчивый мочевой пузырь",
   "UI_trait_ShyBladderDesc": "Затруднённое мочеиспускание без использования туалета.",
   "UI_trait_BigBladder": "Большой мочевой пузырь",
-  "UI_trait_BigBladderDesc": "Мочевой пузырь наполняется дольше.",
+  "UI_trait_BigBladderDesc": "Мочевой пузырь вмещает на четверть больше, поэтому можно дольше терпеть.",
   "UI_trait_BladderControl": "Контроль мочевого пузыря",
-  "UI_trait_BladderControlDesc": "75%% шанс остановить мочеиспускание, пройдя 5%% процесса, если описались.",
+  "UI_trait_BladderControlDesc": "Вдвое реже теряете контроль при позыве, и 75%% шанс остановить мочеиспускание, пройдя 5%% процесса, если описались.",
   "UI_trait_SmallBowels": "Маленький кишечник",
-  "UI_trait_SmallBowelsDesc": "Кишечник наполняется быстрее и с большей срочностью.",
+  "UI_trait_SmallBowelsDesc": "Кишечник вмещает на четверть меньше, поэтому в туалет нужно раньше и чаще.",
   "UI_trait_Bedsoiler": "Пачкает кровать",
   "UI_trait_BedsoilerDesc": "Непроизвольная дефекация во сне.",
   "UI_trait_FecalIncontinence": "Недержание кала",
@@ -42,7 +42,7 @@
   "UI_trait_ShyBowels": "Застенчивый кишечник",
   "UI_trait_ShyBowelsDesc": "Затруднённая дефекация без использования туалета.",
   "UI_trait_BigBowels": "Большой кишечник",
-  "UI_trait_BigBowelsDesc": "Кишечник наполняется дольше.",
+  "UI_trait_BigBowelsDesc": "Кишечник вмещает на четверть больше, поэтому можно дольше терпеть.",
   "UI_trait_BowelControl": "Контроль кишечника",
-  "UI_trait_BowelControlDesc": "75%% шанс остановить дефекацию, пройдя 5%% процесса, если обкакались."
+  "UI_trait_BowelControlDesc": "Вдвое реже теряете контроль при позыве, и 75%% шанс остановить дефекацию, пройдя 5%% процесса, если обкакались."
 }

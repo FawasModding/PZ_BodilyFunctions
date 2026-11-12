@@ -23,17 +23,11 @@ BF_WasteProducts.ScanNearbyForWaste = function()
                         if item:hasTag(BFTags.HumanFeces) or item:hasTag(BFTags.HumanUrine) then
                             wasteAmount = wasteAmount + 1
                             lastWasteSquare = sq
-                            if item:hasTag(BFTags.HumanFeces) and sq == player:getSquare() then
-                                --BF_FecalFootprints.fecesSteps = 5
-                            end
                         end
                     elseif object ~= nil and objectContainer ~= nil then
                         wasteAmount = wasteAmount + objectContainer:getCountTagRecurse(BFTags.HumanFeces)
                         wasteAmount = wasteAmount + objectContainer:getCountTagRecurse(BFTags.HumanUrine)
                         lastWasteSquare = sq
-                        if objectContainer:getCountTagRecurse(BFTags.HumanFeces) > 0 and sq == player:getSquare() then
-                            --BF_FecalFootprints.fecesSteps = 5
-                        end
                     end
 
                     if wasteAmount > 0 then

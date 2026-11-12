@@ -24,8 +24,8 @@
   "Sandbox_BF_UNIMPLEMENTEDHeader_tooltip": "These are features that don't currently exist, but are planned.",
 
   "Sandbox_Defecation": "Bodily Functions - Defecation",
-  "Sandbox_BF_BowelsMaxValue": "Max Bowels Capacity",
-  "Sandbox_BF_BowelsMaxValue_tooltip": "Maximum bowel fullness.",
+  "Sandbox_BF_BowelsMaxValue": "Average Bowel Capacity (mL)",
+  "Sandbox_BF_BowelsMaxValue_tooltip": "How much an average character's bowels hold, in milliliters. Small and Large Bowels scale this per character.",
   "Sandbox_BF_BowelsIncreaseMultiplier": "Bowels Fill Rate Multiplier",
   "Sandbox_BF_BowelsIncreaseMultiplier_tooltip": "Bowel meter increase per 10 minutes.",
   "Sandbox_BF_DefecateSpeedMultiplier": "Time It Takes To Poop",
@@ -57,19 +57,12 @@
   "Sandbox_BF_CreatePoopObject_tooltip": "Enable poop objects on ground/self.",
   "Sandbox_BF_FliesOnPoop": "Flies Around Poop",
   "Sandbox_BF_FliesOnPoop_tooltip": "Flies gather around nearby feces, with sound.",
-  "Sandbox_BF_EnableFecalFootprints": "Footprints When Stepping On Poop",
-  "Sandbox_BF_EnableFecalFootprints_option1": "No Footprints",
-  "Sandbox_BF_EnableFecalFootprints_option1_tooltip": "Neither players nor zombies can track poop when walking on poop.",
-  "Sandbox_BF_EnableFecalFootprints_option2": "Players Only",
-  "Sandbox_BF_EnableFecalFootprints_option2_tooltip": "Players (no zombies) can track poop if they stand on it. Should be optimized.",
-  "Sandbox_BF_EnableFecalFootprints_option3": "Players And Zombies",
-  "Sandbox_BF_EnableFecalFootprints_option3_tooltip": "Both players and zombies can track poop if they stand on it. May be unoptimized.",
   "Sandbox_BF_EnableDefecationTraits": "Enable Defecation Traits",
   "Sandbox_BF_EnableDefecationTraits_tooltip": "Whether defecation traits can be picked in character creation. Turning this off also stops them working on existing characters.",
 
   "Sandbox_Urination": "Bodily Functions - Urination",
-  "Sandbox_BF_BladderMaxValue": "Max Bladder Capacity",
-  "Sandbox_BF_BladderMaxValue_tooltip": "Maximum bladder fullness.",
+  "Sandbox_BF_BladderMaxValue": "Average Bladder Capacity (mL)",
+  "Sandbox_BF_BladderMaxValue_tooltip": "How much an average character's bladder holds, in milliliters. Small and Large Bladder scale this per character.",
   "Sandbox_BF_BladderIncreaseMultiplier": "Bladder Fill Rate Multiplier",
   "Sandbox_BF_BladderIncreaseMultiplier_tooltip": "Bladder meter increase per 10 minutes.",
   "Sandbox_BF_UrinateSpeedMultiplier": "Time It Takes To Pee",
@@ -111,5 +104,9 @@
   "Sandbox_BF_UndressTiming_option3": "On Arrival, After Sitting",
   "Sandbox_BF_UndressTiming_option3_tooltip": "The character sits first and then undresses, which means standing back up mid-animation and clipping through the toilet.",
   "Sandbox_BF_ToiletRequiresWater": "Toilets Need Water",
-  "Sandbox_BF_ToiletRequiresWater_tooltip": "A flushing toilet can only be used while its tank holds enough water for a flush. Without running water it has to be refilled, for example from a rain collector."
+  "Sandbox_BF_ToiletRequiresWater_tooltip": "A flushing toilet can only be used while its tank holds enough water for a flush. Without running water it has to be refilled, for example from a rain collector.",
+  "Sandbox_BF_UrgeFrequencyMultiplier": "Urge Wave Frequency",
+  "Sandbox_BF_UrgeFrequencyMultiplier_tooltip": "How often a full bladder or bowel sends a sudden wave of urgency that makes the character stop and hold on. 0 turns urge waves off.",
+  "Sandbox_BF_UrgeAccidentMultiplier": "Urge Wave Accident Chance",
+  "Sandbox_BF_UrgeAccidentMultiplier_tooltip": "Multiplies the chance that an urge wave turns into an accident. 0 means urge waves never cause accidents. Overflowing still does."
 }

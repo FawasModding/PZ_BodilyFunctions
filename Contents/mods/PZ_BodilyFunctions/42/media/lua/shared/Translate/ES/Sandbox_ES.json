@@ -24,8 +24,8 @@
   "Sandbox_BF_UNIMPLEMENTEDHeader_tooltip": "Estas son funciones que actualmente no existen, pero están planeadas.",
 
   "Sandbox_Defecation": "Funciones corporales - Defecación",
-  "Sandbox_BF_BowelsMaxValue": "Capacidad Máxima de Intestinos",
-  "Sandbox_BF_BowelsMaxValue_tooltip": "El máximo que pueden llenarse tus intestinos.",
+  "Sandbox_BF_BowelsMaxValue": "Capacidad Media de Intestinos (mL)",
+  "Sandbox_BF_BowelsMaxValue_tooltip": "Cuánto contienen los intestinos de un personaje medio, en mililitros. Intestinos Pequeños y Grandes la ajustan para cada personaje.",
   "Sandbox_BF_BowelsIncreaseMultiplier": "Multiplicador de Aumento de Intestinos",
   "Sandbox_BF_BowelsIncreaseMultiplier_tooltip": "Cuánto aumenta el medidor de defecación cada diez minutos.",
   "Sandbox_BF_DefecateSpeedMultiplier": "Tiempo Que Toma Hacer Popó",
@@ -57,19 +57,12 @@
   "Sandbox_BF_CreatePoopObject_tooltip": "Activa objetos de popó cuando haces popó en el suelo o en ti mismo.",
   "Sandbox_BF_FliesOnPoop": "Moscas Alrededor del Popó",
   "Sandbox_BF_FliesOnPoop_tooltip": "Partículas de moscas volarán alrededor de los montones de excremento.",
-  "Sandbox_BF_EnableFecalFootprints": "Huellas al Pisar Popó",
-  "Sandbox_BF_EnableFecalFootprints_option1": "Sin Huellas",
-  "Sandbox_BF_EnableFecalFootprints_option1_tooltip": "Ni los jugadores ni los zombis dejarán huellas al pisar popó.",
-  "Sandbox_BF_EnableFecalFootprints_option2": "Solo Jugadores",
-  "Sandbox_BF_EnableFecalFootprints_option2_tooltip": "Los jugadores (no los zombis) dejarán huellas si pisan popó. Debería estar optimizado.",
-  "Sandbox_BF_EnableFecalFootprints_option3": "Jugadores y Zombis",
-  "Sandbox_BF_EnableFecalFootprints_option3_tooltip": "Tanto los jugadores como los zombis dejarán huellas si pisan popó. Puede que no esté optimizado.",
   "Sandbox_BF_EnableDefecationTraits": "Activar Rasgos de Defecación",
   "Sandbox_BF_EnableDefecationTraits_tooltip": "Alterna si esta partida permite rasgos relacionados con la defecación.",
 
   "Sandbox_Urination": "Funciones corporales - Micción",
-  "Sandbox_BF_BladderMaxValue": "Capacidad Máxima de la Vejiga",
-  "Sandbox_BF_BladderMaxValue_tooltip": "El máximo que puede llenarse tu vejiga.",
+  "Sandbox_BF_BladderMaxValue": "Capacidad Media de la Vejiga (mL)",
+  "Sandbox_BF_BladderMaxValue_tooltip": "Cuánto contiene la vejiga de un personaje medio, en mililitros. Vejiga Pequeña y Grande la ajustan para cada personaje.",
   "Sandbox_BF_BladderIncreaseMultiplier": "Multiplicador de Aumento de la Vejiga",
   "Sandbox_BF_BladderIncreaseMultiplier_tooltip": "Cuánto aumenta el medidor de micción cada diez minutos.",
   "Sandbox_BF_UrinateSpeedMultiplier": "Tiempo Que Toma Hacer Pis",
@@ -100,5 +93,9 @@
   "Sandbox_BF_CreatePeeObject": "Crear Objetos de Orina",
   "Sandbox_BF_CreatePeeObject_tooltip": "Activa objetos de orina cuando haces pis en el suelo o en ti mismo.",
   "Sandbox_BF_EnableUrinationTraits": "Activar Rasgos de Micción",
-  "Sandbox_BF_EnableUrinationTraits_tooltip": "Alterna si esta partida permite rasgos relacionados con la micción."
+  "Sandbox_BF_EnableUrinationTraits_tooltip": "Alterna si esta partida permite rasgos relacionados con la micción.",
+  "Sandbox_BF_UrgeFrequencyMultiplier": "Frecuencia de Urgencias",
+  "Sandbox_BF_UrgeFrequencyMultiplier_tooltip": "Con qué frecuencia una vejiga o intestino lleno provoca una urgencia repentina que obliga al personaje a detenerse y aguantar. 0 desactiva las urgencias.",
+  "Sandbox_BF_UrgeAccidentMultiplier": "Probabilidad de Accidente por Urgencia",
+  "Sandbox_BF_UrgeAccidentMultiplier_tooltip": "Multiplica la probabilidad de que una urgencia termine en accidente. 0 significa que las urgencias nunca causan accidentes. Desbordarse sigue causándolos."
 }
