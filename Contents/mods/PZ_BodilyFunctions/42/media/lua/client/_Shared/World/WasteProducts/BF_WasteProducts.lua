@@ -2,11 +2,11 @@ local BF_WasteProducts = {}
 
 BF_WasteProducts.wasteProductSquares = {}
 
-BF_WasteProducts.ScanNearbyForWaste = function()
+BF_WasteProducts.ScanNearbyForWaste = function(player)
     local wasteAmount = 0
     local lastWasteSquare = nil
     local insertedInTable = false
-    local player = getPlayer()  -- using getPlayer() for singleplayer
+    player = player or getPlayer()
 
     for x = -2, 2 do
         for y = -2, 2 do
@@ -31,7 +31,7 @@ BF_WasteProducts.ScanNearbyForWaste = function()
                     end
 
                     if wasteAmount > 0 then
-                        BF_WasteProducts.ApplyWasteExposureEffects(lastWasteSquare, wasteAmount)
+                        BF_WasteProducts.ApplyWasteExposureEffects(lastWasteSquare, wasteAmount, player)
                         wasteAmount = 0
                         insertedInTable = true
                     end
@@ -43,12 +43,12 @@ BF_WasteProducts.ScanNearbyForWaste = function()
     local playerInventory = player:getInventory()
     if not insertedInTable and (playerInventory:getCountTag(BFTags.HumanFeces) > 0 or playerInventory:getCountTag(BFTags.HumanUrine) > 0) then
         wasteAmount = wasteAmount + playerInventory:getCountTag(BFTags.HumanFeces) + playerInventory:getCountTag(BFTags.HumanUrine)
-        BF_WasteProducts.ApplyWasteExposureEffects(player:getSquare(), wasteAmount)
+        BF_WasteProducts.ApplyWasteExposureEffects(player:getSquare(), wasteAmount, player)
     end
 end
 
-BF_WasteProducts.ApplyWasteExposureEffects = function(lastWasteSquare, wasteAmount)
-    local player = getPlayer()   -- using getPlayer() for singleplayer
+BF_WasteProducts.ApplyWasteExposureEffects = function(lastWasteSquare, wasteAmount, player)
+    player = player or getPlayer()
 
     local foodSicknessLevel = player:getStats():get(CharacterStat.FOOD_SICKNESS)
     if foodSicknessLevel < 50 then -- cap at 50 (Nauseous)
@@ -97,9 +97,9 @@ BF_WasteProducts.ApplyWasteExposureEffects = function(lastWasteSquare, wasteAmou
 
     -- Set bodily fumes value: 75 for feces (or both), 40 for urine only
     if hasFeces then
-        BF.SetBodilyFumesValue(75) -- Feces or both feces and urine
+        BF.SetBodilyFumesValue(75, player) -- Feces or both feces and urine
     elseif hasUrine then
-        BF.SetBodilyFumesValue(40) -- Urine only
+        BF.SetBodilyFumesValue(40, player) -- Urine only
     end
 
     -- Only track HumanFeces for flies
@@ -114,9 +114,19 @@ BF_WasteProducts.ApplyWasteExposureEffects = function(lastWasteSquare, wasteAmou
     end
 end
 
+-- True if a local player carrying feces is standing on this square.
+local function isCarriedFecesOn(square)
+    local found = false
+    BF.ForEachLocalPlayer(function(player)
+        if not found and player:getInventory():getCountTag(BFTags.HumanFeces) > 0 and square:DistToProper(player:getSquare()) < 1 then
+            found = true
+        end
+    end)
+    return found
+end
+
 BF_WasteProducts.UpdateWasteFlies = function()
-    BF_WasteProducts.ScanNearbyForWaste()
-    local player = getPlayer()   -- using getPlayer() for singleplayer
+    BF.ForEachLocalPlayer(BF_WasteProducts.ScanNearbyForWaste)
 
     -- Remove the flies if they were turned off mid-game through sandbox options.
     if SandboxVars.BF.FliesOnPoop == false then
@@ -144,7 +154,7 @@ BF_WasteProducts.UpdateWasteFlies = function()
             end
         end
 
-        if not fecesFound and player:getInventory():getCountTag(BFTags.HumanFeces) > 0 and fecesSquare:DistToProper(player:getSquare()) < 1 then
+        if not fecesFound and isCarriedFecesOn(fecesSquare) then
             fecesFound = true
         end
 

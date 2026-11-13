@@ -13,12 +13,29 @@ local InventoryUI = require("Starlit/client/ui/InventoryUI")
 Handle timed updates for bathroom needs
 Called every 10 in-game minutes.
 ]]--
+--[[
+Runs fn(player) once for each living player on this computer. In split screen there
+are up to 4 of them. getPlayer() only returns one of them, and which one changes
+while the game runs, so anything that acts on "the player" goes through this or
+gets its player passed in.
+]]--
+function BF.ForEachLocalPlayer(fn)
+	for i = 0, getNumActivePlayers() - 1 do
+		local player = getSpecificPlayer(i)
+		if player and not player:isDead() then
+			fn(player)
+		end
+	end
+end
+
 function BF.BathroomFunctionTimers()
 	if BF.didFirstTimer then
-		BF.UpdateBathroomValues() -- If the initial setup is done, update the player's bathroom values.
-		BF.HandleInstantAccidents() -- Check whether or not the player has urinated or defecated themselves.
-		BF.HandleUrgencyHiccup() -- Urge waves: the player stops to hold on, with a chance of an accident.
-		BF.DirtyBottomsEffects()
+		BF.ForEachLocalPlayer(function(player)
+			BF.UpdateBathroomValues(player) -- If the initial setup is done, update the player's bathroom values.
+			BF.HandleInstantAccidents(player) -- Check whether or not the player has urinated or defecated themselves.
+			BF.HandleUrgencyHiccup(player) -- Urge waves: the player stops to hold on, with a chance of an accident.
+			BF.DirtyBottomsEffects(player)
+		end)
 	else
 		BF.didFirstTimer = true -- If this is the first call, set the flag to true and skip updating values.
 	end
@@ -35,10 +52,11 @@ Burn rate: 10 Calories per 10 min
 ]]
 
 -- Update player's bathroom-related values (urination and defecation)
-function BF.UpdateBathroomValues()
+function BF.UpdateBathroomValues(player)
+	player = player or getPlayer()
 
-	BF.UpdateUrinationValues()
-	BF.UpdateDefecationValues()
+	BF.UpdateUrinationValues(player)
+	BF.UpdateDefecationValues(player)
 
 	-- Decay bodily fumes (smell moodle) by 10% every 10 seconds
 	--local currentFumes = BF.GetBodilyFumesValue()
@@ -46,7 +64,7 @@ function BF.UpdateBathroomValues()
 	--BF.SetBodilyFumesValue(reducedFumes)
 
 	-- Instantly clear bodily fumes
-	BF.SetBodilyFumesValue(0)
+	BF.SetBodilyFumesValue(0, player)
 
 end
 
@@ -67,10 +85,10 @@ end
 -- Make the player urinate / defecate in very "sudden" situations.
 -- Like, getting injured (car crash, shot). Overflowing (bladder max capacity).
 -- todo: injuries and car crashes don't do anything yet
-function BF.HandleInstantAccidents()
-	local urinateValue = BF.GetUrinateValue() -- Current bladder level
-	local defecateValue = BF.GetDefecateValue() -- Current bowel level
-	local player = getPlayer()
+function BF.HandleInstantAccidents(player)
+	player = player or getPlayer()
+	local urinateValue = BF.GetUrinateValue(player) -- Current bladder level
+	local defecateValue = BF.GetDefecateValue(player) -- Current bowel level
 
 	local bladderMaxValue = BF.GetBladderCapacity(player) -- mL this character holds
 	local bowelsMaxValue = BF.GetBowelCapacity(player)
@@ -98,14 +116,14 @@ function BF.HandleInstantAccidents()
 	-- Leaking feature for urination
 	if BF.CanHaveAccident(player, "pee") and BF.HasTrait(player, BFTraits.UrinaryIncontinence) and (urinateValue >= 0.2 * bladderMaxValue) then
 		if ZombRand(100) < leakChance then
-			BF.TriggerSelfUrinate(true)  -- Trigger self urination leak action
+			BF.TriggerSelfUrinate(player, true)  -- Trigger self urination leak action
 		end
 	end
 
 	-- Leaking feature for defecation
 	if BF.CanHaveAccident(player, "poop") and BF.HasTrait(player, BFTraits.FecalIncontinence) and (defecateValue >= 0.2 * bowelsMaxValue) then
 		if ZombRand(100) < leakChance then
-			BF.TriggerSelfDefecate(true)  -- Trigger self defecation leak action
+			BF.TriggerSelfDefecate(player, true)  -- Trigger self defecation leak action
 		end
 	end
 
@@ -121,8 +139,8 @@ function BF.HandleInstantAccidents()
 
 			-- If the player has the "Bedwetter" trait, trigger urination accident
 			if BF.CanHaveAccident(player, "pee") and BF.HasTrait(player, BFTraits.Bedwetter) then
-				BF.UrinateBottoms() -- Simulate peeing in bed
-				BF.SetUrinateValue(0) -- Reset pee value after accident
+				BF.UrinateBottoms(player) -- Simulate peeing in bed
+				BF.SetUrinateValue(0, player) -- Reset pee value after accident
 			end
 
 		-- Check if the player needs to defecate while asleep
@@ -131,17 +149,17 @@ function BF.HandleInstantAccidents()
 
 			-- If the player has the "Bedsoiler" trait, trigger defecation accident
 			if BF.CanHaveAccident(player, "poop") and BF.HasTrait(player, BFTraits.Bedsoiler) then
-				BF.DefecateBottoms() -- Simulate pooping in bed
-				BF.SetDefecateValue(0)  -- Reset defecate value after accident
+				BF.DefecateBottoms(player) -- Simulate pooping in bed
+				BF.SetDefecateValue(0, player)  -- Reset defecate value after accident
 			end
 
 		end
 	else
 		-- If the player is awake, start the pee or poop process based on their bladder/bowel status
 		if urinateValue >= bladderThreshold and BF.CanHaveAccident(player, "pee") then
-			BF.TriggerSelfUrinate()  -- Trigger self urination action
+			BF.TriggerSelfUrinate(player)  -- Trigger self urination action
 		elseif defecateValue >= bowelsThreshold and BF.CanHaveAccident(player, "poop") then
-			BF.TriggerSelfDefecate()  -- Trigger self defecation action
+			BF.TriggerSelfDefecate(player)  -- Trigger self defecation action
 		end
 	end
 end
@@ -395,8 +413,8 @@ local function tickUrgeCooldowns(player)
 end
 
 -- Called every 10 minutes from BathroomFunctionTimers.
-function BF.HandleUrgencyHiccup()
-	local player = getPlayer()
+function BF.HandleUrgencyHiccup(player)
+	player = player or getPlayer()
 	if not player or player:isDead() then return end
 
 	local cooldowns = tickUrgeCooldowns(player)
@@ -446,7 +464,7 @@ function BF.DoUrgeWave(player, kind, fullness, strength)
 	local holdTime = BF.Urge.minHoldTime + (BF.Urge.maxHoldTime - BF.Urge.minHoldTime) * strength
 	local hiccupType = kind == "pee" and "bladder" or "bowels"
 	if not player:getVehicle() and isQueueEmpty(player) then
-		BF.PlayUrgencyIdles(hiccupType, true, holdTime)
+		BF.PlayUrgencyIdles(hiccupType, true, holdTime, player)
 	elseif strong and not isClient() then
 		UIManager.getSpeedControls():SetCurrentGameSpeed(1)
 	end
@@ -455,16 +473,16 @@ function BF.DoUrgeWave(player, kind, fullness, strength)
 
 	local isLeak = BF.RollUrgeLeak(player, kind, fullness)
 	if kind == "pee" then
-		BF.TriggerSelfUrinate(isLeak)
+		BF.TriggerSelfUrinate(player, isLeak)
 	else
-		BF.TriggerSelfDefecate(isLeak)
+		BF.TriggerSelfDefecate(player, isLeak)
 	end
 end
 
 -- Plays the urgency hold animation for the hiccup type ("bladder" or "bowels").
 -- holdTime is the action length; stronger urges hold longer.
-function BF.PlayUrgencyIdles(hiccupType, doTimedAction, holdTime)
-	local player = getPlayer()
+function BF.PlayUrgencyIdles(hiccupType, doTimedAction, holdTime, player)
+	player = player or getPlayer()
 	holdTime = holdTime or 40
 
 	if hiccupType == "bladder" then

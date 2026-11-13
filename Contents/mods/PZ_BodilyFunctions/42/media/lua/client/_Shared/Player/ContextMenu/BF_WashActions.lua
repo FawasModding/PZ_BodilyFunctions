@@ -5,8 +5,8 @@ function BF.IsSoiledJunk(item)
     return BF.WashableJunk[item:getFullType()] ~= nil
 end
 
-function BF.WashingRightClick(player, context, worldObjects)
-	--local player = getPlayer()
+function BF.WashingRightClick(player, context, worldObjects, test)
+    if test then return end -- See BF.ReliefRightClick
     player = getSpecificPlayer(player)
 
 	local hasSoiledItem = false
@@ -42,16 +42,8 @@ function BF.WashingRightClick(player, context, worldObjects)
 
 	if hasSoiledItem then
 		local storeWater = nil
-		local firstObject = nil
-
-		for i = 1, #worldObjects do
-			if not firstObject then
-				firstObject = worldObjects[i]
-			end
-		end
-
-		local square = firstObject:getSquare()
-		local worldObjects = square:getObjects()
+		-- All tiles, not only the first object's. A controller's first object is the player's own tile.
+		local worldObjects = BF.GetContextMenuObjects(worldObjects)
 		for i = 0, worldObjects:size() - 1 do
 			local object = worldObjects:get(i)
 			if object:getTextureName() and object:hasWater() then --Anything that can usually be used to wash
@@ -61,6 +53,9 @@ function BF.WashingRightClick(player, context, worldObjects)
 
 		if storeWater == nil then return end
 		if storeWater:getSquare():DistToProper(player:getSquare()) > 10 then return end
+
+		-- The tile the character walks to before washing.
+		local square = storeWater:getSquare()
 
 		-- Nest under vanilla's "Sink" submenu when washing at a sink fixture;
         -- otherwise fall back to a standalone top-level entry.

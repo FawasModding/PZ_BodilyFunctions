@@ -6,6 +6,8 @@ BF = BF or {}
 local MODULE = "BF"
 
 local pendingCallbacks = {}
+-- Who sent each request, so an error shows over the right split-screen player.
+local pendingPlayers = {}
 local nextRequestId = 0
 
 -- Sends a command that gets a reply. onResult(result) runs on the reply, one
@@ -14,6 +16,7 @@ function BF.SendTrackedCommand(player, command, args, onResult)
     nextRequestId = nextRequestId + 1
     args.requestId = nextRequestId
     pendingCallbacks[nextRequestId] = onResult
+    pendingPlayers[nextRequestId] = player
     sendClientCommand(player, MODULE, command, args)
 end
 
@@ -22,11 +25,11 @@ end
 function BF.OnCommandResult(result)
     BF.InvalidateReachableCache()
 
-    if not result.ok and result.reason then
-        local player = getPlayer()
-        if player then
-            HaloTextHelper.addBadText(player, getText(result.reason))
-        end
+    local player = pendingPlayers[result.requestId] or getPlayer()
+    pendingPlayers[result.requestId] = nil
+
+    if not result.ok and result.reason and player then
+        HaloTextHelper.addBadText(player, getText(result.reason))
     end
 
     local callback = pendingCallbacks[result.requestId]

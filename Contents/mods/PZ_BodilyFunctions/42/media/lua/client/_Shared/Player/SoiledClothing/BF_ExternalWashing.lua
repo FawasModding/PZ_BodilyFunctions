@@ -161,29 +161,34 @@ local function cleanContainerContents(container)
 end
 
 function BF.SweepWashingMachines()
-    local player = getPlayer()
-    if not player then return end
-
-    local playerSquare = player:getSquare()
     local cell = getCell()
-    if not playerSquare or not cell then return end
+    if not cell then return end
 
-    local px, py, pz = playerSquare:getX(), playerSquare:getY(), playerSquare:getZ()
+    -- Each washer is cleaned once per minute, even when two split-screen players are both near it.
+    local done = {}
 
-    for dx = -WASHER_SWEEP_RADIUS, WASHER_SWEEP_RADIUS do
-        for dy = -WASHER_SWEEP_RADIUS, WASHER_SWEEP_RADIUS do
-            local square = cell:getGridSquare(px + dx, py + dy, pz)
-            if square then
-                local objects = square:getObjects()
-                for i = 0, objects:size() - 1 do
-                    local object = objects:get(i)
-                    if BF.IsWasherRunning(object) then
-                        forEachWasherContainer(object, cleanContainerContents)
+    BF.ForEachLocalPlayer(function(player)
+        local playerSquare = player:getSquare()
+        if not playerSquare then return end
+
+        local px, py, pz = playerSquare:getX(), playerSquare:getY(), playerSquare:getZ()
+
+        for dx = -WASHER_SWEEP_RADIUS, WASHER_SWEEP_RADIUS do
+            for dy = -WASHER_SWEEP_RADIUS, WASHER_SWEEP_RADIUS do
+                local square = cell:getGridSquare(px + dx, py + dy, pz)
+                if square then
+                    local objects = square:getObjects()
+                    for i = 0, objects:size() - 1 do
+                        local object = objects:get(i)
+                        if not done[object] and BF.IsWasherRunning(object) then
+                            done[object] = true
+                            forEachWasherContainer(object, cleanContainerContents)
+                        end
                     end
                 end
             end
         end
-    end
+    end)
 end
 
 -- ----------------------------------------------------------------------------
@@ -209,30 +214,35 @@ end
 local SYNCED_VALUES = {
     "urinateValue", "defecateValue", "peedSelfValue", "poopedSelfValue", "bodilyFumesValue", "bfBladderStrain",
 }
+-- Last values sent, per split-screen player number.
 local lastSentValues = {}
 
 -- Sends only what changed, as named fields the server validates. This used to be
 -- player:transmitModData(), which pushed the whole table every minute.
-local function syncPlayerValues()
-    if not isClient() then return end
-
-    local player = getPlayer()
-    if not player then return end
+local function syncValuesFor(player)
+    local playerNum = player:getPlayerNum()
+    lastSentValues[playerNum] = lastSentValues[playerNum] or {}
+    local lastSent = lastSentValues[playerNum]
 
     local modData = player:getModData()
     local changed = nil
     for _, field in ipairs(SYNCED_VALUES) do
         local value = modData[field]
-        if type(value) == "number" and value ~= lastSentValues[field] then
+        if type(value) == "number" and value ~= lastSent[field] then
             changed = changed or {}
             changed[field] = value
-            lastSentValues[field] = value
+            lastSent[field] = value
         end
     end
 
     if changed then
         sendClientCommand(player, "BF", "setValues", { values = changed })
     end
+end
+
+local function syncPlayerValues()
+    if not isClient() then return end
+    BF.ForEachLocalPlayer(syncValuesFor)
 end
 
 -- ----------------------------------------------------------------------------

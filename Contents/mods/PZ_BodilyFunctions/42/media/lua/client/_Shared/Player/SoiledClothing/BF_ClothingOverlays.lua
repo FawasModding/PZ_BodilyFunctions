@@ -18,8 +18,19 @@ BF_Overlays = BF_Overlays or {}
 -- Initialization
 -- ============================================================================
 Events.OnLoad.Add(function()
-    BF_Overlays.RefreshOverlaysForPlayer(getPlayer(), "peed")
-    BF_Overlays.RefreshOverlaysForPlayer(getPlayer(), "pooped")
+    BF.ForEachLocalPlayer(function(player)
+        BF_Overlays.RefreshOverlaysForPlayer(player, "peed")
+        BF_Overlays.RefreshOverlaysForPlayer(player, "pooped")
+    end)
+end)
+
+-- OnCreatePlayer runs for each player as they're created, including split-screen players
+-- who join after the game has loaded.
+Events.OnCreatePlayer.Add(function(playerNum, player)
+    player = player or getSpecificPlayer(playerNum)
+    if not player then return end
+    BF_Overlays.RefreshOverlaysForPlayer(player, "peed")
+    BF_Overlays.RefreshOverlaysForPlayer(player, "pooped")
 end)
 
 -- ============================================================================
@@ -270,8 +281,14 @@ if ISWearClothing and ISWearClothing.perform then
             print("[ERROR] ISWearClothing perform failed: " .. tostring(result))
         end
 
-        BF_Overlays.ClearAllOverlaysByType(getPlayer(), "peed")
-        BF_Overlays.ClearAllOverlaysByType(getPlayer(), "pooped")
+        -- The character putting the item on, not getPlayer(), which can be the other split-screen player.
+        local player = self.character
+        if not player or not instanceof(player, "IsoPlayer") then
+            return
+        end
+
+        BF_Overlays.ClearAllOverlaysByType(player, "peed")
+        BF_Overlays.ClearAllOverlaysByType(player, "pooped")
 
         local delayTicks, tickCount = 10, 0
 
@@ -279,8 +296,8 @@ if ISWearClothing and ISWearClothing.perform then
             tickCount = tickCount + 1
             if tickCount >= delayTicks then
                 Events.OnTick.Remove(delayedEquip)
-                BF_Overlays.RefreshOverlaysForPlayer(getPlayer(), "peed")
-                BF_Overlays.RefreshOverlaysForPlayer(getPlayer(), "pooped")
+                BF_Overlays.RefreshOverlaysForPlayer(player, "peed")
+                BF_Overlays.RefreshOverlaysForPlayer(player, "pooped")
             end
         end
 
@@ -303,9 +320,9 @@ if ISUnequipAction and ISUnequipAction.perform then
             print("[ERROR] ISUnequipAction perform failed: " .. tostring(result))
         end
 
-        local player = getPlayer()
-        if not player then
-            print("[ERROR] ISUnequipAction: Player is nil")
+        -- The character taking the item off, not getPlayer(), which can be the other split-screen player.
+        local player = self.character
+        if not player or not instanceof(player, "IsoPlayer") then
             return
         end
 

@@ -40,8 +40,6 @@ end
 function GroundUrinate:perform()
 	self:stopSound() -- Stop peeing sound
 
-	local urinateValue = BF.GetUrinateValue()
-
 	if self.character:isFemale() then --Minor detail, but squatting should give more fatigue than standing
 		local fatigueToGive = self.character:getStats():get(CharacterStat.FATIGUE) + 0.025
 		self.character:getStats():set(CharacterStat.FATIGUE, fatigueToGive)

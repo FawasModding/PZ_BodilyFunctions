@@ -2,31 +2,31 @@
 -- A pill does the same amount no matter who's using it.
 
 function OnEat_AntiDiarrhealPill(food, player, percent)
-    local currentBowels = BF.GetDefecateValue()
+    local currentBowels = BF.GetDefecateValue(player)
     local reduction = BF.GetBaseBowelCapacity() * 0.1 * percent -- 10% of an average bowel per pill
-    BF.SetDefecateValue(math.max(0, currentBowels - reduction))
+    BF.SetDefecateValue(math.max(0, currentBowels - reduction), player)
     print("Anti-Diarrheal Pill consumed: Bowel value reduced by " .. reduction)
 end
 
 function OnEat_LaxativePill(food, player, percent)
     local bowelsMaxValue = BF.GetBowelCapacity(player)
-    local currentBowels = BF.GetDefecateValue()
+    local currentBowels = BF.GetDefecateValue(player)
     local increase = BF.GetBaseBowelCapacity() * 0.2 * percent -- 20% of an average bowel per pill
-    BF.SetDefecateValue(math.min(bowelsMaxValue, currentBowels + increase))
+    BF.SetDefecateValue(math.min(bowelsMaxValue, currentBowels + increase), player)
     print("Laxative Pill consumed: Bowel value increased by " .. increase)
 end
 
 function OnEat_DiureticPill(food, player, percent)
     local bladderMaxValue = BF.GetBladderCapacity(player)
-    local currentBladder = BF.GetUrinateValue()
+    local currentBladder = BF.GetUrinateValue(player)
     local increase = BF.GetBaseBladderCapacity() * 0.2 * percent -- 20% of an average bladder per pill
-    BF.SetUrinateValue(math.min(bladderMaxValue, currentBladder + increase))
+    BF.SetUrinateValue(math.min(bladderMaxValue, currentBladder + increase), player)
     print("Diuretic Pill consumed: Bladder value increased by " .. increase)
 end
 
 function OnEat_AnticholinergicPill(food, player, percent)
-    local currentBladder = BF.GetUrinateValue()
+    local currentBladder = BF.GetUrinateValue(player)
     local reduction = BF.GetBaseBladderCapacity() * 0.1 * percent -- 10% of an average bladder per pill
-    BF.SetUrinateValue(math.max(0, currentBladder - reduction))
+    BF.SetUrinateValue(math.max(0, currentBladder - reduction), player)
     print("Anticholinergic Pill consumed: Bladder value reduced by " .. reduction)
 end

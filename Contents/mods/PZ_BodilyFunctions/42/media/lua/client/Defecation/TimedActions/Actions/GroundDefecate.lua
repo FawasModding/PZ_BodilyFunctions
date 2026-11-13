@@ -33,8 +33,6 @@ function GroundDefecate:stop()
 end
 
 function GroundDefecate:perform()
-	local defecateValue = BF.GetDefecateValue()
-
 	-- Add fatigue since the player had to squat to poop
 
 	local fatigueToGive = self.character:getStats():get(CharacterStat.FATIGUE) + 0.025

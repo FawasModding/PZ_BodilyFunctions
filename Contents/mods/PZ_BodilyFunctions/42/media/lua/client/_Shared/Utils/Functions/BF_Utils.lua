@@ -37,8 +37,7 @@ end
 Get player's current urination value
 If value isn't set or isn't a valid number, default to 0.0.
 ]]--
-function BF.GetUrinateValue()
-    local player = getPlayer() -- Fetch the current player object
+function BF.GetUrinateValue(player)
     local urinateValue = player:getModData().urinateValue -- Retrieve the urination value from the player's modData
 
     if type(urinateValue) ~= "number" then -- Ensure the retrieved value is a valid number
@@ -51,8 +50,7 @@ end
 Get player's current defecation value
 If value isn't set or isn't a valid number, default to 0.0.
 ]]--
-function BF.GetDefecateValue()
-    local player = getPlayer()
+function BF.GetDefecateValue(player)
     local defecateValue = player:getModData().defecateValue -- Defecation value from player's modData
 
     if type(defecateValue) ~= "number" then -- Ensure the retrieved value is a valid number
@@ -66,8 +64,7 @@ end
 Function to set the player's current urination value
 Ensures the value is a valid number and updates the player's modData.
 ]]
-function BF.SetUrinateValue(newUrinateValue)
-    local player = getPlayer() -- Fetch the current player object
+function BF.SetUrinateValue(newUrinateValue, player)
 
     -- Ensure the new value is a valid number
     if type(newUrinateValue) == "number" then
@@ -80,8 +77,7 @@ end
 Function to set the player's current defecation value
 Ensures the value is a valid number and updates the player's modData.
 ]]
-function BF.SetDefecateValue(newDefecateValue)
-    local player = getPlayer() -- Fetch the current player object
+function BF.SetDefecateValue(newDefecateValue, player)
 
     -- Ensure the new value is a valid number
     if type(newDefecateValue) == "number" then
@@ -101,8 +97,7 @@ end
 Get player's current peed self value
 If the value isn't set or isn't a valid number, it defaults to 0.0.
 ]]--
-function BF.GetPeedSelfValue()
-    local player = getPlayer() -- Fetch the current player object
+function BF.GetPeedSelfValue(player)
     local peedSelfValue = player:getModData().peedSelfValue -- Retrieve the peed self value from the player's modData
 
     if type(peedSelfValue) ~= "number" then -- Ensure the retrieved value is a valid number
@@ -115,8 +110,7 @@ end
 Get player's current pooped self value
 If the value isn't set or isn't a valid number, it defaults to 0.0.
 ]]--
-function BF.GetPoopedSelfValue()
-    local player = getPlayer() -- Fetch the current player object
+function BF.GetPoopedSelfValue(player)
     local poopedSelfValue = player:getModData().poopedSelfValue -- Retrieve the pooped self value from the player's modData
 
     if type(poopedSelfValue) ~= "number" then -- Ensure the retrieved value is a valid number
@@ -126,8 +120,7 @@ function BF.GetPoopedSelfValue()
     return poopedSelfValue -- Return the pooped self value
 end
 
-function BF.SetPeedSelfValue(newPeedSelfValue)
-    local player = getPlayer() -- Fetch the current player object
+function BF.SetPeedSelfValue(newPeedSelfValue, player)
 
     -- Ensure the new value is a valid number
     if type(newPeedSelfValue) == "number" then
@@ -136,8 +129,7 @@ function BF.SetPeedSelfValue(newPeedSelfValue)
         print("Error: Invalid value for urinateValue. Must be a number.") -- Handle invalid input
     end
 end
-function BF.SetPoopedSelfValue(newPoopedSelfValue)
-    local player = getPlayer() -- Fetch the current player object
+function BF.SetPoopedSelfValue(newPoopedSelfValue, player)
 
     -- Ensure the new value is a valid number
     if type(newPoopedSelfValue) == "number" then
@@ -155,8 +147,7 @@ end
 Get player's current bodily fumes value (smell moodle)
 If value isn't set or isn't a valid number, default to 0.0.
 ]]--
-function BF.GetBodilyFumesValue()
-    local player = getPlayer() -- Fetch the current player object
+function BF.GetBodilyFumesValue(player)
     local bodilyFumesValue = player:getModData().bodilyFumesValue -- Retrieve the bodily fumes value from the player's modData
 
     if type(bodilyFumesValue) ~= "number" then -- Ensure the retrieved value is a valid number
@@ -170,8 +161,7 @@ end
 Set player's current bodily fumes value (smell moodle)
 Ensures value is a valid number and updates player's modData.
 ]]
-function BF.SetBodilyFumesValue(newBodilyFumesValue)
-    local player = getPlayer() -- Fetch the current player object
+function BF.SetBodilyFumesValue(newBodilyFumesValue, player)
 
     -- Ensure the new value is a valid number
     if type(newBodilyFumesValue) == "number" then

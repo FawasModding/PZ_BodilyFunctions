@@ -7,8 +7,8 @@ function BF.GetUrinateTime(baseTime)
 end
 
 -- Update urination values
-function BF.UpdateUrinationValues()
-    local player = getPlayer()
+function BF.UpdateUrinationValues(player)
+    player = player or getPlayer()
     
     -- Get player stats
     local thirst = player:getStats():get(CharacterStat.THIRST)
@@ -40,7 +40,7 @@ function BF.UpdateUrinationValues()
     local baseBladderMax = BF.GetBladderCapacity(player) -- mL this character holds
 
     -- Get the current fill values.
-    local urinateValue = BF.GetUrinateValue()
+    local urinateValue = BF.GetUrinateValue(player)
 
     -- Base Increase Rate:
     local urinateBaseRate = 10 -- Base bladder fill per 10-minute tick
@@ -91,12 +91,12 @@ function BF.UpdateUrinationValues()
 end
 
 -- Function to apply effects when the player has urinated in their clothing
-function BF.UrinateBottoms(leakTriggered)
-    local player = getPlayer()
+function BF.UrinateBottoms(player, leakTriggered)
+    player = player or getPlayer()
     local modOptions = PZAPI.ModOptions:getOptions("BF")
     local bladderMaxValue = BF.GetBladderCapacity(player)
     local leakMultiplier = leakTriggered and 0.05 or 1.0
-    local peeValue = BF.GetUrinateValue()
+    local peeValue = BF.GetUrinateValue(player)
     local urinatePercentage = (peeValue / bladderMaxValue) * 100 * leakMultiplier
 
     local showPeeObject = false
@@ -162,7 +162,7 @@ function BF.UrinateBottoms(leakTriggered)
 
         -- Update clothing properties
         BF.ApplySoilingEffects(underwear, leakTriggered)
-        BF.RefreshSoiledSeverityFromModData(underwear)
+        BF.RefreshSoiledSeverityFromModData(underwear, player)
 
         if modData.peedSeverity >= 90 then showPeeObject = true end
     end
@@ -190,7 +190,7 @@ function BF.UrinateBottoms(leakTriggered)
 
         -- Update clothing properties
         BF.ApplySoilingEffects(pants, leakTriggered)
-        BF.RefreshSoiledSeverityFromModData(pants)
+        BF.RefreshSoiledSeverityFromModData(pants, player)
 
         if modData.peedSeverity >= 90 then showPeeObject = true end
     end
@@ -339,8 +339,8 @@ function BF.WalkThenRelief(player, object, mustSit, reliefActionFactory, undress
 end
 
 function BF.TriggerToiletUrinate(object, player, isWiping, wipeType, wipeItem, wipeEfficiency, pooledTypes)
-    local player = getPlayer()
-    local urinateValue = BF.GetUrinateValue()
+    player = player or getPlayer()
+    local urinateValue = BF.GetUrinateValue(player)
     local requirement = SandboxVars.BF.PeeInToiletRequirement or 40
     local bladderMaxValue = BF.GetBladderCapacity(player)
     local hasShyBladder = BF.HasTrait(player, BFTraits.ShyBladder)
@@ -376,8 +376,8 @@ end
 -- shower, bush, water, trash can, dumpster). Always walks adjacent and never
 -- sits — these objects have no seating data and no meaningful facing.
 function BF.TriggerFixtureUrinate(object, player, isWiping, wipeType, wipeItem, wipeEfficiency, pooledTypes)
-    local player = getPlayer()
-    local urinateValue = BF.GetUrinateValue()
+    player = player or getPlayer()
+    local urinateValue = BF.GetUrinateValue(player)
     local requirement = SandboxVars.BF.PeeInToiletRequirement or 40
     local bladderMaxValue = BF.GetBladderCapacity(player)
     local hasShyBladder = BF.HasTrait(player, BFTraits.ShyBladder)
@@ -402,9 +402,9 @@ function BF.TriggerFixtureUrinate(object, player, isWiping, wipeType, wipeItem, 
     end or nil)
 end
 
-function BF.TriggerGroundUrinate(isWiping, wipeType, wipeItem, wipeEfficiency, pooledTypes)
-    local player = getPlayer()
-    local urinateValue = BF.GetUrinateValue()
+function BF.TriggerGroundUrinate(player, isWiping, wipeType, wipeItem, wipeEfficiency, pooledTypes)
+    player = player or getPlayer()
+    local urinateValue = BF.GetUrinateValue(player)
     local peeTime = urinateValue
 
     local isFemale = player:isFemale() == true
@@ -443,16 +443,16 @@ function BF.HandlePeeWiping(player, isWiping, wipeType, wipeItem, pooledTypes)
     end
 end
 
-function BF.TriggerSelfUrinate(isLeak)
+function BF.TriggerSelfUrinate(player, isLeak)
     local isLeak = isLeak or false
-    local player = getPlayer()
-    local urinateValue = BF.GetUrinateValue()
+    player = player or getPlayer()
+    local urinateValue = BF.GetUrinateValue(player)
     local peeTime = urinateValue / 4 -- Determine the time based on the bladder level
 
 
     -- Check if player is wearing clothing that can be soiled.
     if BF.HasClothingOn(player, unpack(BF.GetSoilableClothing())) then
-        BF.UrinateBottoms(isLeak)
+        BF.UrinateBottoms(player, isLeak)
     else
         -- If the player isn't wearing clothing, create the pee object if that option is enabled.
         if SandboxVars.BF.CreatePeeObject == true then
@@ -487,17 +487,17 @@ end
 
 -- Pours the bladder into an empty container, up to what the container holds.
 -- The bladder is in mL; fluid containers work in liters.
-function BF.PeeInContainer(item)
+function BF.PeeInContainer(item, player)
     local fluidContainer = item:getFluidContainer()
     if not fluidContainer then return end
 
     local freeMl = (fluidContainer:getCapacity() - fluidContainer:getAmount()) * 1000
-    local bladderMl = BF.GetUrinateValue()
+    local bladderMl = BF.GetUrinateValue(player)
     local pourMl = math.min(freeMl, bladderMl)
     if pourMl <= 0 then return end
 
     local addedMl = addUrine(fluidContainer, pourMl / 1000) * 1000
     if addedMl <= 0 then return end
 
-    BF.SetUrinateValue(math.max(0, bladderMl - addedMl))
+    BF.SetUrinateValue(math.max(0, bladderMl - addedMl), player)
 end

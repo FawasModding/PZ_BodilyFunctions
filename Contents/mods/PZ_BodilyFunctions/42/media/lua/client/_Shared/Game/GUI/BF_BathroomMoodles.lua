@@ -112,7 +112,7 @@ local function CheckBathroomMeters(player)
 		local showSoiledMoodles = getBFOption("5")
 		if showSoiledMoodles and showSoiledMoodles:getValue(1) then
 			if moodle3 then
-				local poopedSelfValue = BF.GetPoopedSelfValue()
+				local poopedSelfValue = BF.GetPoopedSelfValue(player)
 				local poopedSelfPercent = poopedSelfValue / 100 -- Assuming a max value of 100 for severity
 
 				local poopedSelfThreshold = {
@@ -137,7 +137,7 @@ local function CheckBathroomMeters(player)
 			end
 
 			if moodle4 then
-				local peedSelfValue = BF.GetPeedSelfValue()
+				local peedSelfValue = BF.GetPeedSelfValue(player)
 				local peedSelfPercent = peedSelfValue / 100 -- Assuming a max value of 100 for severity
 
 				local peedSelfThreshold = {
@@ -167,7 +167,7 @@ local function CheckBathroomMeters(player)
 
 		-- TODO: Create "showBodilyFumesMoodle"
 		if moodle5 then
-		local bodilyFumesValue = BF.GetBodilyFumesValue()
+		local bodilyFumesValue = BF.GetBodilyFumesValue(player)
 		local bodilyFumesPercent = bodilyFumesValue / 100 -- Assuming 0–100 scale
 
 		local bodilyFumesThreshold = {

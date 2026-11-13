@@ -7,3 +7,5 @@
 > - Removed references to poop footprints.
 > - Character info tab now shows mL value alongside percentage.
 > - Small Blader/Bowel traits now work fine.
+> ---
+> - 

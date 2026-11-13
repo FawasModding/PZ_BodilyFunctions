@@ -19,8 +19,8 @@ function BF.GetDiarrheaMultiplier(player)
 end
 
 -- Update defecation values
-function BF.UpdateDefecationValues()
-    local player = getPlayer()
+function BF.UpdateDefecationValues(player)
+    player = player or getPlayer()
 
     -- Get player stats
     local thirst = player:getStats():get(CharacterStat.THIRST)
@@ -52,7 +52,7 @@ function BF.UpdateDefecationValues()
     local baseBowelsMax  = BF.GetBowelCapacity(player) -- mL this character holds
 
     -- Get the current fill values.
-    local defecateValue = BF.GetDefecateValue()
+    local defecateValue = BF.GetDefecateValue(player)
     
     -- Base Increase Rate:
     local defecateBaseIncreaseRate = 3.5  -- Base bowel fill per 10-minute tick
@@ -77,12 +77,12 @@ function BF.UpdateDefecationValues()
 end
 
 -- Effects when player's wearing pooped clothing
-function BF.DefecateBottoms(leakTriggered)
-    local player = getPlayer()
+function BF.DefecateBottoms(player, leakTriggered)
+    player = player or getPlayer()
     local modOptions = PZAPI.ModOptions:getOptions("BF")
     local bowelsMaxValue = BF.GetBowelCapacity(player)
     local leakMultiplier = leakTriggered and 0.05 or 1.0
-    local defecateValue = BF.GetDefecateValue()
+    local defecateValue = BF.GetDefecateValue(player)
     local defecatePercentage = (defecateValue / bowelsMaxValue) * 100 * leakMultiplier
     
     local showPoopObject = false
@@ -148,7 +148,7 @@ function BF.DefecateBottoms(leakTriggered)
 
         -- Update clothing properties
         BF.ApplySoilingEffects(underwear, leakTriggered)
-        BF.RefreshSoiledSeverityFromModData(underwear)
+        BF.RefreshSoiledSeverityFromModData(underwear, player)
 
         if modData.poopedSeverity >= 90 then showPoopObject = true end
     end
@@ -176,7 +176,7 @@ function BF.DefecateBottoms(leakTriggered)
 
         -- Update clothing properties
         BF.ApplySoilingEffects(pants, leakTriggered)
-        BF.RefreshSoiledSeverityFromModData(pants)
+        BF.RefreshSoiledSeverityFromModData(pants, player)
 
         if modData.poopedSeverity >= 90 then showPoopObject = true end
     end
@@ -203,8 +203,8 @@ end
 -- BF.WalkThenRelief, BF.CanSitOnObject and BF.StandUpAfterToilet are in BF_Urination.lua.
 
 function BF.TriggerToiletDefecate(object, player, isWiping, wipeType, wipeItem, wipeEfficiency, pooledTypes)
-    local player = getPlayer()
-    local defecateValue = BF.GetDefecateValue()
+    player = player or getPlayer()
+    local defecateValue = BF.GetDefecateValue(player)
     local requirement = SandboxVars.BF.PoopInToiletRequirement or 40
     local bowelsMaxValue = BF.GetBowelCapacity(player)
     local hasShyBowels = BF.HasTrait(player, BFTraits.ShyBowels)
@@ -248,8 +248,8 @@ end
 -- spawns no waste object since it's going into the fixture, and applies no
 -- facing logic since these objects have no orientation.
 function BF.TriggerFixtureDefecate(object, player, isWiping, wipeType, wipeItem, wipeEfficiency, pooledTypes)
-    local player = getPlayer()
-    local defecateValue = BF.GetDefecateValue()
+    player = player or getPlayer()
+    local defecateValue = BF.GetDefecateValue(player)
     local requirement = SandboxVars.BF.PoopInToiletRequirement or 40
     local bowelsMaxValue = BF.GetBowelCapacity(player)
     local hasShyBowels = BF.HasTrait(player, BFTraits.ShyBowels)
@@ -282,9 +282,9 @@ function BF.TriggerFixtureDefecate(object, player, isWiping, wipeType, wipeItem,
     end)
 end
 
-function BF.TriggerGroundDefecate(isWiping, wipeType, wipeItem, wipeEfficiency, pooledTypes)
-    local player = getPlayer()
-    local defecateValue = BF.GetDefecateValue()
+function BF.TriggerGroundDefecate(player, isWiping, wipeType, wipeItem, wipeEfficiency, pooledTypes)
+    player = player or getPlayer()
+    local defecateValue = BF.GetDefecateValue(player)
     local poopTime = defecateValue * 2
 
     BF.RemoveBottomClothing(player)
@@ -309,16 +309,16 @@ function BF.TriggerGroundDefecate(isWiping, wipeType, wipeItem, wipeEfficiency, 
     end
 end
 
-function BF.TriggerSelfDefecate(isLeak)
+function BF.TriggerSelfDefecate(player, isLeak)
     local isLeak = isLeak or false
-    local player = getPlayer()
-    local defecateValue = BF.GetDefecateValue()
+    player = player or getPlayer()
+    local defecateValue = BF.GetDefecateValue(player)
     local poopTime = defecateValue / 4
     local bowelsMaxValue = BF.GetBowelCapacity(player)
 
     -- Check if the player has relevant clothing on and apply the "pooped bottoms" effects.
     if BF.HasClothingOn(player, unpack(BF.GetSoilableClothing())) then
-        BF.DefecateBottoms(isLeak)
+        BF.DefecateBottoms(player, isLeak)
     else
         -- Optionally, could create a world object or simply do nothing when no clothing is worn.
     end
@@ -335,5 +335,5 @@ function BF.TriggerSelfDefecate(isLeak)
     --end
 end
 
-function BF.PoopInContainer(item)
+function BF.PoopInContainer(item, player)
 end

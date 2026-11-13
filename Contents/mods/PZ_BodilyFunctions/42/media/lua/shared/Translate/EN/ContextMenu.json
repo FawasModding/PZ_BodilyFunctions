@@ -68,6 +68,8 @@
   "ContextMenu_tooltip_ShyPoopDumpster": "You are too shy to defecate in the dumpster.",
   "ContextMenu_tooltip_ShyPeeOpenWindow": "You are too shy to urinate out of the open window.",
   "ContextMenu_tooltip_ShyPeeContainer": "You are too shy to urinate in a container.",
+  "ContextMenu_tooltip_WatchedPee": "You are too shy to urinate while someone can see you.",
+  "ContextMenu_tooltip_WatchedPoop": "You are too shy to defecate while someone can see you.",
 
   "ContextMenu_DontWipe": "Don't Wipe",
   "ContextMenu_WipeWith": "Wipe With: ",

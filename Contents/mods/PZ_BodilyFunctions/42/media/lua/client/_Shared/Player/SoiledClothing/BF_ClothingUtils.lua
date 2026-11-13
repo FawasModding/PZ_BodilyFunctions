@@ -16,8 +16,8 @@ end
 --[[
 Use this to call function to to show the wearing urinated and defecated garments moodles. As well as affect the mood over time.
 ]]--
-function BF.DirtyBottomsEffects()
-    local player = getPlayer()
+function BF.DirtyBottomsEffects(player)
+    player = player or getPlayer()
     local totalPoopedSeverity = 0
     local totalPeedSeverity = 0
 
@@ -28,7 +28,7 @@ function BF.DirtyBottomsEffects()
         -- Ensure the item is not nil before calling RefreshSoiledSeverityFromModData
         if item ~= nil then
             -- Update values for pooped and peed states based on item mod data
-            local itemUpdatedPooped, itemUpdatedPeed = BF.RefreshSoiledSeverityFromModData(item)
+            local itemUpdatedPooped, itemUpdatedPeed = BF.RefreshSoiledSeverityFromModData(item, player)
 
             -- Accumulate the total pooped and peed severity
             if itemUpdatedPooped and item:getModData().poopedSeverity then
@@ -48,23 +48,21 @@ function BF.DirtyBottomsEffects()
     -- are handled separately in BF_WasteProducts).
     local FUMES_THRESHOLD = 30
 
-    BF.SetPoopedSelfValue(totalPoopedSeverity > 0 and totalPoopedSeverity or 0)
-    BF.SetPeedSelfValue(totalPeedSeverity > 0 and totalPeedSeverity or 0)
+    BF.SetPoopedSelfValue(totalPoopedSeverity > 0 and totalPoopedSeverity or 0, player)
+    BF.SetPeedSelfValue(totalPeedSeverity > 0 and totalPeedSeverity or 0, player)
 
     if totalPoopedSeverity > FUMES_THRESHOLD then
-        BF.SetBodilyFumesValue(50) -- feces smell (stage 2 of 4)
+        BF.SetBodilyFumesValue(50, player) -- feces smell (stage 2 of 4)
     elseif totalPeedSeverity > FUMES_THRESHOLD then
-        BF.SetBodilyFumesValue(30) -- urine smell (stage 1 of 4)
+        BF.SetBodilyFumesValue(30, player) -- urine smell (stage 1 of 4)
     else
         -- Clothing isn't soiled enough to smell; clear the clothing-sourced fume.
-        BF.SetBodilyFumesValue(0)
+        BF.SetBodilyFumesValue(0, player)
     end
 end
 
 -- FOR ITEMS IN GENERAL
 function BF.ApplySoilingEffects(item, isLeak)
-    -- Get the player object
-    local player = getSpecificPlayer(0)
     
     -- If the item is marked as "peed" (wet), modify the item's properties
     if item:getModData().peed == true then
@@ -101,7 +99,7 @@ function BF.ApplySoilingEffects(item, isLeak)
 end
 
 -- FOR CLOTHING SPECIFICALLY
-function BF.RefreshSoiledSeverityFromModData(clothing)
+function BF.RefreshSoiledSeverityFromModData(clothing, player)
     local updatedPooped = false
     local updatedPeed = false
 
@@ -110,19 +108,19 @@ function BF.RefreshSoiledSeverityFromModData(clothing)
         local modData = clothing:getModData()
 
         if modData.pooped ~= nil then -- Check if the worn item is defecated
-            BF.SetPoopedSelfValue(modData.poopedSeverity)
+            BF.SetPoopedSelfValue(modData.poopedSeverity, player)
             updatedPooped = true
         else
             -- If no pooped state, set to 0 (can be skipped here if handled at the end of the loop)
-            BF.SetPoopedSelfValue(0)
+            BF.SetPoopedSelfValue(0, player)
         end
 
         if modData.peed ~= nil then -- Check if the worn item is urinated
-            BF.SetPeedSelfValue(modData.peedSeverity)
+            BF.SetPeedSelfValue(modData.peedSeverity, player)
             updatedPeed = true
         else
             -- If no peed state, set to 0 (can be skipped here if handled at the end of the loop)
-            BF.SetPeedSelfValue(0)
+            BF.SetPeedSelfValue(0, player)
         end
     else
         print("Error: Clothing or mod data is nil in RefreshSoiledSeverityFromModData.")

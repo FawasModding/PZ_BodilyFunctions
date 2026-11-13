@@ -199,6 +199,26 @@ function BathroomCharacterInfo_GUIHandler:onMouseWheel(del)
     return true
 end
 
+-- Controller support using same thing as the vanilla tabs (ISCharacterScreen:onJoypadDown).
+-- Vital, otherwise you can't close the menu or scroll through.
+function BathroomCharacterInfo_GUIHandler:onJoypadDown(button)
+    local infoPanel = getPlayerInfoPanel(self.playerNum)
+    if button == Joypad.BButton then
+        if infoPanel then infoPanel:toggleView(getText("UI_BodilyFunctions")) end
+        setJoypadFocus(self.playerNum, nil)
+    elseif button == Joypad.LBumper or button == Joypad.RBumper then
+        if infoPanel then infoPanel:onJoypadDown(button) end
+    end
+end
+
+function BathroomCharacterInfo_GUIHandler:onJoypadDirUp()
+    self:onMouseWheel(-1)
+end
+
+function BathroomCharacterInfo_GUIHandler:onJoypadDirDown()
+    self:onMouseWheel(1)
+end
+
 function BathroomCharacterInfo_GUIHandler:new(x, y, width, height, playerNum)
     local o = {}
     o = ISPanelJoypad:new(x, y, width, height)

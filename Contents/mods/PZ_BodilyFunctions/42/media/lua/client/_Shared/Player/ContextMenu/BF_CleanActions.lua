@@ -1,4 +1,5 @@
-function BF.CleaningRightClick(player, context, worldObjects)
+function BF.CleaningRightClick(player, context, worldObjects, test)
+    if test then return end -- See BF.ReliefRightClick
     local playerObj = getSpecificPlayer(player)
     local inventory = playerObj:getInventory()
 

@@ -84,11 +84,10 @@ end
 local function onFillWorldObjectContextMenu(playerNum, context, worldObjects, test)
 	if test or isLifestyleActive() then return end
 	local player = getSpecificPlayer(playerNum)
-	local first = worldObjects and worldObjects[1]
-	local square = first and first:getSquare()
-	if not player or not square then return end
+	if not player then return end
 
-	local objects = square:getObjects()
+	-- All tiles, not only worldObjects[1]'s. A controller's first object is the player's own tile.
+	local objects = BF.GetContextMenuObjects(worldObjects)
 	for i = 0, objects:size() - 1 do
 		local obj = objects:get(i)
 		if BF.GetToiletWaterUse(obj) and BF_Toilet.needsFlush(obj) then

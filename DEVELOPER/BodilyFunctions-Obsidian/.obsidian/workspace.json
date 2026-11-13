@@ -28,7 +28,7 @@
               "type": "markdown",
               "state": {
                 "file": "Changelogs/Changelog v1.5.0.md",
-                "mode": "source",
+                "mode": "preview",
                 "source": true
               },
               "icon": "lucide-file",
@@ -57,7 +57,8 @@
               "title": "1.5.0"
             }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "vertical"
@@ -246,11 +247,15 @@
       "file-tree-alternative:File Tree Alternative Plugin": false
     }
   },
-  "active": "debb636e99f5e118",
+  "active": "7be354591b1eff47",
   "lastOpenFiles": [
-    "Changelogs/Changelog v1.5.0.md",
     "!Development/Versions/Incomplete/1.5.0.md",
     "!Development/Development Log/November 2026.md",
+    "Changelogs/Changelog v1.5.0.md",
+    "Changelogs/Changelog v1.5.0.md.tmp.17308.d7e16f5b4d41",
+    "Changelogs/Changelog v1.5.0.md.tmp.17308.79054e9b7f9b",
+    "Changelogs/Changelog v1.5.0.md.tmp.51740.3fbf136a3800",
+    "Changelogs/Changelog v1.5.0.md.tmp.46028.e1ba9cd23881",
     "Changelogs/Changelog v1.5.0.md.tmp.21124.6f2bc51de639",
     "Changelogs/Changelog v1.5.0.md.tmp.21124.53283ef28ad2",
     "Changelogs/Changelog v1.5.0.md.tmp.21124.d0894f7e446f",
@@ -259,10 +264,6 @@
     "!Development/Versions/Incomplete/Pre-Build 1.5.md",
     "Content/Maps",
     "Content/Spoons",
-    "Content/Food",
-    "Content/Bowls",
-    "Content/Chimps",
-    "Content",
     "!Development/Versions/Complete/Pre-Build 1.0.md",
     "!Development/Versions/Incomplete/Pre-Build 1.6.md",
     "!Development/Development Log/October 2026.md",
