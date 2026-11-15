@@ -25,13 +25,19 @@
 -- Multiplayer clients load this folder too.
 if isClient() then return end
 
+require "BF_Waste"
+require "BF_Toilets"
+require "BF_PuddleWipe"
+
 local MODULE = "BF"
 
 -- How far from the player (in squares) a referenced world object may be. A tile
 -- of slack over what the client checks, to allow for position lag.
 local REACH_WASH = 2
 local REACH_TOILET = 2
-local REACH_CLEAN_WASTE = 3
+local REACH_WIPE_PUDDLE = 1
+-- Pee out of a window is placed on the far side, so allow one extra square.
+local REACH_WASTE = 3
 local REACH_WASTE_BIN = 2
 
 local BOOK_CLEAN_RETURN = "Base.SheetPaper2"
@@ -129,11 +135,15 @@ end
 -- Waste on the ground
 -- -----------------------------------------------------
 
+-- Only poop is put into bins; pee on the ground becomes a puddle (BF_Waste).
 local WASTE_KINDS = {
-    pee = { fullType = "BF.Urine_Hydrated_0", option = "CreatePeeObject", scatter = false },
-    poop = { fullType = "BF.HumanFeces", option = "CreatePoopObject", scatter = true },
+    pee = { option = "CreatePeeObject" },
+    poop = { fullType = "BF.HumanFeces", option = "CreatePoopObject" },
 }
 
+-- args = { kind, x, y, z, liters (pee), fx, fy (poop) }
+-- Pee is placed on the given square: the character's own, the ground outside a window
+-- (up to BF_Waste.FALL floors down) or a bush's. Poop is only placed on the character's square.
 function Commands.spawnWaste(player, args)
     local kind = WASTE_KINDS[args.kind]
     if not kind or SandboxVars.BF[kind.option] ~= true then return end
@@ -143,16 +153,19 @@ function Commands.spawnWaste(player, args)
     if lastWasteSpawn[username] and now - lastWasteSpawn[username] < WASTE_SPAWN_INTERVAL_MS then return end
     lastWasteSpawn[username] = now
 
-    local square = player:getCurrentSquare()
+    local here = player:getCurrentSquare()
+    if not here or not isNumber(args.x) or not isNumber(args.y) or not isNumber(args.z) then return end
+    local square = getCell():getGridSquare(args.x, args.y, args.z)
     if not square then return end
+    if math.abs(square:getX() - here:getX()) > REACH_WASTE or math.abs(square:getY() - here:getY()) > REACH_WASTE then return end
+    if square:getZ() > here:getZ() or here:getZ() - square:getZ() > BF_Waste.FALL then return end
 
-    local x, y = 0, 0
-    if kind.scatter then
-        x = ZombRandFloat(0.1, 0.5)
-        y = ZombRandFloat(0.1, 0.5)
+    if args.kind == "pee" then
+        local liters = isNumber(args.liters) and args.liters or 0
+        BF_Waste.pee(square, math.min(BF_Waste.MAX_LITERS, math.max(0, liters)))
+    elseif square == here then
+        BF_Waste.poop(square, isNumber(args.fx) and args.fx or 0.5, isNumber(args.fy) and args.fy or 0.5)
     end
-    -- The four-argument form transmits to clients itself.
-    square:AddWorldInventoryItem(instanceItem(kind.fullType), x, y, 0)
 end
 
 -- The container a waste bin keeps its contents in. Big dumpsters span two tiles.
@@ -184,11 +197,21 @@ local function findBinContainer(square, sprite)
     return nil
 end
 
+-- The storage container of the toilet at args.x/y/z with sprite args.sprite, if
+-- Toilets Store Items is on and the toilet is in reach. Only the mod's own
+-- container type counts, so a container another mod gave a toilet is never
+-- filled with waste.
+local function findToiletStorage(player, args)
+    local toilet = findObjectBySprite(squareInReach(player, args, REACH_TOILET), args.sprite, BF.IsToilet)
+    return toilet and BF_Toilets.storage(toilet)
+end
+
 -- args = { kind, x, y, z, sprite }. Puts waste into a dumpster or trash can.
--- If it's full, the waste lands on the ground beside it instead.
+-- If it's full, the waste is placed on the ground beside it instead. Toilet
+-- waste is handled by toiletUse.
 function Commands.depositWaste(player, args)
     local kind = WASTE_KINDS[args.kind]
-    if not kind or SandboxVars.BF[kind.option] ~= true then return end
+    if not kind or not kind.fullType or SandboxVars.BF[kind.option] ~= true then return end
     if type(args.sprite) ~= "string" then return end
 
     local now = getTimestampMs()
@@ -208,30 +231,6 @@ function Commands.depositWaste(player, args)
     else
         square:AddWorldInventoryItem(item, ZombRandFloat(0.1, 0.5), ZombRandFloat(0.1, 0.5), 0)
     end
-end
-
-function Commands.cleanWaste(player, args)
-    local result = { requestId = args.requestId, ok = false, reason = "IGUI_BF_CleanWasteFailed" }
-
-    local tool = isNumber(args.toolId) and player:getInventory():getItemWithID(args.toolId)
-    local square = squareInReach(player, args, REACH_CLEAN_WASTE)
-    if tool and BF.WasteCleaningTools[tool:getType()] and square and isNumber(args.itemId) then
-        local objects = square:getObjects()
-        for i = 0, objects:size() - 1 do
-            local object = objects:get(i)
-            if object:getObjectName() == "WorldInventoryItem" then
-                local item = object:getItem()
-                if item and item:getID() == args.itemId and BF.IsCleanableWaste(item) then
-                    square:transmitRemoveItemFromSquare(object)
-                    result.ok = true
-                    result.reason = nil
-                    break
-                end
-            end
-        end
-    end
-
-    reply(player, result)
 end
 
 -- -----------------------------------------------------
@@ -343,7 +342,22 @@ local function wipeWithBook(player, records, itemType, config, junk)
     return 1.0
 end
 
--- args = { wipeType, itemType, bodilyFunction, requestId }
+-- Puts soiled junk into the toilet's storage, one item at a time. Whatever
+-- doesn't fit goes to the player's inventory.
+local function giveJunk(player, toiletStorage, fullType, count)
+    for i = 1, count do
+        local item = toiletStorage and instanceItem(fullType)
+        if not item or not toiletStorage:hasRoomFor(player, item) then
+            giveItems(player, fullType, count - i + 1)
+            return
+        end
+        toiletStorage:AddItem(item)
+        sendAddItemToContainer(toiletStorage, item)
+    end
+end
+
+-- args = { wipeType, itemType, bodilyFunction, requestId, x, y, z, sprite }
+-- x/y/z/sprite are the toilet that was used, if any.
 function Commands.wipe(player, args)
     local itemType = args.itemType
     local bodilyFunction = args.bodilyFunction
@@ -373,14 +387,44 @@ function Commands.wipe(player, args)
         efficiency = wipeWithBook(player, records, itemType, config, junk)
     end
 
-    -- Only defecation leaves soiled junk.
+    -- Only defecation leaves soiled junk. After using a toilet with Toilets
+    -- Store Items on, it goes into the toilet.
     if bodilyFunction == "poop" then
+        local toiletStorage = args.sprite and findToiletStorage(player, args)
         for junkType, count in pairs(junk) do
-            giveItems(player, junkType, count)
+            giveJunk(player, toiletStorage, junkType, count)
         end
     end
 
     reply(player, { requestId = args.requestId, ok = true, efficiency = efficiency })
+end
+
+-- args = { x, y, z, wipeType, itemType, requestId }. Wipes up a urine puddle
+-- next to the player with a wipeable item and soap (BF_PuddleWipe). With too
+-- little of either, only part of the puddle is wiped up.
+function Commands.wipePuddle(player, args)
+    local P = BF_PuddleWipe
+    local function fail(reason)
+        reply(player, { requestId = args.requestId, ok = false, reason = reason })
+    end
+
+    local square = squareInReach(player, args, REACH_WIPE_PUDDLE)
+    local puddle = square and BF_Sewage.puddle(square)
+    if not P.canWipe(puddle) or not P.config(args.wipeType, args.itemType) then
+        return fail("IGUI_BF_WipeRejected")
+    end
+
+    local liters = BF_Sewage.volume(puddle)
+    local records = BF.BuildReachableItemRecords(player)
+    local share = P.share(records, args.wipeType, args.itemType, liters)
+    if share <= 0 then return fail("IGUI_BF_WipePuddleMissing") end
+
+    local needed = P.wipesNeeded(liters)
+    local used = P.consume(player, records, args.wipeType, args.itemType, needed * share)
+    local wiped = math.min(share, used / needed)
+    P.useSoap(records, math.ceil(P.soapNeeded(liters) * wiped - 0.0001))
+    BF_Sewage.setVolume(puddle, liters * (1 - wiped))
+    reply(player, { requestId = args.requestId, ok = true, share = wiped })
 end
 
 -- -----------------------------------------------------
@@ -429,30 +473,35 @@ end
 -- Toilets
 -- -----------------------------------------------------
 
-local function findToilet(player, args)
-    return findObjectBySprite(squareInReach(player, args, REACH_TOILET), args.sprite, BF.GetToiletWaterUse)
-end
+local TOILET_USE_INTERVAL_MS = 1000
+local lastToiletUse = {}
 
--- movableData.needFlush is the field Lifestyle: Hobbies reads too.
-local function setNeedFlush(object, value)
+-- With Lifestyle: Hobbies active, its own toilet system reads this flag.
+local function setNeedFlush(object)
     local modData = object:getModData()
     modData.movableData = modData.movableData or {}
-    modData.movableData.needFlush = value
+    modData.movableData.needFlush = true
     object:transmitModData()
 end
 
-function Commands.markFlush(player, args)
-    local toilet = findToilet(player, args)
-    if toilet then setNeedFlush(toilet, true) end
-end
-
-function Commands.flush(player, args)
-    local toilet = findToilet(player, args)
+-- args = { x, y, z, sprite, poop, amount }. Sent when peeing or pooping in a
+-- toilet ends; amount is the share of it that was done (0 to 1).
+function Commands.toiletUse(player, args)
+    local toilet = findObjectBySprite(squareInReach(player, args, REACH_TOILET), args.sprite, BF_Toilets.kind)
     if not toilet then return end
-    local amount = BF.GetToiletWaterUse(toilet)
-    if not toilet:hasWater() or toilet:getFluidAmount() < amount then return end
-    toilet:useFluid(amount)
-    setNeedFlush(toilet, false)
+
+    local now = getTimestampMs()
+    local username = player:getUsername() or "local"
+    if lastToiletUse[username] and now - lastToiletUse[username] < TOILET_USE_INTERVAL_MS then return end
+    lastToiletUse[username] = now
+
+    if not BF_Toilets.active() then
+        if BF_Toilets.kind(toilet) == "flush" then setNeedFlush(toilet) end
+        if args.poop == true then BF_Toilets.depositFeces(toilet, player) end
+        return
+    end
+    local amount = isNumber(args.amount) and args.amount or 1
+    BF_Toilets.applyUse(toilet, player, amount, args.poop == true)
 end
 
 -- -----------------------------------------------------

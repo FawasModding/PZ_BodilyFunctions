@@ -1,3 +1,6 @@
+require "BF_Sewage"
+require "BF_Toilets"
+
 local BF_WasteProducts = {}
 
 BF_WasteProducts.wasteProductSquares = {}
@@ -27,6 +30,9 @@ BF_WasteProducts.ScanNearbyForWaste = function(player)
                     elseif object ~= nil and objectContainer ~= nil then
                         wasteAmount = wasteAmount + objectContainer:getCountTagRecurse(BFTags.HumanFeces)
                         wasteAmount = wasteAmount + objectContainer:getCountTagRecurse(BFTags.HumanUrine)
+                        lastWasteSquare = sq
+                    elseif BF_Sewage.isPuddle(object) or BF_Toilets.smells(object) then
+                        wasteAmount = wasteAmount + 1
                         lastWasteSquare = sq
                     end
 
@@ -80,6 +86,10 @@ BF_WasteProducts.ApplyWasteExposureEffects = function(lastWasteSquare, wasteAmou
                 if objectContainer:getCountTagRecurse(BFTags.HumanUrine) > 0 then
                     hasUrine = true
                 end
+            elseif BF_Sewage.isPuddle(object) or BF_Toilets.smells(object) then
+                -- Puddles (urine, sewage or vomit) and unflushed toilets smell like urine;
+                -- the flies effect is only for feces piles.
+                hasUrine = true
             end
         end
     end

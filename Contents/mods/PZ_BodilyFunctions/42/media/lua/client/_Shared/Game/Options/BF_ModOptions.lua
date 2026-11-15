@@ -3,6 +3,7 @@ local config = {
     peeInContainersOption   = nil,
     peeSelfOption  = nil,
     poopSelfOption = nil,
+    reliefInFixtureMenus = nil,
     showMoodles  = nil,
     moodleType  = nil,
     showSoiledMoodles = nil,
@@ -19,6 +20,7 @@ local function BFConfig()
     config.peeInContainersOption = options:addTickBox("1", getText("UI_BF_options_PeeInContainersOption"), true, getText("UI_BF_options_PeeInContainersOption_tooltip"))
     config.peeSelfOption = options:addTickBox("2", getText("UI_BF_options_PeeSelfOption"), false, getText("UI_BF_options_PeeSelfOption_tooltip"))
     config.poopSelfOption = options:addTickBox("3", getText("UI_BF_options_PoopSelfOption"), false, getText("UI_BF_options_PoopSelfOption_tooltip"))
+    config.reliefInFixtureMenus = options:addTickBox("7", getText("UI_BF_options_ReliefInFixtureMenus"), false, getText("UI_BF_options_ReliefInFixtureMenus_tooltip"))
 
     options:addSeparator()
 

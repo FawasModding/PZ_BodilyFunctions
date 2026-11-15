@@ -1,6 +1,8 @@
 -- Client side of server/BF_ServerCommands.lua: sends requests and routes each
 -- reply back to whatever "asked".
 
+require "BF_Waste"
+
 BF = BF or {}
 
 local MODULE = "BF"
@@ -40,9 +42,27 @@ function BF.OnCommandResult(result)
 end
 
 -- kind is "pee" or "poop". The caller decides whether waste is due; the server
--- makes the item, because a world item a client adds is invisible to everyone else.
-function BF.SpawnWaste(player, kind)
-    sendClientCommand(player, MODULE, "spawnWaste", { kind = kind })
+-- makes the puddle or pile, because a world object a client adds is invisible to
+-- everyone else.
+--   pee:  a urine puddle on square (default: the character's), bladderValue / 1000
+--         liters (0.1-1.5). bladderValue defaults to the current urinateValue, which
+--         is near 0 once a relief action has run, so actions pass their start value.
+--   poop: a feces pile exactly where the character stands.
+function BF.SpawnWaste(player, kind, bladderValue, square)
+    local args = { kind = kind }
+    if kind == "pee" then
+        square = square or player:getCurrentSquare()
+        args.liters = BF_Waste.liters(bladderValue or player:getModData().urinateValue)
+    else
+        square = player:getCurrentSquare()
+        if square then
+            args.fx = player:getX() - square:getX()
+            args.fy = player:getY() - square:getY()
+        end
+    end
+    if not square then return end
+    args.x, args.y, args.z = square:getX(), square:getY(), square:getZ()
+    sendClientCommand(player, MODULE, "spawnWaste", args)
 end
 
 -- Whether this fixture is a dumpster or trash can, which keeps what goes in it.

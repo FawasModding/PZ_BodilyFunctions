@@ -1,4 +1,4 @@
-name=Bodily Functions (1.4.0)
+name=Bodily Functions (1.5.0)
 poster=poster.png
 id=bodilyfunctions
 author=Fawas Interactive
@@ -10,4 +10,6 @@ description=Features Defecation & Urination
 modversion=1.0
 url=https://www.fawasinteractive.com
 require=\StarlitLibrary,\MoodleFramework
+pack=BFP_Sanitation.floor
+tiledef=BFP_Sanitation 8161
 icon=icon.png

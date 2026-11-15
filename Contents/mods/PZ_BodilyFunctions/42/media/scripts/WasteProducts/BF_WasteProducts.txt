@@ -53,7 +53,7 @@ module BF
 		GoodHot = false,
 
 		Poison = true,
-		PoisonPower = 1,
+		PoisonPower = 30,
 		UseForPoison = 20,
 		PoisonDetectionLevel = 5,
 

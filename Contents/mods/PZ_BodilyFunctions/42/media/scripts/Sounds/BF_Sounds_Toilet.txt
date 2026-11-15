@@ -1,0 +1,166 @@
+/* Plunger and sewage spill sounds. */
+module Base
+{
+	sound BFP_PlungerClogged
+	{
+		category = SFX, loop = false, is3D = true,
+		clip
+		{
+			file = media/sound/BFP/Plunger_Clogged_1.ogg,
+			distanceMin = 3, distanceMax = 30,
+			reverbFactor = 0, volume = 0.4,
+		}
+		clip
+		{
+			file = media/sound/BFP/Plunger_Clogged_2.ogg,
+			distanceMin = 3, distanceMax = 30,
+			reverbFactor = 0, volume = 0.4,
+		}
+		clip
+		{
+			file = media/sound/BFP/Plunger_Clogged_3.ogg,
+			distanceMin = 3, distanceMax = 30,
+			reverbFactor = 0, volume = 0.4,
+		}
+		clip
+		{
+			file = media/sound/BFP/Plunger_Clogged_4.ogg,
+			distanceMin = 3, distanceMax = 30,
+			reverbFactor = 0, volume = 0.4,
+		}
+		clip
+		{
+			file = media/sound/BFP/Plunger_Clogged_5.ogg,
+			distanceMin = 3, distanceMax = 30,
+			reverbFactor = 0, volume = 0.4,
+		}
+		clip
+		{
+			file = media/sound/BFP/Plunger_Clogged_6.ogg,
+			distanceMin = 3, distanceMax = 30,
+			reverbFactor = 0, volume = 0.4,
+		}
+		clip
+		{
+			file = media/sound/BFP/Plunger_Clogged_7.ogg,
+			distanceMin = 3, distanceMax = 30,
+			reverbFactor = 0, volume = 0.4,
+		}
+		clip
+		{
+			file = media/sound/BFP/Plunger_Clogged_8.ogg,
+			distanceMin = 3, distanceMax = 30,
+			reverbFactor = 0, volume = 0.4,
+		}
+		clip
+		{
+			file = media/sound/BFP/Plunger_Clogged_9.ogg,
+			distanceMin = 3, distanceMax = 30,
+			reverbFactor = 0, volume = 0.4,
+		}
+		clip
+		{
+			file = media/sound/BFP/Plunger_Clogged_10.ogg,
+			distanceMin = 3, distanceMax = 30,
+			reverbFactor = 0, volume = 0.4,
+		}
+	}
+
+	sound BFP_PlungerClear
+	{
+		category = SFX, loop = false, is3D = true,
+		clip
+		{
+			file = media/sound/BFP/Plunger_Clear_1.ogg,
+			distanceMin = 3, distanceMax = 30,
+			reverbFactor = 0, volume = 0.4,
+		}
+		clip
+		{
+			file = media/sound/BFP/Plunger_Clear_2.ogg,
+			distanceMin = 3, distanceMax = 30,
+			reverbFactor = 0, volume = 0.4,
+		}
+		clip
+		{
+			file = media/sound/BFP/Plunger_Clear_3.ogg,
+			distanceMin = 3, distanceMax = 30,
+			reverbFactor = 0, volume = 0.4,
+		}
+		clip
+		{
+			file = media/sound/BFP/Plunger_Clear_4.ogg,
+			distanceMin = 3, distanceMax = 30,
+			reverbFactor = 0, volume = 0.4,
+		}
+		clip
+		{
+			file = media/sound/BFP/Plunger_Clear_5.ogg,
+			distanceMin = 3, distanceMax = 30,
+			reverbFactor = 0, volume = 0.4,
+		}
+		clip
+		{
+			file = media/sound/BFP/Plunger_Clear_6.ogg,
+			distanceMin = 3, distanceMax = 30,
+			reverbFactor = 0, volume = 0.4,
+		}
+		clip
+		{
+			file = media/sound/BFP/Plunger_Clear_7.ogg,
+			distanceMin = 3, distanceMax = 30,
+			reverbFactor = 0, volume = 0.4,
+		}
+		clip
+		{
+			file = media/sound/BFP/Plunger_Clear_8.ogg,
+			distanceMin = 3, distanceMax = 30,
+			reverbFactor = 0, volume = 0.4,
+		}
+		clip
+		{
+			file = media/sound/BFP/Plunger_Clear_9.ogg,
+			distanceMin = 3, distanceMax = 30,
+			reverbFactor = 0, volume = 0.4,
+		}
+		clip
+		{
+			file = media/sound/BFP/Plunger_Clear_10.ogg,
+			distanceMin = 3, distanceMax = 30,
+			reverbFactor = 0, volume = 0.4,
+		}
+		clip
+		{
+			file = media/sound/BFP/Plunger_Clear_11.ogg,
+			distanceMin = 3, distanceMax = 30,
+			reverbFactor = 0, volume = 0.4,
+		}
+		clip
+		{
+			file = media/sound/BFP/Plunger_Clear_12.ogg,
+			distanceMin = 3, distanceMax = 30,
+			reverbFactor = 0, volume = 0.4,
+		}
+		clip
+		{
+			file = media/sound/BFP/Plunger_Clear_13.ogg,
+			distanceMin = 3, distanceMax = 30,
+			reverbFactor = 0, volume = 0.4,
+		}
+		clip
+		{
+			file = media/sound/BFP/Plunger_Clear_14.ogg,
+			distanceMin = 3, distanceMax = 30,
+			reverbFactor = 0, volume = 0.4,
+		}
+	}
+
+	sound BFP_SewageSpill
+	{
+		category = Object, loop = false, is3D = true,
+		clip
+		{
+			event = Character/Survival/Liquid/LiquidOnGround,
+		}
+	}
+}

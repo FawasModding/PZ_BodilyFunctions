@@ -194,6 +194,58 @@ function BathroomCharacterInfo_GUIHandler:render()
     self:clearStencilRect()
 end
 
+-- -----------------------------------------------------
+-- Debug controls: right-click the tab, only while the game is in debug mode.
+-- -----------------------------------------------------
+
+local DEBUG_PERCENTS = { 0, 25, 50, 75, 90, 100 }
+
+-- organ = { name, set, getAmount, getCapacity }
+local DEBUG_ORGANS = {
+    { name = "Bladder", set = function(v, p) BF.SetUrinateValue(v, p) end,
+      getAmount = function(p) return BF.GetBladderAmount(p) end, getCapacity = function(p) return BF.GetBladderCapacity(p) end },
+    { name = "Bowels", set = function(v, p) BF.SetDefecateValue(v, p) end,
+      getAmount = function(p) return BF.GetBowelAmount(p) end, getCapacity = function(p) return BF.GetBowelCapacity(p) end },
+}
+
+local function debugSet(entry, mL)
+    entry.organ.set(math.max(0, math.min(entry.capacity, mL)), entry.player)
+end
+
+local function onDebugAmountEntered(entry, button)
+    if button.internal ~= "OK" then return end
+    local mL = tonumber(button.parent.entry:getText())
+    if not mL then return end
+    debugSet(entry, mL)
+end
+
+local function debugCustom(entry)
+    local title = entry.organ.name .. " amount in mL (0 - " .. math.floor(entry.capacity) .. ")"
+    local box = ISTextBox:new(0, 0, 380, 180, title, tostring(math.floor(entry.organ.getAmount(entry.player))),
+        entry, onDebugAmountEntered, entry.player:getPlayerNum())
+    box:initialise()
+    box:addToUIManager()
+    box:setOnlyNumbers(true)
+end
+
+function BathroomCharacterInfo_GUIHandler:onRightMouseUp(x, y)
+    if not isDebugEnabled() or not SandboxVars.BF or not self.char then return false end
+    local player = self.char
+    local context = ISContextMenu.get(self.playerNum, getMouseX(), getMouseY())
+    for _, organ in ipairs(DEBUG_ORGANS) do
+        local capacity = organ.getCapacity(player)
+        local entry = { organ = organ, player = player, capacity = capacity }
+        local label = string.format("[Debug] %s: %d / %d mL", organ.name, math.floor(organ.getAmount(player)), math.floor(capacity))
+        local sub = ISContextMenu:getNew(context)
+        context:addSubMenu(context:addOption(label), sub)
+        for _, percent in ipairs(DEBUG_PERCENTS) do
+            sub:addOption(percent .. "%", entry, debugSet, capacity * percent / 100)
+        end
+        sub:addOption("Set mL...", entry, debugCustom)
+    end
+    return true
+end
+
 function BathroomCharacterInfo_GUIHandler:onMouseWheel(del)
     self:setYScroll(self:getYScroll() - del * 30)
     return true

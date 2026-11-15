@@ -79,7 +79,7 @@
   "ContextMenu_tooltip_WipeOther": "Usar un objeto de papel aleatorio te dará un equivalente inservible.",
   "ContextMenu_tooltip_WipeClothing": "Usar una prenda de vestir la ensuciará.",
 
-  "ContextMenu_FlushToilet": "Tirar de la cadena",
+  "ContextMenu_BF_FlushToilet": "Tirar de la cadena",
 
   "ContextMenu_Take_AntiDiarrhealPill": "Tomar pastilla antidiarreica",
   "ContextMenu_Take_LaxativePill": "Tomar laxante",

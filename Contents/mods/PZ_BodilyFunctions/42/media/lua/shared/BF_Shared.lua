@@ -235,20 +235,6 @@ function BF.ReduceSoilSeverity(severity, usedCleaningAgent)
 end
 
 -- -----------------------------------------------------
--- Waste on the ground
--- -----------------------------------------------------
-
-BF.WasteCleaningTools = { Mop = true, ToiletBrush = true, DishCloth = true, BathTowel = true }
-
-BF.UrineWorldTypes = { ["BF.Urine_Hydrated_0"] = true, ["BF.Urine_Hydrated_1"] = true }
-
-function BF.IsCleanableWaste(item)
-    if not item then return false end
-    local fullType = item:getFullType()
-    return BF.UrineWorldTypes[fullType] == true or fullType == "BF.HumanFeces"
-end
-
--- -----------------------------------------------------
 -- Toilets
 -- -----------------------------------------------------
 

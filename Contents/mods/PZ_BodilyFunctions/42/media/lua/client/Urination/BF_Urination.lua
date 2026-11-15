@@ -393,7 +393,7 @@ function BF.TriggerFixtureUrinate(object, player, isWiping, wipeType, wipeItem, 
     local isFemale = player:isFemale() == true
 
     BF.WalkThenRelief(player, object, false, function(goalObject, seated)
-        ISTimedActionQueue.add(FixtureUrinate:new(player, BF.GetUrinateTime(urinateValue), true, true))
+        ISTimedActionQueue.add(FixtureUrinate:new(player, BF.GetUrinateTime(urinateValue), true, true, goalObject))
         if isFemale then
             BF.HandlePeeWiping(player, isWiping, wipeType, wipeItem, pooledTypes)
         end

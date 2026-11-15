@@ -72,7 +72,7 @@
   "ContextMenu_tooltip_WipeDrainable": "Использование расходуемого предмета уменьшит его использование на 1.",
   "ContextMenu_tooltip_WipeOther": "Использование обычного бумажного предмета даст его испачканный аналог.",
   "ContextMenu_tooltip_WipeClothing": "Использование одежды испачкает её.",
-  "ContextMenu_FlushToilet": "Смыть в туалете",
+  "ContextMenu_BF_FlushToilet": "Смыть в туалете",
   "ContextMenu_Take_AntiDiarrhealPill": "Принять противодиарейное",
   "ContextMenu_Take_LaxativePill": "Принять слабительное",
   "ContextMenu_Take_DiureticPill": "Принять мочегонное",
@@ -81,9 +81,15 @@
   "ContextMenu_Tooltip_Defecated": "Испражнился:",
   "ContextMenu_PaperScraps": "Обрывки бумаги",
   "ContextMenu_ClothScraps": "Тряпки",
-
   "ContextMenu_BF_Redress": "Одеться",
   "ContextMenu_BF_Redress_tooltip": "Надеть обратно одежду, снятую, чтобы справить нужду.",
   "ContextMenu_BF_RedressForget": "Забыть эти вещи",
-  "ContextMenu_BF_NoWater": "В бачке не хватает воды на слив."
+  "ContextMenu_BF_NoWater": "В бачке не хватает воды на слив.",
+  "ContextMenu_BF_CleanUp_sewage": "Убрать нечистоты",
+  "ContextMenu_BF_CoverSoil": "Засыпать нечистоты землёй",
+  "ContextMenu_BF_NoShovel": "Нужна лопата.",
+  "ContextMenu_BF_NoBrush": "Рядом нет губки или туалетного ёршика.",
+  "ContextMenu_BF_WeakMix": "Раствор слишком слабый: средства должно быть не меньше десятой части жидкости.",
+  "ContextMenu_BF_LittleCleaner": "Средства осталось слишком мало.",
+  "ContextMenu_BF_NoCleaner": "Рядом нет моющего средства или отбеливателя."
 }

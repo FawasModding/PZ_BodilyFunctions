@@ -48,6 +48,31 @@ option BF.ToiletRequiresWater
     type = boolean, default = true,
     page = Bathroom, translation = BF_ToiletRequiresWater,
 }
+option BF.ToiletStorage
+{
+    type = boolean, default = false,
+    page = Bathroom, translation = BF_ToiletStorage,
+}
+option BF.UnflushedVisits
+{
+    type = integer, min = 1, max = 20, default = 3,
+    page = Bathroom, translation = BF_UnflushedVisits,
+}
+option BF.ToiletClogChance
+{
+    type = integer, min = 0, max = 100, default = 3,
+    page = Bathroom, translation = BF_ToiletClogChance,
+}
+option BF.UnflushedClogChance
+{
+    type = integer, min = 0, max = 100, default = 20,
+    page = Bathroom, translation = BF_UnflushedClogChance,
+}
+option BF.ToiletOverflowChance
+{
+    type = integer, min = 0, max = 100, default = 25,
+    page = Bathroom, translation = BF_ToiletOverflowChance,
+}
 
 /* Urge waves (hiccups) */
 option BF.UrgeFrequencyMultiplier

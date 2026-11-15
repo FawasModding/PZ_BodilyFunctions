@@ -10,6 +10,8 @@
 
   "UI_BF_options_PoopSelfOption": "Poop Self Option",
   "UI_BF_options_PoopSelfOption_tooltip": "Show option for pooping yourself in the context menu.",
+  "UI_BF_options_ReliefInFixtureMenus": "Relief Options In Fixture Menus",
+  "UI_BF_options_ReliefInFixtureMenus_tooltip": "Puts the options to pee or poop in a toilet or sink in that toilet's or sink's own right-click menu. When off, they are in the Urinate and Defecate menus with the other options.",
 
   "UI_BF_options_ShowMoodles": "Show Bladder / Bowel Moodles",
   "UI_BF_options_ShowMoodles_tooltip": "Whether to show basic peeing and pooping moodles.",

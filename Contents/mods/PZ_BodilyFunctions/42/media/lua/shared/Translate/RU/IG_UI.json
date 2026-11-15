@@ -3,7 +3,6 @@
   "IGUI_announce_IPoopedMyself": "Я обкакался...",
   "IGUI_announce_UrgeHiccup": "О нет, я не могу сдержаться!",
   "IGUI_announce_UrgeHiccupMild": "Мне очень надо в туалет...",
-  "IGUI_announce_CantPickUpPee": "Мне нужно это убрать.",
   "IGUI_announce_SilentOops": "О нет...",
   "IGUI_BladderFullness": "Заполненность мочевого пузыря",
   "IGUI_BowelsFullness": "Заполненность кишечника",
@@ -12,6 +11,5 @@
 
   "IGUI_BF_WashItemMissing": "Этой вещи больше нет в инвентаре.",
   "IGUI_BF_WashNoWater": "Здесь не хватает воды.",
-  "IGUI_BF_CleanWasteFailed": "Не могу дотянуться, чтобы это убрать.",
   "IGUI_BF_WipeRejected": "Этим нельзя вытереться."
 }

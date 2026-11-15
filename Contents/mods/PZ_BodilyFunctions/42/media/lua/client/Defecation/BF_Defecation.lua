@@ -220,7 +220,7 @@ function BF.TriggerToiletDefecate(object, player, isWiping, wipeType, wipeItem, 
         ISTimedActionQueue.add(ToiletDefecate:new(player, BF.GetDefecateTime(defecateValue * 2), true, true, goalObject, seated))
 
         if isWiping then
-            ISTimedActionQueue.add(WipeSelf:new(player, 20, wipeType, wipeItem, "poop", pooledTypes))
+            ISTimedActionQueue.add(WipeSelf:new(player, 20, wipeType, wipeItem, "poop", pooledTypes, goalObject))
         else
             -- Apply 5% soiling penalty to worn clothing if not wiping
             local soilableClothing = BF.GetSoilableClothing()
@@ -319,8 +319,9 @@ function BF.TriggerSelfDefecate(player, isLeak)
     -- Check if the player has relevant clothing on and apply the "pooped bottoms" effects.
     if BF.HasClothingOn(player, unpack(BF.GetSoilableClothing())) then
         BF.DefecateBottoms(player, isLeak)
-    else
-        -- Optionally, could create a world object or simply do nothing when no clothing is worn.
+    elseif SandboxVars.BF.CreatePoopObject == true then
+        -- No toilet or container, so the pile is placed on the ground under the character.
+        BF.SpawnWaste(player, "poop")
     end
 
     -- Enqueue the self-defecation timed action.

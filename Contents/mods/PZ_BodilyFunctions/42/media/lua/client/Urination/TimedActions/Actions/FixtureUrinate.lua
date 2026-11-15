@@ -41,7 +41,7 @@ end
 
 function FixtureUrinate:perform()
     self.character:getModData().urinateValue = 0.0 -- RESET URINE VALUE
-    self.character:getModData().urinateValue = 0.0
+    self:spawnPuddle()
     ISBaseTimedAction.perform(self)
 
     -- Put clothing back on now that we're done
@@ -58,11 +58,30 @@ function FixtureUrinate:stopSound()
     end
 end
 
-function FixtureUrinate:new(character, time, stopWalk, stopRun)
+-- Peeing out of an open window puts the puddle on the ground on the far side;
+-- into a bush, on the bush's square. Sinks, showers, tubs, water and trash cans
+-- don't make a puddle.
+function FixtureUrinate:spawnPuddle()
+    local fixture = self.fixture
+    if not fixture or not SandboxVars.BF.CreatePeeObject then return end
+    local square
+    if BF_Waste.isOpenWindow(fixture) then
+        square = BF_Waste.outside(fixture, self.character)
+    elseif BF_ReliefTiles.GetBushTiles()[fixture:getTextureName()] == true then
+        square = fixture:getSquare()
+    end
+    if square then
+        BF.SpawnWaste(self.character, "pee", self.initialUrinateValue, square)
+    end
+end
+
+-- fixture is the sink/shower/bush/water/trash can/dumpster/window object being used.
+function FixtureUrinate:new(character, time, stopWalk, stopRun, fixture)
     local o = {}
     setmetatable(o, self)
     self.__index = self
     o.character = character
+    o.fixture = fixture
     o.stopOnWalk = stopWalk
     o.stopOnRun = stopRun
     o.maxTime = time

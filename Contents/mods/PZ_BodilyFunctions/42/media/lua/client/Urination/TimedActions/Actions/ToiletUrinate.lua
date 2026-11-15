@@ -19,8 +19,11 @@ local function canUseToilet(character, toiletObject)
 	return dx <= 1 and dy <= 1
 end
 
+-- The action can't start on a clogged, unflushed or full toilet. If the
+-- toilet clogs during the action, the action continues.
 function ToiletUrinate:isValid()
-	return canUseToilet(self.character, self.toiletObject)
+	if not canUseToilet(self.character, self.toiletObject) then return false end
+	return self.bfStarted or not BF_Toilet.isBlocked(self.toiletObject)
 end
 
 function ToiletUrinate:update()
@@ -56,6 +59,7 @@ function ToiletUrinate:update()
 end
 
 function ToiletUrinate:start()
+	self.bfStarted = true
 	self.initialUrinateValue = self.character:getModData().urinateValue or 0
 
 	-- If the character is seated on the toilet (vanilla Rest pose), don't apply
@@ -75,6 +79,10 @@ function ToiletUrinate:start()
 end
 
 function ToiletUrinate:stop()
+	-- The visit is counted as partial.
+	if self.bfStarted then
+		BF_Toilet.markUsed(self.character, self.toiletObject, false, self:getJobDelta())
+	end
 	ISBaseTimedAction.stop(self)
 
 	-- Ending early: re-dress so the character isn't left undressed.
@@ -92,7 +100,7 @@ function ToiletUrinate:perform()
 		BF.ReequipBottomClothing(self.character)
 	end
 
-	BF_Toilet.markUsed(self.character, self.toiletObject)
+	BF_Toilet.markUsed(self.character, self.toiletObject, false, 1)
 
 	self:stopSound()
 end

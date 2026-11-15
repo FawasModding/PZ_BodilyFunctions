@@ -82,11 +82,21 @@ function WipeSelf:perform()
     local removedClothing = self.character:getModData().removedClothing or {}
 
     if self.wipingWith then
-        BF.SendTrackedCommand(self.character, "wipe", {
+        local args = {
             wipeType = self.wipeType,
             itemType = self.wipingWith:getType(),
             bodilyFunction = self.bodilyFunction,
-        }, function(result)
+        }
+        -- After using a toilet, the server puts the soiled junk into it when
+        -- Toilets Store Items is on.
+        local toiletSquare = self.toilet and self.toilet:getSquare()
+        if toiletSquare then
+            args.x = toiletSquare:getX()
+            args.y = toiletSquare:getY()
+            args.z = toiletSquare:getZ()
+            args.sprite = self.toilet:getTextureName()
+        end
+        BF.SendTrackedCommand(self.character, "wipe", args, function(result)
             if not result.ok or result.efficiency >= 1.0 then return end
             -- Pee residue is lighter than poop residue.
             local basePenalty = (self.bodilyFunction == "pee") and 3 or 5
@@ -101,7 +111,8 @@ function WipeSelf:perform()
     ISBaseTimedAction.perform(self)
 end
 
-function WipeSelf:new(character, time, wipeType, wipingWith, bodilyFunction, pooledTypes)
+-- toilet is the toilet object that was used, or nil.
+function WipeSelf:new(character, time, wipeType, wipingWith, bodilyFunction, pooledTypes, toilet)
     local o = {}
     setmetatable(o, self)
     self.__index = self
@@ -113,5 +124,6 @@ function WipeSelf:new(character, time, wipeType, wipingWith, bodilyFunction, poo
     o.wipingWith = wipingWith
     o.bodilyFunction = bodilyFunction
     o.pooledTypes = pooledTypes
+    o.toilet = toilet
     return o
 end

@@ -33,11 +33,14 @@ function FixtureDefecate:perform()
     local fatigueToGive = self.character:getStats():get(CharacterStat.FATIGUE) + 0.025
     self.character:getStats():set(CharacterStat.FATIGUE, fatigueToGive)
 
-    -- Unlike GroundDefecate, nothing lands on the ground. Bushes and water just
-    -- take it; dumpsters and trash cans get a BF.HumanFeces in their container.
+    -- Dumpsters and trash cans get a BF.HumanFeces item in their container. For a
+    -- bush, the pile is placed under the character. For water, no pile is made.
     self.character:getModData().defecateValue = 0.0
     if self.fixture and BF.IsWasteBin(self.fixture) then
         BF.DepositWaste(self.character, self.fixture, "poop")
+    elseif self.fixture and SandboxVars.BF.CreatePoopObject == true
+        and BF_ReliefTiles.GetBushTiles()[self.fixture:getTextureName()] == true then
+        BF.SpawnWaste(self.character, "poop")
     end
     ISBaseTimedAction.perform(self)
 

@@ -161,8 +161,13 @@ function BF.ReliefRightClick(player, context, worldObjects, test)
         end
     end
 
-    local vanillaToiletSubMenu = BF.FindToiletSubMenu(context)
-    local vanillaSinkSubMenu   = BF.FindSinkSubMenu(context)
+    -- With the "Relief Options In Fixture Menus" mod option off (the default),
+    -- toilet and sink pee/poop options are shown in the Urinate and Defecate menus
+    -- instead of the toilet's or sink's own menu. It is set per player.
+    local fixtureMenusOption = modOptions:getOption("7")
+    local inFixtureMenus = fixtureMenusOption ~= nil and fixtureMenusOption:getValue(1) == true
+    local vanillaToiletSubMenu = inFixtureMenus and BF.FindToiletSubMenu(context) or nil
+    local vanillaSinkSubMenu   = inFixtureMenus and BF.FindSinkSubMenu(context) or nil
 
     -- Add options for each type
     BF.AddGroundOptions(peeSubMenu, poopSubMenu, worldObjects, player, urinateValue, defecateValue, bladderMaxValue, bowelsMaxValue, peeOnGroundRequirement, poopOnGroundRequirement, hasShyBladder, hasShyBowels, isBeingWatched)
@@ -264,9 +269,9 @@ function BF.AddToiletOptions(vanillaToiletSubMenu, peeSubMenu, poopSubMenu, worl
                 local isPodiumToilet = tile == "location_entertainment_gallery_02_56"
                 local toiletText = isPodiumToilet and getText("ContextMenu_UsePodiumToilet") or getText("ContextMenu_UseToilet")
 
-                -- If we couldn't find the vanilla toilet submenu (e.g. localized name
-                -- didn't match), fall back to the mod's own Pee/Poop submenus instead
-                -- of dropping the options entirely.
+                -- Without the vanilla toilet submenu (Relief Options In Fixture Menus
+                -- off, or a localized name that didn't match), use the mod's own
+                -- Pee/Poop submenus.
                 local peeTargetMenu = BF.IsUrinationEnabled() and vanillaToiletSubMenu or peeSubMenu
                 local poopTargetMenu = BF.IsDefecationEnabled() and vanillaToiletSubMenu or poopSubMenu
 
@@ -277,10 +282,12 @@ function BF.AddToiletOptions(vanillaToiletSubMenu, peeSubMenu, poopSubMenu, worl
                 toiletPeeOption.iconTexture = getTexture("media/textures/ContextMenuToilet.png")
                 toiletPoopOption.iconTexture = getTexture("media/textures/ContextMenuToilet.png")
 
-                local noWater = BF_Toilet and BF_Toilet.isBlocked(object)
-                if noWater then
-                    BF.AddTooltip(toiletPeeOption, getText("ContextMenu_BF_NoWater"))
-                    BF.AddTooltip(toiletPoopOption, getText("ContextMenu_BF_NoWater"))
+                -- Clogged, needs flushing or no water (BF_Toilets).
+                local blockReason = BF_Toilet and BF_Toilet.reason(object)
+                local blocked = blockReason ~= nil
+                if blockReason then
+                    BF.AddTooltip(toiletPeeOption, getText("ContextMenu_BF_" .. blockReason))
+                    BF.AddTooltip(toiletPoopOption, getText("ContextMenu_BF_" .. blockReason))
                 end
 
                 -- BF.TriggerToiletUrinate/Defecate refuse in this case, so show it in the menu.
@@ -288,7 +295,7 @@ function BF.AddToiletOptions(vanillaToiletSubMenu, peeSubMenu, poopSubMenu, worl
                     return
                 end
 
-                if noWater or urinateValue < (peeInToiletRequirement / 100) * bladderMaxValue then
+                if blocked or urinateValue < (peeInToiletRequirement / 100) * bladderMaxValue then
                     toiletPeeOption.notAvailable = true
                 elseif player:isFemale() then
                     -- Female characters can wipe after urinating in the toilet.
@@ -300,7 +307,7 @@ function BF.AddToiletOptions(vanillaToiletSubMenu, peeSubMenu, poopSubMenu, worl
                     end
                 end
 
-                if noWater or defecateValue < (poopInToiletRequirement / 100) * bowelsMaxValue then
+                if blocked or defecateValue < (poopInToiletRequirement / 100) * bowelsMaxValue then
                     toiletPoopOption.notAvailable = true
                 else
                     local wipeSubMenuForToiletPoop = BF.AddWipingOptions(
@@ -332,9 +339,10 @@ function BF.AddUrinalOptions(peeSubMenu, poopSubMenu, worldObjects, player, urin
                             BF.AddTooltip(urinalPeeOption, getText("ContextMenu_tooltip_ShyPeeUrinal"))
                         end
                     end
-                    if BF_Toilet and BF_Toilet.isBlocked(object) then
+                    local blockReason = BF_Toilet and BF_Toilet.reason(object)
+                    if blockReason then
                         urinalPeeOption.notAvailable = true
-                        BF.AddTooltip(urinalPeeOption, getText("ContextMenu_BF_NoWater"))
+                        BF.AddTooltip(urinalPeeOption, getText("ContextMenu_BF_" .. blockReason))
                     end
 
                     local urinalPoopOption = poopSubMenu:addOption(getText("ContextMenu_Poop") .. " " .. getText("ContextMenu_UseUrinal"), object, nil, player)
@@ -365,7 +373,14 @@ function BF.AddOuthouseOptions(peeSubMenu, poopSubMenu, worldObjects, player, ur
                     return
                 end
 
-                if urinateValue < (peeInToiletRequirement / 100) * bladderMaxValue then
+                -- A chemical toilet with a full tank, or a clogged one (BF_Toilets).
+                local blockReason = BF_Toilet and BF_Toilet.reason(object)
+                if blockReason then
+                    BF.AddTooltip(outhousePeeOption, getText("ContextMenu_BF_" .. blockReason))
+                    BF.AddTooltip(outhousePoopOption, getText("ContextMenu_BF_" .. blockReason))
+                end
+
+                if blockReason or urinateValue < (peeInToiletRequirement / 100) * bladderMaxValue then
                     outhousePeeOption.notAvailable = true
                 elseif player:isFemale() then
                     local wipeSubMenuForOuthousePee = BF.AddWipingOptions(
@@ -376,7 +391,7 @@ function BF.AddOuthouseOptions(peeSubMenu, poopSubMenu, worldObjects, player, ur
                     end
                 end
 
-                if defecateValue < (poopInToiletRequirement / 100) * bowelsMaxValue then
+                if blockReason or defecateValue < (poopInToiletRequirement / 100) * bowelsMaxValue then
                     outhousePoopOption.notAvailable = true
                 else
                     local wipeSubMenuForOuthousePoop = BF.AddWipingOptions(

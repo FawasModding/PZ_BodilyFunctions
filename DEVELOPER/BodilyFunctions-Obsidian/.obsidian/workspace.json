@@ -28,7 +28,7 @@
               "type": "markdown",
               "state": {
                 "file": "Changelogs/Changelog v1.5.0.md",
-                "mode": "preview",
+                "mode": "source",
                 "source": true
               },
               "icon": "lucide-file",
@@ -58,7 +58,7 @@
             }
           }
         ],
-        "currentTab": 1
+        "currentTab": 2
       }
     ],
     "direction": "vertical"
@@ -247,23 +247,24 @@
       "file-tree-alternative:File Tree Alternative Plugin": false
     }
   },
-  "active": "7be354591b1eff47",
+  "active": "a35551f38a489bf2",
   "lastOpenFiles": [
-    "!Development/Versions/Incomplete/1.5.0.md",
-    "!Development/Development Log/November 2026.md",
+    "!Development/Versions/Incomplete/seduR0op0",
     "Changelogs/Changelog v1.5.0.md",
-    "Changelogs/Changelog v1.5.0.md.tmp.17308.d7e16f5b4d41",
-    "Changelogs/Changelog v1.5.0.md.tmp.17308.79054e9b7f9b",
-    "Changelogs/Changelog v1.5.0.md.tmp.51740.3fbf136a3800",
-    "Changelogs/Changelog v1.5.0.md.tmp.46028.e1ba9cd23881",
-    "Changelogs/Changelog v1.5.0.md.tmp.21124.6f2bc51de639",
-    "Changelogs/Changelog v1.5.0.md.tmp.21124.53283ef28ad2",
-    "Changelogs/Changelog v1.5.0.md.tmp.21124.d0894f7e446f",
-    "Changelogs/Changelog v1.5.0.md.tmp.21124.b7f0ab2872b8",
+    "!Development/Versions/Incomplete/1.5.0.md",
+    "!Development/Versions/Incomplete/1.5.0.md.tmp.7212.edce99d001af",
+    "Changelogs/Changelog v1.5.0.md.tmp.7212.cea7c39fed3a",
+    "Changelogs/Changelog v1.5.0.md.tmp.23644.ff3db8a206f6",
+    "Changelogs/sedWm2CRI",
+    "Changelogs/sedFDoIC0",
+    "Changelogs/sedpWjg5A",
+    "Changelogs/sedgDXcJE",
+    "Changelogs/Changelog v1.5.0.md.tmp.26184.8cd855280e96",
+    "Changelogs/Changelog v1.5.0.md.tmp.26184.d0fea2ca7287",
+    "Changelogs/Changelog v1.5.0.md.tmp.26184.8fc52ab77994",
+    "!Development/Development Log/November 2026.md",
     "!Development/Credits.md",
     "!Development/Versions/Incomplete/Pre-Build 1.5.md",
-    "Content/Maps",
-    "Content/Spoons",
     "!Development/Versions/Complete/Pre-Build 1.0.md",
     "!Development/Versions/Incomplete/Pre-Build 1.6.md",
     "!Development/Development Log/October 2026.md",
