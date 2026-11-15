@@ -58,7 +58,7 @@
             }
           }
         ],
-        "currentTab": 2
+        "currentTab": 1
       }
     ],
     "direction": "vertical"
@@ -247,11 +247,12 @@
       "file-tree-alternative:File Tree Alternative Plugin": false
     }
   },
-  "active": "a35551f38a489bf2",
+  "active": "7be354591b1eff47",
   "lastOpenFiles": [
-    "!Development/Versions/Incomplete/seduR0op0",
+    "!Development/Development Log/November 2026.md",
     "Changelogs/Changelog v1.5.0.md",
     "!Development/Versions/Incomplete/1.5.0.md",
+    "!Development/Versions/Incomplete/seduR0op0",
     "!Development/Versions/Incomplete/1.5.0.md.tmp.7212.edce99d001af",
     "Changelogs/Changelog v1.5.0.md.tmp.7212.cea7c39fed3a",
     "Changelogs/Changelog v1.5.0.md.tmp.23644.ff3db8a206f6",
@@ -261,8 +262,6 @@
     "Changelogs/sedgDXcJE",
     "Changelogs/Changelog v1.5.0.md.tmp.26184.8cd855280e96",
     "Changelogs/Changelog v1.5.0.md.tmp.26184.d0fea2ca7287",
-    "Changelogs/Changelog v1.5.0.md.tmp.26184.8fc52ab77994",
-    "!Development/Development Log/November 2026.md",
     "!Development/Credits.md",
     "!Development/Versions/Incomplete/Pre-Build 1.5.md",
     "!Development/Versions/Complete/Pre-Build 1.0.md",

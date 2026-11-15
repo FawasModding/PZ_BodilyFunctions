@@ -729,8 +729,13 @@ function BF.IsBeingWatched(player)
 
         local function hasLineOfSight(fromSquare, toSquare)
             if not fromSquare or not toSquare then return false end
-            return LosUtil.lineClear(getCell(), fromSquare:getX(), fromSquare:getY(), fromSquare:getZ(),
+            -- lineClear returns a LosUtil.TestResults value, not a boolean, so it has
+            -- to be compared by name. Any value counts as true in Lua, which made every
+            -- zombie within range count as watching, even through walls.
+            local result = LosUtil.lineClear(getCell(), fromSquare:getX(), fromSquare:getY(), fromSquare:getZ(),
                                      toSquare:getX(), toSquare:getY(), toSquare:getZ(), false)
+            local name = result and tostring(result)
+            return name == "Clear" or name == "ClearThroughOpenDoor" or name == "ClearThroughWindow"
         end
 
         local zombies = getCell():getZombieList()
