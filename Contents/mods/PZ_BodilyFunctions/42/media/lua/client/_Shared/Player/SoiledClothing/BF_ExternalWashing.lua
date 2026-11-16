@@ -195,15 +195,17 @@ end
 -- Vanilla sink washing
 -- ----------------------------------------------------------------------------
 
+-- In multiplayer complete() runs only on the
+-- server, which never loads this client file, and soiling lives on the client.
+-- perform() runs on the client in both single player and multiplayer.
 local function hookVanillaWashing()
-    if not ISWashClothing or ISWashClothing._BF_originalComplete then return end
+    if not ISWashClothing or ISWashClothing._BF_originalPerform then return end
 
-    ISWashClothing._BF_originalComplete = ISWashClothing.complete
+    ISWashClothing._BF_originalPerform = ISWashClothing.perform
 
-    function ISWashClothing:complete()
-        local result = ISWashClothing._BF_originalComplete(self)
+    function ISWashClothing:perform()
         BF.ClearItemSoiling(self.item, self.character)
-        return result
+        return ISWashClothing._BF_originalPerform(self)
     end
 end
 

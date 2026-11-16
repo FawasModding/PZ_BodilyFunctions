@@ -52,6 +52,15 @@ local function isNumber(value)
     return type(value) == "number" and value == value and value ~= 1 / 0 and value ~= -1 / 0
 end
 
+-- Logs why a request was turned down to the server console, with where the
+-- player and the target were, so a server log shows the cause.
+local function logRejected(command, player, args, reason)
+    local square = player and player:getCurrentSquare()
+    local at = square and (square:getX() .. "," .. square:getY() .. "," .. square:getZ()) or "no square"
+    print(string.format("[BF] %s rejected (%s): player at %s, target %s,%s,%s sprite %s",
+        command, reason, at, tostring(args.x), tostring(args.y), tostring(args.z), tostring(args.sprite)))
+end
+
 local function reply(player, args)
     if isServer() then
         sendServerCommand(player, MODULE, "result", args)
@@ -434,6 +443,7 @@ end
 -- args = { itemId, cleanerId, x, y, z, sprite, requestId }
 function Commands.wash(player, args)
     local function fail(reason)
+        logRejected("wash", player, args, reason)
         reply(player, { requestId = args.requestId, ok = false, reason = reason })
     end
 
@@ -487,8 +497,12 @@ end
 -- args = { x, y, z, sprite, poop, amount }. Sent when peeing or pooping in a
 -- toilet ends; amount is the share of it that was done (0 to 1).
 function Commands.toiletUse(player, args)
-    local toilet = findObjectBySprite(squareInReach(player, args, REACH_TOILET), args.sprite, BF_Toilets.kind)
-    if not toilet then return end
+    local square = squareInReach(player, args, REACH_TOILET)
+    local toilet = findObjectBySprite(square, args.sprite, BF_Toilets.kind)
+    if not toilet then
+        logRejected("toiletUse", player, args, square and "no toilet with that sprite" or "out of reach")
+        return
+    end
 
     local now = getTimestampMs()
     local username = player:getUsername() or "local"
